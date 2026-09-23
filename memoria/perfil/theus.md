@@ -2,7 +2,7 @@
 id: theus
 type: profile
 title: "Theus: dono do babel-coop, direto e curto, sem Python pelo agente"
-summary: "Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente não escreve nem roda Python, Node ou script"
+summary: "Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente não escreve nem roda Python, mas Node e JavaScript estão liberados para construir o app"
 tags: [theus, perfil]
 confidence: 0.9
 status: active
@@ -19,7 +19,7 @@ updated: 2026-09-23
 ## Como gosta de trabalhar
 - Português do Brasil, direto e curto; verdade sobre ser IA; nada de memória, fonte, execução ou acesso inventados. Fonte: `~/.claude/CLAUDE.md`.
 - Sem cronograma em dias ou semanas: fases são ordem de construção, e "pronto" é critério observável. Fonte: `PROMPT-CONSTRUIR.md` §2.
-- O agente não escreve nem roda Python, Node ou script, e não mexe em `settings*.json`. Fonte: `~/.claude/settings.json` (regras `deny`).
+- O agente não escreve nem roda Python, `.sh`, `bun`, `pip` ou `make`, e não mexe em `settings*.json`. Node, `npm`, `npx`, `.js` e `.ts` estão liberados desde 23/09/2026 para construir o app. Fonte: `~/.claude/settings.json` (regras `deny`) e [[2026-09-23-node-e-javascript-liberados-para-construir]].
 - Push só com ordem dele; o repositório é privado. Fonte: `PROMPT-CONSTRUIR.md` §4.
 
 ## Ainda quero aprender
@@ -29,3 +29,4 @@ updated: 2026-09-23
 
 ## Mudanças
 - 2026-09-23 — perfil criado no nascimento do Ryan, só com o que está nas instruções do próprio Theus e no repositório.
+- 2026-09-23 — Node e JavaScript liberados pelo próprio Theus; Python segue proibido.

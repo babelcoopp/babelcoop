@@ -1,10 +1,10 @@
-# Índice vivo do Ryan — v0.1.0 · geração 1 · 7 memórias ativas · 1 projeto aberto · 4 pendências
+# Índice vivo do Ryan — v0.1.0 · geração 1 · 8 memórias ativas · 1 projeto aberto · 4 pendências
 Estado: ativo
 
 <!-- Mantido à mão pelo Ryan; contrato em .claude/rules/memoria.md; até 150 linhas. Entra no contexto só em sessão nova, /clear ou /compact. -->
 
 ## Theus
-Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente não escreve nem roda Python, Node ou script. Detalhes: memoria/perfil/theus.md
+Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente não escreve nem roda Python, mas Node e JavaScript estão liberados para construir o app. Detalhes: memoria/perfil/theus.md
 
 ## Missão DEUS
 - Nenhuma ativa.
@@ -17,8 +17,8 @@ Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente
 - 2026-09-23 · Um só escritor da memória: subagentes devolvem, o Ryan grava (2026-09-23-um-so-escritor-da-memoria)
 - 2026-09-23 · Ryan nasce na raiz do babel-coop mesclando DEUS e o organismo (2026-09-23-ryan-nasce-na-raiz-mesclando-deus-e-organismo)
 - 2026-09-23 · Ryan em Markdown puro: sem motor, hooks, settings nem painel (2026-09-23-ryan-em-markdown-puro-sem-motor-nem-hooks)
+- 2026-09-23 · Node e JavaScript liberados para construir o Babel Coop; Python segue proibido (2026-09-23-node-e-javascript-liberados-para-construir)
 - 2026-09-23 · Memória do Ryan começa limpa: nada do Marcelo (2026-09-23-memoria-do-ryan-comeca-limpa)
-- 2026-09-23 · Arquivos do babel-os soltos em agente/ e o Gabriel vira Dominic (2026-09-23-babel-os-solto-em-agente-e-gabriel-vira-dominic)
 
 ## Memórias recentes
 - [reference 0.9] O babel-coop está no GitHub, privado: theusveyra/babel-coop (2026-09-23-repositorio-privado-no-github)
@@ -34,4 +34,4 @@ Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente
 - [ ] ryan: agente/: o settings.json do Dominic ainda chama o hook apagado e diz "Gabriel" (só o Theus edita), e o backup .tar.gz tem cópias do motor
 
 ## Fora do índice
-- 0 memórias ativas fora do índice; /consultar <tema> acha tudo.
+- 1 memória ativa fora do índice; /consultar <tema> acha tudo.
