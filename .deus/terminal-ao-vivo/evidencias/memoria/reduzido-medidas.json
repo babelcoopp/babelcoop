@@ -1,0 +1,16 @@
+{
+  "usou": {
+    "id": "ap:ap6",
+    "contou": true,
+    "motivo": null,
+    "usos": 3,
+    "rotulo": "Aprendizado · Davi · separar · usado 3×"
+  },
+  "cartao": {
+    "anim": "none",
+    "borda": "rgb(42, 213, 229)",
+    "reduz": true
+  },
+  "luzIntel": "1.000",
+  "erros": []
+}

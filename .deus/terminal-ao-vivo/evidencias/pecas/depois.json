@@ -1,0 +1,377 @@
+{
+  "resumo": "16/16",
+  "tudo": [
+    {
+      "nome": "a Máquina carrega BC.pecas sozinha e pega a imagem de cada peça em midia/pecas (<id>.png de 512 px)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "a ficha da peça tem o botão \"Ver em 3D\"",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "clicar em \"Ver em 3D\" na Máquina abre a vitrine e o corpo 3D da peça",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "pecas.json tem as 16 peças",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "os 16 PNG abrem com recorte (canto transparente, peça no meio)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "os 16 GLB têm cabeçalho glTF 2 válido e malha",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "vitrine mostra 16 cartões de peça",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "clique na Gaveta abre o 3D e o GLB carrega (malhas > 0)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "canvas respeita devicePixelRatio ≤ 1,5",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "a peça aparece desenhada no canvas (pixels acesos > 2 %)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "trocar para a Portaria troca o modelo",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "o laço do 3D para quando o palco some",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "BC.pecas.reduzido() responde (prefers-reduced-motion)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "peça nova tracejada ganha corpo ao publicar",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "Gaveta nova: o clipe cubo → gaveta toca uma vez no evento e ela fica com corpo",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "zero erros de página",
+      "ok": true,
+      "achou": ""
+    }
+  ],
+  "glbs": [
+    {
+      "id": "gaveta",
+      "bytes": 284324,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "campo",
+      "bytes": 75696,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "fio",
+      "bytes": 139328,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "chave",
+      "bytes": 70024,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "empresa",
+      "bytes": 123848,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "portaria",
+      "bytes": 94360,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "porta",
+      "bytes": 164148,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "robo",
+      "bytes": 185080,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "deposito",
+      "bytes": 110336,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "cofre",
+      "bytes": 289012,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "tela",
+      "bytes": 131088,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "cano",
+      "bytes": 285676,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "armario",
+      "bytes": 212980,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "ferramenta",
+      "bytes": 243516,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "carteiro",
+      "bytes": 76580,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    },
+    {
+      "id": "casa-de-maquinas",
+      "bytes": 344700,
+      "glTF": true,
+      "versao": 2,
+      "len_ok": true,
+      "malhas": 1,
+      "ext": [
+        "KHR_mesh_quantization",
+        "KHR_texture_transform"
+      ]
+    }
+  ],
+  "imgs": [
+    {
+      "id": "gaveta",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 72
+    },
+    {
+      "id": "campo",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 77
+    },
+    {
+      "id": "fio",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 73
+    },
+    {
+      "id": "chave",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 81
+    },
+    {
+      "id": "empresa",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 74
+    },
+    {
+      "id": "portaria",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 68
+    },
+    {
+      "id": "porta",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 81
+    },
+    {
+      "id": "robo",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 75
+    },
+    {
+      "id": "deposito",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 76
+    },
+    {
+      "id": "cofre",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 67
+    },
+    {
+      "id": "tela",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 81
+    },
+    {
+      "id": "cano",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 80
+    },
+    {
+      "id": "armario",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 71
+    },
+    {
+      "id": "ferramenta",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 73
+    },
+    {
+      "id": "carteiro",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 79
+    },
+    {
+      "id": "casa-de-maquinas",
+      "w": 512,
+      "h": 512,
+      "transp_pct": 76
+    }
+  ]
+}

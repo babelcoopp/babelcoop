@@ -1,0 +1,202 @@
+{
+  "inicio": "2026-09-23T22:59:55.298Z",
+  "fonteWoff2": true,
+  "errosDaTela": [],
+  "injetadoPeloServidor": true,
+  "ambiente": {
+    "webview": true,
+    "app": true,
+    "modulo": true
+  },
+  "abrirAntesDaAba": {
+    "ms": 183,
+    "doModulo": {
+      "url": "http://localhost:4941/",
+      "titulo": "Clínica Vida · teste",
+      "status": 200,
+      "ms": 86
+    }
+  },
+  "registro": {
+    "webContentsId": 2,
+    "registrado": true,
+    "principal": {
+      "registrado": true,
+      "webContentsId": 2,
+      "controlador": "agente"
+    }
+  },
+  "hud": {
+    "opacidade": "1",
+    "borda": "rgba(63, 227, 255, 0.584)",
+    "fundo": "repeating-linear-gradient(rgba(42, 213, 229, 0.035) 0px, rgba(42, 213, 229, 0.035) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 3px)",
+    "canto": 0.981273,
+    "vidro": "blur(10px) saturate(1.25)",
+    "bordaFaixa": "rgba(63, 227, 255, 0.22)"
+  },
+  "passosDoAgente": [
+    "clicando em Mostrar mais um plano…",
+    "clicou em Mostrar mais um plano",
+    "preenchendo Nome da empresa…",
+    "preencheu Nome da empresa"
+  ],
+  "luzDoPasso": {
+    "luz": 1,
+    "faixa": 1
+  },
+  "suaVez": {
+    "faixa": "sua vez: digite a senha em Senha · depois clique em Devolver",
+    "escudo": "none",
+    "botao": "Devolver para Aurora"
+  },
+  "assumido": {
+    "faixa": "você está no controle",
+    "ro": false,
+    "escudo": "none",
+    "hud": "0"
+  },
+  "raioxHtmlMs": 36,
+  "buscaCadastro": 5,
+  "areaDeTransferencia": {
+    "igual": true,
+    "bytes": 368
+  },
+  "domVivo": {
+    "ms": 514,
+    "antes": 2,
+    "depois": 3,
+    "luz": 0.984
+  },
+  "raioxCssMs": 35,
+  "css": {
+    "regras": [
+      "h1",
+      "body"
+    ],
+    "origens": [
+      "estilo.css:4",
+      "herdada de 3 nível(is) acima · estilo.css"
+    ],
+    "fontes": [
+      "Arial Rounded MT Bold",
+      "Teste Sans",
+      "Arial"
+    ],
+    "cores": [
+      "#0f172a",
+      "#ffffff",
+      "#000000",
+      "#cbd5e1",
+      "#0000ee",
+      "#0ea5a4",
+      "#94a3b8",
+      "#475569"
+    ]
+  },
+  "copy": [
+    "imagem: Logo da Clínica Vida",
+    "link: Planos",
+    "link: Cadastro de fornecedor",
+    "título h1: Atendimento que cuida do seu paciente",
+    "parágrafo: A Clínica Vida atende em Campinas há 12 anos.",
+    "botão: Mostrar mais um plano",
+    "subtítulo h2: Planos",
+    "item: Consulta avulsa · R$ 180",
+    "item: Plano família · R$ 390",
+    "item: Plano empresa · sob consulta",
+    "subtítulo h2: Cadastro de fornecedor",
+    "campo: Nome da empresa",
+    "campo: Sua empresa",
+    "campo: E-mail"
+  ],
+  "copyMd": {
+    "bytes": 848,
+    "inicio": "# Copy de localhost_4941\n\n> http://localhost:4941/ · \"Clínica Vida · teste\" · extraída pelo navegador do babel-coop em 23/09/2026 20:00\n\n## Topo\n\n- [imagem] Logo da Clínica Vida\n\n## Menu\n\n- [link] Planos\n- [link] Cadastro de fornecedor\n\n## "
+  },
+  "rede": [
+    "GET 200 /",
+    "GET 200 /css/estilo.css",
+    "GET 200 /img/logo.png",
+    "GET 200 /js/app.js",
+    "GET 200 /api/planos.json",
+    "GET 200 /fontes/teste.woff2"
+  ],
+  "console": [
+    "n-log coop-teste: log",
+    "n-aviso coop-teste: aviso",
+    "n-erro coop-teste: erro",
+    "n-log coop-teste: planos 2"
+  ],
+  "selecionar": {
+    "via": "mouse da tela (Playwright → Electron)",
+    "ms": 101,
+    "card": "Selecionadop.sub314 × 37#hero > pver HTMLver CSScopiar blocomostrar na página"
+  },
+  "clone": {
+    "ms": 134,
+    "arquivos": [
+      "assets/estilo-a4829c.css",
+      "assets/logo-d60543.png",
+      "assets/teste-fd48fb.woff2",
+      "copy.md",
+      "index.html"
+    ],
+    "fonteEmbutida": true,
+    "edicao": {
+      "h1": "EDITADO · Atendimento que cuida de verdade",
+      "semUrlDoServidor": true,
+      "trecho": "<main>\n<section id=\"hero\"><h1>EDITADO · Atendimento que cuida de verdade</h1><p class=\"sub\">A Clínica Vida atende em Campinas há 12 anos.</p><button id=\"mais\" type=\"button\">Mostrar mais um plano</button></section>\n<section id=\"planos\"><h2>Planos</h2><ul id=\"lista-pl"
+    }
+  },
+  "print": {
+    "arquivo": "print-2026-09-23-200003.png",
+    "bytes": 181215,
+    "largura": 724,
+    "altura": 1902
+  },
+  "abaFechada": {
+    "msClique": 507,
+    "depois": {
+      "abas": [
+        "dia",
+        "clone:Clones/localhost_4941",
+        "demandas",
+        "nav:aurora"
+      ],
+      "ativa": "demandas",
+      "wc": 2
+    }
+  },
+  "reserva": {
+    "selecionado": "h2",
+    "seletor": "#planos > h2",
+    "htmlBytes": 1484,
+    "cssBytes": 1035
+  },
+  "reduzido": {
+    "varreu": 0,
+    "luz": 1,
+    "semReduzir": 1
+  },
+  "semElectron": {
+    "coopElectron": "undefined",
+    "webview": false,
+    "texto": "NavegadorNavegador só no appO navegador do agente roda dentro da Estação, no computador (app babel-coop). Aqui você acompanha pelos avisos e pelo terminal."
+  },
+  "errosDaTelaTotal": 0,
+  "fim": "2026-09-23T23:00:06.934Z",
+  "prints": [
+    "01-aba-do-agente.jpg",
+    "02-sua-vez-senha.jpg",
+    "03-voce-no-controle.jpg",
+    "04-raiox-html.jpg",
+    "05-raiox-css.jpg",
+    "06-raiox-copy.jpg",
+    "07-raiox-rede.jpg",
+    "08-raiox-console.jpg",
+    "09-selecionar-elemento.jpg",
+    "10-clone-site.jpg",
+    "11-clone-codigo.jpg",
+    "12-clone-editado.jpg"
+  ]
+}

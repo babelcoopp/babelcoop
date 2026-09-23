@@ -1,0 +1,637 @@
+{
+  "url": "http://localhost:4861/coop/organismo-demo.html",
+  "quando": "2026-09-23T20:48:56.356Z",
+  "servidor": "servidor do app",
+  "console": [],
+  "falhasDeRede": [],
+  "erros": [],
+  "prints": [
+    "00-pagina-inteira.png",
+    "01-estados.png",
+    "10-painel-shell.png",
+    "11-painel-rodando.png",
+    "12-painel-pulso-em-voo.png",
+    "13-painel-faiscas.png",
+    "13b-painel-terminou.png",
+    "14-painel-espera.png",
+    "15-painel-visitante.png",
+    "16-painel-pausado.png",
+    "17-painel-falhou.png",
+    "17b-painel-falhou.png",
+    "18-painel-desligado.png",
+    "18b-recusado.png",
+    "19-painel-rito-longo.png",
+    "20-teto-tres-efeitos.png",
+    "20b-faiscas-24.png",
+    "21-sala-constelacao.png",
+    "22-parede.png",
+    "23-sala-depois.png",
+    "24-reduzido-terminou.png",
+    "25-reduzido-respirar.png"
+  ],
+  "cenarios": {
+    "gesto-tique": {
+      "sonsTocados": {
+        "tique": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [],
+      "maxVivos": 0,
+      "descartados": 0,
+      "particulas": 0
+    },
+    "build-14s": {
+      "sonsTocados": {
+        "tique": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [
+        "acordar 247 ms",
+        "pulso 536 ms",
+        "faiscas 866 ms"
+      ],
+      "maxVivos": 1,
+      "descartados": 0,
+      "particulas": 8
+    },
+    "npm-3s": {
+      "sonsTocados": {
+        "tique": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [
+        "acordar 247 ms",
+        "pulso 603 ms",
+        "faiscas 866 ms"
+      ],
+      "maxVivos": 1,
+      "descartados": 0,
+      "particulas": 4
+    },
+    "espera-foco-fora": {
+      "sonsTocados": {
+        "espera": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [],
+      "maxVivos": 0,
+      "descartados": 0,
+      "particulas": 0
+    },
+    "espera-foco-no-terminal": {
+      "sonsTocados": {},
+      "sonsSegurados": {
+        "espera:em-foco": 1
+      },
+      "efeitos": [],
+      "maxVivos": 0,
+      "descartados": 0,
+      "particulas": 0
+    },
+    "visitante-entra": {
+      "sonsTocados": {
+        "duas": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [],
+      "maxVivos": 0,
+      "descartados": 0,
+      "particulas": 0
+    },
+    "pausa": {
+      "sonsTocados": {},
+      "sonsSegurados": {},
+      "efeitos": [],
+      "maxVivos": 0,
+      "descartados": 0,
+      "particulas": 0
+    },
+    "erro-provavel": {
+      "sonsTocados": {
+        "erro": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [
+        "acordar 248 ms",
+        "pulso 610 ms"
+      ],
+      "maxVivos": 1,
+      "descartados": 0,
+      "particulas": 0
+    },
+    "fim-do-shell": {
+      "sonsTocados": {},
+      "sonsSegurados": {},
+      "efeitos": [],
+      "maxVivos": 0,
+      "descartados": 0,
+      "particulas": 0
+    },
+    "aberto-e-recusado": {
+      "sonsTocados": {
+        "acordar": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [
+        "acordar 245 ms",
+        "respirar 726 ms"
+      ],
+      "maxVivos": 1,
+      "descartados": 0,
+      "particulas": 0
+    },
+    "instalacao-75s": {
+      "sonsTocados": {
+        "duas": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [
+        "acordar 248 ms",
+        "pulso 523 ms",
+        "faiscas 866 ms",
+        "respirar 1215 ms"
+      ],
+      "maxVivos": 2,
+      "descartados": 0,
+      "particulas": 8
+    },
+    "teto-tres-efeitos": {
+      "sonsTocados": {},
+      "sonsSegurados": {},
+      "efeitos": [
+        "respirar · teto",
+        "pulso 614 ms",
+        "faiscas 881 ms"
+      ],
+      "maxVivos": 2,
+      "descartados": 1,
+      "particulas": 8
+    },
+    "teto-trinta-faiscas": {
+      "sonsTocados": {},
+      "sonsSegurados": {},
+      "efeitos": [
+        "faiscas 890 ms"
+      ],
+      "maxVivos": 1,
+      "descartados": 0,
+      "particulas": 24
+    },
+    "sala": {
+      "sonsTocados": {
+        "duas": 1
+      },
+      "sonsSegurados": {},
+      "efeitos": [
+        "pulso 522 ms"
+      ],
+      "maxVivos": 1,
+      "descartados": 0,
+      "particulas": 0
+    }
+  },
+  "checagens": {
+    "somPadraoLigado": true,
+    "textura": {
+      "url": "/coop/midia/mostrador-anel-512.png",
+      "carregou": true,
+      "presencasComTextura": 8
+    },
+    "repousoInicial": {
+      "vivos": 0,
+      "tela": "sem canvas (nenhum efeito pedido ainda)"
+    },
+    "fraseTerminou": "terminou · 17:49 · 14 s",
+    "visitante": {
+      "arcos": 1,
+      "cor": "rgb(246, 154, 154)",
+      "selo": true
+    },
+    "pausa": {
+      "estado": "pausado",
+      "cor": "rgb(93, 107, 120)",
+      "tinta": "0.94",
+      "marcaPausada": "sim",
+      "haloDoB": "0"
+    },
+    "teto": {
+      "vivosLogoDepoisDeTresPedidos": 2,
+      "maxVivosTres": 2,
+      "descartadosTres": 1,
+      "faiscasPedidas": 30,
+      "faiscasLancadas": 24,
+      "maxVivosTrinta": 1
+    },
+    "ecoComEfeitos": {
+      "teclas": 53,
+      "msDigitando": 1415,
+      "efeitosPedidosDuranteADigitacao": 15,
+      "maxVivos": 2,
+      "teclaAteTratamentoMs": {
+        "n": 53,
+        "min": 0,
+        "p50": 0.1,
+        "p95": 0.2,
+        "max": 0.2
+      },
+      "teclaAteProximoQuadroMs": {
+        "n": 53,
+        "min": 0.3,
+        "p50": 7.6,
+        "p95": 14.4,
+        "max": 14.9
+      },
+      "tarefasLongas": []
+    },
+    "repousoFinal": {
+      "vivos": 0,
+      "tela": "hidden"
+    },
+    "somDesligado": {
+      "ligado": false,
+      "guardado": "0",
+      "bloqueados": {
+        "tique:desligado": 1,
+        "espera:desligado": 1
+      },
+      "osciladoresNovos": 0
+    },
+    "somReligado": {
+      "ligado": true,
+      "guardado": "1"
+    },
+    "tv": {
+      "somLigado": false,
+      "ligarSomTrue": false,
+      "contagem": {
+        "somPedido": {
+          "tique": 2,
+          "espera": 1
+        },
+        "somTocado": {},
+        "somBloqueado": {
+          "tique:tv": 2,
+          "espera:tv": 1
+        },
+        "pulso": 1,
+        "faiscas": 1,
+        "particulas": 4,
+        "respirar": 0,
+        "acordar": 1,
+        "acender": 12,
+        "descartados": 0,
+        "preemptados": 0,
+        "maxVivos": 1
+      },
+      "osciladoresIniciados": 0,
+      "preferenciaDaEstacao": "1"
+    },
+    "reduzido": {
+      "reduzido": true,
+      "contagem": {
+        "somPedido": {
+          "tique": 1
+        },
+        "somTocado": {
+          "tique": 1
+        },
+        "somBloqueado": {},
+        "pulso": 1,
+        "faiscas": 1,
+        "particulas": 0,
+        "respirar": 1,
+        "acordar": 1,
+        "acender": 12,
+        "descartados": 0,
+        "preemptados": 0,
+        "maxVivos": 1
+      },
+      "registro": [
+        {
+          "tipo": "acordar",
+          "ok": false,
+          "motivo": "sem-movimento",
+          "t": 79
+        },
+        {
+          "tipo": "pulso",
+          "ok": false,
+          "motivo": "sem-movimento",
+          "t": 2005
+        },
+        {
+          "tipo": "faiscas",
+          "ok": false,
+          "motivo": "sem-movimento",
+          "t": 2005
+        }
+      ],
+      "lacoAnimado": "none",
+      "canvasVisivel": "nunca criado"
+    }
+  },
+  "navegador": "Google Chrome 154.0.8037.57 (headless, Playwright 1.63.0)",
+  "versao": "1.0.0",
+  "api": [
+    "Constelacao",
+    "MarcaB",
+    "Presenca",
+    "acender",
+    "apagar",
+    "concluido",
+    "contagem",
+    "duracaoTexto",
+    "efeitosLigados",
+    "estados",
+    "faiscas",
+    "falhou",
+    "foraDeFoco",
+    "frase",
+    "hora",
+    "ligarEfeitos",
+    "ligarSom",
+    "limites",
+    "naTV",
+    "nivelDeBytes",
+    "ouvir",
+    "pulso",
+    "reduzido",
+    "registro",
+    "respirar",
+    "semMovimento",
+    "som",
+    "somLigado",
+    "sons",
+    "texturaAnel",
+    "versao",
+    "vincular",
+    "vivos",
+    "zerar"
+  ],
+  "somAudio": {
+    "criados": 14,
+    "iniciados": 14,
+    "freq": [
+      880,
+      880,
+      880,
+      659,
+      988,
+      660,
+      880,
+      311,
+      233,
+      1175,
+      660,
+      880,
+      660,
+      880
+    ],
+    "ganhoMax": 0.07
+  },
+  "duracoesMs": {
+    "acordar": {
+      "n": 5,
+      "min": 245,
+      "p50": 247,
+      "p95": 248,
+      "max": 248
+    },
+    "pulso": {
+      "n": 6,
+      "min": 522,
+      "p50": 603,
+      "p95": 614,
+      "max": 614
+    },
+    "faiscas": {
+      "n": 5,
+      "min": 866,
+      "p50": 866,
+      "p95": 890,
+      "max": 890
+    },
+    "respirar": {
+      "n": 2,
+      "min": 726,
+      "p50": 1215,
+      "p95": 1215,
+      "max": 1215
+    }
+  },
+  "registroTotal": [
+    {
+      "cenario": "gesto-tique",
+      "tipo": "som",
+      "nome": "tique",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 1289
+    },
+    {
+      "cenario": "build-14s",
+      "tipo": "acordar",
+      "ok": true,
+      "ms": 247,
+      "t": 1726
+    },
+    {
+      "cenario": "build-14s",
+      "tipo": "pulso",
+      "ok": true,
+      "ms": 536,
+      "t": 4560
+    },
+    {
+      "cenario": "build-14s",
+      "tipo": "som",
+      "nome": "tique",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 4560
+    },
+    {
+      "cenario": "build-14s",
+      "tipo": "faiscas",
+      "ok": true,
+      "ms": 866,
+      "t": 5426
+    },
+    {
+      "cenario": "npm-3s",
+      "tipo": "acordar",
+      "ok": true,
+      "ms": 247,
+      "t": 6410
+    },
+    {
+      "cenario": "npm-3s",
+      "tipo": "pulso",
+      "ok": true,
+      "ms": 603,
+      "t": 8693
+    },
+    {
+      "cenario": "npm-3s",
+      "tipo": "som",
+      "nome": "tique",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 8694
+    },
+    {
+      "cenario": "npm-3s",
+      "tipo": "faiscas",
+      "ok": true,
+      "ms": 866,
+      "t": 9560
+    },
+    {
+      "cenario": "espera-foco-fora",
+      "tipo": "som",
+      "nome": "espera",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 9730
+    },
+    {
+      "cenario": "espera-foco-no-terminal",
+      "tipo": "som",
+      "nome": "espera",
+      "ok": false,
+      "motivo": "em-foco",
+      "t": 10399
+    },
+    {
+      "cenario": "visitante-entra",
+      "tipo": "som",
+      "nome": "duas",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 10912
+    },
+    {
+      "cenario": "erro-provavel",
+      "tipo": "acordar",
+      "ok": true,
+      "ms": 248,
+      "t": 13010
+    },
+    {
+      "cenario": "erro-provavel",
+      "tipo": "pulso",
+      "ok": true,
+      "ms": 610,
+      "t": 15210
+    },
+    {
+      "cenario": "erro-provavel",
+      "tipo": "som",
+      "nome": "erro",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 15210
+    },
+    {
+      "cenario": "aberto-e-recusado",
+      "tipo": "som",
+      "nome": "acordar",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 16565
+    },
+    {
+      "cenario": "aberto-e-recusado",
+      "tipo": "acordar",
+      "ok": true,
+      "ms": 245,
+      "t": 16810
+    },
+    {
+      "cenario": "aberto-e-recusado",
+      "tipo": "respirar",
+      "ok": true,
+      "ms": 726,
+      "t": 17693
+    },
+    {
+      "cenario": "instalacao-75s",
+      "tipo": "acordar",
+      "ok": true,
+      "ms": 248,
+      "t": 18560
+    },
+    {
+      "cenario": "instalacao-75s",
+      "tipo": "pulso",
+      "ok": true,
+      "ms": 523,
+      "t": 21777
+    },
+    {
+      "cenario": "instalacao-75s",
+      "tipo": "som",
+      "nome": "duas",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 21777
+    },
+    {
+      "cenario": "instalacao-75s",
+      "tipo": "faiscas",
+      "ok": true,
+      "ms": 866,
+      "t": 22643
+    },
+    {
+      "cenario": "instalacao-75s",
+      "tipo": "respirar",
+      "ok": true,
+      "ms": 1215,
+      "t": 22993
+    },
+    {
+      "cenario": "teto-tres-efeitos",
+      "tipo": "respirar",
+      "ok": false,
+      "motivo": "teto",
+      "t": 24978
+    },
+    {
+      "cenario": "teto-tres-efeitos",
+      "tipo": "pulso",
+      "ok": true,
+      "ms": 614,
+      "t": 25593
+    },
+    {
+      "cenario": "teto-tres-efeitos",
+      "tipo": "faiscas",
+      "ok": true,
+      "ms": 881,
+      "t": 25859
+    },
+    {
+      "cenario": "teto-trinta-faiscas",
+      "tipo": "faiscas",
+      "ok": true,
+      "ms": 890,
+      "t": 27543
+    },
+    {
+      "cenario": "sala",
+      "tipo": "pulso",
+      "ok": true,
+      "ms": 522,
+      "t": 29992
+    },
+    {
+      "cenario": "sala",
+      "tipo": "som",
+      "nome": "duas",
+      "ok": true,
+      "motivo": "tocou",
+      "t": 30172
+    }
+  ]
+}

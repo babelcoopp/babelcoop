@@ -1,0 +1,36 @@
+{
+  "conteudo": {
+    "interface": 21,
+    "navegador": 4,
+    "servidor": 11,
+    "midiaInterfaceForaDoAsar": 6,
+    "prototipo": 109,
+    "glb": 17,
+    "mp4": 4
+  },
+  "fuses": {
+    "runAsNode": true,
+    "nodeOptions": true,
+    "onlyLoadAppFromAsar": false,
+    "nodeDoApp": "24.21.0"
+  },
+  "nome": "babel-coop",
+  "versao": "0.1.0",
+  "arch": "arm64",
+  "electron": "44.4.5",
+  "app": "dist/mac-arm64/babel-coop.app",
+  "executavel": "dist/mac-arm64/babel-coop.app/Contents/MacOS/babel-coop",
+  "tamanhoAppKB": 257860,
+  "pty": {
+    "pty": "Contents/Resources/app.asar.unpacked/node_modules/node-pty/prebuilds/darwin-arm64/pty.node",
+    "spawnHelper": "Contents/Resources/app.asar.unpacked/node_modules/node-pty/prebuilds/darwin-arm64/spawn-helper",
+    "modoSpawnHelper": "755"
+  },
+  "prototipo": true,
+  "assinatura": "Format=app bundle with Mach-O thin (arm64) | CodeDirectory v=20400 size=295 flags=0x2(adhoc) hashes=3+3 location=embedded | Signature=adhoc | TeamIdentifier=not set | Sealed Resources version=2 rules=13 files=142",
+  "dmg": "dist/babel-coop-0.1.0-arm64.dmg",
+  "tamanhoDmgKB": 120771,
+  "sha256Dmg": "4d733519901ea9c9e0b6c9646067e229c7228aae30675d52c5b3a80aa12f8046",
+  "segundos": 25.5,
+  "quando": "2026-09-23T22:48:24.120Z"
+}

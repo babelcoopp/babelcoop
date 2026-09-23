@@ -1,0 +1,217 @@
+{
+  "casos": {
+    "t-aviso": {
+      "ferramenta": "coop_aviso",
+      "args": {
+        "texto": "Reunião geral às 16h"
+      },
+      "ms": 8,
+      "ok": true,
+      "texto": "Aviso na TV: \"Reunião geral às 16h\" · assinado Rita · Theus.",
+      "tv": {
+        "rodape": "✦THReunião geral às 16h · Rita · Theusagora+1 na fila",
+        "assinatura": "Rita · Theus"
+      },
+      "diario": {
+        "acao": "porAgente",
+        "args": [
+          {
+            "id": "ag-rita",
+            "nome": "Rita"
+          },
+          "aviso",
+          [
+            "Reunião geral às 16h"
+          ],
+          "aviso na TV"
+        ]
+      }
+    },
+    "t-campanha": {
+      "ferramenta": "coop_campanha",
+      "args": {
+        "nome": "50 clientes",
+        "meta": 50,
+        "para": "Carla",
+        "prazo": "30/09"
+      },
+      "ms": 11,
+      "ok": true,
+      "texto": "Campanha \"50 clientes\" criada para Carla · meta 50 · até 30/09 · já está na TV · assinada Rita · Theus.",
+      "tv": "50 clientes00/500%clientes · faltam 50"
+    },
+    "t-demanda": {
+      "ferramenta": "coop_demanda",
+      "args": {
+        "titulo": "Revisar a proposta da Clínica Vida",
+        "para": "Bruno",
+        "prazo": "2026-09-29",
+        "prioridade": "alta"
+      },
+      "ms": 11,
+      "ok": true,
+      "texto": "Demanda \"Revisar a proposta da Clínica Vida\" enviada para Bruno · até 29/09 · assinada Rita · Theus."
+    },
+    "t-tv": {
+      "ferramenta": "coop_tv",
+      "args": {
+        "modo": "reuniao"
+      },
+      "ms": 9,
+      "ok": true,
+      "texto": "TV no modo reuniao."
+    },
+    "t-tv-painel": {
+      "ferramenta": "coop_tv",
+      "args": {
+        "modo": "painel"
+      },
+      "ms": 10,
+      "ok": true,
+      "texto": "TV no modo painel."
+    },
+    "t-meta": {
+      "ferramenta": "coop_meta",
+      "args": {
+        "mais": 2
+      },
+      "ms": 16,
+      "ok": true,
+      "texto": "+2 · Campanha \"50 clientes\": 2 de 50 clientes · faltam 48 · até 30/09."
+    },
+    "t-mural": {
+      "ferramenta": "coop_mural",
+      "args": {
+        "texto": "Café novo na copa"
+      },
+      "ms": 15,
+      "ok": true,
+      "texto": "Recado no mural da TV: \"Café novo na copa\" · assinado Rita · Theus."
+    },
+    "t-ideia": {
+      "ferramenta": "coop_ideia",
+      "args": {
+        "texto": "Vídeo curto com depoimento de cliente"
+      },
+      "ms": 9,
+      "ok": true,
+      "texto": "Ideia registrada e na TV: \"Vídeo curto com depoimento de cliente\" · assinada Rita · Theus."
+    },
+    "t-aprendi": {
+      "ferramenta": "coop_aprendi",
+      "args": {
+        "texto": "Zebra laranja no teste do conector coop confirma o registro de aprendizado"
+      },
+      "ms": 10,
+      "ok": true,
+      "texto": "Aprendizado novo registrado: a IA de todos vai ler isso. Assinado Rita · Theus."
+    },
+    "t-pessoas": {
+      "ferramenta": "coop_pessoas",
+      "args": {},
+      "ms": 5,
+      "ok": true,
+      "texto": "11 pessoas na equipe:\n- Theus (theus) · gestão · gestao · online · agentes: Rita, Dev\n- Ana (ana) · membro · vendas · offline · agentes: Sol · (sem token: equipe de exemplo)\n- Bruno (bruno) · membro · comercial · offline · agentes: Bruno-bot · (sem token: equipe de exemplo)\n- Carla (carla) · membro · financeiro · offline · agentes: Lu · (sem token: equipe de exemplo)\n- Davi (davi) · membro · programacao · offline · agentes: Dev, Doc · (sem token: equipe de exemplo)\n- Eva (eva) · membro · marketing · offline · agentes: Musa · (sem token: equipe de exemplo)\n- Felipe (felipe) · membro · suporte · offline · agentes: Zé · (sem token: equipe de exemplo)\n- Gabi (gabi) · membro · rh · offline · agentes: Gente · (sem token: equipe de exemplo)\n- Hugo (hugo) · membro · operacao · offline · agentes: Base · (sem token: equipe de exemplo)\n- Iara (iara) · membro · atendimento · offline · agentes: Fala · (sem token: equipe de exemplo)\n- João (joao) · membro · programacao · offline · agentes: Pixel · (sem token: equipe de exemplo)"
+    },
+    "t-projetos": {
+      "ferramenta": "coop_projetos",
+      "args": {},
+      "ms": 2,
+      "ok": true,
+      "texto": "3 projeto(s):\n- Clínicas em Campinas · Carla, Bruno, Davi, Theus · Projetos/Clínicas · próximos: Fechar a landing até sexta\n- Site novo · Davi, Eva, Theus, João · Projetos/Site novo\n- Onboarding de clientes · Iara, Felipe · Projetos/Onboarding"
+    },
+    "t-demandas": {
+      "ferramenta": "coop_demandas",
+      "args": {
+        "pessoa": "Bruno"
+      },
+      "ms": 1,
+      "ok": true,
+      "texto": "Bruno: 2 demanda(s) aberta(s):\n- [enviada] Revisar a proposta da Clínica Vida · de Theus · até 29/09\n- [enviada] Revisar a proposta da Clínica Vida · de Theus · até 29/09\nLivres: Atualizar a planilha de leads com as clínicas novas · Revisar o texto da página de preços · Organizar a pasta EQUIPE/Quadros."
+    },
+    "t-buscar": {
+      "ferramenta": "coop_buscar",
+      "args": {
+        "termo": "reembolso"
+      },
+      "ms": 2,
+      "ok": true,
+      "texto": "3 resultado(s) para \"reembolso\" (busca sem LLM):\n- Aprovar reembolso da viagem a Campinas · demanda · Aprovar reembolso da viagem a Campinas. As notas estão no HD da Carla, em  Notas de despesas . Preciso do O…\n- carla/Notas de despesas/viagem-campinas.pdf · pdf · Reembolso · viagem a Campinas # Despesas Combustível: R$ 212,40 Pedágio: R$ 38,60 Almoço com client…\n- theus/README.md · nota · …sões → Voltar como estava*. ## Comandos úteis no terminal ```bash coop ajuda coop buscar  reembolso  coop aprendi  cliente de clínica prefere proposta curta  `"
+    },
+    "t-proibida": {
+      "ferramenta": "coop_acao",
+      "args": {
+        "acao": "transmissao",
+        "args": [
+          false
+        ]
+      },
+      "ms": 2,
+      "ok": false,
+      "texto": "a ação \"transmissao\" não está na lista permitida ao agente."
+    },
+    "t-acao": {
+      "ferramenta": "coop_acao",
+      "args": {
+        "acao": "pegar",
+        "args": [
+          "d-que-nao-existe"
+        ]
+      },
+      "ms": 2,
+      "ok": false,
+      "texto": "não deu: ação pegar (o app recusou; confira o estado)."
+    },
+    "t-aviso-membro": {
+      "ferramenta": "coop_aviso",
+      "args": {
+        "texto": "isso não pode"
+      },
+      "ms": 1,
+      "ok": false,
+      "texto": "só a gestão manda aviso oficial. Use coop_mural para um recado."
+    },
+    "t-ninguem": {
+      "ferramenta": "coop_campanha",
+      "args": {
+        "nome": "10 clientes",
+        "meta": 10,
+        "para": "Fulano de Tal",
+        "prazo": "30/09"
+      },
+      "ms": 2,
+      "ok": false,
+      "texto": "não achei \"Fulano de Tal\" na equipe. Pessoas: Theus, Ana, Bruno, Carla, Davi, Eva, Felipe, Gabi, Hugo, Iara, João."
+    },
+    "t-prazo": {
+      "ferramenta": "coop_demanda",
+      "args": {
+        "titulo": "x",
+        "prazo": "31/02"
+      },
+      "ms": 1,
+      "ok": false,
+      "texto": "a data 31/02 não existe."
+    },
+    "t-desconhecida": {
+      "ferramenta": "coop_formatar_disco",
+      "args": {},
+      "ms": 0,
+      "ok": false,
+      "texto": "ferramenta desconhecida na tela: coop_formatar_disco"
+    },
+    "tvNaoExecuta": {
+      "tvRespondeu": 0,
+      "muralAntes": 4,
+      "execucoesNaEstacao": 1,
+      "acoesNoDiario": 1,
+      "itensNaTelaDepoisDoCanal": 2
+    }
+  },
+  "eu": {
+    "id": "theus",
+    "nome": "Theus",
+    "papel": "gestao"
+  },
+  "coopUiInjetadoPeloTeste": true
+}

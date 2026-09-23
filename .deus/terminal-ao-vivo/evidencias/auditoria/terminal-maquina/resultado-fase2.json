@@ -1,0 +1,191 @@
+{
+ "fundar": {
+  "id": "theus",
+  "nome": "Theus",
+  "papel": "gestao",
+  "equipe": "babel",
+  "pronto": true
+ },
+ "inicio": {
+  "real": {
+   "terminal": true,
+   "midia": [
+    "b-entrada-poster.jpg",
+    "b-entrada.mp4",
+    "midia.json",
+    "mostrador-anel-512.png",
+    "mostrador-anel-mini.svg",
+    "mostrador-anel.png"
+   ]
+  },
+  "tr": true,
+  "trPronto": true,
+  "sessoes": [
+   {
+    "id": "assistente",
+    "agente": "assistente",
+    "nome": "Assistente",
+    "aberta": true,
+    "pid": 73064,
+    "estado": "shell",
+    "face": "presenca",
+    "pausada": false,
+    "modoAgente": false,
+    "agenteEstado": null,
+    "blocos": 0,
+    "cols": 56,
+    "rows": 28,
+    "frase": "em repouso",
+    "alvo": "babel-e2e-tm-s5p7Py/theus"
+   }
+  ],
+  "pessoas": [
+   "Theus"
+  ],
+  "projetos": [],
+  "organismo": true,
+  "somLigado": true,
+  "textura": "/coop/midia/mostrador-anel-512.png",
+  "painel": "→ babel-e2e-tm-s5p7Py/theus\nAssistente · em repouso\nnasceu na sua pasta · 19:55\n● ao vivo",
+  "abas": [
+   "Assistente\n×",
+   "×"
+  ],
+  "marca": true,
+  "selo": false,
+  "aoVivo": [],
+  "atividades": []
+ },
+ "erroFrase": "falhou | falhou · 19:55",
+ "erroCont": {
+  "antes": {
+   "sons": {
+    "acordar": 1
+   },
+   "pulso": 0,
+   "faiscas": 0,
+   "particulas": 0,
+   "respirar": 0
+  },
+  "depois": {
+   "sons": {
+    "acordar": 1
+   },
+   "pulso": 2,
+   "faiscas": 0,
+   "particulas": 0,
+   "respirar": 0
+  }
+ },
+ "longoFrase": "terminou | terminou · 19:55 · 11 s",
+ "longoCont": {
+  "antes": {
+   "sons": {
+    "acordar": 1,
+    "erro": 1
+   },
+   "pulso": 2,
+   "faiscas": 0,
+   "particulas": 0,
+   "respirar": 0
+  },
+  "depois": {
+   "sons": {
+    "acordar": 1,
+    "erro": 1,
+    "tique": 1
+   },
+   "pulso": 4,
+   "faiscas": 1,
+   "particulas": 8,
+   "respirar": 0
+  }
+ },
+ "placar": {
+  "antes": "0\npontos · hoje",
+  "depois": "13\npontos · hoje",
+  "api": [
+   "versao",
+   "hoje",
+   "semana",
+   "sequencia",
+   "meta",
+   "definirMeta",
+   "eventos",
+   "doPlano",
+   "registrarOk",
+   "abrir",
+   "fechar",
+   "aberto",
+   "ouvir",
+   "contagem",
+   "ultimaContagem",
+   "registro",
+   "religar"
+  ]
+ },
+ "agenteCont": {
+  "antes": {
+   "sons": {
+    "acordar": 1,
+    "erro": 1,
+    "tique": 1
+   },
+   "pulso": 4,
+   "faiscas": 1,
+   "particulas": 8,
+   "respirar": 0
+  },
+  "depois": {
+   "sons": {
+    "acordar": 1,
+    "erro": 1,
+    "tique": 4,
+    "duas": 1,
+    "espera": 1
+   },
+   "pulso": 8,
+   "faiscas": 5,
+   "particulas": 20,
+   "respirar": 1
+  }
+ },
+ "paredeCartoes": [
+  {
+   "txt": "RI Aurora · rita você aqui npm · rodando há 1 s Sair Chamar",
+   "borda": "3px solid rgb(108, 123, 150)",
+   "borda2": "oklch(0.811047 0.1238 226.941 / 0.55) oklch(0.811047 0.1238 226.941 / 0.55) oklch(0.811047 0.1238 226.941 / 0.55) rgb(108, 123, 150)",
+   "sombra": "rgba(42, 213, 229, 0.035) 0px 0px 0px 1px inset, rgba(42, 213, 229, 0.4) 0px 12px 30px -20px",
+   "avatar": {
+    "w": 22,
+    "html": "<span class=\"avatar\" style=\"--cor:#6c7b96;--tam:22px\" title=\"rita\">RI</span>",
+    "sombra": "none"
+   },
+   "botoes": [
+    "Sair",
+    "Chamar"
+   ]
+  },
+  {
+   "txt": "TH Assistente · Theus (você) ao vivo ✓ resultado pronto: landing.html com herói, três cartões e depoimento [matheussilveirapro] /var/folders",
+   "borda": "3px solid rgb(90, 209, 255)",
+   "borda2": "rgba(63, 227, 255, 0.22) rgba(63, 227, 255, 0.22) rgba(63, 227, 255, 0.22) rgb(90, 209, 255)",
+   "sombra": "rgba(42, 213, 229, 0.035) 0px 0px 0px 1px inset, rgba(42, 213, 229, 0.4) 0px 12px 30px -20px",
+   "avatar": {
+    "w": 22,
+    "html": "<span class=\"avatar\" style=\"--cor:#5ad1ff;--tam:22px\" title=\"Theus\">TH</span>",
+    "sombra": "none"
+   },
+   "botoes": [
+    "Pausar transmissão"
+   ]
+  }
+ ],
+ "ampliado": "RI\nrita · Aurora\n\nao vivo · npm · rodando há 2 s\n\nvocê aqui\nSair\nChamar\nFalar\nVoltar para a parede\n● você está no terminal de rita · o que você digitar roda lá\n ",
+ "peca3d": {
+  "camada": true,
+  "canvas": true,
+  "texto": "✕ fechar o 3D\nGaveta\n\ntabela: guarda linhas de uma coisa (pacientes, pedidos); vitrine (view) e janela (tabela estrangeira) são variantes dela · “guarda os Pacientes”\n\nkeyframe → recorte → 3d → clipe · US$ 0,630 · 18436 triângulos · arraste para girar\nGaveta\nguarda as linhas (tabela)\nCampo\ncada informação (coluna)\nFio\nliga uma gaveta à outra\nChave\nquem vê e quem muda (RLS)\nEmpresa\ncada empresa vê só o seu\nPortaria\nquem entra (login)\nPorta\nrecebe pedidos (API)\nRobô\nfaz sozinho quando algo acontec"
+ },
+ "erros": []
+}

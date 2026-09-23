@@ -1,0 +1,135 @@
+{
+  "quando": "2026-09-23T21:15:28.514Z",
+  "comando": "claude -p 'liste as pessoas da equipe usando a ferramenta coop' --model haiku --mcp-config '{\"mcpServers\":{\"coop\":{\"type\":\"http\",\"url\":\"http://127.0.0.1:4923/mcp/s-claude\"}}}' --strict-mcp-config --allowedTools mcp__coop mcp__coop__* --output-format json --no-session-persistence --setting-sources project --max-budget-usd 0.30 --debug-file /var/folders/k6/6y2hfq0d0zb5_fn8cnxkx_c00000gn/T/babel-mcp-claude-XNEdM4/debug.log",
+  "cwd": "/var/folders/k6/6y2hfq0d0zb5_fn8cnxkx_c00000gn/T/babel-mcp-claude-XNEdM4",
+  "ms": 8189,
+  "codigo": 0,
+  "registroDoServidor": [
+    {
+      "ts": 1790198120566,
+      "sessao": "s-claude",
+      "era": "moderna",
+      "versao": "2026-07-28",
+      "metodo": "server/discover",
+      "ua": "claude-code/2.1.281 (sdk-cli)",
+      "status": 200,
+      "ms": 0
+    },
+    {
+      "ts": 1790198120576,
+      "sessao": "s-claude",
+      "era": "moderna",
+      "versao": "2026-07-28",
+      "metodo": "tools/list",
+      "ua": "claude-code/2.1.281 (sdk-cli)",
+      "status": 200,
+      "ms": 0,
+      "ferramentas": 24
+    },
+    {
+      "ts": 1790198125558,
+      "sessao": "s-claude",
+      "era": "moderna",
+      "versao": "2026-07-28",
+      "metodo": "tools/call",
+      "ua": "claude-code/2.1.281 (sdk-cli)",
+      "status": 200,
+      "ms": 1,
+      "ferramenta": "coop_pessoas",
+      "ok": true
+    }
+  ],
+  "chamadasNaTela": [
+    {
+      "ferramenta": "coop_pessoas",
+      "sessao": "s-claude",
+      "agente": {
+        "id": "ag-rita",
+        "nome": "Rita",
+        "dono": "theus-1"
+      },
+      "args": {}
+    }
+  ],
+  "resposta": {
+    "result": "Aqui estão as pessoas da equipe:\n\n| Nome | Papel | Status | Agentes |\n|------|-------|--------|---------|\n| **Theus** | Gestão | 🟢 Online | Rita |\n| **Carla** | Membro | 🔴 Offline | Lu |\n| **Zuleica Brandão** | Membro | 🟢 Online | Faro |\n\nAtualmente, **Theus** e **Zuleica Brandão** estão online, enquanto **Carla** está offline.",
+    "is_error": false,
+    "num_turns": 3,
+    "duration_ms": 7055,
+    "total_cost_usd": 0.0248456,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 8356,
+      "cache_read_input_tokens": 57356,
+      "output_tokens": 474,
+      "output_tokens_details": {
+        "thinking_tokens": 198
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 8356,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 8,
+          "output_tokens": 179,
+          "cache_read_input_tokens": 21937,
+          "cache_creation_input_tokens": 275,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 275
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "modelUsage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 28,
+        "outputTokens": 474,
+        "cacheReadInputTokens": 57356,
+        "cacheCreationInputTokens": 8356,
+        "webSearchRequests": 0,
+        "costUSD": 0.0248456,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000,
+        "thinkingTokens": 198,
+        "canonicalModel": "claude-haiku-4-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "subtype": "success"
+  },
+  "stderr": "",
+  "debugMcp": [
+    "2026-09-23T21:15:20.562Z [DEBUG] MCP server \"coop\": Initializing HTTP transport to http://127.0.0.1:4923/mcp/s-claude",
+    "2026-09-23T21:15:20.562Z [DEBUG] MCP server \"coop\": Node version: v26.3.0, Platform: darwin",
+    "2026-09-23T21:15:20.563Z [DEBUG] MCP server \"coop\": Environment: {\"NODE_OPTIONS\":\"not set\",\"UV_THREADPOOL_SIZE\":\"default\",\"HTTP_PROXY\":\"not set\",\"HTTPS_PROXY\":\"not set\",\"NO_PROXY\":\"not set\"}",
+    "2026-09-23T21:15:20.563Z [DEBUG] MCP server \"coop\": HTTP transport options: {\"url\":\"http://127.0.0.1:4923/mcp/s-claude\",\"headers\":{\"User-Agent\":\"claude-code/2.1.281 (sdk-cli)\",\"Accept-Encoding\":\"identity\"},\"hasAuthProvider\":true,\"timeoutMs\":60000}",
+    "2026-09-23T21:15:20.563Z [DEBUG] MCP server \"coop\": HTTP transport created successfully",
+    "2026-09-23T21:15:20.563Z [DEBUG] MCP server \"coop\": Starting connection with timeout of 30000ms",
+    "2026-09-23T21:15:20.563Z [DEBUG] MCP server \"coop\": Testing basic HTTP connectivity to http://127.0.0.1:4923/mcp/s-claude",
+    "2026-09-23T21:15:20.563Z [DEBUG] MCP server \"coop\": Parsed URL: host=127.0.0.1, port=4923, protocol=http:",
+    "2026-09-23T21:15:20.563Z [DEBUG] MCP server \"coop\": Using loopback address: 127.0.0.1",
+    "2026-09-23T21:15:20.564Z [DEBUG] MCP server \"coop\": No token data found",
+    "2026-09-23T21:15:20.574Z [DEBUG] MCP server \"coop\": Successfully connected (transport: http) in 12ms",
+    "2026-09-23T21:15:20.574Z [DEBUG] MCP server \"coop\": no auto-opened subscriptions/listen on a modern connection; running the listen open through the reopen machinery (no-op if the server advertises no listChanged capability)",
+    "2026-09-23T21:15:20.574Z [DEBUG] MCP server \"coop\": Connection established with capabilities: {\"hasTools\":true,\"hasPrompts\":false,\"hasResources\":false,\"hasResourceSubscribe\":false,\"serverVersion\":{\"name\":\"coop\",\"title\":\"babel-coop\",\"version\":\"0.1.0\"},\"protocolEra\":\"modern\",\"negotiatedProtocolVersion\":\"2026-07-28\"}",
+    "2026-09-23T21:15:20.574Z [DEBUG] [MCP] Server \"coop\" connected with subscribe=false",
+    "2026-09-23T21:15:20.575Z [DEBUG] MCP server \"coop\": No token data found",
+    "2026-09-23T21:15:23.803Z [DEBUG] ToolSearchTool: selected mcp__coop__coop_pessoas",
+    "2026-09-23T21:15:25.557Z [DEBUG] MCP server \"coop\": Calling MCP tool: coop_pessoas",
+    "2026-09-23T21:15:25.558Z [DEBUG] MCP server \"coop\": No token data found",
+    "2026-09-23T21:15:25.560Z [DEBUG] MCP server \"coop\": Tool 'coop_pessoas' completed successfully in 3ms",
+    "2026-09-23T21:15:27.987Z [DEBUG] MCP server \"coop\": HTTP connection closed after 7s (cleanly)",
+    "2026-09-23T21:15:27.987Z [DEBUG] MCP server \"coop\": Cleared connection cache for reconnection"
+  ]
+}

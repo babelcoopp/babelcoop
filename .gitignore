@@ -20,3 +20,15 @@ Thumbs.db
 # Claude Code (arquivos locais da sessão)
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# evidências pesadas dos testes da missão terminal-ao-vivo (ficam no disco; os resumos .json/.txt/.md vão para o git)
+.deus/terminal-ao-vivo/evidencias/**/*.png
+.deus/terminal-ao-vivo/evidencias/**/*.jpg
+.deus/terminal-ao-vivo/evidencias/**/*.jpeg
+.deus/terminal-ao-vivo/evidencias/**/*.mp4
+.deus/terminal-ao-vivo/evidencias/**/*.webm
+.deus/terminal-ao-vivo/evidencias/**/*.glb
+.deus/terminal-ao-vivo/evidencias/**/*.sqlite
+.deus/terminal-ao-vivo/evidencias/**/*.dmg
+.deus/terminal-ao-vivo/evidencias/**/*.exe
+.deus/terminal-ao-vivo/evidencias/**/node_modules/

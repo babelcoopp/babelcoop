@@ -1,0 +1,17 @@
+{
+  "aberto": {
+    "estado": "corpo",
+    "peca": "gaveta",
+    "canvas": true,
+    "ultimo": {
+      "id": "gaveta",
+      "malhas": 1,
+      "triangulos": 18436,
+      "pixelRatio": 1.5,
+      "quadros": 52,
+      "pixelsAcesos": 13.3
+    }
+  },
+  "fechou": true,
+  "erros": []
+}

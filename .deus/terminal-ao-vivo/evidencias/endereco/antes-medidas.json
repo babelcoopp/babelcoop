@@ -1,0 +1,67 @@
+{
+  "prefixo": "antes",
+  "quando": "2026-09-23T21:44:42.525Z",
+  "protótipo": {
+    "landing": "davi/Projetos/Clínicas/landing.html",
+    "cabecalho": {
+      "endereco": null,
+      "trilhaEditor": "Davi › Projetos › Clínicas › landing.html"
+    },
+    "paletaOnde": [
+      "Procurar \"onde\" no acervo",
+      "acervo",
+      "Mostrar ou esconder a lateral",
+      "Ctrl B",
+      "Mostrar ou esconder o terminal",
+      "Ctrl `"
+    ],
+    "lateralEquipe": [
+      "EQUIPE",
+      "Cuidando da gente",
+      "3",
+      "Pessoas e carga",
+      "11",
+      "Check-ins de hoje",
+      "4/11",
+      "Controle da TV",
+      "painel",
+      "Regras",
+      "CONVIDAR PESSOA",
+      "Gerar token",
+      "Horas por pessoa aparecem só para a gestão. A TV mostra o total da equipe e os sinais de cuidado, nunca um ranking."
+    ],
+    "erros": []
+  },
+  "app": {
+    "landing": "davi/Projetos/Clínicas/landing.html",
+    "cabecalho": {
+      "endereco": null,
+      "trilhaEditor": "Davi › Projetos › Clínicas › landing.html"
+    },
+    "paletaOnde": [
+      "Procurar \"onde\" no acervo",
+      "acervo",
+      "Mostrar ou esconder a lateral",
+      "Ctrl B",
+      "Mostrar ou esconder o terminal",
+      "Ctrl `"
+    ],
+    "lateralEquipe": [
+      "EQUIPE",
+      "Cuidando da gente",
+      "3",
+      "Pessoas e carga",
+      "11",
+      "Check-ins de hoje",
+      "4/11",
+      "Controle da TV",
+      "painel",
+      "Regras",
+      "CONVIDAR PESSOA",
+      "Gerar token",
+      "Horas por pessoa aparecem só para a gestão. A TV mostra o total da equipe e os sinais de cuidado, nunca um ranking."
+    ],
+    "erros": [],
+    "fundou": "theus"
+  }
+}

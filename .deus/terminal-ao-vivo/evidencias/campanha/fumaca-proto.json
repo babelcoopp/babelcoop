@@ -1,0 +1,221 @@
+{
+ "modo": "proto",
+ "api": "function",
+ "gerou": {
+  "id": "cp-muenj740-wu7c",
+  "nome": "Clínica Vida",
+  "estado": "gerando",
+  "para": "carla",
+  "por": "theus",
+  "prazo": "2026-09-30",
+  "meta": "40 clientes",
+  "endereco": "equipe/Campanhas/Clínica Vida",
+  "pecas": [
+   {
+    "id": "tela",
+    "tipo": "tela",
+    "titulo": "Landing page",
+    "dono": "davi",
+    "arquivo": "equipe/Campanhas/Clínica Vida/landing.html",
+    "estado": "fila",
+    "progresso": 0,
+    "ok": null
+   },
+   {
+    "id": "anuncio-1",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 1 · feed",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-1.svg",
+    "estado": "fila",
+    "progresso": 0,
+    "ok": null
+   },
+   {
+    "id": "anuncio-2",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 2 · feed",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-2.svg",
+    "estado": "fila",
+    "progresso": 0,
+    "ok": null
+   },
+   {
+    "id": "anuncio-3",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 3 · stories",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-3.svg",
+    "estado": "fila",
+    "progresso": 0,
+    "ok": null
+   },
+   {
+    "id": "whatsapp",
+    "tipo": "whatsapp",
+    "titulo": "Mensagem de WhatsApp",
+    "dono": "iara",
+    "arquivo": "equipe/Campanhas/Clínica Vida/whatsapp.txt",
+    "estado": "fila",
+    "progresso": 0,
+    "ok": null
+   },
+   {
+    "id": "calendario",
+    "tipo": "calendario",
+    "titulo": "Calendário de posts",
+    "dono": "carla",
+    "arquivo": "equipe/Campanhas/Clínica Vida/calendario.csv",
+    "estado": "fila",
+    "progresso": 0,
+    "ok": null
+   }
+  ]
+ },
+ "meio": {
+  "id": "cp-muenj740-wu7c",
+  "nome": "Clínica Vida",
+  "estado": "gerando",
+  "para": "carla",
+  "por": "theus",
+  "prazo": "2026-09-30",
+  "meta": "40 clientes",
+  "endereco": "equipe/Campanhas/Clínica Vida",
+  "pecas": [
+   {
+    "id": "tela",
+    "tipo": "tela",
+    "titulo": "Landing page",
+    "dono": "davi",
+    "arquivo": "equipe/Campanhas/Clínica Vida/landing.html",
+    "estado": "gerando",
+    "progresso": 0.8,
+    "ok": null
+   },
+   {
+    "id": "anuncio-1",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 1 · feed",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-1.svg",
+    "estado": "gerando",
+    "progresso": 0.5,
+    "ok": null
+   },
+   {
+    "id": "anuncio-2",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 2 · feed",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-2.svg",
+    "estado": "gerando",
+    "progresso": 0.25,
+    "ok": null
+   },
+   {
+    "id": "anuncio-3",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 3 · stories",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-3.svg",
+    "estado": "gerando",
+    "progresso": 0.25,
+    "ok": null
+   },
+   {
+    "id": "whatsapp",
+    "tipo": "whatsapp",
+    "titulo": "Mensagem de WhatsApp",
+    "dono": "iara",
+    "arquivo": "equipe/Campanhas/Clínica Vida/whatsapp.txt",
+    "estado": "fila",
+    "progresso": 0,
+    "ok": null
+   },
+   {
+    "id": "calendario",
+    "tipo": "calendario",
+    "titulo": "Calendário de posts",
+    "dono": "carla",
+    "arquivo": "equipe/Campanhas/Clínica Vida/calendario.csv",
+    "estado": "gerando",
+    "progresso": 0.14,
+    "ok": null
+   }
+  ]
+ },
+ "fim": {
+  "id": "cp-muenj740-wu7c",
+  "nome": "Clínica Vida",
+  "estado": "pronta",
+  "para": "carla",
+  "por": "theus",
+  "prazo": "2026-09-30",
+  "meta": "40 clientes",
+  "endereco": "equipe/Campanhas/Clínica Vida",
+  "pecas": [
+   {
+    "id": "tela",
+    "tipo": "tela",
+    "titulo": "Landing page",
+    "dono": "davi",
+    "arquivo": "equipe/Campanhas/Clínica Vida/landing.html",
+    "estado": "pronta",
+    "progresso": 1,
+    "ok": null
+   },
+   {
+    "id": "anuncio-1",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 1 · feed",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-1.svg",
+    "estado": "pronta",
+    "progresso": 1,
+    "ok": null
+   },
+   {
+    "id": "anuncio-2",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 2 · feed",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-2.svg",
+    "estado": "pronta",
+    "progresso": 1,
+    "ok": null
+   },
+   {
+    "id": "anuncio-3",
+    "tipo": "anuncio",
+    "titulo": "Anúncio 3 · stories",
+    "dono": "eva",
+    "arquivo": "equipe/Campanhas/Clínica Vida/anuncio-3.svg",
+    "estado": "pronta",
+    "progresso": 1,
+    "ok": null
+   },
+   {
+    "id": "whatsapp",
+    "tipo": "whatsapp",
+    "titulo": "Mensagem de WhatsApp",
+    "dono": "iara",
+    "arquivo": "equipe/Campanhas/Clínica Vida/whatsapp.txt",
+    "estado": "pronta",
+    "progresso": 1,
+    "ok": null
+   },
+   {
+    "id": "calendario",
+    "tipo": "calendario",
+    "titulo": "Calendário de posts",
+    "dono": "carla",
+    "arquivo": "equipe/Campanhas/Clínica Vida/calendario.csv",
+    "estado": "pronta",
+    "progresso": 1,
+    "ok": null
+   }
+  ]
+ },
+ "erros": []
+}

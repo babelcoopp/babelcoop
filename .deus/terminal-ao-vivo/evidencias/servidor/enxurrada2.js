@@ -1,0 +1,20 @@
+const WebSocket = require('/Users/matheussilveirapro/Desktop/babel-coop/app/node_modules/ws');
+const { Estacao, esperar } = require('/Users/matheussilveirapro/Desktop/babel-coop/app/testes/servidor/estacoes.js');
+(async () => {
+  const E = new Estacao({ nome: 'enxurrada', porta: 4818, descoberta: 41314 });
+  await E.subir();
+  await E.api('POST', '/api/fundar', { nome: 'Theus' });
+  const ws = new WebSocket('ws://127.0.0.1:4818/ws', { origin: 'http://localhost:4818' });
+  await new Promise((r) => ws.on('open', r));
+  let bytes = 0, fim = null, cauda = '', aberto = null;
+  ws.on('message', (b) => { const m = JSON.parse(b); if (m.tipo === 'term-aberto') aberto = m; if (m.tipo !== 'term-saida') return; bytes += m.dados.length; cauda = (cauda + m.dados).slice(-4096); if (!fim && cauda.includes('FIM-9')) fim = Date.now(); });
+  ws.send(JSON.stringify({ tipo: 'term-abrir', id: 'x1', cols: 120, rows: 40 }));
+  while (!aberto) await esperar(20);
+  await esperar(500);
+  const t0 = Date.now();
+  ws.send(JSON.stringify({ tipo: 'term-entrada', id: 'x1', dados: "head -c 30000000 /dev/zero | tr '\\0' 'a'; echo; echo FIM-$((3*3))\r" }));
+  while (!fim) await esperar(20);
+  const rss = require('child_process').execFileSync('/bin/ps', ['-o', 'rss=', '-p', String(E.filho.pid)]).toString().trim();
+  console.log(JSON.stringify({ segundos: (fim - t0) / 1000, MBnoNavegador: (bytes / 1e6).toFixed(1), rssMB: (rss / 1024).toFixed(0) }));
+  ws.close(); await E.parar();
+})().catch((e) => { console.error('FALHOU', e.message); process.exit(1); });

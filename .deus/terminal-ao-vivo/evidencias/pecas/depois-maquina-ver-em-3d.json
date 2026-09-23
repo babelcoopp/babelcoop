@@ -1,0 +1,18 @@
+{
+ "clicou_em": {
+  "x": 774,
+  "y": 411.140625,
+  "id": "carteiro"
+ },
+ "estado": "corpo",
+ "peca": "carteiro",
+ "cartoes": 17,
+ "u": {
+  "id": "carteiro",
+  "malhas": 1,
+  "triangulos": 3830,
+  "pixelRatio": 1,
+  "quadros": 5,
+  "pixelsAcesos": 11.6
+ }
+}

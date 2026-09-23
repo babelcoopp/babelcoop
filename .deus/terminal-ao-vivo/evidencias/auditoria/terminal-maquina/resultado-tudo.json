@@ -1,0 +1,513 @@
+{
+ "fundar": {
+  "id": "theus",
+  "nome": "Theus",
+  "papel": "gestao",
+  "equipe": "babel",
+  "pronto": true
+ },
+ "inicio": {
+  "real": {
+   "terminal": true,
+   "midia": [
+    "b-entrada-poster.jpg",
+    "b-entrada.mp4",
+    "midia.json",
+    "mostrador-anel-512.png",
+    "mostrador-anel-mini.svg",
+    "mostrador-anel.png"
+   ]
+  },
+  "tr": true,
+  "trPronto": true,
+  "sessoes": [
+   {
+    "id": "assistente",
+    "agente": "assistente",
+    "nome": "Assistente",
+    "aberta": true,
+    "pid": 57882,
+    "estado": "shell",
+    "face": "presenca",
+    "pausada": false,
+    "modoAgente": false,
+    "agenteEstado": null,
+    "blocos": 0,
+    "cols": 56,
+    "rows": 28,
+    "frase": "em repouso",
+    "alvo": "babel-e2e-tm-OH9wKG/theus"
+   }
+  ],
+  "pessoas": [
+   "Theus"
+  ],
+  "projetos": [],
+  "organismo": true,
+  "somLigado": true,
+  "textura": "/coop/midia/mostrador-anel-512.png",
+  "painel": "→ babel-e2e-tm-OH9wKG/theus\nAssistente · em repouso\nnasceu na sua pasta · 19:51\n● ao vivo",
+  "abas": [
+   "Assistente\n×",
+   "×"
+  ],
+  "marca": true,
+  "selo": false,
+  "aoVivo": [],
+  "atividades": []
+ },
+ "eu": "theus",
+ "terminal": {
+  "spanPadrao": {
+   "cls": "",
+   "bgImg": "linear-gradient(90deg, rgb(185, 168, 255) 1174px, rgb(122, 184, 255) 1401px, rgb(111, 227, 255) 1586px)",
+   "clip": "text",
+   "color": "rgba(0, 0, 0, 0)"
+  },
+  "fundo": "rgb(6, 11, 22)",
+  "fonte": "\"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace 12.5px",
+  "marcaB": {
+   "html": "<span class=\"bc-marca-b\" aria-hidden=\"true\" data-neon=\"sim\" style=\"--bc-nivel: 0.572;\"><svg viewBox=\"0 0 20 20\" focusable=\"false\"><defs><linearGradient id=\"bcm1",
+   "w": 34,
+   "op": "1"
+  },
+  "hairline": {
+   "bg": "linear-gradient(90deg, rgb(163, 118, 233), rgb(42, 213, 229))",
+   "op": "0.86"
+  }
+ },
+ "cabRodando": "→ sleep | Assistente · rodando há 2 s | rodando sleep · 19:51 | nasceu na sua pasta · 19:51 | ● ao vivo",
+ "cabTerminou": "→ sleep | Assistente · terminou · 19:51 · 4 s | terminou sleep · 4 s · 19:51 | rodando sleep · 19:51 | nasceu na sua pasta · 19:51 | ● ao vivo",
+ "orgDepoisTerminou": {
+  "contagem": {
+   "somPedido": {
+    "acordar": 1,
+    "tique": 1
+   },
+   "somTocado": {
+    "acordar": 1,
+    "tique": 1
+   },
+   "somBloqueado": {},
+   "pulso": 2,
+   "faiscas": 1,
+   "particulas": 4,
+   "respirar": 0,
+   "acordar": 1,
+   "acender": 46,
+   "descartados": 0,
+   "preemptados": 0,
+   "maxVivos": 1
+  },
+  "ultimos": [
+   {
+    "tipo": "som",
+    "nome": "acordar",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 475
+   },
+   {
+    "tipo": "acordar",
+    "ok": true,
+    "ms": 257,
+    "t": 529
+   },
+   {
+    "tipo": "pulso",
+    "ok": false,
+    "motivo": "sem-alvo",
+    "t": 10417
+   },
+   {
+    "tipo": "pulso",
+    "ok": true,
+    "ms": 611,
+    "t": 11029
+   },
+   {
+    "tipo": "som",
+    "nome": "tique",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 11032
+   },
+   {
+    "tipo": "faiscas",
+    "ok": true,
+    "ms": 866,
+    "t": 11898
+   }
+  ]
+ },
+ "cabErro": "→ sleep | Assistente · rodando há 0 s | rodando sleep · 19:51 | terminou sleep · 4 s · 19:51 | rodando sleep · 19:51 | nasceu na sua pasta · 19:51 | ● ao vivo",
+ "orgDepoisErro": {
+  "contagem": {
+   "somPedido": {
+    "acordar": 1,
+    "tique": 1
+   },
+   "somTocado": {
+    "acordar": 1,
+    "tique": 1
+   },
+   "somBloqueado": {},
+   "pulso": 2,
+   "faiscas": 1,
+   "particulas": 4,
+   "respirar": 0,
+   "acordar": 1,
+   "acender": 55,
+   "descartados": 0,
+   "preemptados": 0,
+   "maxVivos": 1
+  },
+  "ultimos": [
+   {
+    "tipo": "som",
+    "nome": "acordar",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 475
+   },
+   {
+    "tipo": "acordar",
+    "ok": true,
+    "ms": 257,
+    "t": 529
+   },
+   {
+    "tipo": "pulso",
+    "ok": false,
+    "motivo": "sem-alvo",
+    "t": 10417
+   },
+   {
+    "tipo": "pulso",
+    "ok": true,
+    "ms": 611,
+    "t": 11029
+   },
+   {
+    "tipo": "som",
+    "nome": "tique",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 11032
+   },
+   {
+    "tipo": "faiscas",
+    "ok": true,
+    "ms": 866,
+    "t": 11898
+   }
+  ]
+ },
+ "cabEspera": "→ claude | Assistente · espera você | espera você · 19:51 | rodando sleep · 19:51 | terminou sleep · 4 s · 19:51 | rodando sleep · 19:51 | ● ao vivo",
+ "visitante": {
+  "selo": "CA\n● carla está no seu terminal Assistente\nEncerrar",
+  "rodape": [
+   "● carla está no seu terminal Assistente\nEncerrar",
+   "0\npontos · hoje\nTV não aberta\n● terminal ao vivo\nacervo: 1\nSalvo na equipe",
+   "● terminal ao vivo"
+  ]
+ },
+ "pedido": {
+  "selo": [
+   "RI\nrita pede para entrar no seu terminal Assistente\nAceitar\nRecusar"
+  ]
+ },
+ "cabPausa": "→ babel-e2e-tm-OH9wKG/theus | Assistente · transmissão pausada | transmissão pausada · 19:51 | carla entrou · 19:51 | espera você · 19:51 | rodando sleep · 19:51 | ⏸ pausado",
+ "pausaAbas": [
+  "Assistente | ×",
+  "Presença | Terminal | Ctrl J | Entrar em… | Neon | Som | ⟩"
+ ],
+ "sonsOuvidos": [],
+ "orgFim": {
+  "contagem": {
+   "somPedido": {
+    "acordar": 1,
+    "tique": 1,
+    "espera": 1,
+    "duas": 1
+   },
+   "somTocado": {
+    "acordar": 1,
+    "tique": 1,
+    "espera": 1,
+    "duas": 1
+   },
+   "somBloqueado": {},
+   "pulso": 4,
+   "faiscas": 1,
+   "particulas": 4,
+   "respirar": 2,
+   "acordar": 1,
+   "acender": 89,
+   "descartados": 0,
+   "preemptados": 0,
+   "maxVivos": 2
+  },
+  "ultimos": [
+   {
+    "tipo": "som",
+    "nome": "acordar",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 475
+   },
+   {
+    "tipo": "acordar",
+    "ok": true,
+    "ms": 257,
+    "t": 529
+   },
+   {
+    "tipo": "pulso",
+    "ok": false,
+    "motivo": "sem-alvo",
+    "t": 10417
+   },
+   {
+    "tipo": "pulso",
+    "ok": true,
+    "ms": 611,
+    "t": 11029
+   },
+   {
+    "tipo": "som",
+    "nome": "tique",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 11032
+   },
+   {
+    "tipo": "faiscas",
+    "ok": true,
+    "ms": 866,
+    "t": 11898
+   },
+   {
+    "tipo": "som",
+    "nome": "espera",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 12904
+   },
+   {
+    "tipo": "som",
+    "nome": "duas",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 13528
+   },
+   {
+    "tipo": "respirar",
+    "ok": true,
+    "ms": 1214,
+    "t": 14746
+   },
+   {
+    "tipo": "respirar",
+    "ok": true,
+    "ms": 1215,
+    "t": 15495
+   },
+   {
+    "tipo": "pulso",
+    "ok": false,
+    "motivo": "sem-alvo",
+    "t": 15887
+   }
+  ]
+ },
+ "parede": {
+  "texto": "Terminais ao vivo\n\n1 pessoa · 1 terminal · 1 ao vivo. Todo mundo vê todo mundo; para ajudar, entre e digite.\n\nMAPA DA SALA\nEQUIPE: 1 PRESENÇA\nSINAL: AO VIVO\nTheus · Assistente\na sala\nTH\nAssistente\n· Theus (você)\nao vivo\n[matheussilveirapro] /var/folders/k6/6y2hfq0d0zb5_fn8cnx\nkx_c00000gn/T/babel-e2e-tm-OH9wKG/theus\n❯ echo \"texto padrão para ver o degradê do Babel Termina\nl\"; printf \"\\033[31mvermelho\\033[0m \\033[32mverde\\033[0m\n\\n\"\ntexto padrão para ver o degradê do Babel Terminal\nvermelho verde\n[matheussilveirapro] /var/folders/k6/6y2hfq0d0zb5_fn8cnx\nkx_c00000gn/T/babel-e2e-tm-OH9wKG/theus\n❯ sleep 4; echo pronto                     codex: ready\npronto\n[matheussilveirapro] /var/folders/k6/6y2hfq0d0zb5_fn8cnx\nkx_c00000gn/T/babel-e2e-tm-OH9wKG/theus\n❯ sleep 2.2; ls /nao-existe-babel          codex: ready\nls: /nao-existe-babel: No such file or directory\n[matheussilveirapro] /var/folders/k6/6",
+  "constelacao": true,
+  "cartoes": 1,
+  "classes": [
+   "pr-lat-meus",
+   "pr-lat-meu",
+   "pr-raiz",
+   "pr-vista-parede",
+   "pr-cab-acoes",
+   "pr-sala",
+   "pr-sala-rot",
+   "pr-sala-equipe",
+   "pr-sala-sinal",
+   "pr-constelacao",
+   "pr-grade",
+   "pr-cartao",
+   "pr-fio",
+   "pr-topo",
+   "pr-av",
+   "pr-mini",
+   "pr-ag",
+   "pr-ag-nome",
+   "pr-ag-pessoa",
+   "pr-selo",
+   "pr-selo-t",
+   "pr-bloco",
+   "pr-tela",
+   "pr-escala",
+   "pr-xterm",
+   "pr-tela-aviso",
+   "pr-pe",
+   "pr-frase",
+   "pr-acoes",
+   "pr-bt",
+   "pr-vazio",
+   "pr-amp",
+   "pr-amp-cab",
+   "pr-amp-av",
+   "pr-amp-pres",
+   "pr-amp-titulo",
+   "pr-amp-frase",
+   "pr-amp-acoes",
+   "pr-amp-sessoes",
+   "pr-amp-faixa"
+  ]
+ },
+ "paredePar": {
+  "texto": "Terminais ao vivo\n\n2 pessoas · 2 terminais · 2 ao vivo. Todo mundo vê todo mundo; para ajudar, entre e digite.\n\nMAPA DA SALA\nEQUIPE: 2 PRESENÇAS\nSINAL: AO VIVO\nTheus · Assistente\nrita · Aurora\na sala\nRI\nAurora\n· rita\nao vivo\nnpm run build\n> compilando 42 módulos\n \nnpm · terminou · 19:52 · 14 s\nEntrar\nChamar\nTH\nAssistente\n· Theus (você)\nao vivo\n[matheussilveirapro] /var/folders/k6/6y2hfq0d0zb5_fn8cnx\nkx_c00000gn/T/babel-e2e-tm-OH9wKG/theus\n❯ echo \"texto padrão para ver o degradê do Babel Termina\nl\"; printf \"\\033[31mvermelho\\033[0m \\033[32mverde\\033[0m\n\\n\"\ntexto padrão para ver o degradê do Babel Terminal\nvermelho verde\n[matheussilveirapro] /var/folders/k6/6y2hfq0d0zb5_fn8cnx\nkx_c00000gn/T/babel-e2e-tm-OH9wKG/theus\n❯ sleep 4; echo pronto                     codex: ready\npronto\n[matheussilveirapro] /var/folders/k6/6y2hfq0d0zb5_fn8cnx\nkx_c00000gn/T/babel-e2e-tm-OH9wKG/theus\n❯ sleep 2.2; ls /",
+  "cartoes": 2
+ },
+ "criar": {
+  "texto": "Criar\n\nÉ aqui que tudo acontece. Dependendo do que você cria, a tela do meio vira a coisa certa: site vira Tela, backend vira Máquina, texto vira Pesquisa. Numa tela, o modo 3D mostra a página num ambiente 3D com os próximos itens ao lado: digite nela, aperte Enter e veja o pulso correr. O agente do terminal participa de tudo.\n\n⬚\nTela\numa página, uma landing, um login: abre já como site, edita no visual e tem o modo 3D\n⚙\nMáquina\no backend em peças de Lego: gavetas, portas, robôs, chaves; testa vendo os dados andar\n▤\nPesquisa\nMD, TXT ou PDF: o agente pesquisa e o texto abre em leitura\nCOMEÇAR DE UM PRESET · O QUE A EQUIPE JÁ CONSTRUIU E FUNCIONOU\nPRESETS DA EQUIPE\n0\n\nNada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".\n\nPresets são o que a equipe já construiu e funcionou: backends e telas. Entram em qualquer projeto com um clique ou por \"usa o preset X\" no terminal.\n\n＋ Nota\n＋ Mapa mental\n＋ Quadro\n↥ Abrir do computador\nMUDARAM POR ÚLTIMO\nMD\nREADME.md\ntheus/README.md · agora\n\nAtalhos: Ctrl+B esconde a lateral · Ctrl+` esconde o terminal · Ctrl+K abre os comandos · Ctrl+S salva o arquivo.",
+  "cartaoMaquina": [
+   "clinicas:⚙\nMáquina",
+   "clinicas:⚙\nMáquina\no backend em peças de Lego: gavetas, por"
+  ]
+ },
+ "maquina": {
+  "titulo": "Máquina · Clínicas (exemplo)\n×",
+  "botoes": [
+   "local ●",
+   "branch",
+   "produção",
+   "Testar",
+   "Publicar",
+   "O que muda",
+   "▶ Ver o agente montando",
+   "Projetar na TV",
+   "Máquina inteira",
+   "todas as peças",
+   "Inteira",
+   "Domínio",
+   "Peça",
+   "por pessoa",
+   "Carteiro TH REMETENTE PADRÃO ⚠ padrão: 2 e-mails por hora, só para a equipe",
+   "Portaria TH dono atendente entra com e-mail e senha",
+   "Agenda a tela Agenda usa as portas \"novo\" e \"listar\"",
+   "novo agendamento RECEBE PACIENTE + QUANDO recebe paciente e horário e grava na gaveta Agendamentos",
+   "listar agendamentos DEVOLVE DIA devolve os agendamentos do dia da clínica",
+   "Clínicas TH ¶ nome texto ¶ cnpj texto ¶ cidade texto ≡ plano lista TABELA · clinicas · 4 linhas",
+   "Pacientes ¶ nome texto ▭ nascimento data ¶ telefone texto ○ clínica → Clínicas +1 campo(s) TABELA · pacientes · 20 linhas",
+   "Agendamentos ▭ quando data e hora ○ paciente → Pacientes ≡ status lista: marcado, feito, faltou ¶ obs texto TABELA · agendamentos · 50 linhas",
+   "aviso no WhatsApp QUANDO ENTRA · AGENDAMENTOS usa: ZAPI_TOKEN",
+   "fotos 1,2 GB · PRIVADA",
+   "Cofre TH BANCO_URL BANCO_CHAVE ZAPI_TOKEN pedir ao Theus ⚠ chave faltando: ZAPI_TOKEN",
+   "ao vivo AO VIVO · AGENDAMENTOS",
+   "Ficha",
+   "Teste",
+   "16 peças",
+   "▴",
+   "Carteiro ⚠ padrão: 2 e-mails por hora, só para a equipe",
+   "Cofre ⚠ chave faltando: ZAPI_TOKEN"
+  ],
+  "pecas": [
+   "mq-carteiro alerta :: Carteiro TH REMETENTE PADRÃO ⚠ padrão: 2 e-mails por hora, s",
+   "mq-portaria :: Portaria TH dono atendente entra com e-mail e senha",
+   "mq-tela :: Agenda a tela Agenda usa as portas \"novo\" e \"listar\"",
+   "mq-porta :: novo agendamento RECEBE PACIENTE + QUANDO recebe paciente e ",
+   "mq-porta :: listar agendamentos DEVOLVE DIA devolve os agendamentos do d",
+   "mq-gaveta :: Clínicas TH ¶ nome texto ¶ cnpj texto ¶ cidade texto ≡ plano",
+   "mq-gaveta :: Pacientes ¶ nome texto ▭ nascimento data ¶ telefone texto ○ ",
+   "mq-gaveta :: Agendamentos ▭ quando data e hora ○ paciente → Pacientes ≡ s",
+   "mq-robo :: aviso no WhatsApp QUANDO ENTRA · AGENDAMENTOS usa: ZAPI_TOKE",
+   "mq-deposito :: fotos 1,2 GB · PRIVADA",
+   "mq-cofre alerta :: Cofre TH BANCO_URL BANCO_CHAVE ZAPI_TOKEN pedir ao Theus ⚠ c",
+   "mq-cano :: ao vivo AO VIVO · AGENDAMENTOS"
+  ],
+  "fios": 13,
+  "estilosPeca": {
+   "bg": "rgb(22, 30, 45)",
+   "borda": "",
+   "esq": "3px solid rgb(90, 209, 255)",
+   "sombra": "rgba(255, 255, 255, 0.06) 0px 1px 0px 0px inset, color(srgb 0.164706 0.835294 0.898039 / 0.7) 0px 0px 0px 0px",
+   "bottom": "2px solid rgb(6, 11, 22)"
+  },
+  "rodape": "terminou sleep · 2 s · 19:51\ntransmissão retomada · 19:51\ntransmissão pausada · 19:51\ncarla entrou · 19:51",
+  "lateral": "MÁQUINA · BACKEND VISUAL\n\nO backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto:\n\nClínicas (exemplo)\nLINHA DO TEMPO\n4\nBruno-bot ligou o robô do WhatsApp\nhá 40 min\nDev criou a porta \"novo agendamento\"\nhá 2 horas\nTH\nfechou Pacientes por empresa\nhá 3 horas\nTH\nRita criou a gaveta Pacientes\nhá 3 horas\nPRESETS DA EQUIPE\n0\n\nNada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".\n\nPresets são o que a equipe já construiu e funcionou: bac",
+  "pecas3d": true
+ },
+ "ficha": "Máquina inteira\n›\ntodas as peças\nInteira\nDomínio\nPeça\npor pessoa\nARMÁRIO DA FRENTE · as gavetas daqui têm porta na rua\nCarteiro\nTH\nREMETENTE PADRÃO\n⚠ padrão: 2 e-mails por hora, só para a equipe\nPortaria\nTH\ndono\natendente\nentra com e-mail e senha\nAgenda\na tela Agenda usa as portas \"novo\" e \"listar\"\nnovo agendamento\nRECEBE PACIENTE + QUANDO\nrecebe paciente e horário e grava na gaveta Agendamentos\nlistar agendamentos\nDEVOLVE DIA\ndevolve os agendamentos do dia da clínica\nEMPRESA\ncada uma vê só o seu\nClínicas\nTH\n¶\nnome\ntexto\n¶\ncnpj\ntexto\n¶\ncidade\ntexto\n≡\nplano\nlista\nTABELA · clinicas · 4 linhas\nPacientes\n¶\nnome\ntexto\n▭\nnascimento\ndata\n¶\ntelefone\ntexto\n○\nclínica\n→ Clínicas\n+1 campo(s)\nTABELA · pacientes · 20 linhas\nAgendamentos\n▭\nquando\ndata e hora\n○\npaciente\n→ Pacientes\n≡\nstatus\nlista: marcado, feito, faltou\n¶\nobs\ntexto\nTABELA · agendamentos · 50 linhas\naviso no WhatsApp\nQUANDO ENTRA · AGEND",
+ "testeForm": "PELA PORTA\nnovo agendamento\nlistar agendamentos\nPACIENTE\nQUANDO\nCOMO QUEM\nAna e depois a outra empresa\nAna · Clínica Vida\nBeto · Clínica Sorriso (a outra empresa)\nEnviar pelo fio",
+ "testeFim": {
+  "mesa": "Ficha · Carteiro\nTeste\n16 peças\n▴\nTeste\nabrir ▴\nentrou pela Portaria como Beto, da Clínica Sorriso · papel: atendente",
+  "bolhas": []
+ },
+ "outra": {
+  "bolhas": [
+   "0 passaram · 1 barrado pela chave: cada empresa vê só o seu"
+  ],
+  "texto": "Teste\nabrir ▴\n0 passaram · 1 barrado pela chave · +20"
+ },
+ "muda": "ARMÁRIO DA FRENTE · as gavetas daqui têm porta na rua\nCarteiro\nTH\nREMETENTE PADRÃO\n⚠ padrão: 2 e-mails por hora, só para a equipe\nPortaria\nTH\ndono\natendente\nentra com e-mail e senha\nentrou: Beto\nAgenda\na tela Agenda usa as portas \"novo\" e \"listar\"\nenviou\nnovo agendamento\nRECEBE PACIENTE + QUANDO\nrecebe paciente e horário e grava na gaveta Agendamentos\n1 pedido\nlistar agendamentos\nDEVOLVE DIA\ndevolve os agendamentos do dia da clínica\nEMPRESA\ncada uma vê só o seu\nClínicas\nTH\n¶\nnome\ntexto\n¶\ncnpj\ntexto\n¶\ncidade\ntexto\n≡\nplano\nlista\nTABELA · clinicas · 4 linhas\nPacientes\n¶\nnome\ntexto\n▭\nnascimento\nda",
+ "publicar": "ARMÁRIO DA FRENTE · as gavetas daqui têm porta na rua\nCarteiro\nTH\nREMETENTE PADRÃO\n⚠ padrão: 2 e-mails por hora, só para a equipe\nPortaria\nTH\ndono\natendente\nentra com e-mail e senha\nentrou: Beto\nAgenda\na tela Agenda usa as portas \"novo\" e \"listar\"\nenviou\nnovo agendamento\nRECEBE PACIENTE + QUANDO\nrecebe paciente e horário e grava na gaveta Agendamentos\n1 pedido\nlistar agendamentos\nDEVOLVE DIA\ndevolve os agendamentos do dia da clínica\nEMPRESA\ncada uma vê só o seu\nClínicas\nTH\n¶\nnome\ntexto\n¶\ncnpj\ntexto\n¶\ncidade\ntexto\n≡\nplano\nlista\nTABELA · clinicas · 4 linhas\nPacientes\n¶\nnome\ntexto\n▭\nnascimento\nda",
+ "mq3d": {
+  "camada": false,
+  "canvas": false,
+  "texto": null
+ },
+ "telaSite": {
+  "barra": [
+   "Site",
+   "Código",
+   "3D",
+   "✎ Editar na tela",
+   "★ Salvar como preset",
+   "Editar",
+   "▣ Projetar na TV",
+   "Pedir ajuda",
+   "Chamar para cá",
+   "Versões (0)"
+  ],
+  "regua": false,
+  "abas": [
+   "Meu dia\n×",
+   "Terminais ao vivo\n×",
+   "Criar\n×",
+   "Máquina · Clínicas (exemplo)\n×",
+   "<>\nagenda.html\n×",
+   "Assistente\n×"
+  ]
+ },
+ "telaEditar": {
+  "barra": [
+   "Site",
+   "Código",
+   "3D",
+   "✓ Pronto",
+   "Texto",
+   "↑",
+   "↓",
+   "Duplicar",
+   "Apagar",
+   "★ Salvar como preset",
+   "Editar",
+   "▣ Projetar na TV",
+   "Pedir ajuda",
+   "Chamar para cá",
+   "Versões (0)"
+  ],
+  "previaBarra": "Editando na tela · clique seleciona · arraste e solte para mover · duplo clique edita o texto · Delete apaga · o código muda junto"
+ },
+ "tela3d": {
+  "texto": "TH\nsalvo por você · agora\nSite\nCódigo\n3D\nEditar\n▣ Projetar na TV\nPedir ajuda\nChamar para cá\nVersões (0)\n3D · a tela num ambiente com os próximos itens · clique na tela, digite, Enter: o pulso corre pelo fio · arraste para girar, roda aproxima",
+  "canvas": true,
+  "iframes": 1
+ },
+ "rodape": "online\n0 na caixa\n◌ memória da sala\n0\npontos · hoje\nTV não aberta\n● terminal ao vivo\nacervo: 2\nSalvo na equipe",
+ "erros": []
+}

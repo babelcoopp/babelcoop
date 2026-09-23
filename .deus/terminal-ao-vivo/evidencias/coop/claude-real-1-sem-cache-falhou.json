@@ -1,0 +1,122 @@
+{
+  "quando": "2026-09-23T21:12:22.814Z",
+  "comando": "claude -p 'liste as pessoas da equipe usando a ferramenta coop' --model haiku --mcp-config '{\"mcpServers\":{\"coop\":{\"type\":\"http\",\"url\":\"http://127.0.0.1:4923/mcp/s-claude\"}}}' --strict-mcp-config --allowedTools mcp__coop mcp__coop__* --output-format json --no-session-persistence --setting-sources project --max-budget-usd 0.30",
+  "cwd": "/var/folders/k6/6y2hfq0d0zb5_fn8cnxkx_c00000gn/T/babel-mcp-claude-EgYvD3",
+  "ms": 16201,
+  "codigo": 0,
+  "registroDoServidor": [
+    {
+      "ts": 1790197926868,
+      "sessao": "s-claude",
+      "era": "moderna",
+      "versao": "2026-07-28",
+      "metodo": "server/discover",
+      "ua": "claude-code/2.1.281 (sdk-cli)",
+      "status": 200,
+      "ms": 1
+    },
+    {
+      "ts": 1790197926888,
+      "sessao": "s-claude",
+      "era": "moderna",
+      "versao": "2026-07-28",
+      "metodo": "tools/list",
+      "ua": "claude-code/2.1.281 (sdk-cli)",
+      "status": 200,
+      "ms": 0,
+      "ferramentas": 24
+    },
+    {
+      "ts": 1790197927142,
+      "sessao": "s-claude",
+      "era": "moderna",
+      "versao": "2026-07-28",
+      "metodo": "tools/list",
+      "ua": "claude-code/2.1.281 (sdk-cli)",
+      "status": 200,
+      "ms": 0,
+      "ferramentas": 24
+    },
+    {
+      "ts": 1790197927646,
+      "sessao": "s-claude",
+      "era": "moderna",
+      "versao": "2026-07-28",
+      "metodo": "tools/list",
+      "ua": "claude-code/2.1.281 (sdk-cli)",
+      "status": 200,
+      "ms": 0,
+      "ferramentas": 24
+    },
+    {
+      "ts": 1790197928651,
+      "sessao": "s-claude",
+      "era": "moderna",
+      "versao": "2026-07-28",
+      "metodo": "tools/list",
+      "ua": "claude-code/2.1.281 (sdk-cli)",
+      "status": 200,
+      "ms": 0,
+      "ferramentas": 24
+    }
+  ],
+  "chamadasNaTela": [],
+  "resposta": {
+    "result": "Desculpe, as ferramentas do babel-coop (como `coop_pessoas`) não estão disponíveis nesta sessão. Isso pode significar que:\n\n1. O servidor MCP do babel-coop não foi inicializado\n2. As ferramentas precisam ser carregadas explicitamente\n\nSegundo as instruções do MCP, deveria haver uma ferramenta `coop_pessoas` disponível para listar as pessoas da equipe, mas ela não está acessível no momento.\n\nVocê consegue verificar se:\n- O servidor babel-coop está ativo?\n- As ferramentas coop estão configuradas na sessão?\n\nOu gostaria de verificar de outra forma?",
+    "is_error": false,
+    "num_turns": 3,
+    "duration_ms": 13695,
+    "total_cost_usd": 0.0277866,
+    "usage": {
+      "input_tokens": 26,
+      "cache_creation_input_tokens": 8336,
+      "cache_read_input_tokens": 57086,
+      "output_tokens": 1076,
+      "output_tokens_details": {
+        "thinking_tokens": 723
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 8336,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 8,
+          "output_tokens": 345,
+          "cache_read_input_tokens": 21953,
+          "cache_creation_input_tokens": 239,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 239
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "modelUsage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 26,
+        "outputTokens": 1076,
+        "cacheReadInputTokens": 57086,
+        "cacheCreationInputTokens": 8336,
+        "webSearchRequests": 0,
+        "costUSD": 0.0277866,
+        "contextWindow": 200000,
+        "maxOutputTokens": 32000,
+        "thinkingTokens": 723,
+        "canonicalModel": "claude-haiku-4-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "subtype": "success"
+  },
+  "stderr": ""
+}

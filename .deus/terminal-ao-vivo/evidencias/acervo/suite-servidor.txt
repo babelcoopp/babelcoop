@@ -1,0 +1,201 @@
+# node --test testes/servidor/  (2026-09-23 19:59, node v24.14.1)
+▶ acervo · substrato no processo
+  ✔ indexa a pasta (texto de .md .txt .html .css .js .json .csv; PDF só o nome; imagem só no inventário) e o diário, com autor e origem (8.574667ms)
+  ✔ busca por palavras: com e sem acento, maiúscula e prefixo ("clinica" acha "clínicas") (2.284375ms)
+  ✔ busca por semelhança acha texto parecido escrito com outras palavras (e a por palavras não acha) (0.863583ms)
+  ✔ aprendizado repetido vira +1 confirmado (fundido) e o parecido abaixo do limiar entra como novo (1.206209ms)
+  ✔ APRENDIZADOS.md, ACERVO.md, CLAUDE.md (bloco marcado, sem apagar o da pessoa) e os JSONL de cartões, fundidos e inventário (5.076833ms)
+  ✔ uso soma +1 por pessoa por hora por item e o próprio autor não infla (5.122583ms)
+  ✔ resultado de agente (Stop do claude, Agentes de verdade) entra como histórico de terminal, sem o que foi digitado; e o agente nasce sabendo (3.438208ms)
+  ✔ exportar o dia em JSONL (eventos, aprendizados, ideias, históricos de terminal) e reconstruir do zero dá o mesmo (10.553708ms)
+✔ acervo · substrato no processo (49.993708ms)
+▶ acervo · pelo conector coop (JSON-RPC por HTTP)
+  ✔ tools/list tem coop_buscar, coop_ler, coop_aprendi e coop_aprendizados (9.203ms)
+  ✔ coop_aprendi duas vezes com o mesmo texto: "novo" e depois "+1 confirmado"; coop_buscar devolve com autor e usos (5.581375ms)
+✔ acervo · pelo conector coop (JSON-RPC por HTTP) (21.425417ms)
+▶ acervo · rotas locais e busca federada com 2 Estações
+  ✔ as rotas do acervo recusam quem não é o navegador desta máquina (2.874792ms)
+  ✔ POST /api/acervo/aprendi vai para o diário; repetido = +1 confirmado; item, exportar e estatísticas respondem (4.800125ms)
+  ✔ busca federada: acha na Estação do Zeca; o Zeca desliga e vira ficha "computador desligado" (983.281834ms)
+✔ acervo · rotas locais e busca federada com 2 Estações (1307.57725ms)
+▶ agentes · unidades
+  ✔ a linha de comando chega intacta ao programa pelo zsh (aspas, $, crase, !, acentos) (32.767167ms)
+  ✔ argumentos: --settings, --mcp-config, --no-chrome, -n, --append-system-prompt, --allowedTools do coop e o modelo só quando pedido (0.227541ms)
+  ✔ o prompt do agente leva nome, dono, instruções e as regras do babel-coop numa linha só (0.12325ms)
+  ✔ plano: TodoWrite vira itens e concluidosAgora só conta o que virou feito agora (0.240416ms)
+  ✔ ferramentas: nome curto, consulta x ação, resumo (0.455209ms)
+  ✔ o que vem de par: só campos conhecidos, caminho absoluto ou com .. recusado, dono reescrito (0.566625ms)
+  ✔ segredo comparado em tempo constante e nunca vazio (0.127583ms)
+✔ agentes · unidades (34.753ms)
+▶ agentes · ganchos sintéticos (sem modelo)
+  ✔ agente-iniciar: recusa sem terminal; com o shell parado digita o comando, cria os 3 arquivos em modo 600 e avisa (1454.295292ms)
+  ✔ /api/gancho: sem segredo, segredo errado, GET e de fora da máquina são recusados; o script do SessionStart funciona (56.876875ms)
+  ✔ um turno inteiro: pedido → plano → consulta agrupada → ação com prova → arquivo → falha → resultado; Rita assiste e recebe (sem caminho absoluto) (20.996167ms)
+  ℹ gancho → resposta: mediana 0.8 ms · p95 4.5 ms (16 ganchos)
+  ✔ permissão: segura a resposta até a tela decidir (permitir, negar); sem decisão, solta vazio e o Claude pergunta no terminal (1975.459833ms)
+  ℹ permissão: pedido → OK da tela → resposta ao Claude em 356 ms (300 ms de "pessoa pensando")
+  ✔ pausa: o que o agente faz durante a pausa chega à minha tela e nunca a quem assiste, nem depois (nem quando o bloco ou o plano mudam depois) (1136.866916ms)
+  ✔ /mcp/<sessao>: segredo da sessão, GET 405, de fora recusado; tools/call vai a UMA tela e volta ao Claude (3.996333ms)
+  ✔ campo ❯ (agente-pedido): com um programa na frente escreve o texto e, separado, o Enter (154.767709ms)
+  ✔ fechar o terminal encerra o agente: agente-fim, arquivos apagados e o segredo morre (5.536583ms)
+✔ agentes · ganchos sintéticos (sem modelo) (5300.198125ms)
+﹣ agentes · Claude Code de verdade no pty (modelo barato) (0.141292ms) # só com BABEL_TESTE_CLAUDE=1 (custa 3 pedidos ao modelo barato)
+▶ servidor dentro do runtime do Electron
+  ✔ funda, abre um terminal de verdade e lê a saída e a atividade (1169.630791ms)
+  ℹ motor: Electron 44.4.5 · Node 24.21.0
+  ✔ a página sai com a injeção na ordem, os arquivos de /coop/ e /vendor/, e nada fora das pastas (11.745125ms)
+✔ servidor dentro do runtime do Electron (1492.785917ms)
+▶ Estações de verdade: carteira, transmissão, controle, pausa e nada em disco
+  ✔ a) Theus funda (gestão), convida Rita e Bruno; as Estações se veem pelo encontro do token e pela descoberta, com id e papel da carteira (5037.606375ms)
+  ℹ encontro no token: 192.168.3.19:4810
+  ℹ Rita↔Bruno não estão no token um do outro: a ligação veio da descoberta UDP
+  ✔ b) A6 · Bruno assiste um terminal da Rita: recebe a saída e o tamanho quando a Rita redimensiona (435.530292ms)
+  ✔ atividade (presença) · shell → rodando → terminou, e espera com um processo "claude" parado; quem assiste de fora vê o mesmo (4421.722333ms)
+  ✔ c) A7 · Theus (gestão) pede o terminal da Rita, entra direto, digita e o comando roda na sessão da Rita (6.68225ms)
+  ✔ d) A8 · Rita pede o terminal do Theus: pedido, teclas recusadas até o aceite; com projeto em comum entra direto; Bruno (fora) só pede (185.554042ms)
+  ✔ e) A9 · o dono encerra: o controlador recebe controle-fim e as teclas seguintes são recusadas; quem controla também pode sair (303.775ms)
+  ✔ f) A10 · pausa: o marcador não chega a quem assiste (nem ao entrar depois, nem depois de retomar) e teclas de par são recusadas (911.470291ms)
+  ℹ mensagens conferidas sem o marcador: Bruno 72, Theus 41
+  ✔ h) segurança · Origin de outro site, navegador sem Origin, celular pela rede, par forjado, resposta errada e papel declarado (1024.882417ms)
+  ✔ i) A12 · latência: 200 teclas do Theus no terminal da Rita, tecla → eco no navegador do Theus, p95 < 100 ms (600.922333ms)
+  ℹ latência tecla→eco (Theus navegador → servidor Theus → servidor Rita → pty → volta), 200 teclas: p50 1.70 ms · p95 2.16 ms · máx 2.76 ms
+  ✔ g) A11 · nada em disco: o marcador não existe em nenhuma raiz temporária nem em app/, e nenhum shell ficou vivo (3191.900084ms)
+  ℹ busca do marcador: 8580 arquivos, 849.2 MB em 5 pastas
+  ℹ histórico do zsh da Rita (na raiz temporária) tem 7 linhas; o printf em partes está lá: true
+✔ Estações de verdade: carteira, transmissão, controle, pausa e nada em disco (16229.470375ms)
+▶ integração · passos do navegador viram blocos da presença
+  ✔ dentro da chamada navegador_digitar o passo atualiza o bloco dela; a senha vira espera "sua vez", nunca falha (1.025917ms)
+  ✔ fora de uma chamada: "clonando…" e "clone pronto" dividem um bloco que vira resultado com o arquivo; ler = consulta; erro = falha (0.608958ms)
+  ✔ pausa: o passo que nasce na pausa chega à minha tela e nunca a quem assiste, nem depois (0.086ms)
+  ✔ todas as agente-* levam o nome do agente (0.063667ms)
+✔ integração · passos do navegador viram blocos da presença (4.257375ms)
+▶ integração · servidor
+  ✔ bemvindo.agentes = true liga a presença; BABEL_COOP_AGENTES=0 desliga; a lista vai em agentesLista (0.120042ms)
+  ✔ GET /pasta/: o clone abre como site, com MIME certo e CSP sandbox sem allow-same-origin (origem "null" recusada); nada fora da pasta (8.023083ms)
+  ✔ controles-publico: Theus entra no terminal da Rita e a parede do Zeca fica sabendo (e desfaz quando ele sai) (12.450708ms)
+✔ integração · servidor (521.068833ms)
+▶ conector coop · protocolo MCP (JSON-RPC por HTTP)
+  ✔ initialize (era legada) devolve a versão pedida, tools e serverInfo coop (2.32825ms)
+  ✔ notifications/initialized → 202 sem corpo (0.546667ms)
+  ✔ tools/list: 35 ferramentas, navegador_* e coop_*, esquema objeto, ordem fixa (1.293875ms)
+  ✔ tools/call coop_aviso: vira mcp-chamada {cid, sessao, ferramenta, args, agente} e volta como texto (0.769916ms)
+  ✔ argumento faltando ou do tipo errado: erro de ferramenta (isError) sem incomodar a tela (1.689542ms)
+  ✔ ferramenta desconhecida → erro JSON-RPC -32602; método desconhecido → -32601 (0.510833ms)
+  ✔ navegador sem Electron: "navegador disponível só no app" (0.400916ms)
+  ✔ JSON quebrado → 400 -32700; não é JSON-RPC → 400 -32600; lote atendido (1.038417ms)
+  ✔ GET e DELETE → 405 (sem SSE, sem sessão); Origin de fora → 403; versão estranha no cabeçalho → 400 (1.724417ms)
+  ✔ era moderna (2026-07-28): server/discover, resultType, cabeçalhos conferidos, versão e método (5.576083ms)
+  ✔ o registro fica só em memória e não guarda argumentos nem respostas (0.137709ms)
+✔ conector coop · protocolo MCP (JSON-RPC por HTTP) (19.458125ms)
+▶ conector coop · a tela: sem tela, tela muda, cancelamento, recusa
+  ✔ nenhuma tela aberta → erro na hora (0.687666ms)
+  ✔ tela que não responde → erro no prazo (30 s no app; 300 ms aqui) (302.057666ms)
+  ✔ cliente desistiu (fechou a conexão) → a chamada pendente some; resposta atrasada é ignorada (152.130458ms)
+  ✔ a tela recusou → isError com a mensagem dela; cid desconhecido é ignorado (1.304625ms)
+✔ conector coop · a tela: sem tela, tela muda, cancelamento, recusa (456.528542ms)
+▶ conector coop · navegador (módulo falso com a API do §9)
+  ✔ abrir delega com o agente {id, nome} (a aba pedida mostra o nome) e completa https:// (1.373292ms)
+  ✔ clicar pede seletor ou texto; digitar recusa senha (pelo seletor e pelo aviso do módulo) (2.318875ms)
+  ✔ ler devolve o Markdown; raio-X passa o seletor (0.649833ms)
+  ✔ clonar, copy e print: destino = a pasta compartilhada (o módulo grava em Clones/<site>/); pasta fora dela é recusada (5.483417ms)
+✔ conector coop · navegador (módulo falso com a API do §9) (10.812292ms)
+✔ conector coop · navegador até o osso: inspeção só leitura e navegação (módulo falso) (17.371958ms)
+✖ conector coop · servidor e tela falam a mesma língua (7.534584ms)
+﹣ conector coop · Claude Code real chama tools/list e tools/call e usa o resultado (0.087334ms) # só com BABEL_TESTE_CLAUDE=1 (custa uma chamada ao modelo barato)
+▶ rede: uma ligação por par e reconexão
+  ✔ os dois lados ligam (zeca pelo encontro, Theus pela descoberta) e sobra uma ligação só, estável (11543.568791ms)
+  ℹ ligações abertas ao todo (série) e duplicadas fechadas: theus 3/0 · zeca 3/1 · ana 2/0
+  ℹ ligações verificadas por par: theus {"zeca":1,"ana":1} · zeca {"theus":1,"ana":1} · ana {"theus":1,"zeca":1}
+  ✔ Zeca reinicia (mesma raiz, mesma carteira) e volta a se ligar; enquanto isso aparece desligado (322.5265ms)
+✔ rede: uma ligação por par e reconexão (12301.827708ms)
+▶ carteira e token v2
+  ✔ fundar cria a carteira da gestão assinada pela chave da equipe (2.37975ms)
+  ✔ convite → ler: membro sem a chave da equipe; gestão com ela (3.810833ms)
+  ✔ só a gestão convida; nome vazio ou igual ao meu não passa (0.784125ms)
+  ✔ ler recusa token v1, lixo, carteira alterada, chave trocada e membro que vira gestão sem a chave da equipe (1.545375ms)
+✔ carteira e token v2 (8.654334ms)
+▶ aperto de mão (desafio/ola) e canal selado
+  ✔ ola verdadeiro passa e a carteira devolvida é a do outro (0.992084ms)
+  ✔ cada conferência derruba o ola quando falha (3.304666ms)
+  ✔ quem troca a chave efêmera no meio do caminho quebra a assinatura (1.148083ms)
+  ✔ canal: os dois lados derivam as mesmas chaves; alterar, repetir ou trocar a ordem falha (2.011542ms)
+✔ aperto de mão (desafio/ola) e canal selado (7.596708ms)
+▶ controle: matriz de permissões no servidor do dono
+  ✔ gestão entra direto; membro fora de projeto pede; o mesmo pedido volta o mesmo (0.455875ms)
+  ✔ mesmo projeto entra direto; projeto sem o dono não conta (0.172042ms)
+  ✔ aceitar, recusar, encerrar, sair (só o próprio), par caiu, terminal fechou e sessão null = todas (0.502166ms)
+  ✔ espelho só aceita controle sobre mim e some quando o dono cai (0.252334ms)
+✔ controle: matriz de permissões no servidor do dono (1.509667ms)
+▶ presença: estados a partir do processo da frente
+  ✔ shell, terminou, rodando, espera (nome ou comm com "claude", 1,5 s sem saída) e pausado (0.221917ms)
+✔ presença: estados a partir do processo da frente (0.266208ms)
+▶ página
+  ✔ INJETAR: ordem do PROTOCOLO (organismo antes de terminal-real e parede-real, ponte antes do organismo) (0.218209ms)
+✔ página (0.258291ms)
+ℹ tests 88
+ℹ suites 16
+ℹ pass 86
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 41673.242166
+
+✖ failing tests:
+
+test at testes/servidor/mcp.test.js:399:1
+✖ conector coop · servidor e tela falam a mesma língua (7.534584ms)
+  AssertionError [ERR_ASSERTION]: cada ferramenta coop_* tem quem a execute na tela
+  + actual - expected
+  
+    [
+      'coop_acao',
+      'coop_aprendi',
+  -   'coop_aprendizados',
+      'coop_aviso',
+      'coop_buscar',
+      'coop_campanha',
+      'coop_demanda',
+      'coop_demandas',
+      'coop_ideia',
+  -   'coop_ler',
+      'coop_meta',
+      'coop_momento',
+      'coop_mural',
+      'coop_pessoas',
+      'coop_projetar',
+  
+      at TestContext.<anonymous> (/Users/matheussilveirapro/Desktop/babel-coop/app/testes/servidor/mcp.test.js:405:10)
+      at Test.runInAsyncScope (node:async_hooks:228:14)
+      at Test.run (node:internal/test_runner/test:1118:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:787:18)
+      at Test.postRun (node:internal/test_runner/test:1247:19)
+      at Test.run (node:internal/test_runner/test:1175:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [
+      'coop_acao',     'coop_aprendi',
+      'coop_aviso',    'coop_buscar',
+      'coop_campanha', 'coop_demanda',
+      'coop_demandas', 'coop_ideia',
+      'coop_meta',     'coop_momento',
+      'coop_mural',    'coop_pessoas',
+      'coop_projetar', 'coop_projetos',
+      'coop_sonhar',   'coop_tv'
+    ],
+    expected: [
+      'coop_acao',         'coop_aprendi',
+      'coop_aprendizados', 'coop_aviso',
+      'coop_buscar',       'coop_campanha',
+      'coop_demanda',      'coop_demandas',
+      'coop_ideia',        'coop_ler',
+      'coop_meta',         'coop_momento',
+      'coop_mural',        'coop_pessoas',
+      'coop_projetar',     'coop_projetos',
+      'coop_sonhar',       'coop_tv'
+    ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

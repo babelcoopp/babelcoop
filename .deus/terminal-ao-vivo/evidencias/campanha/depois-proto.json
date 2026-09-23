@@ -1,0 +1,190 @@
+{
+  "quando": "2026-09-23T22:25:05.455Z",
+  "checagens": [
+    {
+      "parte": "proto",
+      "nome": "o pedido no terminal abre o palco da campanha no meio",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "6 peças (Tela, 3 anúncios, WhatsApp, calendário), cada uma com dono",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "o intérprete leu nome, meta, pessoa e prazo",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "peça viva com HUD: vidro, borda 1 px rgba(63,227,255,.22), scanlines ≤ 5 %",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "anéis de progresso andando ao mesmo tempo",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "rito \"Campanha pronta\" e os 6 itens do plano com ✓",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "sem o organismo: 6 pulsos em CSS, 6 peças acenderam ao chegar, a landing nasceu em 5 seções",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "6 arquivos no endereço equipe/Campanhas/Clínica Vida",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "o agente volta a \"parado\" e avisa no terminal",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "a TV fica sabendo (eventos com tv)",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "a Tela abre como arquivo no Site|Código",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "o anúncio abre como Imagem|Texto e a arte acompanha o que se digita",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "salvar o anúncio grava a arte (anuncio-1.svg ganha versão)",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "OK fecha o Selo: \"OK · Theus · hh:mm\"; editar depois rompe: \"Rompido por Theus\"",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "o WhatsApp abre como mensagem sugerida e salvar grava whatsapp.txt",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "o calendário abre como lista de 7 datas até o prazo; salvar grava calendario.csv",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "\"OK nas N prontas\" põe a campanha no ar, com 6 Selos e aviso para a TV",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "só quem pediu (ou a gestão) dá o OK",
+      "ok": true
+    },
+    {
+      "parte": "proto",
+      "nome": "zero erros de página",
+      "ok": true
+    }
+  ],
+  "proto": {
+    "aberto": {
+      "tipo": "campanha",
+      "palco": true,
+      "conteudoEscondido": true,
+      "cartoes": 6,
+      "donos": [
+        "Davi",
+        "Eva",
+        "Eva",
+        "Eva",
+        "Iara",
+        "Carla"
+      ],
+      "itens": 6
+    },
+    "campanha": {
+      "nome": "Clínica Vida",
+      "para": "carla",
+      "prazo": "2026-09-30",
+      "meta": "40 clientes",
+      "tipos": [
+        "tela",
+        "anuncio",
+        "anuncio",
+        "anuncio",
+        "whatsapp",
+        "calendario"
+      ],
+      "donos": [
+        "davi",
+        "eva",
+        "eva",
+        "eva",
+        "iara",
+        "carla"
+      ]
+    },
+    "hud": {
+      "peca": "tela",
+      "vidro": "blur(10px) saturate(1.15)",
+      "borda": "rgba(63, 227, 255, 0.22)",
+      "scanOpacidade": 1,
+      "scanAlfaMax": 0.043
+    },
+    "meio": [
+      "tela:gerando:0.8",
+      "anuncio-1:gerando:0.5",
+      "anuncio-2:gerando:0.25",
+      "anuncio-3:gerando:0.25",
+      "whatsapp:fila:0",
+      "calendario:gerando:0.14"
+    ],
+    "msAtePronta": 6827,
+    "fim": {
+      "efeitos": {
+        "pulsos": 6,
+        "chegou": 6,
+        "nasce": 5,
+        "t0": 1545
+      },
+      "rito": "Campanha pronta\n6 peças · 4 donos · 7 s · Rita, agente de Theus · falta o OK de Theus em 6",
+      "itensFeitos": 6,
+      "arquivos": [
+        "landing.html:html",
+        "anuncio-1.svg:imagem",
+        "anuncio-2.svg:imagem",
+        "anuncio-3.svg:imagem",
+        "whatsapp.txt:txt",
+        "calendario.csv:csv"
+      ],
+      "terminal": [
+        "✓ Campanha Clínica Vida gerando para ◉ Carla · até 30/09 · meta 40 clientes · 6 peças com dono em equipe/Campanhas/Clínica Vidadesfazerver",
+        "✓ Campanha Clínica Vida pronta: 6 peças · 4 donos · 7 s · espera o seu OKver"
+      ],
+      "agente": "parado",
+      "eventos": [
+        "campanha-pronta:tv",
+        "campanha-peca",
+        "campanha-peca",
+        "campanha-peca",
+        "campanha-peca",
+        "campanha-peca",
+        "campanha-peca",
+        "campanha-gerando:tv"
+      ]
+    },
+    "erros": []
+  },
+  "resumo": "19/19 passaram"
+}

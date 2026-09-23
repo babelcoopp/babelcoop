@@ -1,0 +1,21 @@
+{
+  "largo": {
+    "palco": 1587,
+    "colunas": 5,
+    "plano": "1251px 272px",
+    "transborda": false
+  },
+  "tv": {
+    "evento": "TH\n\nCampanha \"Estúdio Norte\" pronta: 6 peças com dono · espera o OK de Theus\n\nagora\n+1 na fila",
+    "temCampanha": false,
+    "botoes": 0,
+    "cp": false
+  },
+  "celular": {
+    "palco": 202,
+    "transborda": false,
+    "colunas": 1,
+    "larguraJanela": 980
+  },
+  "erros": []
+}

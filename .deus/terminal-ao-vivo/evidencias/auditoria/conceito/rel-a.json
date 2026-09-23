@@ -1,0 +1,33 @@
+{
+ "fundar": [
+  "id",
+  "nome",
+  "papel",
+  "equipe",
+  "pronto"
+ ],
+ "inicio": {
+  "titulo": "babel-coop",
+  "ids": [
+   "e-atividades",
+   "e-lateral",
+   "e-abas",
+   "e-painel",
+   "e-status",
+   "e-abas-celular",
+   "tv-rodape",
+   "ip-topo"
+  ],
+  "body": {
+   "w": 1440,
+   "h": 900,
+   "x": 0,
+   "y": 0,
+   "bg": "rgb(6, 11, 22)",
+   "font": "\"IBM Plex Sans\", system-ui, -apple-syste",
+   "fs": "14px"
+  },
+  "textoTopo": "babel-coop\nBuscar arquivo, comando ou acervo\nCtrl\nK\nTela da TV\nMeu dia\nCriar\nTrabalho\nChat\nWhatsApp\nReunião\nTerminais\nProjetos\nAcervo\nEquipe\nLoja\nOficina\nTH\nMEU DIA\nCaixa de entrada\n0\nEsperando meu OK\n0\nTarefas livres\n0\nPrimeiros passos com IA\nMinha contribuição\nPergunta da semana\n0\nIdeias\n0\nCheck-in do dia\n·\n\nA caixa de entrada junta o que chegou para você. A TV nunca mostra as suas horas; elas ficam aqui para você.\n\nMeu dia\n×\nMeu dia\nonde estão?\n\nBoa noite, Theus.\n\nquarta, 23 de setembro · 0 na caixa de entrada · trabalho medido hoje 0 s\n\n🎙 Falar uma ideia\nNova demanda\nCAIXA DE ENTRADA\n\nNad",
+  "vistas": []
+ }
+}

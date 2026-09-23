@@ -1,0 +1,129 @@
+{
+ "erros": [],
+ "passos": {
+  "nota": {
+   "clicou": true,
+   "aba": "arq:theus/notas/2026-09-23 19h52.md",
+   "arquivos": [
+    "theus/README.md",
+    "theus/notas/2026-09-23 19h52.md"
+   ],
+   "disco": "README.md,notas"
+  },
+  "editarSalvar": {
+   "botoes": [
+    "ed-modo:Texto",
+    "ed-modo:Editar",
+    "ed-projetar:▣ Projetar na TV",
+    "ed-ajuda:Pedir ajuda",
+    "ed-chamar:Chamar para cá",
+    "ed-versoes:Versões (0)"
+   ],
+   "salvar": true,
+   "disco": "# README\n\nmudado pela auditoria\n",
+   "versoes": 1
+  },
+  "projetar": {
+   "r": true,
+   "projecao": {
+    "caminho": "theus/README.md",
+    "tipo": "md",
+    "por": "theus",
+    "pagina": 1,
+    "paginas": 1,
+    "desde": 1790203967812
+   },
+   "tv": "babel-coop\nSEM CAMPANHA · FALTAM\nNaN:NaN:NaN\n19:52\nqua, 23 set\nNO RITMO\n00 concluídas hoje\n00 rodando\n00 livres para pegar\n0 s medidas hoje\nMAPA DA SALA · 1 PRESENÇA\nSINAL · EM REPOUSO\nCRIAR\n1\nTH\nTheus\n→ README.md\nTheus\na sala\nCORPO DO PROJETO\nCLÍNICAS EM CAMPINAS\n\n12 peças com corpo · v6 · 17:52 · carla\n\nAGENTES TRABALHANDO\n\nnenhum agente trabalhando agora\n\nMETAS DO MÊS\nSEM CAMPANHA\n00/0\nNaN%\n\n· meta batida\n\nPERGUNTA DA SEMANA\nQue trabalho acontece hoje fora de qualquer sistema, e ninguém vê?\n\nresponda na sua Estação, em Meu dia\n\nprotótipo com dados de exemplo · atualizado às 19:52:47\ndemonst",
+   "tv2": "babel-coop\nSEM CAMPANHA · FALTAM\nNaN:NaN:NaN\n19:52\nqua, 23 set\nNO RITMO\n00 concluídas hoje\n00 rodando\n00 livres para pegar\n0 s medidas hoje\nMAPA DA SALA · 1 PRESENÇA\nSINAL · EM REPOUSO\nCRIAR\n1\nTH\nTheus\n→ README.md\nTheus\na sala\nCORPO DO PROJETO\nCLÍNICAS EM CAMPINAS\n\n12 peças com corpo · v6 · 17:52 · carla\n\nAGENTES TRABALHANDO\n\nnenhum agente trabalhando agora\n\nMETAS DO MÊS\nSEM CAMPANHA\n00/0\nNaN%\n\n· meta batida\n\nPERGUNTA DA SEMANA\nQue trabalho acontece hoje fora de qualquer sistema, e ninguém vê?\n\nresponda na sua Estação, em Meu dia\n\nprotótipo com dados de exemplo · atualizado às 19:52:57\ndemonstração: sem Estação aberta, a própria TV simula a equipe"
+  },
+  "demanda": {
+   "id": "d-iebggkca-7-1",
+   "status": "online\n0 na caixa\n◷ Auditoria demanda\n00:00:02\n◌ memória da sala\n0\npontos · hoje\nTV não aberta\n● terminal ao vivo\nacervo: 3\nSalvando…",
+   "cron": "cronometro :: ⋮⋮\n00:00:02\nRODANDO\n▴",
+   "diario": 9
+  },
+  "projeto": {
+   "pj": {
+    "id": "pj-iebggkca-a-1",
+    "pasta": "Projetos/Projeto Auditoria"
+   },
+   "txt": "Projeto Auditoria\n\n· desde 19:53 · 1 membros\n\nTH\nAbrir no Explorador\n⚙ Máquina\nFalar com o projeto\nLevar para a TV\nARQUIVOS · DE TODOS OS MEMBROS\nTH\nTheus (eu)\nonline\n\nnada ainda em Projetos/Projeto Auditoria\n\nAbrir o arquivo de outro membro edita ao vivo na Estação dele, com dois cursores. Arraste no Explorador para mandar um arquivo a alguém.\n\nCONVERSA DO PROJETO\n# com todos\n\nNinguém falou ainda por aqui.\n\n📎 anexar do projeto\nEnviar\nDEMANDAS DO PROJETO · 0 ABERTAS\n＋ Demanda\n\nNenhuma demanda ligada ao projeto.\n\nQUADRO E MAPA DO PROJETO\n▢ Criar o quadro do projeto\n◉ Criar o mapa mental\nAGENTES NO PROJETO\nAS\nAssistente\n· Theus\nPRÓXIMOS PASSOS\nNenhum ainda.\nTheus\n+",
+   "sel": [
+    "=Sozinho · minha pasta e o HD da equipe",
+    "pj-iebggkca-a-1=Projeto · Projeto Auditoria"
+   ],
+   "lat": "CRIAR\n＋ Nota\n＋ Mapa\n＋ Quadro\n＋ Pasta\n＋\n↥\n⬚\nTela\n⚙\nMáquina\n▤\nPesquisa\nSozinho · minha pasta e o HD da equipe\nProjeto · Projeto Auditoria\nninguém do projeto online agora\n▾\nTH\nTHEUS (eu)\n\nArraste um arquivo para o nome de uma pessoa: ele aparece na pasta de projeto dela com \"recebido de você\". Abrir o arquivo de outro membro edita ao vivo na Estação dele.\n\nAbrir a tela do projeto",
+   "disco": "sem pasta Projetos"
+  },
+  "chat": {
+   "achouCampo": true,
+   "msgs": 1
+  },
+  "reuniao": {
+   "clicou": true,
+   "ativa": true,
+   "txt": "Reunião geral\n\naberta por Theus · 00:00:01 · 1 pessoas\n\n● Na TV\nEncerrar e gerar a ata\nTH\nMEMÓRIA DA SALA\n◌ últimos 5 min em memória\n💡 Salvar ideia falada\n⏺ Começar a gravar\n○ Conversa particular (pausar a memória)\n\nA sala guarda só os últimos 5 minutos em memória. Nada é gravado até alguém apertar. Também vale \"Babel, guarda isso\" e o botão físico na mesa.\n\nNinguém falou nada ainda.\n\nPAUTA\n+\nNA MESA\n\nNinguém levou nada ainda. Em qualquer arquivo: \"☰ Levar para a reunião\".\n\nDECISÕES\n+\nPRÓXIMOS PASSOS\nTheus\n+"
+  },
+  "tela": {
+   "alt": [
+    "ed-vis:Site",
+    "ed-vis:Código",
+    "ed-vis:3D",
+    "ed-visual:✎ Editar na tela",
+    "ed-preset:★ Salvar como preset",
+    "ed-modo:Editar",
+    "ed-reuniao:☰ Levar para a reunião",
+    "ed-projetar:▣ Projetar na TV",
+    "ed-ajuda:Pedir ajuda",
+    "ed-chamar:Chamar para cá",
+    "ed-versoes:Versões (0)"
+   ],
+   "tresd": true,
+   "disco": true
+  },
+  "maquina": {
+   "r": "ok",
+   "aba": "maquina",
+   "txt": "Máquina · Projeto Auditoria\n\nlocal ●\nbranch\nprodução\n v1 · 13 peças · 2 alertas\n\nTestar\nPublicar\nO que muda\n▶ Ver o agente montando\nProjetar na TV\nMáquina inteira\n›\ntodas as peças\nInteira\nDomínio\nPeça\npor pessoa\nARMÁRIO DA FRENTE · as gavetas daqui têm porta na rua\nCarteiro\nTH\nREMETENTE PADRÃO\n⚠ padrão: 2 e-mails por hora, só para a equipe\nPortaria\nTH\ndono\natendente\nentra com e-mail e senha\nAgenda\na tela Agenda usa as portas \"novo\" e \"listar\"\nnovo agendamento\nRECEBE PACIENTE + QUANDO\nrecebe paciente e horário e grava na gaveta Agendamentos\nlistar agendamentos\nDEVOLVE DIA\ndevolve os agendamentos do dia da clínica\nEMPRESA\ncada uma vê só o seu\nClínicas\nTH\n¶\nnome\ntexto\n¶\ncnpj\ntexto\n¶\ncidade\ntext"
+  },
+  "mapa": {
+   "aba": "arq:theus/Projetos/Projeto Auditoria/Mapa 2026-09-23.mapa",
+   "arquivos": [
+    "theus/Projetos/Projeto Auditoria/Mapa 2026-09-23.mapa",
+    "theus/README.md",
+    "theus/notas/2026-09-23 19h52.md",
+    "theus/tela-aud.html"
+   ]
+  },
+  "quadro": {
+   "aba": "arq:theus/Projetos/Projeto Auditoria/Quadro 2026-09-23.quadro"
+  },
+  "pesquisa": {
+   "entrada": "Pesquisa sobre clínicas odontológicas em Campinas e gera um relatório em MD"
+  },
+  "token": {
+   "temToken": true,
+   "chaves": [
+    "token"
+   ]
+  },
+  "ideiaFalada": {
+   "ok": true,
+   "texto": "E se o cronômetro avisasse quando passar da estimativa?"
+  },
+  "nascendo": {
+   "aba": "nascendo:nascendo-aud.md"
+  },
+  "presencaAtiva": {
+   "avatares": [
+    "avatar | shadow=none | anim=none"
+   ]
+  },
+  "ipad": {
+   "html": 3425,
+   "txt": "Babel Quadro\nIPAD\nQuadro 2026-09-23\n＋ Novo quadro\n▣ Mandar ao vivo para a TV\nTH\nVoltar à Estação\n✋\n✎\n▮\n⌫\n▢\nT\nDesfazer\n−\n+\nEnquadrar",
+   "bts": 21
+  },
+  "equipe": true
+ }
+}

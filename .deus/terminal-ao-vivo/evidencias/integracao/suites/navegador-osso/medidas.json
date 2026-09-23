@@ -1,0 +1,19 @@
+{
+  "esperar": {
+    "atrasadoMs": 762
+  },
+  "codigo": {
+    "recursos": 3,
+    "porTipo": {
+      "Document": 1,
+      "Script": 1,
+      "Stylesheet": 1
+    },
+    "jsBytes": 678,
+    "ms": 12
+  },
+  "rede": {
+    "pedidos": 4,
+    "corpo": 36
+  }
+}

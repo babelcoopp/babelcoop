@@ -1,0 +1,23 @@
+{
+  "enviou": true,
+  "maqDepois": "to ¶ cidade texto ≡ plano lista TABELA · clinicas · 4 linhas Pacientes ¶ nome texto ▭ nascimento data ¶ telefone texto ○ clínica → Clínicas +1 campo(s) TABELA · pacientes · 20 linhas Agendamentos ▭ quando data e hora ○ paciente → Pacientes ≡ status lista: marcado, feito, faltou ¶ obs texto Maria Souza · amanhã 14:30 TABELA · agendamentos · 50 → 51 linhas +1 linha aviso no WhatsApp QUANDO ENTRA · AGENDAMENTOS usa: ZAPI_TOKEN disparou (teste) fotos 1,2 GB · PRIVADA Cofre TH BANCO_URL BANCO_CHAVE ZAPI_TOKEN pedir ao Theus ⚠ chave faltando: ZAPI_TOKEN ao vivo AO VIVO · AGENDAMENTOS 1 aviso CASA DE MÁQUINAS pequena · 2 GB · São Paulo · cópia diária por 7 dias · sem volta no tempo · 90 conexões Ficha Teste 16 peças ▴ Teste abrir ▴ ✓ a tela Agenda mostra a consulta nova na hora 17:02 fechou Pacientes por empresa 17:52 Dev criou a porta \"novo agendamento\" 19:12 Bruno-bot ligou o robô do WhatsApp",
+  "projeto": {
+    "r": true,
+    "projetos": [
+      "Clínicas"
+    ]
+  },
+  "seletor": [
+    ":Sozinho · minha pasta e o HD da equipe",
+    "pj-zrytmiqg-6-1:Projeto · Clínicas"
+  ],
+  "lateralProjeto": "CRIAR ＋ Nota ＋ Mapa ＋ Quadro ＋ Pasta ＋ ↥ ⬚ Tela ⚙ Máquina ▤ Pesquisa Sozinho · minha pasta e o HD da equipe Projeto · Clínicas ninguém do projeto online agora ▾ TH THEUS (eu) Arraste um arquivo para o nome de uma pessoa: ele aparece na pasta de projeto dela com \"recebido de você\". Abrir o arquivo de outro membro edita ao vivo na Estação dele. Abrir a tela do projeto",
+  "tv": "babel-coop SEM CAMPANHA · FALTAM NaN:NaN:NaN 19:52 qua, 23 set NO RITMO 00 concluídas hoje 00 rodando 00 livres para pegar 0 s medidas hoje MAPA DA SALA · 1 PRESENÇA SINAL · EM REPOUSO CRIAR 1 TH Theus → Criar SALAS VAZIAS Clínicas Theus a sala CORPO DO PROJETO CLÍNICAS EM CAMPINAS 12 peças com corpo · v6 · 17:52 · carla AGENTES TRABALHANDO nenhum agente trabalhando agora METAS DO MÊS SEM CAMPANHA 00/0 NaN% · meta batida PERGUNTA DA SEMANA Que trabalho acontece hoje fora de qualquer sistema, e ninguém vê? responda na sua Estação, em Meu dia TH Máquina de Clínicas (exemplo) funcionando · 12 peças com corpo agora protótipo com dados de exemplo · atualizado às 19:52:51 demonstração: sem Estação aberta, a própria TV simula a equipe",
+  "paleta": " Enter executa · Esc fecha ",
+  "temaNaPaleta": false,
+  "rm": {
+    "efeitos": true,
+    "reduzido": true
+  },
+  "erros": []
+}

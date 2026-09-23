@@ -1,0 +1,41 @@
+▶ navegador próprio do agente (webview + CDP, sem Chrome)
+  ✔ o preload expõe a API e o registro liga o webview ao agente (44.568125ms)
+  ℹ webContentsId do webview: 2 · pasta /var/folders/k6/6y2hfq0d0zb5_fn8cnxkx_c00000gn/T/babel-e2e-nav-ItTmt6/matheussilveirapro · fonte /System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf (31024 bytes woff2)
+  ✔ abrir: carrega a página e devolve título e status (2942.519709ms)
+  ℹ abrir 140 ms · status 200
+  ✔ clicar: acha "Cadastro" pelo texto, leva o cursor do agente e clica com mouse de verdade (1774.422416ms)
+  ℹ clicou em (74,262) em 568 ms · cursor em (74,262)
+  ✔ digitar: preenche Nome (seletor) e E-mail (pelo rótulo) com o teclado (1025.834084ms)
+  ✔ digitar em campo de senha: recusa e devolve "sua vez: a pessoa digita a senha" (167.486ms)
+  ✔ escolher no <select> e enviar o cadastro: a API do site recebe sem senha (819.654583ms)
+  ✔ aviso e confirmação da página não travam o agente: alert é aceito, confirm é cancelado (a pessoa decide) (1031.63775ms)
+  ℹ dois cliques com diálogo em 1031 ms
+  ✔ ler: a página em Markdown com títulos, links e o formulário (4.169292ms)
+  ℹ 1017 caracteres de Markdown em 4 ms
+  ✔ raio-X: DOM, CSS do elemento, fontes, cores, copy, rede (fetch) e console (45.069667ms)
+  ℹ raio-X em 17 ms · 58 elementos · 8 pedidos · 5 mensagens · 9 cores
+  ✔ selecionar elemento: modo inspeção do Chromium, a pessoa clica e vem o raio-X do elemento (267.988917ms)
+  ℹ escolhido: #planos > h2
+  ✔ assumir e devolver: com a pessoa no controle o agente não mexe (1115.335917ms)
+  ✔ print: a página inteira em PNG, mais alta que a janela (332.715375ms)
+  ℹ print 2200×5752 px (página 1100×2876 CSS) · 639903 bytes · 328 ms
+  ✔ copy: copy.md por seção (h1/h2/h3) com os textos em ordem (10.593ms)
+  ℹ 5 seções · 548 bytes
+  ✔ clonar: HTML + CSS + imagens + fonte em Clones/<site>/ e a cópia abre sozinha, sem o site no ar (379.576334ms)
+  ℹ clone: 5 arquivos · 459082 bytes · {"imagem":1,"css-url":2,"css":1} · aberto por file:// (a rota /pasta/ do servidor ainda não existe: 404) · 44 ms
+  ✔ segurança: nada fora da pasta, nada da própria Estação, nada de Chrome no código (1136.698666ms)
+  ✔ passos: a tela recebeu cada passo do agente, na ordem (6.012833ms)
+  ℹ 44 passos
+  ✔ a ferramenta chega antes da aba: a tela recebe o pedido, cria o webview, registra e a ação segue (257.916292ms)
+  ℹ aba pedida, criada, registrada e página aberta em 240 ms
+  ✔ site de verdade na internet (só com BABEL_COOP_REDE=1): abrir, ler, raio-X, clonar e print (272.886875ms)
+  ℹ example.com: abrir 172 ms · 1 pedidos · clone 1 arquivos (0 faltaram) · print 2200×1440
+✔ navegador próprio do agente (webview + CDP, sem Chrome) (13108.77925ms)
+ℹ tests 18
+ℹ suites 1
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13549.908417

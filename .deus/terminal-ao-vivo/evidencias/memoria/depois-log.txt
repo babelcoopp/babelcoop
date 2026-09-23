@@ -1,0 +1,36 @@
+[0.3s] electron aberto
+[0.4s] fundou true
+[0.9s] recarregou
+[0.9s] estacao pronta
+[2.4s] acervo: reembolso
+[3.5s] acervo: sessão expirando
+[4.6s] inteligencia
+{
+  "quando": "2026-09-23T22:07:44.932Z",
+  "fundou": "theus",
+  "eu": "theus",
+  "temMemoria": true,
+  "temOrganismo": true,
+  "acervoReembolso": [
+    "aprendizado Aprendizado de Carla Carla · ontem · relevância 4.06 Aprendizado · Carla · reembolso · usado 7× Reembolso de viagem só fecha o mês com as notas anexadas e o OK do Theus até as 18h. (Reembo",
+    "demanda Aprovar reembolso da viagem a Campinas Theus · 18:42 · relevância 3.85 Aprovar reembolso da viagem a Campinas. As notas estão no HD da Carla, em \"Notas de despesas\". Preciso do O… Abrir",
+    "PDF viagem-campinas.pdf carla/Notas de despesas/viagem-campinas.pdf · 18:41 · relevância 2.64 Reembolso · viagem a Campinas # Despesas Combustível: R$ 212,40 Pedágio: R$ 38,60 Almoço com client… Abrir",
+    "nota README.md theus/README.md · 18:37 · relevância 1.24 …sões → Voltar como estava*. ## Comandos úteis no terminal ```bash coop ajuda coop buscar \"reembolso\" coop aprendi \"cliente de clínica prefere ",
+    "nota APRENDIZADOS.md equipe/Aprendizados/APRENDIZADOS.md · 19:07 · relevância 0.88 …a melhor começando pela dor do cliente, não pelo produto. _(Eva, 15:07, +1 confirmado)_ - Reembolso de viagem só fec"
+  ],
+  "acervoSessao": [
+    "aprendizado Aprendizado de Felipe Felipe · ontem · relevância 6.23 Aprendizado · Felipe · sessão expirando · usado 9× Chamado de login quase sempre é sessão expirando; conferir o relógio do servidor p",
+    "terminal Histórico do terminal de Felipe Felipe · 18:07 · relevância 5.97 coop buscar \"sessão expirando\" 3 trechos: Procedimento de suporte v3.pdf · aprendizado do Felipe · Chamados a… Abrir",
+    "demanda Relatório de chamados de agosto Felipe · ontem · relevância 5.42 …o de resposta, reabertos e os 5 assuntos mais frequentes. Chamado de login quase sempre é sessão expirando; conferir o relógio",
+    "nota faq-tecnico.md felipe/Projetos/Onboarding/faq-tecnico.md · 14:57 · relevância 2.90 …AQ técnico do onboarding **Não recebe mensagens?** Conferir se o número está conectado. **Sessão expira?** Reló"
+  ],
+  "aprendizados": [
+    "AN Clínica pequena decide rápido quando a proposta cabe em uma página. Ana · 20/09 · de \"Proposta Clínica Sorriso\" · +1 confirmado · usado 7× Usar +1 também aprendi",
+    "CA Contrato com cláusula de reajuste precisa passar pelo financeiro antes de ir ao cliente. Carla · 21/09 · de \"Proposta Acme\" · usado 4× Usar +1 também aprendi",
+    "FE Chamado de login quase sempre é sessão expirando; conferir o relógio do servidor primeiro. Felipe · ontem · de \"Relatório de chamados de agosto\" · +2 confirmado · usado 9× Usar +1 também aprendi",
+    "JO Página de preços converte melhor com o plano anual em destaque. João · ontem · de \"Site novo\" · usado 3× Usar +1 também aprendi",
+    "EV Roteiro de depoimento funciona melhor começando pela dor do cliente, não pelo produto. Eva · 15:07 · de \"Vídeo depoimento\" · +1 confirmado · usado 5× Usar +1 dado"
+  ],
+  "presenca": null,
+  "erros": []
+}

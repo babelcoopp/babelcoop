@@ -1,0 +1,96 @@
+# babel-coop · agentes no servidor (PROTOCOLO §7) · evidência dos testes
+# gerado em 23/09/2026, 18:42:59 · Claude Code 2.1.281 · node v24.14.1
+
+## 1. agentes.test.js (unidades + ganchos sintéticos contra 2 Estações de verdade; o real fica pulado sem BABEL_TESTE_CLAUDE=1)
+$ cd app && node --test testes/servidor/agentes.test.js
+▶ agentes · unidades
+  ✔ a linha de comando chega intacta ao programa pelo zsh (aspas, $, crase, !, acentos) (37.84825ms)
+  ✔ argumentos: --settings, --mcp-config, --no-chrome, -n, --append-system-prompt e o modelo só quando pedido (0.538625ms)
+  ✔ o prompt do agente leva nome, dono, instruções e as regras do babel-coop numa linha só (0.284666ms)
+  ✔ plano: TodoWrite vira itens e concluidosAgora só conta o que virou feito agora (0.196375ms)
+  ✔ ferramentas: nome curto, consulta x ação, resumo (0.331833ms)
+  ✔ o que vem de par: só campos conhecidos, caminho absoluto ou com .. recusado, dono reescrito (0.348667ms)
+  ✔ segredo comparado em tempo constante e nunca vazio (0.095375ms)
+✔ agentes · unidades (40.529458ms)
+▶ agentes · ganchos sintéticos (sem modelo)
+  ✔ agente-iniciar: recusa sem terminal; com o shell parado digita o comando, cria os 3 arquivos em modo 600 e avisa (1436.938667ms)
+  ✔ /api/gancho: sem segredo, segredo errado, GET e de fora da máquina são recusados; o script do SessionStart funciona (56.842042ms)
+  ✔ um turno inteiro: pedido → plano → consulta agrupada → ação com prova → arquivo → falha → resultado; Rita assiste e recebe (sem caminho absoluto) (18.090625ms)
+  ℹ gancho → resposta: mediana 0.7 ms · p95 1.3 ms (16 ganchos)
+  ✔ permissão: segura a resposta até a tela decidir (permitir, negar); sem decisão, solta vazio e o Claude pergunta no terminal (1961.727833ms)
+  ℹ permissão: pedido → OK da tela → resposta ao Claude em 354 ms (300 ms de "pessoa pensando")
+  ✔ pausa: o que o agente faz durante a pausa chega à minha tela e nunca a quem assiste, nem depois (nem quando o bloco ou o plano mudam depois) (1114.351084ms)
+  ✔ /mcp/<sessao>: segredo da sessão, GET 405, de fora recusado; tools/call vai a UMA tela e volta ao Claude (5.420833ms)
+  ✔ campo ❯ (agente-pedido): com um programa na frente escreve o texto e, separado, o Enter (153.21425ms)
+  ✔ fechar o terminal encerra o agente: agente-fim, arquivos apagados e o segredo morre (5.33325ms)
+✔ agentes · ganchos sintéticos (sem modelo) (5250.082334ms)
+﹣ agentes · Claude Code de verdade no pty (modelo barato) (0.076166ms) # só com BABEL_TESTE_CLAUDE=1 (custa 3 pedidos ao modelo barato)
+ℹ tests 15
+ℹ suites 3
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9167.607791
+
+## 2. suíte inteira do servidor (nada quebrou)
+$ cd app && node --test testes/servidor/
+✔ agentes · unidades (32.14825ms)
+✔ agentes · ganchos sintéticos (sem modelo) (5204.878541ms)
+﹣ agentes · Claude Code de verdade no pty (modelo barato) (0.115125ms) # só com BABEL_TESTE_CLAUDE=1 (custa 3 pedidos ao modelo barato)
+✔ servidor dentro do runtime do Electron (1534.354042ms)
+✔ Estações de verdade: carteira, transmissão, controle, pausa e nada em disco (16000.596166ms)
+✔ conector coop · protocolo MCP (JSON-RPC por HTTP) (25.377542ms)
+✔ conector coop · a tela: sem tela, tela muda, cancelamento, recusa (456.129542ms)
+✔ conector coop · navegador (módulo falso com a API do §9) (9.2035ms)
+✔ conector coop · servidor e tela falam a mesma língua (0.745ms)
+﹣ conector coop · Claude Code real chama tools/list e tools/call e usa o resultado (0.06275ms) # só com BABEL_TESTE_CLAUDE=1 (custa uma chamada ao modelo barato)
+✔ rede: uma ligação por par e reconexão (12306.817917ms)
+✔ carteira e token v2 (4.6915ms)
+✔ aperto de mão (desafio/ola) e canal selado (7.244792ms)
+✔ controle: matriz de permissões no servidor do dono (1.895667ms)
+✔ presença: estados a partir do processo da frente (0.339125ms)
+✔ página (0.356708ms)
+ℹ tests 67
+ℹ suites 11
+ℹ pass 66
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 39437.519459
+
+## 3. Claude Code de verdade no pty (haiku, 3 pedidos) · rodado uma vez, às 18:29, antes de 3 ajustes pequenos
+##    (ToolSearch deixou de virar bloco; PostToolUse solta a permissão respondida no terminal; comando nascido na pausa sai da prova pública),
+##    todos cobertos pela parte sintética acima. Detalhe completo em claude-real.json.
+$ cd app && BABEL_TESTE_CLAUDE=1 BABEL_TESTE_EVIDENCIAS=<esta pasta> node --test --test-name-pattern="Claude Code de verdade|claude abre|arquivo com plano|pede permissão|conector coop|sair do claude" testes/servidor/agentes.test.js
+▶ agentes · Claude Code de verdade no pty (modelo barato)
+  ✔ o claude abre no pty com os ganchos, a pasta nova pede confiança e o SessionStart chega (acordou) (4251.582167ms)
+  ✔ (a) arquivo com plano: agente-estado, blocos pedido/plano/ação/resultado, plano indo a feito e agente-arquivo de ola.md (20377.906209ms)
+  ✔ (b) um comando que pede permissão em modo manual: agente-espera chega, a tela permite e o Claude segue até o Stop (7157.508542ms)
+  ✔ (c) o claude chama o conector coop (POST /mcp) e usa a resposta da tela (7756.618209ms)
+  ✔ sair do claude (Ctrl+C duas vezes) encerra o agente e apaga os arquivos da sessão (1069.576708ms)
+✔ agentes · Claude Code de verdade no pty (modelo barato) (41438.01875ms)
+ℹ tests 5
+ℹ suites 1
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45299.020917
+
+## 4. SessionStart no runtime do Electron (gancho command em forma exec: /usr/bin/env ELECTRON_RUN_AS_NODE=1 <Electron> coop-gancho.js)
+motor: {"node":"24.21.0","electron":"44.4.5"}
+SessionStart no arquivo: {"type":"command","command":"/usr/bin/env","args":["ELECTRON_RUN_AS_NODE=1","/Users/matheussilveirapro/Desktop/babel-coop/app/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron","<raiz>/.coop/agentes/e1/coop-gancho.js"],"timeout":10}
+saída do gancho: código 0 stdout "" stderr ""
+a tela recebeu: {"tipo":"agente-estado","id":"e1","estado":"acordou","modelo":"claude-haiku-4-5"}
+fim: o terminal fechou · pasta da sessão existe? false
+
+## 5. mutações (a proteção da pausa tirada de propósito; o teste tem de falhar)
+mutação 1 · bloco nascido na pausa atualizado depois é publicado  → ✖ 'o marcador da pausa vazou para quem assiste'
+mutação 2 · item do plano nascido na pausa não é marcado privado   → ✖ 'o item nascido na pausa não aparece para quem assiste'
+mutação 3 · emitir() ignora a pausa                              → ✖ 'o marcador da pausa vazou para quem assiste'
+mutação 4 · prova pública do resultado leva comando da pausa       → ✖ 'o marcador da pausa vazou para quem assiste'
+(código restaurado depois de cada uma; 10 rodadas seguidas da parte sintética sem falha)

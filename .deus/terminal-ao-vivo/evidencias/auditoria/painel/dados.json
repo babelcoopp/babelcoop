@@ -1,0 +1,152 @@
+{
+  "fundar": {
+    "pronto": true,
+    "id": "theus"
+  },
+  "inicio": {
+    "vistaAtiva": "",
+    "htmlData": {
+      "vista": "estacao"
+    },
+    "topo": "babel-coop Buscar arquivo, comando ou acervo Ctrl K Tela da TV",
+    "atividades": "Meu dia Criar Trabalho Chat WhatsApp Reunião Terminais Projetos Acervo Equipe Loja Oficina TH",
+    "atividadesN": 13,
+    "lateral": "MEU DIA Caixa de entrada 0 Esperando meu OK 0 Tarefas livres 0 Primeiros passos com IA Minha contribuição Pergunta da semana 0 Ideias 0 Check-in do dia · A caixa de entrada junta o que chegou para você. A TV nunca mostra as suas horas; elas ficam aqui para você.",
+    "abas": "Meu dia ×",
+    "conteudo": "Boa noite, Theus. quarta, 23 de setembro · 0 na caixa de entrada · trabalho medido hoje 0 s 🎙 Falar uma ideia Nova demanda CAIXA DE ENTRADA Nada novo. Bom sinal. MINHAS DEMANDAS EM ANDAMENTO Nenhuma demanda rodando. ESPERANDO O SEU OK Ninguém esperando você. TAREFAS LIVRES · PEGA QUEM PUDER ver todas (0) Nenhuma tarefa livre agora. IDEIAS DA EQUIPE Mandar ideia 💡 Salvar ideia falada ⏺ Começar a gravar A sala guarda só os últimos 5 minutos em memória. Nada é gravado até alguém apertar. PRIMEIROS PASSOS COM IA 0/6 Abra um arquivo no Explorador (▤) No terminal, rode coop ajuda Use uma receita: ",
+    "painel": "Assistente × + Presença Terminal Ctrl J Entrar em… Neon Som ⟩ → babel-e2e-aud-painel-vCoeF3/theus Assistente · em repouso nasceu na sua pasta · 19:48 ● ao vivo ASSISTENTE Seu agente: pesquisa, escreve, organiza e mexe no babel-coop por você. Peça em português: eu trabalho no seu terminal de verdade, em babel-e2e-aud-painel-vCoeF3/theus. Cada passo aparece aqui com prova. ▶ Iniciar Assistente só terminal Procurar no acervo Resumir o dia Me ajude com um erro ❯ → Meu dia × enviar",
+    "status": "online 0 na caixa ◌ memória da sala 0 pontos · hoje TV não aberta ● terminal ao vivo acervo: 1 Salvo na equipe",
+    "coluna": "",
+    "rects": {
+      "atividades": [
+        0,
+        32,
+        56,
+        844
+      ],
+      "lateral": [
+        56,
+        32,
+        264,
+        844
+      ],
+      "abas": [
+        325,
+        32,
+        670,
+        33
+      ],
+      "conteudo": [
+        325,
+        101,
+        670,
+        775
+      ],
+      "painel": [
+        1000,
+        32,
+        440,
+        844
+      ],
+      "status": [
+        0,
+        876,
+        1440,
+        24
+      ]
+    },
+    "fotos": [
+      {
+        "c": "avatar",
+        "sh": "none",
+        "anim": "none",
+        "filt": "none"
+      }
+    ],
+    "estacaoFilhos": [
+      ".e-topo",
+      "e-atividades.e-atividades",
+      "e-lateral.e-lateral",
+      ".e-borda",
+      ".e-editor navr-hospeda",
+      ".e-borda",
+      "e-painel.e-painel",
+      "e-coluna.e-coluna",
+      "cronometro.cronometro",
+      "e-toast.e-toast",
+      "e-status.e-status",
+      "e-abas-celular.e-abas-celular",
+      "e-sobre.e-sobre",
+      "arq-upload.",
+      "foto-arquivo."
+    ]
+  },
+  "vistas": {
+    "dia": {
+      "abas": "Meu dia ×",
+      "lateral": "MEU DIA Caixa de entrada 0 Esperando meu OK 0 Tarefas livres 0 Primeiros passos com IA Minha contribuição Pergunta da semana 0 Ideias 0 Check-in do dia · A caixa de entrada junta o que chegou para você. A TV nunca mostra as suas horas; elas ficam aqui para você.",
+      "conteudo": "Boa noite, Theus. quarta, 23 de setembro · 0 na caixa de entrada · trabalho medido hoje 0 s 🎙 Falar uma ideia Nova demanda CAIXA DE ENTRADA Nada novo. Bom sinal. MINHAS DEMANDAS EM ANDAMENTO Nenhuma demanda rodando. ESPERANDO O SEU OK Ninguém esperando você. TAREFAS LIVRES · PEGA QUEM PUDER ver todas (0) Nenhuma tarefa livre agora. IDEIAS DA EQUIPE Mandar ideia 💡 Salvar ideia falada ⏺ Começar a gravar A sala guarda só os últimos 5 minutos em memória. Nada é gravado até alguém apertar. PRIMEIROS PASSOS COM IA 0/6 Abra um arquivo no Explorador (▤) No terminal, rode coop ajuda Use uma receita: \"Explicar este arquivo\" Crie uma nota (＋ Nota) e leve para a reunião Registre um aprendizado: coop a"
+    },
+    "explorador": {
+      "abas": "Meu dia × Criar × ××",
+      "lateral": "CRIAR ＋ Nota ＋ Mapa ＋ Quadro ＋ Pasta ＋ ↥ ⬚ Tela ⚙ Máquina ▤ Pesquisa Sozinho · minha pasta e o HD da equipe ▾ THEUS (você) MD README.md Sua pasta é ~/BabelCoop/theus: o que está nela a equipe vê; o resto do computador, não. Arraste um arquivo de texto para cá ou crie pelo ＋.",
+      "conteudo": "Criar É aqui que tudo acontece. Dependendo do que você cria, a tela do meio vira a coisa certa: site vira Tela, backend vira Máquina, texto vira Pesquisa. Numa tela, o modo 3D mostra a página num ambiente 3D com os próximos itens ao lado: digite nela, aperte Enter e veja o pulso correr. O agente do terminal participa de tudo. ⬚ Tela uma página, uma landing, um login: abre já como site, edita no visual e tem o modo 3D ⚙ Máquina o backend em peças de Lego: gavetas, portas, robôs, chaves; testa vendo os dados andar ▤ Pesquisa MD, TXT ou PDF: o agente pesquisa e o texto abre em leitura COMEÇAR DE UM PRESET · O QUE A EQUIPE JÁ CONSTRUIU E FUNCIONOU PRESETS DA EQUIPE 0 Nada guardado ainda. Quando "
+    },
+    "demandas": {
+      "abas": "Meu dia × Criar × Demandas × ××",
+      "lateral": "Demandas Tarefas DEMANDAS + Nova Recebidas 0 Livres: pega quem puder 0 Enviadas por mim 0 Concluídas 0 Quem recebe só pausa e retoma. Só quem pediu dá o OK e encerra o cronômetro. Cada pausa fica no histórico.",
+      "conteudo": "Demandas para você Trabalho medido hoje: 0 s · 0 aguardando OK · 0 para começar Nova demanda Nada por aqui agora."
+    },
+    "chat": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × ××",
+      "lateral": "CONVERSAS b babel-coop · todos 📌 Sem mensagens",
+      "conteudo": "b babel-coop · todos todos da Babel Nenhuma mensagem ainda. Diga oi. 😊 📎 ➤"
+    },
+    "whatsapp": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × ××",
+      "lateral": "WHATSAPP Só você vê esta tela. Ela não entra no acervo, nem na TV, nem aparece para a equipe.",
+      "conteudo": "WhatsApp Leia o QR code com o seu celular, como no WhatsApp Web. O seu WhatsApp passa a viver aqui, e o Assistente pode responder por você. Só você vê esta tela. Ela não entra no acervo nem na TV. Já escaneei (simulado)"
+    },
+    "reuniao": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × Reunião × ××",
+      "lateral": "REUNIÕES Nenhuma agora ATAS NO ACERVO MOMENTOS FALADOS",
+      "conteudo": "Reunião A TV vira a mesa da reunião: cada um joga materiais do próprio computador. Abrir reunião MEMÓRIA DA SALA ◌ últimos 5 min em memória 💡 Salvar ideia falada ⏺ Começar a gravar ○ Conversa particular (pausar a memória) A sala guarda só os últimos 5 minutos em memória. Nada é gravado até alguém apertar. Também vale \"Babel, guarda isso\" e o botão físico na mesa. Ninguém falou nada ainda."
+    },
+    "terminais": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × ××",
+      "lateral": "TERMINAIS DA EQUIPE Parede (todos) 1 Theus (você) · Assistente ao vivo OS SEUS TERMINAIS Assistente ● ao vivo Pausar Todos veem todos. Para mexer: a gestão entra direto; membros do mesmo projeto também; os outros pedem e o dono aceita com um clique. Quem está no seu terminal aparece com um selo, e você encerra quando quiser. Pausado: nada do que sair durante a pausa chega a ninguém, nem depois.",
+      "conteudo": "Terminais ao vivo 1 pessoa · 1 terminal · 1 ao vivo. Todo mundo vê todo mundo; para ajudar, entre e digite. MAPA DA SALA EQUIPE: 1 PRESENÇA SINAL: AO VIVO Theus · Assistente a sala TH Assistente · Theus (você) ao vivo [matheussilveirapro] /var/folders/k6/6y2hfq0d0zb5_fn8cnx kx_c00000gn/T/babel-e2e-aud-painel-vCoeF3/theus ❯ codex: ready em repouso Pausar transmissão"
+    },
+    "projetos": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × ××",
+      "lateral": "PROJETOS ＋ Novo Trabalhar sozinho é uma coisa; em projeto é outra. No projeto, o Explorador mostra só o projeto, agrupado por pessoa, e dá para arrastar arquivos para alguém.",
+      "conteudo": "Projetos Duas ou mais pessoas na mesma coisa, sem ninguém abrir mão do próprio computador. Cada membro guarda a sua parte; o projeto é o que junta. ＋ Novo projeto"
+    },
+    "acervo": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × ××",
+      "lateral": "Acervo Inteligência ACERVO 1 materiais e 3 termos indexados, sem LLM. Tudo 1 nota 1 MEMÓRIA COM NOME 0 coisas que a equipe aprendeu, cada uma com autor e usos (). Todo agente novo nasce sabendo. esta semana: usada 0× · 0 aprendizados novos o que você ensinou: 0 · usado 0× · +0 pontos esta semana · só você vê A IA do terminal usa o mesmo acervo: coop buscar \"…\" e coop ler caminho.",
+      "conteudo": "Acervo Tudo o que a equipe cria vira busca. Sem LLM: por palavras (BM25) ou por semelhança (vetores calculados aqui). A memória tem nome: cada aprendizado, preset, prompt, ideia e ata cita quem ensinou e quantas vezes foi usado. Palavras Semelhança EXPERIMENTE reembolso sessão expirando plano anual clínicas Campinas webinar dentistas proposta de uma página Tente \"Semelhança\" com palavras que não aparecem iguais no texto (ex.: \"clinicas\" sem acento, \"reembolsos\" no plural): a busca acha pelos pedaços das palavras."
+    },
+    "equipe": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Equipe × ××",
+      "lateral": "Equipe Metas Mapa PLANTA DA SALA 1 presente Equipe 1 TH você em Equipe Clique numa pessoa para ver por onde passou; → vai até onde ela está. EQUIPE Cuidando da gente 0 Pessoas e carga 1 Check-ins de hoje 0/1 Controle da TV painel Regras CONVIDAR PESSOA Gerar token Horas por pessoa aparecem só para a gestão. A TV mostra o total da equipe e os sinais de cuidado, nunca um ranking.",
+      "conteudo": "Equipe 1 pessoas · 1 online · a equipe mediu 0 s hoje CUIDANDO DA GENTE · O QUE O SISTEMA NOTOU Ninguém precisando de uma mão agora. Contas simples, sem IA: tempo acima de 1,5× a estimativa, \"estou travado\", muitas trocas de tarefa, dias sem abrir a Estação, bloqueio no check-in. A pessoa pode apertar \"Estou bem\". PESSOAS E CARGA TH Theus · gestão Gestão · online 0 s Sem check-in hoje. Pôr foto CONTROLE DA TV Painel geral Reunião Quadro ao vivo Publicar aviso Ligar modo visita Tema roxo (grafo v5) Tema azul (Babel Terminal) Nada projetado agora. Em qualquer arquivo: \"▣ Projetar na TV\". TV não está aberta. Abra este protótipo em outra janela e clique em \"Tela da TV\". REGRAS Pausar os cronômet"
+    },
+    "loja": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Equipe × Loja da equipe × ××",
+      "lateral": "PUBLICAR NA LOJA Skill MCP Plugin Agente CLAUDE.md Publicar Tudo o que estiver em Loja/ na sua pasta compartilhada aparece aqui para a equipe. Chaves nunca vão para a pasta: ficam no cofre de cada computador. O QUE EU PUBLIQUEI nada ainda",
+      "conteudo": "Loja da equipe 0 itens · 0 novos esta semana. O que uma pessoa monta para a IA dela serve para todas: instala com um clique no seu Claude Code. Tudo Skills MCPs Plugins Agentes CLAUDE.md"
+    },
+    "oficina": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Equipe × Loja da equipe × Oficina do app × ××",
+      "lateral": "OFICINA DO APP v0 Aguardando publicação 0 Quem pode mudar o app 1 Versões 0 Ainda na versão antiga 0 Você pode mudar o app: no terminal, diga \"muda no app: …\". A mudança fica aqui até o Theus publicar.",
+      "conteudo": "BABEL COOP · VERSÃO ATUAL v0 NOTAS DA PRÓXIMA VERSÃO (V1) Publicar atualização v1 Ao publicar, todo mundo vê \"⬆ Atualizar para v1\" na barra de baixo. Quem clica recebe os arquivos da sua Estação e o app recarrega. AGUARDANDO PUBLICAÇÃO Nenhuma mudança esperando. Quem está liberado pede ao agente no terminal: \"muda no app: …\". QUEM PODE MUDAR O APP TH Theus · gestão pode mudar Quem pode mudar recebe a pasta Oficina/app na Estação: o agente edita o código lá, roda os testes e a mudança fica aguardando aqui. Publicar é só da gestão. VERSÃO INSTALADA EM CADA ESTAÇÃO TH Theus v0 · em dia VERSÕES PUBLICADAS"
+    },
+    "maquina": {
+      "abas": "Meu dia × Criar × Demandas × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Equipe × Loja da equipe × Oficina do app × Máquina × ××",
+      "lateral": "MÁQUINA · BACKEND VISUAL O backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto: Clínicas (exemplo) LINHA DO TEMPO 4 Bruno-bot ligou o robô do WhatsApp há 40 min Dev criou a porta \"novo agendamento\" há 2 horas TH fechou Pacientes por empresa há 3 horas TH Rita criou a gaveta Pacientes há 3 horas PRESETS DA EQUIPE 0 Nada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\". Presets são o que a equipe já construiu e funcionou: backend",
+      "conteudo": "Máquina · Clínicas (exemplo) local ● branch produção v1 · 13 peças · 2 alertas Testar Publicar O que muda ▶ Ver o agente montando Projetar na TV Máquina inteira › todas as peças Inteira Domínio Peça por pessoa ARMÁRIO DA FRENTE · as gavetas daqui têm porta na rua Carteiro TH REMETENTE PADRÃO ⚠ padrão: 2 e-mails por hora, só para a equipe Portaria TH dono atendente entra com e-mail e senha Agenda a tela Agenda usa as portas \"novo\" e \"listar\" novo agendamento RECEBE PACIENTE + QUANDO recebe paciente e horário e grava na gaveta Agendamentos listar agendamentos DEVOLVE DIA devolve os agendamentos do dia da clínica EMPRESA cada uma vê só o seu Clínicas TH ¶ nome texto ¶ cnpj texto ¶ cidade texto "
+    }
+  },
+  "erros": []
+}

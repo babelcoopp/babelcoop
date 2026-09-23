@@ -1,0 +1,203 @@
+{
+  "fundou": "theus",
+  "casca": {
+    "temBCicones": false,
+    "nomesBCicones": 0,
+    "svgsVisiveis": 32,
+    "comDataIcone": 0,
+    "tracoComputado": {
+      "1.5px": 19,
+      "1.6px": 6,
+      "1.3px": 2,
+      "1px": 5
+    },
+    "barra": [
+      {
+        "id": "explorador",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "dia",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "demandas",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "chat",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "reuniao",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "acervo",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "inteligencia",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "terminais",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "tarefas",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "metas",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "equipe",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "mapa",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "projetos",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "whatsapp",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "loja",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "oficina",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "ir-tv",
+        "icone": "(antigo)",
+        "traco": "1.5px",
+        "tam": 20
+      }
+    ]
+  },
+  "cliques": [
+    {
+      "id": "explorador",
+      "ativo": "explorador",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "dia",
+      "ativo": "dia",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "demandas",
+      "ativo": "demandas",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "chat",
+      "ativo": "chat",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "reuniao",
+      "ativo": "reuniao",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "acervo",
+      "ativo": "acervo",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "inteligencia",
+      "ativo": "inteligencia",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "terminais",
+      "ativo": "terminais",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "tarefas",
+      "ativo": "tarefas",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "metas",
+      "ativo": "metas",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "equipe",
+      "ativo": "equipe",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "mapa",
+      "ativo": "mapa",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "projetos",
+      "ativo": "projetos",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "whatsapp",
+      "ativo": "whatsapp",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "loja",
+      "ativo": "loja",
+      "icone": "(antigo)"
+    },
+    {
+      "id": "oficina",
+      "ativo": "oficina",
+      "icone": "(antigo)"
+    }
+  ],
+  "mais": 19,
+  "erros": []
+}

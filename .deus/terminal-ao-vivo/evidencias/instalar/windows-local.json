@@ -1,0 +1,17 @@
+{
+  "quando": "2026-09-23",
+  "como": "npx electron-builder --win nsis --x64 --publish never, construído no Mac (cruzado) numa pasta temporária, só para validar a configuração; o .exe foi apagado depois",
+  "instalador": "babel-coop-0.1.0-windows-x64.exe · 105.4 MB (110490261 bytes)",
+  "nodePtyNoPacote": ["win32-x64: pty.node, conpty.node, conpty/, conpty_console_list.node, winpty.dll, winpty-agent.exe"],
+  "idiomas": ["en-US.pak", "pt-BR.pak"],
+  "asar": 117,
+  "prototipo": "resources/prototipo (8,3 MB)",
+  "interfaceMidiaForaDoAsar": 6,
+  "fuseRunAsNode": "ligado (49)",
+  "bugsAchadosECorrigidos": [
+    "electronLanguages en/pt_BR_* apagava TODOS os .pak do Windows (en-US.pak e pt-BR.pak): win.electronLanguages = [en-US, pt-BR]",
+    "o filtro do node-pty usava ${platform} (o sistema de quem constrói): no build cruzado ia darwin-x64 no .exe; agora cada alvo filtra o seu (darwin-${arch} / win32-${arch})",
+    "files da plataforma substitui o da raiz: com só o filtro, o .exe levou dist/ e testes/ (316 MB); cada alvo leva a lista inteira"
+  ],
+  "naoTestado": "rodar o .exe numa máquina Windows: fica com o job instaladores do CI (teste instalar.test.js no windows-latest)"
+}

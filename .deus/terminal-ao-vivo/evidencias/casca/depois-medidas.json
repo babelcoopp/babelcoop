@@ -1,0 +1,229 @@
+{
+  "prefixo": "depois",
+  "sem_casca": false,
+  "quando": "2026-09-23T20:43:42.184Z",
+  "auditoria_arquivo": {
+    "textos_medidos": 119,
+    "texto_t1_t2_menor_que_18px": [],
+    "contraste_por_regiao": {
+      "e-topo": {
+        "textos": 4,
+        "contraste_min": 8.33,
+        "contraste_medio": 10.46
+      },
+      "e-atividades": {
+        "textos": 4,
+        "contraste_min": 5.12,
+        "contraste_medio": 8.56
+      },
+      "e-lateral": {
+        "textos": 38,
+        "contraste_min": 5.12,
+        "contraste_medio": 10.39
+      },
+      "e-abas": {
+        "textos": 2,
+        "contraste_min": 11.86,
+        "contraste_medio": 13.19
+      },
+      "e-conteudo": {
+        "textos": 39,
+        "contraste_min": 5.12,
+        "contraste_medio": 12.41
+      },
+      "e-painel": {
+        "textos": 17,
+        "contraste_min": 9.41,
+        "contraste_medio": 10.29
+      },
+      "cronometro": {
+        "textos": 3,
+        "contraste_min": 8.33,
+        "contraste_medio": 10.66
+      },
+      "e-status": {
+        "textos": 12,
+        "contraste_min": 9.82,
+        "contraste_medio": 11.38
+      }
+    },
+    "texto_abaixo_de_4_5": [],
+    "total_abaixo_de_4_5": 0,
+    "sombras_externas": [
+      "ponto online → rgb(6, 11, 22) 0px 0px 0px 2px"
+    ],
+    "corpo_do_meio": {
+      "cor": "rgb(195, 207, 229)",
+      "fundo": "rgb(11, 19, 32)",
+      "tamanho": "14px",
+      "fonte": "\"IBM Plex Sans\"",
+      "contraste": 11.86
+    }
+  },
+  "logo_repouso": {
+    "filter": "none",
+    "animacao": "none",
+    "opacidade": "0.92"
+  },
+  "animacoes_em_repouso": [
+    "pulsar em marca-num vivo (laço)",
+    "neon em term-marca (laço)"
+  ],
+  "gancho_luz": {
+    "antes": {
+      "linha": "0",
+      "aba": "0",
+      "rodape": "rgb(195, 207, 229)"
+    },
+    "com_luz": {
+      "linha": "1",
+      "aba": "0.5",
+      "rodape": "oklch(0.799384 0.129814 204.963)"
+    },
+    "nota": "gancho para o motor do organismo; valores escritos pelo teste, não por evento"
+  },
+  "auditoria_terminais": {
+    "textos_medidos": 142,
+    "texto_t1_t2_menor_que_18px": [],
+    "contraste_por_regiao": {
+      "e-topo": {
+        "textos": 4,
+        "contraste_min": 8.33,
+        "contraste_medio": 10.46
+      },
+      "e-atividades": {
+        "textos": 4,
+        "contraste_min": 5.12,
+        "contraste_medio": 8.56
+      },
+      "e-lateral": {
+        "textos": 26,
+        "contraste_min": 9.82,
+        "contraste_medio": 12.17
+      },
+      "e-abas": {
+        "textos": 1,
+        "contraste_min": 14.52,
+        "contraste_medio": 14.52
+      },
+      "e-conteudo": {
+        "textos": 75,
+        "contraste_min": 5.12,
+        "contraste_medio": 10.18
+      },
+      "e-painel": {
+        "textos": 17,
+        "contraste_min": 9.41,
+        "contraste_medio": 10.29
+      },
+      "cronometro": {
+        "textos": 3,
+        "contraste_min": 8.33,
+        "contraste_medio": 10.66
+      },
+      "e-status": {
+        "textos": 12,
+        "contraste_min": 9.82,
+        "contraste_medio": 11.38
+      }
+    },
+    "texto_abaixo_de_4_5": [],
+    "total_abaixo_de_4_5": 0,
+    "sombras_externas": [
+      "ponto online → rgb(6, 11, 22) 0px 0px 0px 2px"
+    ],
+    "corpo_do_meio": {
+      "cor": "rgb(168, 184, 213)",
+      "fundo": "rgb(11, 19, 32)",
+      "tamanho": "12.5px",
+      "fonte": "\"JetBrains Mono\"",
+      "contraste": 9.29
+    }
+  },
+  "evento_0s3": {
+    "filter": "drop-shadow(rgb(42, 213, 229) 0px 0px 1.5px) drop-shadow(color(srgb 0.164706 0.835294 0.898039 / 0.7) 0px 0px 5px) drop-shadow(color(srgb 0.",
+    "animacao": "none",
+    "opacidade": "1",
+    "aviso": {
+      "visivel": true,
+      "texto": "Salvo. A versão anterior ficou guardada.",
+      "borda": "rgb(44, 207, 223)"
+    }
+  },
+  "evento_5s6": {
+    "filter": "drop-shadow(rgba(42, 213, 229, 0.616) 0px 0px 0.924013px) drop-shadow(oklab(0.799384 -0.117687 -0.0547857 / 0.431206) 0px 0px 3.08004px) dro",
+    "animacao": "none",
+    "opacidade": "0.969281",
+    "aviso_visivel": false
+  },
+  "evento_9s6": {
+    "filter": "none",
+    "animacao": "none",
+    "opacidade": "0.92",
+    "aviso_visivel": false
+  },
+  "pensando": {
+    "filter": "drop-shadow(oklab(1 153.009 164.523 / 0.892347) 0px 0px 1.64116px) drop-shadow(oklab(0.799384 -0.117687 -0.0547857 / 0.7) 0px 0px 4.92347px)",
+    "animacao": "casca-b-pensa",
+    "opacidade": "0.974078",
+    "abas": "term-estado pensando | term-estado parado"
+  },
+  "pensando_depois": {
+    "filter": "none",
+    "animacao": "none",
+    "opacidade": "0.981798",
+    "abas": "term-estado parado | term-estado parado"
+  },
+  "erros_estacao": [],
+  "movimento_reduzido": {
+    "logo_filtro": "drop-shadow(rgb(42, 213, 229) 0px 0px 1.5px) drop-shadow(color(srgb 0.164706 0.835294 0.89",
+    "logo_animacao": "none",
+    "logo_transicao": "1e-05s",
+    "aviso_animacao": "none",
+    "aviso_borda": "rgb(42, 213, 229)"
+  },
+  "erros_tv": [],
+  "celular": {
+    "scrollWidth": 400,
+    "janela": 400,
+    "abas_celular": "flex",
+    "barra_atividades": "none"
+  },
+  "auditoria_celular": {
+    "textos_medidos": 48,
+    "texto_t1_t2_menor_que_18px": [],
+    "contraste_por_regiao": {
+      "e-lateral": {
+        "textos": 3,
+        "contraste_min": 12.53,
+        "contraste_medio": 12.53
+      },
+      "e-conteudo": {
+        "textos": 39,
+        "contraste_min": 7.74,
+        "contraste_medio": 10.64
+      },
+      "cronometro": {
+        "textos": 3,
+        "contraste_min": 8.33,
+        "contraste_medio": 10.66
+      },
+      "e-abas-celular": {
+        "textos": 3,
+        "contraste_min": 11.01,
+        "contraste_medio": 12.45
+      }
+    },
+    "texto_abaixo_de_4_5": [],
+    "total_abaixo_de_4_5": 0,
+    "sombras_externas": [],
+    "corpo_do_meio": {
+      "cor": "rgba(255, 248, 231, 0.88)",
+      "fundo": "rgb(11, 19, 32)",
+      "tamanho": "28px",
+      "fonte": "\"Cormorant Garamond\"",
+      "contraste": 17.58
+    }
+  },
+  "erros_celular": []
+}

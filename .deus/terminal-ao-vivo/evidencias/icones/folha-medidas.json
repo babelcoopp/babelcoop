@@ -1,0 +1,42 @@
+{
+  "inicial": {
+    "celulas": 83,
+    "visiveis": 83,
+    "svgs": 747,
+    "svgsVisiveis": 747,
+    "casca": 61,
+    "pecas": 16,
+    "estados": 6,
+    "foraDaMargem": [],
+    "preenchidos": [],
+    "tracos": {
+      "1.5": 747
+    },
+    "lupaAberta": false,
+    "fundo": "todos",
+    "tam": "todos"
+  },
+  "depoisFiltro": {
+    "celulas": 83,
+    "visiveis": 1,
+    "svgs": 747,
+    "svgsVisiveis": 1,
+    "casca": 61,
+    "pecas": 16,
+    "estados": 6,
+    "foraDaMargem": [],
+    "preenchidos": [],
+    "tracos": {
+      "1.5": 747
+    },
+    "lupaAberta": false,
+    "fundo": "s2",
+    "tam": "16"
+  },
+  "lupa": {
+    "aberta": true,
+    "nome": "gaveta",
+    "copiado": "copiado: BC.icones.svg('gaveta', 20)"
+  },
+  "erros": []
+}

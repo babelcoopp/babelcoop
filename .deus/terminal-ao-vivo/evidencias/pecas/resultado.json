@@ -1,0 +1,183 @@
+{
+ "papel": "PEÇAS · R5 as 16 peças em 3D",
+ "antes": {
+  "fundar": "{\"id\":\"theus\",\"nome\":\"Theus\",\"papel\":\"gestao\",\"equipe\":\"babel\",\"pronto\":true}",
+  "pecas_json": 404,
+  "pecas_js": 404,
+  "bc_pecas": false,
+  "maquina_imgs_de_peca": 0,
+  "erros": []
+ },
+ "depois": {
+  "prova": "16/16",
+  "roteiro": "81/82 passaram",
+  "roteiro_falha_de_outro_agente": [
+   "G · clicar numa parada do rastro abre aquele objeto (a landing, onde o Davi está)"
+  ]
+ },
+ "roteiro_42_originais": "42/42",
+ "roteiro_minhas_3": [
+  "✓ B · as 16 peças têm PNG recortado e GLB glTF 2 válido",
+  "✓ B · clicar na Gaveta da vitrine abre o corpo 3D (GLB carregado)",
+  "✓ B · peça nova nasce tracejada e ganha corpo ao publicar"
+ ],
+ "gasto": {
+  "rodada": "terminal-ao-vivo-pecas",
+  "predicoes": 36,
+  "custo_estimado_usd": 2.025,
+  "teto_usd": 4
+ },
+ "tempo_medio_s": {
+  "3d": 25.1,
+  "clipe": 30.7,
+  "keyframe": 9.1,
+  "recorte": 1.9
+ },
+ "pecas": [
+  {
+   "id": "gaveta",
+   "png": "gaveta.png",
+   "glb": "gaveta.glb",
+   "glb_kb": 278,
+   "triangulos": 18436,
+   "giro_graus": 0,
+   "custo_usd": 0.63
+  },
+  {
+   "id": "campo",
+   "png": "campo.png",
+   "glb": "campo.glb",
+   "glb_kb": 74,
+   "triangulos": 4374,
+   "giro_graus": 270,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "fio",
+   "png": "fio.png",
+   "glb": "fio.glb",
+   "glb_kb": 136,
+   "triangulos": 7620,
+   "giro_graus": 180,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "chave",
+   "png": "chave.png",
+   "glb": "chave.glb",
+   "glb_kb": 68,
+   "triangulos": 4232,
+   "giro_graus": 0,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "empresa",
+   "png": "empresa.png",
+   "glb": "empresa.glb",
+   "glb_kb": 121,
+   "triangulos": 7178,
+   "giro_graus": 270,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "portaria",
+   "png": "portaria.png",
+   "glb": "portaria.glb",
+   "glb_kb": 92,
+   "triangulos": 3992,
+   "giro_graus": 180,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "porta",
+   "png": "porta.png",
+   "glb": "porta.glb",
+   "glb_kb": 160,
+   "triangulos": 10500,
+   "giro_graus": 180,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "robo",
+   "png": "robo.png",
+   "glb": "robo.glb",
+   "glb_kb": 181,
+   "triangulos": 10286,
+   "giro_graus": 180,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "deposito",
+   "png": "deposito.png",
+   "glb": "deposito.glb",
+   "glb_kb": 108,
+   "triangulos": 7348,
+   "giro_graus": 90,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "cofre",
+   "png": "cofre.png",
+   "glb": "cofre.glb",
+   "glb_kb": 282,
+   "triangulos": 17714,
+   "giro_graus": 180,
+   "custo_usd": 0.12
+  },
+  {
+   "id": "tela",
+   "png": "tela.png",
+   "glb": "tela.glb",
+   "glb_kb": 128,
+   "triangulos": 8814,
+   "giro_graus": 180,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "cano",
+   "png": "cano.png",
+   "glb": "cano.glb",
+   "glb_kb": 279,
+   "triangulos": 14680,
+   "giro_graus": 0,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "armario",
+   "png": "armario.png",
+   "glb": "armario.glb",
+   "glb_kb": 208,
+   "triangulos": 14646,
+   "giro_graus": 90,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "ferramenta",
+   "png": "ferramenta.png",
+   "glb": "ferramenta.glb",
+   "glb_kb": 238,
+   "triangulos": 15488,
+   "giro_graus": 270,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "carteiro",
+   "png": "carteiro.png",
+   "glb": "carteiro.glb",
+   "glb_kb": 75,
+   "triangulos": 3830,
+   "giro_graus": 180,
+   "custo_usd": 0.13
+  },
+  {
+   "id": "casa-de-maquinas",
+   "png": "casa-de-maquinas.png",
+   "glb": "casa-de-maquinas.glb",
+   "glb_kb": 337,
+   "triangulos": 16622,
+   "giro_graus": 0,
+   "custo_usd": 0.13
+  }
+ ],
+ "pasta_kb": 4938
+}

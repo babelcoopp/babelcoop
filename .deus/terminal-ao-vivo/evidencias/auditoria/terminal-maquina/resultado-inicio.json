@@ -1,0 +1,60 @@
+{
+ "fundar": {
+  "id": "theus",
+  "nome": "Theus",
+  "papel": "gestao",
+  "equipe": "babel",
+  "pronto": true
+ },
+ "inicio": {
+  "real": {
+   "terminal": true,
+   "midia": [
+    "b-entrada-poster.jpg",
+    "b-entrada.mp4",
+    "midia.json",
+    "mostrador-anel-512.png",
+    "mostrador-anel-mini.svg",
+    "mostrador-anel.png"
+   ]
+  },
+  "tr": true,
+  "trPronto": true,
+  "sessoes": [
+   {
+    "id": "assistente",
+    "agente": "assistente",
+    "nome": "Assistente",
+    "aberta": true,
+    "pid": 48764,
+    "estado": "shell",
+    "face": "presenca",
+    "pausada": false,
+    "modoAgente": false,
+    "agenteEstado": null,
+    "blocos": 0,
+    "cols": 56,
+    "rows": 28,
+    "frase": "em repouso",
+    "alvo": "babel-e2e-tm-dJyuQN/theus"
+   }
+  ],
+  "pessoas": [
+   "Theus"
+  ],
+  "projetos": [],
+  "organismo": true,
+  "somLigado": true,
+  "textura": "/coop/midia/mostrador-anel-512.png",
+  "painel": "→ babel-e2e-tm-dJyuQN/theus\nAssistente · em repouso\nnasceu na sua pasta · 19:49\n● ao vivo",
+  "abas": [
+   "Assistente\n×",
+   "×"
+  ],
+  "marca": true,
+  "selo": false,
+  "aoVivo": [],
+  "atividades": []
+ },
+ "erros": []
+}

@@ -1,0 +1,258 @@
+[0.5s] electron aberto
+[0.6s] fundou true
+[1.1s] recarregou
+[1.5s] estacao pronta
+[3.0s] acervo: sessão expirando
+[16.3s] agente consulta (conector)
+[26.6s] protótipo puro
+{
+  "quando": "2026-09-23T22:10:32.170Z",
+  "eu": "theus",
+  "api": [
+    "autor",
+    "citar",
+    "citarHtml",
+    "consultar",
+    "documentos",
+    "eMemoria",
+    "janelaUsoMs",
+    "luz",
+    "luzesPara",
+    "meus",
+    "pontosPorUso",
+    "resumoParaAgente",
+    "semana",
+    "tipos",
+    "usar",
+    "usos",
+    "versao"
+  ],
+  "temOrganismo": true,
+  "temPlacar": true,
+  "alvo": {
+    "doc": "ap:ap3",
+    "antes": 9
+  },
+  "depoisDeUsar": {
+    "usos": 10,
+    "citacao": "Aprendizado · Felipe · sessão expirando · usado 10×",
+    "luzesFelipe": 1,
+    "luzesTheusVe": 0
+  },
+  "repetido": 10,
+  "luzFelipe": {
+    "texto": "TH Theus usou o seu aprendizado ✕ “Chamado de login quase sempre é sessão expirando; conferir o relógio do servidor primeiro.” Aprendizado · Felipe · sessão expirando · usado 10× +2 origem: uso do seu trabalho · 19:10 · só você vê",
+    "luz": "0.985",
+    "vidro": "blur(14px) saturate(1.15)",
+    "borda": "color(srgb 0.170641 0.839251 0.905387 / 0.796123)",
+    "tAtividade": "0.989"
+  },
+  "luzAos3s": "0.522",
+  "luzAos7s": "saiu",
+  "duracaoMs": 10260,
+  "pontosFelipe": {
+    "pessoa": "felipe",
+    "memorias": 2,
+    "usadoTotal": 14,
+    "usosSemana": 1,
+    "pontos": [
+      {
+        "chave": "luz:ap:ap3:10",
+        "pts": 2,
+        "ts": 1790201433490,
+        "ref": "ap:ap3",
+        "origem": "Theus usou o seu aprendizado",
+        "conta": "2 = uso do meu trabalho 2 × esforço 1 × surpresa 1 (régua §3)",
+        "prova": "Aprendizado · “Chamado de login quase sempre é sessão expirando; conferir o relógio do servidor primeiro.” · usado 10×"
+      }
+    ],
+    "pontosSemana": 2,
+    "pendentes": 0
+  },
+  "luzesFelipeDepois": 1,
+  "carlaVe": {
+    "cartoes": 0,
+    "novidades": 0,
+    "meus": 0
+  },
+  "conector": [
+    {
+      "id": "ap:ap7",
+      "tipo": "aprendizado",
+      "titulo": "IA do terminal de Davi",
+      "autor": "Davi",
+      "autorId": "davi",
+      "usos": 7,
+      "trecho": "Em planilhas exportadas do banco, datas vêm como texto dd/mm; converter antes de somar. (terminal do …",
+      "tema": "planilha exportada",
+      "memoria": true,
+      "contou": true,
+      "caminho": null,
+      "relevancia": 22.24,
+      "rotulo": "Aprendizado · Davi · planilha exportada · usado 7×"
+    },
+    {
+      "id": "arq:f-aprendizados",
+      "tipo": "nota",
+      "titulo": "APRENDIZADOS.md",
+      "autor": "Theus",
+      "autorId": "theus",
+      "usos": null,
+      "trecho": "…expirando; conferir o relógio do servidor primeiro. _(Felipe, ontem, +2 confirmado)_ - Em planilhas exportadas do banco, datas vêm como texto dd/mm; converter antes de somar. _(IA do termi…",
+      "tema": "planilha exportada",
+      "memoria": false,
+      "contou": false,
+      "caminho": "equipe/Aprendizados/APRENDIZADOS.md",
+      "relevancia": 6.456,
+      "rotulo": "APRENDIZADOS.md · Theus"
+    },
+    {
+      "id": "dem:l1",
+      "tipo": "demanda",
+      "titulo": "Atualizar a planilha de leads com as clínicas novas",
+      "autor": null,
+      "autorId": null,
+      "usos": null,
+      "trecho": "Atualizar a planilha de leads com as clínicas novas. São umas 20 clínicas que vieram do evento. A planilha est…",
+      "tema": "planilha",
+      "memoria": false,
+      "contou": false,
+      "caminho": null,
+      "relevancia": 4.445,
+      "rotulo": "Atualizar a planilha de leads com as clínicas novas"
+    },
+    {
+      "id": "dem:d3",
+      "tipo": "demanda",
+      "titulo": "Ajustar a planilha de comissões",
+      "autor": "Davi",
+      "autorId": "davi",
+      "usos": null,
+      "trecho": "Ajustar a planilha de comissões. Separar comissão de renovação e de cliente novo. aguardando informação",
+      "tema": "planilha",
+      "memoria": false,
+      "contou": false,
+      "caminho": null,
+      "relevancia": 4.181,
+      "rotulo": "Ajustar a planilha de comissões · Davi"
+    }
+  ],
+  "davi": {
+    "antes": 6,
+    "depois": 7
+  },
+  "luzDavi": "TH Rita (agente de Theus) usou o seu aprendizado ✕ “Em planilhas exportadas do banco, datas vêm como texto dd/mm; converter antes de somar.” Aprendizado · Davi · planilha exportada · usado 7× +2 origem: uso do seu trabalho · 19:10 · só você vê",
+  "resumo": {
+    "total": 24,
+    "porTipo": {
+      "aprendizado": 9,
+      "preset": 3,
+      "prompt": 7,
+      "ideia": 3,
+      "fala": 1,
+      "ata": 1
+    },
+    "texto": "já li 24 coisas que a equipe aprendeu",
+    "itens": 9,
+    "primeiros": [
+      {
+        "id": "ap:ap3",
+        "tipo": "aprendizado",
+        "texto": "Chamado de login quase sempre é sessão expirando; conferir o relógio do servidor primeiro.",
+        "autor": "Felipe",
+        "autorId": "felipe",
+        "usos": 10,
+        "confirmacoes": 2,
+        "ts": 1790115030005
+      },
+      {
+        "id": "ap:ap7",
+        "tipo": "aprendizado",
+        "texto": "Em planilhas exportadas do banco, datas vêm como texto dd/mm; converter antes de somar.",
+        "autor": "Davi",
+        "autorId": "davi",
+        "usos": 7,
+        "confirmacoes": 1,
+        "ts": 1790190630005
+      },
+      {
+        "id": "ap:ap9",
+        "tipo": "aprendizado",
+        "texto": "Reembolso de viagem só fecha o mês com as notas anexadas e o OK do Theus até as 18h.",
+        "autor": "Carla",
+        "autorId": "carla",
+        "usos": 7,
+        "confirmacoes": 1,
+        "ts": 1790107830006
+      }
+    ],
+    "instrucoes": "## O que a equipe já sabe (babel-coop · memória com nome)\n\nVocê nasceu sabendo: já li 24 coisas que a equipe aprendeu (9 aprendizados, 3 presets, 7 prompts, 3 ideias, 1 ideia falada, 1 ata).\nQuando usar algo daqui, cite quem ensinou, no formato \"Aprendizado · <autor> · <tema> · usado N×\". Para mais, use coop_buscar antes de criar: cada consulta soma +1 para quem ensinou e acende a luz na tela dele.\n\nOs 9 aprendizados mais usados da equipe:\n1. Chamado de login quase sempre é sessão expirando; conferir o relógio do servidor primeiro. (Felipe · usado 10×)\n2. Em planilhas exportadas do banco, datas vêm como texto dd/mm; converter antes de somar. (Davi · usado 7×)\n3. Reembolso de viagem só fecha "
+  },
+  "consultarReembolso": [
+    {
+      "id": "ap:ap9",
+      "tipo": "aprendizado",
+      "titulo": "Aprendizado de Carla",
+      "autor": "Carla",
+      "autorId": "carla",
+      "usos": 8,
+      "trecho": "Reembolso de viagem só fecha o mês com as notas anexadas e o OK do Theus até as 18h. (Reembolso da …",
+      "tema": "reembolso",
+      "memoria": true,
+      "contou": true,
+      "caminho": null,
+      "relevancia": 4.064,
+      "rotulo": "Aprendizado · Carla · reembolso · usado 8×"
+    },
+    {
+      "id": "dem:d1",
+      "tipo": "demanda",
+      "titulo": "Aprovar reembolso da viagem a Campinas",
+      "autor": "Theus",
+      "autorId": "theus",
+      "usos": null,
+      "trecho": "Aprovar reembolso da viagem a Campinas. As notas estão no HD da Carla, em \"Notas de despesas\". Preciso do O…",
+      "tema": "reembolso",
+      "memoria": false,
+      "contou": false,
+      "caminho": null,
+      "relevancia": 3.848,
+      "rotulo": "Aprovar reembolso da viagem a Campinas · Theus"
+    },
+    {
+      "id": "arq:f12",
+      "tipo": "pdf",
+      "titulo": "viagem-campinas.pdf",
+      "autor": "Carla",
+      "autorId": "carla",
+      "usos": null,
+      "trecho": "Reembolso · viagem a Campinas # Despesas Combustível: R$ 212,40 Pedágio: R$ 38,60 Almoço com client…",
+      "tema": "reembolso",
+      "memoria": false,
+      "contou": false,
+      "caminho": "carla/Notas de despesas/viagem-campinas.pdf",
+      "relevancia": 2.643,
+      "rotulo": "viagem-campinas.pdf · Carla"
+    }
+  ],
+  "semana": {
+    "desde": 1789959600000,
+    "usos": 3,
+    "aprendizadosNovos": 8,
+    "total": 24
+  },
+  "errosApp": [],
+  "presenca": "CONSULTA · RITA LEU O QUE A EQUIPE ENSINOU Aprendizado · Davi · planilha exportada · usado 7× +1",
+  "presencaUsos": {
+    "antes": 6,
+    "depois": 7
+  },
+  "nasceu": "LIA NASCEU SABENDO Já li 25 coisas que a equipe aprendeu. 9 aprendizados · 3 presets · 8 prompts · 3 ideias · 1 ideia falada · 1 ata AS MAIS USADAS Aprendizado · Felipe · chamado · usado 9× Aprendizado · Davi · planilhas · usado 7× Aprendizado · Carla · reembolso · usado 7×",
+  "luzDaviProto": {
+    "texto": "TH Rita (agente de Theus) usou o seu aprendizado ✕ “Em planilhas exportadas do banco, datas vêm como texto dd/mm; converter antes de somar.” Aprendizado · Davi · planilha exportada · usado 7× +2 origem: uso do seu trabalho · 19:11 · só você vê",
+    "motor": "css",
+    "animacao": "mem-nasce, mem-esfria"
+  },
+  "errosProto": [],
+  "erros": []
+}

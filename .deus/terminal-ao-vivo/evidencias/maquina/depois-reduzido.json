@@ -1,0 +1,26 @@
+{
+  "semMovimento": true,
+  "durante": {
+    "pontos": 0,
+    "faiscas": 0,
+    "acesas": 6,
+    "luzes": [
+      "1.000",
+      "1.000",
+      "1.000"
+    ]
+  },
+  "segundos": 4.4,
+  "fim": {
+    "passou": true,
+    "barrado": true,
+    "log": 15,
+    "pontos": [
+      2,
+      6
+    ],
+    "corpo": 8,
+    "animando": 0
+  },
+  "erros": []
+}

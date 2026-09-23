@@ -1,0 +1,434 @@
+{
+ "fundar": {
+  "id": "theus",
+  "nome": "Theus",
+  "papel": "gestao",
+  "equipe": "babel",
+  "pronto": true
+ },
+ "inicio": {
+  "titulo": "babel-coop",
+  "eu": "theus",
+  "pessoas": [
+   "Theus"
+  ],
+  "topo": "babel-coop\nBuscar arquivo, comando ou acervo\nCtrl\nK\nTela da TV",
+  "atividades": [
+   "Meu dia",
+   "Criar",
+   "Trabalho",
+   "Chat",
+   "WhatsApp",
+   "Reunião",
+   "Terminais",
+   "Projetos",
+   "Acervo",
+   "Equipe",
+   "Loja",
+   "Oficina",
+   "TH"
+  ],
+  "status": "online\n0 na caixa\n◌ memória da sala\n0\npontos · hoje\nTV não aberta\n● terminal ao vivo\nacervo: 1\nSalvo na equipe",
+  "painel": "Assistente\n×\n+\nPresença\nTerminal\nCtrl J\nEntrar em…\nNeon\nSom\n⟩\n→ babel-e2e-funcoes-XgEowF/theus\nAssistente · em repouso\nnasceu na sua pasta · 19:49\n● ao vivo\nASSISTENTE\nSeu agente: pesquisa, escreve, organiza e mexe no babel-coop por você.\nPeça em português: eu trabalho no seu terminal de verdade, em babel-e2e-funcoes-XgEowF/theus. Cada passo aparece aqui com prova.\n▶ Iniciar Assistente\nsó terminal\nProcurar no acervo\nResumir o dia\nMe ajude com um erro\n❯\n→ Meu dia\n×\nenviar",
+  "abas": "Meu dia\n×",
+  "conteudo": "Boa noite, Theus.\n\nquarta, 23 de setembro · 0 na caixa de entrada · trabalho medido hoje 0 s\n\n🎙 Falar uma ideia\nNova demanda\nCAIXA DE ENTRADA\n\nNada novo. Bom sinal.\n\nMINHAS DEMANDAS EM ANDAMENTO\n\nNenhuma demanda rodando.\n\nESPERANDO O SEU OK\n\nNinguém esperando você.\n\nTAREFAS LIVRES · PEGA QUEM PUDER\nver todas (0)\n\nNenhuma tarefa livre agora.\n\nIDEIAS DA EQUIPE\nMandar ideia\n💡 Salvar ideia falada\n⏺ Começar a gravar\n\nA sala guarda só os últimos 5 minutos em memória. Nada é gravado até alguém apertar.\n\nPRIMEIROS PASSOS COM IA\n0/6\nAbra um arquivo no Explorador (▤)\nNo terminal, rode coop ajuda\nUse uma receita: \"Explicar este arquivo\"\nCrie uma nota (＋ Nota) e leve para a reunião\nRegistre um aprendizado: coop aprendi \"...\"\nConclua uma demanda escrevendo o que aprendeu\n\nTravou? O botão \"Pedir ajuda\" de qualquer arquivo manda ele para o Theus.\n\nMINHA CONTRIBUIÇÃO\nMateriais que criei\n1\nVezes que foram abertos\n0\nAprendizados meus\n0\nValeus recebidos\n0\n\nSeus aprendizados estão no APRENDIZADOS.md: a IA do terminal de todos lê antes de começar.\n\nPERGUNTA DA SEMANA\n\nQue trabalho acontece hoje fora de qualquer sistema, e ninguém vê?\n\nResponder\n\n0 resposta(s) até agora.\n\nCHECK-IN DO DIA\nRegistrar check-in\nAVISOS",
+  "arquivos": [
+   "theus/README.md"
+  ],
+  "demandas": 0,
+  "projetos": 0,
+  "organismo": true,
+  "real": true,
+  "limpo": true
+ },
+ "vistas": {
+  "dia": {
+   "lateral": "MEU DIA\nCaixa de entrada\n0\nEsperando meu OK\n0\nTarefas livres\n0\nPrimeiros passos com IA\nMinha contribuição\nPergunta da semana\n0\nIdeias\n0\nCheck-in do dia\n·\nA caixa de entrada junta o que chegou para você. A TV nunca mostra as suas horas; elas ficam aqui para você.",
+   "conteudo": "Boa noite, Theus.\nquarta, 23 de setembro · 0 na caixa de entrada · trabalho medido hoje 0 s\n🎙 Falar uma ideia\nNova demanda\nCAIXA DE ENTRADA\nNada novo. Bom sinal.\nMINHAS DEMANDAS EM ANDAMENTO\nNenhuma demanda rodando.\nESPERANDO O SEU OK\nNinguém esperando você.\nTAREFAS LIVRES · PEGA QUEM PUDER\nver todas (0)\nNenhuma tarefa livre agora.\nIDEIAS DA EQUIPE\nMandar ideia\n💡 Salvar ideia falada\n⏺ Começar a gravar\nA sala guarda só os últimos 5 minutos em memória. Nada é gravado até alguém apertar.\nPRIMEIROS PASSOS COM IA\n0/6\nAbra um arquivo no Explorador (▤)\nNo terminal, rode coop ajuda\nUse uma receita: \"Explicar este arquivo\"\nCrie uma nota (＋ Nota) e leve para a reunião\nRegistre um aprendizado: coop aprendi \"...\"\nConclua uma demanda escrevendo o que aprendeu\nTravou? O botão \"Pedir ajuda\" de qualquer arquivo manda ele para o Theus.\nMINHA CONTRIBUIÇÃO\nMateriais que criei\n1\nVezes que foram abertos\n0\nAprendizados meus\n0\nValeus recebidos\n0\nSeus aprendizados estão no APRENDIZADOS.md: a IA do terminal de todos lê antes de começar.\nPERGUNTA DA SEMANA\nQue trabalho acontece hoje fora de qualquer sistema, e ninguém vê?\nResponder\n0 resposta(s) até agora.\nCHECK-IN DO DIA\nRegistrar check-in\nAVISOS",
+   "btsConteudo": [
+    "🎙 Falar uma ideia",
+    "Nova demanda",
+    "ver todas (0)",
+    "Mandar ideia",
+    "💡 Salvar ideia falada",
+    "⏺ Começar a gravar",
+    "Responder",
+    "Registrar check-in"
+   ],
+   "btsLateral": [
+    "Caixa de entrada 0",
+    "Esperando meu OK 0",
+    "Tarefas livres 0",
+    "Primeiros passos com IA",
+    "Minha contribuição",
+    "Pergunta da semana 0",
+    "Ideias 0",
+    "Check-in do dia ·"
+   ]
+  },
+  "explorador": {
+   "lateral": "CRIAR\n＋ Nota\n＋ Mapa\n＋ Quadro\n＋ Pasta\n＋\n↥\n⬚\nTela\n⚙\nMáquina\n▤\nPesquisa\nSozinho · minha pasta e o HD da equipe\n▾\nTHEUS (você)\nMD\nREADME.md\nSua pasta é ~/BabelCoop/theus: o que está nela a equipe vê; o resto do computador, não. Arraste um arquivo de texto para cá ou crie pelo ＋.",
+   "conteudo": "Criar\nÉ aqui que tudo acontece. Dependendo do que você cria, a tela do meio vira a coisa certa: site vira Tela, backend vira Máquina, texto vira Pesquisa. Numa tela, o modo 3D mostra a página num ambiente 3D com os próximos itens ao lado: digite nela, aperte Enter e veja o pulso correr. O agente do terminal participa de tudo.\n⬚\nTela\numa página, uma landing, um login: abre já como site, edita no visual e tem o modo 3D\n⚙\nMáquina\no backend em peças de Lego: gavetas, portas, robôs, chaves; testa vendo os dados andar\n▤\nPesquisa\nMD, TXT ou PDF: o agente pesquisa e o texto abre em leitura\nCOMEÇAR DE UM PRESET · O QUE A EQUIPE JÁ CONSTRUIU E FUNCIONOU\nPRESETS DA EQUIPE\n0\nNada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".\nPresets são o que a equipe já construiu e funcionou: backends e telas. Entram em qualquer projeto com um clique ou por \"usa o preset X\" no terminal.\n＋ Nota\n＋ Mapa mental\n＋ Quadro\n↥ Abrir do computador\nMUDARAM POR ÚLTIMO\nMD\nREADME.md\ntheus/README.md · agora\nAtalhos: Ctrl+B esconde a lateral · Ctrl+` esconde o terminal · Ctrl+K abre os comandos · Ctrl+S salva o arquivo.",
+   "btsConteudo": [
+    "⬚ Tela uma página, uma landing, um login: abre já como site, edita no visual e tem o modo 3D",
+    "⚙ Máquina o backend em peças de Lego: gavetas, portas, robôs, chaves; testa vendo os dados andar",
+    "▤ Pesquisa MD, TXT ou PDF: o agente pesquisa e o texto abre em leitura",
+    "＋ Nota",
+    "＋ Mapa mental",
+    "＋ Quadro",
+    "↥ Abrir do computador",
+    "MD README.md theus/README.md · agora"
+   ],
+   "btsLateral": [
+    "＋ Nota",
+    "＋ Mapa",
+    "＋ Quadro",
+    "＋ Pasta",
+    "＋",
+    "↥",
+    "⬚ Tela",
+    "⚙ Máquina",
+    "▤ Pesquisa",
+    "▣"
+   ]
+  },
+  "demandas": {
+   "lateral": "Demandas\nTarefas\nDEMANDAS\n+ Nova\nRecebidas\n0\nLivres: pega quem puder\n0\nEnviadas por mim\n0\nConcluídas\n0\nQuem recebe só pausa e retoma. Só quem pediu dá o OK e encerra o cronômetro. Cada pausa fica no histórico.",
+   "conteudo": "Demandas para você\nTrabalho medido hoje: 0 s · 0 aguardando OK · 0 para começar\nNova demanda\nNada por aqui agora.",
+   "btsConteudo": [
+    "Nova demanda"
+   ],
+   "btsLateral": [
+    "Demandas",
+    "Tarefas",
+    "+ Nova",
+    "Recebidas 0",
+    "Livres: pega quem puder 0",
+    "Enviadas por mim 0",
+    "Concluídas 0"
+   ]
+  },
+  "tarefas": {
+   "lateral": "Demandas\nTarefas\nTAREFAS COM FLUXO\n+ Nova\nTodas abertas\n0\nComigo agora\n0\nPassam por mim\n0\nConcluídas\n0\nUma tarefa passa de mão em mão: cada etapa tem um responsável. A TV mostra a trilha e o pulso de luz quando ela muda de mão.",
+   "conteudo": "Tarefas com fluxo\n0 tarefa(s) · colunas por tipo de fluxo\nNova tarefa com fluxo\nNenhuma tarefa aqui.",
+   "btsConteudo": [
+    "Nova tarefa com fluxo"
+   ],
+   "btsLateral": [
+    "Demandas",
+    "Tarefas",
+    "+ Nova",
+    "Todas abertas 0",
+    "Comigo agora 0",
+    "Passam por mim 0",
+    "Concluídas 0"
+   ]
+  },
+  "chat": {
+   "lateral": "CONVERSAS\nb\nbabel-coop · todos 📌\nSem mensagens",
+   "conteudo": "b\nbabel-coop · todos\ntodos da Babel\nNenhuma mensagem ainda. Diga oi.\n😊\n📎\n➤",
+   "btsConteudo": [
+    "😊",
+    "📎",
+    "➤"
+   ],
+   "btsLateral": [
+    "b babel-coop · todos 📌 Sem mensagens"
+   ]
+  },
+  "whatsapp": {
+   "lateral": "WHATSAPP\nSó você vê esta tela. Ela não entra no acervo, nem na TV, nem aparece para a equipe.",
+   "conteudo": "WhatsApp\nLeia o QR code com o seu celular, como no WhatsApp Web. O seu WhatsApp passa a viver aqui, e o Assistente pode responder por você.\nSó você vê esta tela. Ela não entra no acervo nem na TV.\nJá escaneei (simulado)",
+   "btsConteudo": [
+    "Já escaneei (simulado)"
+   ],
+   "btsLateral": []
+  },
+  "reuniao": {
+   "lateral": "REUNIÕES\nNenhuma agora\nATAS NO ACERVO\nMOMENTOS FALADOS",
+   "conteudo": "Reunião\nA TV vira a mesa da reunião: cada um joga materiais do próprio computador.\nAbrir reunião\nMEMÓRIA DA SALA\n◌ últimos 5 min em memória\n💡 Salvar ideia falada\n⏺ Começar a gravar\n○ Conversa particular (pausar a memória)\nA sala guarda só os últimos 5 minutos em memória. Nada é gravado até alguém apertar. Também vale \"Babel, guarda isso\" e o botão físico na mesa.\nNinguém falou nada ainda.",
+   "btsConteudo": [
+    "Abrir reunião",
+    "💡 Salvar ideia falada",
+    "⏺ Começar a gravar",
+    "○ Conversa particular (pausar a memória)"
+   ],
+   "btsLateral": [
+    "Nenhuma agora"
+   ]
+  },
+  "terminais": {
+   "lateral": "TERMINAIS DA EQUIPE\nParede (todos)\n1\nTheus (você) · Assistente\nao vivo\nOS SEUS TERMINAIS\nAssistente\n● ao vivo\nPausar\nTodos veem todos. Para mexer: a gestão entra direto; membros do mesmo projeto também; os outros pedem e o dono aceita com um clique. Quem está no seu terminal aparece com um selo, e você encerra quando quiser. Pausado: nada do que sair durante a pausa chega a ninguém, nem depois.",
+   "conteudo": "Terminais ao vivo\n1 pessoa · 1 terminal · 1 ao vivo. Todo mundo vê todo mundo; para ajudar, entre e digite.\nMAPA DA SALA\nEQUIPE: 1 PRESENÇA\nSINAL: AO VIVO\nTheus · Assistente\na sala\nTH\nAssistente\n· Theus (você)\nao vivo\n[matheussilveirapro] /var/folders/k6/6y2hfq0d0zb5_fn8cnx\nkx_c00000gn/T/babel-e2e-funcoes-XgEowF/theus\n❯                                          codex: ready\nem repouso\nPausar transmissão",
+   "btsConteudo": [
+    "Pausar transmissão"
+   ],
+   "btsLateral": [
+    "Parede (todos) 1",
+    "Theus (você) · Assistente ao vivo",
+    "Pausar"
+   ]
+  },
+  "projetos": {
+   "lateral": "PROJETOS\n＋ Novo\nTrabalhar sozinho é uma coisa; em projeto é outra. No projeto, o Explorador mostra só o projeto, agrupado por pessoa, e dá para arrastar arquivos para alguém.",
+   "conteudo": "Projetos\nDuas ou mais pessoas na mesma coisa, sem ninguém abrir mão do próprio computador. Cada membro guarda a sua parte; o projeto é o que junta.\n＋ Novo projeto",
+   "btsConteudo": [
+    "＋ Novo projeto"
+   ],
+   "btsLateral": [
+    "＋ Novo"
+   ]
+  },
+  "acervo": {
+   "lateral": "Acervo\nInteligência\nACERVO\n1 materiais e 3 termos indexados, sem LLM.\nTudo\n1\nnota\n1\nMEMÓRIA COM NOME\n0\ncoisas que a equipe aprendeu, cada uma com autor e usos (). Todo agente novo nasce sabendo.\nesta semana: usada 0× · 0 aprendizados novos\no que você ensinou: 0 · usado 0× · +0 pontos esta semana · só você vê\nA IA do terminal usa o mesmo acervo: coop buscar \"…\" e coop ler caminho.",
+   "conteudo": "Acervo\nTudo o que a equipe cria vira busca. Sem LLM: por palavras (BM25) ou por semelhança (vetores calculados aqui). A memória tem nome: cada aprendizado, preset, prompt, ideia e ata cita quem ensinou e quantas vezes foi usado.\nPalavras\nSemelhança\nEXPERIMENTE\nreembolso\nsessão expirando\nplano anual\nclínicas Campinas\nwebinar dentistas\nproposta de uma página\nTente \"Semelhança\" com palavras que não aparecem iguais no texto (ex.: \"clinicas\" sem acento, \"reembolsos\" no plural): a busca acha pelos pedaços das palavras.",
+   "btsConteudo": [
+    "Palavras",
+    "Semelhança",
+    "reembolso",
+    "sessão expirando",
+    "plano anual",
+    "clínicas Campinas",
+    "webinar dentistas",
+    "proposta de uma página"
+   ],
+   "btsLateral": [
+    "Acervo",
+    "Inteligência",
+    "Tudo 1",
+    "nota 1"
+   ]
+  },
+  "inteligencia": {
+   "lateral": "Acervo\nInteligência\nINTELIGÊNCIA DA EQUIPE\nAprendizados\n0\nO sonho\n0 novos\nMelhores prompts\n0\nPergunta da semana\n0\nIdeias\n0\nO que cada um aprende volta para a IA do terminal de todos, pelo APRENDIZADOS.md e pelo acervo.",
+   "conteudo": "Aprendizados\nRepetido não é aprendizado: soma +1 confirmado. O que é novo entra e a IA de todos passa a saber.\nUma frase curta. Se a equipe já souber, soma +1 em vez de repetir.\nRegistrar aprendizado",
+   "btsConteudo": [
+    "Registrar aprendizado"
+   ],
+   "btsLateral": [
+    "Acervo",
+    "Inteligência",
+    "Aprendizados 0",
+    "O sonho 0 novos",
+    "Melhores prompts 0",
+    "Pergunta da semana 0",
+    "Ideias 0"
+   ]
+  },
+  "equipe": {
+   "lateral": "Equipe\nMetas\nMapa\nPLANTA DA SALA\n1 presente\nEquipe\n1\nTH\nvocê\nem Equipe\nClique numa pessoa para ver por onde passou; → vai até onde ela está.\nEQUIPE\nCuidando da gente\n0\nPessoas e carga\n1\nCheck-ins de hoje\n0/1\nControle da TV\npainel\nRegras\nCONVIDAR PESSOA\nGerar token\nHoras por pessoa aparecem só para a gestão. A TV mostra o total da equipe e os sinais de cuidado, nunca um ranking.",
+   "conteudo": "Equipe\n1 pessoas · 1 online · a equipe mediu 0 s hoje\nCUIDANDO DA GENTE · O QUE O SISTEMA NOTOU\nNinguém precisando de uma mão agora.\nContas simples, sem IA: tempo acima de 1,5× a estimativa, \"estou travado\", muitas trocas de tarefa, dias sem abrir a Estação, bloqueio no check-in. A pessoa pode apertar \"Estou bem\".\nPESSOAS E CARGA\nTH\nTheus · gestão\nGestão · online\n0 s\nSem check-in hoje.\nPôr foto\nCONTROLE DA TV\nPainel geral\nReunião\nQuadro ao vivo\nPublicar aviso\nLigar modo visita\nTema roxo (grafo v5)\nTema azul (Babel Terminal)\nNada projetado agora. Em qualquer arquivo: \"▣ Projetar na TV\".\nTV não está aberta. Abra este protótipo em outra janela e clique em \"Tela da TV\".\nREGRAS\nPausar os cronômetros sozinho no almoço e depois das 18h\nNo protótipo começa desligada, para você poder testar a qualquer hora.\nSempre ligada: só uma demanda rodando por vez por pessoa. Começar outra pausa a atual com o motivo \"trocou de demanda\".\nTerminais: cada um vê o selo \"ao vivo\" no próprio terminal e pode pausar a transmissão quando quiser.",
+   "btsConteudo": [
+    "Pôr foto",
+    "Painel geral",
+    "Reunião",
+    "Quadro ao vivo",
+    "Publicar aviso",
+    "Ligar modo visita",
+    "Tema roxo (grafo v5)",
+    "Tema azul (Babel Terminal)"
+   ],
+   "btsLateral": [
+    "Equipe",
+    "Metas",
+    "Mapa",
+    "Equipe 1",
+    "TH você em Equipe",
+    "Cuidando da gente 0",
+    "Pessoas e carga 1",
+    "Check-ins de hoje 0/1",
+    "Controle da TV painel",
+    "Regras",
+    "Gerar token"
+   ]
+  },
+  "metas": {
+   "lateral": "Equipe\nMetas\nMapa\nMETAS DO MÊS\nCAMPANHA\nSem campanha\n0/0\nMeta sem número aparece como \"sem dado\", nunca como zero.",
+   "conteudo": "Metas e campanhas\nsetembro · o mesmo painel que aparece na TV\nMETAS DO MÊS\nSEM CAMPANHA\n0/0\n0 de 0\ntermina em 00:00:00\n+1 cliente (demonstração)\nCRONÔMETRO NA TV\nReunião geral · 15 min\nFoco · 25 min\nStand-up · 10 min",
+   "btsConteudo": [
+    "+1 cliente (demonstração)",
+    "Reunião geral · 15 min",
+    "Foco · 25 min",
+    "Stand-up · 10 min"
+   ],
+   "btsLateral": [
+    "Equipe",
+    "Metas",
+    "Mapa"
+   ]
+  },
+  "mapa": {
+   "lateral": "Equipe\nMetas\nMapa\nMAPA DA EQUIPE\n● pessoa\n○ área\n◐ tarefa (enche com a %)\n◆ demanda (pulsa rodando)\n■ arquivo (pontilhado = dono offline)\nCARTA\nClique num ponto do mapa para ver a carta dele aqui.",
+   "conteudo": "passe o mouse para acender\nclique para ver a carta\narraste para mover\npulso de luz = tarefa passando de mão",
+   "btsConteudo": [],
+   "btsLateral": [
+    "Equipe",
+    "Metas",
+    "Mapa"
+   ]
+  },
+  "loja": {
+   "lateral": "PUBLICAR NA LOJA\nSkill\nMCP\nPlugin\nAgente\nCLAUDE.md\nPublicar\nTudo o que estiver em Loja/ na sua pasta compartilhada aparece aqui para a equipe. Chaves nunca vão para a pasta: ficam no cofre de cada computador.\nO QUE EU PUBLIQUEI\nnada ainda",
+   "conteudo": "Loja da equipe\n0 itens · 0 novos esta semana. O que uma pessoa monta para a IA dela serve para todas: instala com um clique no seu Claude Code.\nTudo\nSkills\nMCPs\nPlugins\nAgentes\nCLAUDE.md",
+   "btsConteudo": [
+    "Tudo",
+    "Skills",
+    "MCPs",
+    "Plugins",
+    "Agentes",
+    "CLAUDE.md"
+   ],
+   "btsLateral": [
+    "Publicar"
+   ]
+  },
+  "oficina": {
+   "lateral": "OFICINA DO APP\nv0\nAguardando publicação\n0\nQuem pode mudar o app\n1\nVersões\n0\nAinda na versão antiga\n0\nVocê pode mudar o app: no terminal, diga \"muda no app: …\". A mudança fica aqui até o Theus publicar.",
+   "conteudo": "BABEL COOP · VERSÃO ATUAL\nv0\nNOTAS DA PRÓXIMA VERSÃO (V1)\nPublicar atualização v1\nAo publicar, todo mundo vê \"⬆ Atualizar para v1\" na barra de baixo. Quem clica recebe os arquivos da sua Estação e o app recarrega.\nAGUARDANDO PUBLICAÇÃO\nNenhuma mudança esperando. Quem está liberado pede ao agente no terminal: \"muda no app: …\".\nQUEM PODE MUDAR O APP\nTH\nTheus · gestão\npode mudar\nQuem pode mudar recebe a pasta Oficina/app na Estação: o agente edita o código lá, roda os testes e a mudança fica aguardando aqui. Publicar é só da gestão.\nVERSÃO INSTALADA EM CADA ESTAÇÃO\nTH\nTheus\nv0 · em dia\nVERSÕES PUBLICADAS",
+   "btsConteudo": [
+    "Publicar atualização v1"
+   ],
+   "btsLateral": [
+    "Aguardando publicação 0",
+    "Quem pode mudar o app 1",
+    "Versões 0",
+    "Ainda na versão antiga 0"
+   ]
+  }
+ },
+ "perfil": {
+  "lateral": "Equipe\nMetas\nMapa\nPLANTA DA SALA\n1 presente\nEquipe\n1\nTH\nvocê\nno perfil de Theus\nClique numa pessoa para ver por onde passou; → vai até onde ela está.\nEQUIPE\nCuidando da gente\n0\nPessoas e carga\n1\nCheck-ins de hoje\n0/1\nControle da TV\npainel\nRegras\nCONVIDAR PESSOA\nGerar token\nHoras por pessoa aparecem só para a gestão. A TV mostra o total da equipe e os sinais de cuidado, nunca um ranking.",
+  "conteudo": "TH\nTheus\nGestão · gestão · online · agentes: Assistente\nAS\nAssistente · Seu agente: pesquisa, escreve, organiza\nEditar perfil\nNÍVEL 1\nAprendiz\n🔥 0 dias com aprendizado\n0% para o nível 2 · 0 pontos, só seus: contra você mesmo, nunca contra os outros\npróxima: 🥇 Primeiro aprendizado\nTRABALHOS · SETEMBRO\nver tudo\nDemandas com OK\n0\nAjudas dadas\n0\nIdeias · aprendizados\n0 · 0\nSkills publicadas\n0\nTarefas entregues\n0\nQuadros · mapas\n0 · 0\nTEMPO · SETEMBRO\nEm demandas\n0 s\nMédia por demanda\n0 s\nPausada\n0 s\nMelhor foco\n—\nÉ sobre a pessoa, para ela. Ninguém é comparado.\nVOCÊ NO BABEL COOP\nvocê é 100% do que a Babel sabe\nacervo\n100%\ndemandas do mês\n0%\najudas\n0%\nprojetos\n0 de 0\nDADOS E MATERIAIS\n1 arquivos · 0 mapas · 0 quadros · 0 clones\nMD\nREADME.md\naberto 0 vezes pelos outros\nLINHA DO TEMPO\nTheus criou o agente Assistente\nagora",
+  "btsConteudo": [
+   "Editar perfil",
+   "ver tudo",
+   "MD README.md aberto 0 vezes pelos outros"
+  ],
+  "btsLateral": [
+   "Equipe",
+   "Metas",
+   "Mapa",
+   "Equipe 1",
+   "TH você no perfil de Theus",
+   "Cuidando da gente 0",
+   "Pessoas e carga 1",
+   "Check-ins de hoje 0/1",
+   "Controle da TV painel",
+   "Regras",
+   "Gerar token"
+  ]
+ },
+ "paleta": "Enter executa · ↑↓ escolhe · Esc fecha\nIr para: Criar · telas, máquina e pesquisas\nIr para: Meu dia\nIr para: Demandas\nIr para: Chat\nIr para: Reunião\nIr para: Acervo · busca sem LLM\nIr para: Inteligência da equipe\nIr para: Terminais ao vivo\nIr para: Tarefas com fluxo\nIr para: Metas e campanhas\nIr para: Equipe\nIr para: Mapa da equipe\nIr para: Projetos\nIr para: WhatsApp",
+ "colunaTxt": "NOVIDADES\nFechar\nPara ver a TV: clique em Tela da TV (abre numa janela própria, sem botão) e arraste para a tela da TV. O iPad é um app à parte: abra este link com #ipad no fim. As janelas conversam na hora.\nTheus criou o agente Assistente\nagora",
+ "criarBotoes": [
+  "novo-nota:＋ Nota",
+  "novo-mapa:＋ Mapa",
+  "novo-quadro:＋ Quadro",
+  "nova-pasta:＋ Pasta",
+  "novo-arquivo:＋",
+  "subir-arquivo:↥",
+  "criar-tela:⬚\nTela",
+  "pj-maquina:⚙\nMáquina",
+  "criar-pesquisa:▤\nPesquisa",
+  "arv-pasta:▾\nTHEUS (você)",
+  "abrir-arquivo:MD\nREADME.md",
+  "arq-projetar:▣",
+  "criar-tela:⬚\nTela\numa página, uma landing",
+  "pj-maquina:⚙\nMáquina\no backend em peças d",
+  "criar-pesquisa:▤\nPesquisa\nMD, TXT ou PDF: o a",
+  "novo-nota:＋ Nota",
+  "novo-mapa:＋ Mapa mental",
+  "novo-quadro:＋ Quadro",
+  "subir-arquivo:↥ Abrir do computador",
+  "abrir-arquivo:MD\nREADME.md\ntheus/README.md ·"
+ ],
+ "apiArquivos": [
+  {
+   "id": "theus/README.md",
+   "caminho": "theus/README.md",
+   "dono": "theus",
+   "tipo": "md",
+   "tamanho": "113 B",
+   "bytes": 113,
+   "modificado": 1790203758848.1934,
+   "local": false
+  }
+ ],
+ "tv": "babel-coop\nSEM CAMPANHA · FALTAM\nNaN:NaN:NaN\n19:49\nqua, 23 set\nNO RITMO\n00 concluídas hoje\n00 rodando\n00 livres para pegar\n0 s medidas hoje\nMAPA DA SALA · 1 PRESENÇA\nSINAL · EM REPOUSO\nCRIAR\n1\nTH\nTheus\n→ Criar\nTheus\na sala\nCORPO DO PROJETO\nCLÍNICAS EM CAMPINAS\n\n12 peças com corpo · v6 · 17:49 · carla\n\nAGENTES TRABALHANDO\n\nnenhum agente trabalhando agora\n\nMETAS DO MÊS\nSEM CAMPANHA\n00/0\nNaN%\n\n· meta batida\n\nPERGUNTA DA SEMANA\nQue trabalho acontece hoje fora de qualquer sistema, e ninguém vê?\n\nresponda na sua Estação, em Meu dia\n\nprotótipo com dados de exemplo · atualizado às 19:49:41\ndemonstração: sem Estação aberta, a própria TV simula a equipe",
+ "tvBotoes": 0,
+ "ipad": "",
+ "celular": "Meu dia\nDemandas\nChat\nCriar\nMais",
+ "organismo": {
+  "contagem": {
+   "somPedido": {
+    "acordar": 1,
+    "duas": 1
+   },
+   "somTocado": {
+    "acordar": 1,
+    "duas": 1
+   },
+   "somBloqueado": {},
+   "pulso": 0,
+   "faiscas": 1,
+   "particulas": 10,
+   "respirar": 1,
+   "acordar": 1,
+   "acender": 12,
+   "descartados": 0,
+   "preemptados": 0,
+   "maxVivos": 2
+  },
+  "registro": [
+   {
+    "tipo": "som",
+    "nome": "acordar",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 241
+   },
+   {
+    "tipo": "acordar",
+    "ok": true,
+    "ms": 253,
+    "t": 380
+   },
+   {
+    "tipo": "som",
+    "nome": "duas",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 32115
+   }
+  ],
+  "placar": "10\npontos · hoje"
+ },
+ "brilho": {
+  "avatares": [
+   {
+    "cls": "avatar",
+    "boxShadow": "none",
+    "anim": "none",
+    "filter": "none"
+   },
+   {
+    "cls": "avatar",
+    "boxShadow": "none",
+    "anim": "none",
+    "filter": "none"
+   }
+  ],
+  "bordaLuz": 2,
+  "orgCanvas": 4,
+  "anel": 6
+ },
+ "painel": {
+  "txt": "Assistente\n×\n+\nPresença\nTerminal\nCtrl J\nEntrar em…\nNeon\nSom\n⟩\n→ babel-e2e-funcoes-XgEowF/theus\nAssistente · em repouso\nnasceu na sua pasta · 19:49\n● ao vivo\nASSISTENTE\nSeu agente: pesquisa, escreve, organiza e mexe no babel-coop por você.\nPeça em português: eu trabalho no seu terminal de verdade, em babel-e2e-funcoes-XgEowF/theus. Cada passo aparece aqui com prova.\n▶ Iniciar Assistente\nsó terminal\nProcurar no acervo\nResumir o dia\nMe ajude com um erro\n❯\n→ Meu dia\n×\nenviar",
+  "xterm": 1,
+  "abas": [
+   "Assistente\n×",
+   "Assistente\n×",
+   "Assistente"
+  ]
+ }
+}

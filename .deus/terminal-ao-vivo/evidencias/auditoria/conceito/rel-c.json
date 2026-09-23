@@ -1,0 +1,123 @@
+{
+ "medidas": {
+  "conteudo": {
+   "w": 670,
+   "h": 775,
+   "bg": "rgba(0, 0, 0, 0)",
+   "bl": "0px rgb(215, 228, 251)",
+   "br": "0px rgb(215, 228, 251)",
+   "fs": "14px",
+   "fw": "400",
+   "ff": "\"IBM Plex Sans\""
+  },
+  "coluna": {
+   "w": 0,
+   "h": 0,
+   "bg": "rgb(11, 19, 32)",
+   "bl": "1px rgb(77, 85, 100)",
+   "br": "0px rgb(215, 228, 251)",
+   "fs": "14px",
+   "fw": "400",
+   "ff": "\"IBM Plex Sans\""
+  },
+  "rotuloBarra": {
+   "w": 39,
+   "h": 12,
+   "bg": "rgba(0, 0, 0, 0)",
+   "bl": "0px rgb(215, 228, 251)",
+   "br": "0px rgb(215, 228, 251)",
+   "fs": "11px",
+   "fw": "500",
+   "ff": "\"IBM Plex Sans\""
+  },
+  "abaAgente": {
+   "w": 127,
+   "h": 31,
+   "bg": "rgba(0, 0, 0, 0)",
+   "bl": "0px rgb(215, 228, 251)",
+   "br": "0px rgb(215, 228, 251)",
+   "fs": "12.5px",
+   "fw": "500",
+   "ff": "\"IBM Plex Sans\""
+  },
+  "abaAgenteHTML": "<span class=\"tr-ic\"><i class=\"tr-ic-anel\"></i><span class=\"bc-presenca bc-presenca--mini\" aria-hidden=\"true\" data-estado=\"shell\" style=\"--bc-escala: 0.280; --bc-brilho: 0.000;\"><svg viewBox=\"0 0 100 100\" aria-hidden=\"true\" focusable=\"false\"><defs><linearGradient id=\"bcp1-col\" x1=\"0\" y1=\"0\" x2=\"0\" y2",
+  "cabPainel": {
+   "w": 440,
+   "h": 221,
+   "bg": "color(srgb 0.0862745 0.117647 0.176471 / 0.78)",
+   "bl": "0px rgb(195, 207, 229)",
+   "br": "0px rgb(195, 207, 229)",
+   "fs": "12.5px",
+   "fw": "400",
+   "ff": "\"JetBrains Mono\""
+  },
+  "logo": {
+   "w": 11,
+   "h": 25,
+   "bg": "rgba(0, 0, 0, 0)",
+   "bl": "0px rgb(215, 228, 251)",
+   "br": "0px rgb(215, 228, 251)",
+   "fs": "14px",
+   "fw": "400",
+   "ff": "\"IBM Plex Sans\""
+  },
+  "logoTag": "IMG babel-logo.png",
+  "foto": {
+   "w": 56,
+   "h": 46,
+   "bg": "rgba(0, 0, 0, 0)",
+   "bl": "2px rgba(0, 0, 0, 0)",
+   "br": "0px oklch(0.650374 0.0452394 262.253)",
+   "fs": "14px",
+   "fw": "400",
+   "ff": "\"IBM Plex Sans\""
+  }
+ },
+ "somPadrao": {
+  "ls": [],
+  "api": "function",
+  "estado": null
+ },
+ "paleta": "Enter executa · ↑↓ escolhe · Esc fecha Ir para: Criar · telas, máquina e pesquisas Ir para: Meu dia Ir para: Demandas Ir para: Chat Ir para: Reunião Ir para: Acervo · busca sem LLM Ir para: Inteligência da equipe Ir para: Terminais ao vivo Ir para: Tarefas com fluxo Ir para: Metas e campanhas Ir para: Equipe Ir para: Mapa da equipe Ir para: Projetos Ir para: WhatsApp",
+ "vazio": {
+  "t": "Nada aberto · CtrlK para buscar · a lateral continua ao lado",
+  "img": "none",
+  "bg": "rgba(0, 0, 0, 0)"
+ },
+ "recolhido": {
+  "status": "online 0 na caixa ◌ memória da sala 0 pontos · hoje TV não aberta ● terminal ao vivo acervo: 1 Salvo na equipe",
+  "painelW": 440
+ },
+ "sino": "Novidades",
+ "arvore": {
+  "html": "<span class=\"arv-ic ic-md\">MD</span><span class=\"arv-nome\">README.md</span><span class=\"arv-acoes\"><button type=\"button\" data-acao=\"arq-projetar\" data-id=\"theus/README.md\" title=\"Projetar na TV\" aria-label=\"Projetar na TV\">▣</button></span>",
+  "botoes": [
+   "Projetar na TV"
+  ]
+ },
+ "menuArquivo": null,
+ "novaDemanda": {
+  "ok": true,
+  "t": "Nova demanda Quem recebe liga o cronômetro ao começar. Quem encerra é você, dando o OK. PARA QUEM Ninguém ainda: fica livre para quem puder pegar O QUE PRECISA SER FEITO DETALHES PRAZO Hoje Amanhã Esta semana Sem prazo ESTIMATIVA Sem estimativa 15 min 30 min 1 hora 2 horas 4 horas PRIORIDADE Urgente Alta Média Baixa Enviar demanda Cancelar"
+ },
+ "perfil": "TH Theus Gestão · gestão · online · agentes: Assistente AS Assistente · Seu agente: pesquisa, escreve, organiza Editar perfil NÍVEL 1 Aprendiz 🔥 0 dias com aprendizado 0% para o nível 2 · 0 pontos, só seus: contra você mesmo, nunca contra os outros próxima: 🥇 Primeiro aprendizado TRABALHOS · SETEMBRO ver tudo Demandas com OK 0 Ajudas dadas 0 Ideias · aprendizados 0 · 0 Skills publicadas 0 Tarefas entregues 0 Quadros · mapas 0 · 0 TEMPO · SETEMBRO Em demandas 0 s Média por demanda 0 s Pausada 0 s Melhor foco — É sobre a pessoa, para ela. Ninguém é comparado. VOCÊ NO BABEL COOP você é 100% do que a Babel sabe acervo 100% demandas do mês 0% ajudas 0% projetos 0 de 0 DADOS E MATERIAIS 1 arquiv",
+ "rodape8s": [
+  "0 na caixa [rgb(195, 207, 229)]",
+  "◌ memória da sala [rgb(195, 207, 229)]",
+  "0 [rgb(215, 228, 251)]",
+  "pontos · hoje [rgb(195, 207, 229)]",
+  "TV não aberta [rgb(195, 207, 229)]",
+  "● terminal ao vivo [rgb(195, 207, 229)]",
+  "acervo: 1 [rgb(195, 207, 229)]",
+  "Salvo na equipe [rgb(168, 184, 213)]",
+  "mostrar terminal [rgb(195, 207, 229)]"
+ ],
+ "tv": {
+  "t": "babel-coop SEM CAMPANHA · FALTAM NaN:NaN:NaN 19:53 qua, 23 set NO RITMO 00 concluídas hoje 00 rodando 00 livres para pegar 0 s medidas hoje MAPA DA SALA · 1 PRESENÇA SINAL · EM REPOUSO EQUIPE 1 TH Theus → Theus Theus a sala CORPO DO PROJETO CLÍNICAS EM CAMPINAS 12 peças com corpo · v6 · 17:53 · carla AGENTES TRABALHANDO nenhum agente trabalhando agora METAS DO MÊS SEM CAMPANHA 00/0 NaN% · meta batida PERGUNTA DA SEMANA Que trabalho acontece hoje fora de qualquer sistema, e ninguém vê? responda na sua Estação, em Meu dia protótipo com dados de exemplo · atualizado às 19:53:30 demonstração: sem Estação aberta, a própria TV simula a equipe",
+  "botoesVisiveis": []
+ },
+ "ipad": {
+  "t": "",
+  "botoes": []
+ }
+}

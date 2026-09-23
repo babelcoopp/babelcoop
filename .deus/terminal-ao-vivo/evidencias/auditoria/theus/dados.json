@@ -1,0 +1,142 @@
+{
+ "fundar": {
+  "id": "theus",
+  "nome": "Theus",
+  "papel": "gestao",
+  "equipe": "babel",
+  "pronto": true
+ },
+ "viewport": [
+  1440,
+  900
+ ],
+ "inicio": {
+  "anim": [
+   "CSSTransition@[object SVGAnimatedString]",
+   "CSSTransition@[object SVGAnimatedString]",
+   "casca-b-vivo@e-logo",
+   "tr-nasce@tr-bloco tr-saudacao"
+  ],
+  "barra": [
+   "Meu dia",
+   "Criar",
+   "Trabalho",
+   "Chat",
+   "WhatsApp",
+   "Reunião",
+   "Terminais",
+   "Projetos",
+   "Acervo",
+   "Equipe",
+   "Loja",
+   "Oficina",
+   "TH"
+  ],
+  "av": [
+   {
+    "cls": "avatar",
+    "bs": "none",
+    "anim": "none",
+    "bg": "none"
+   }
+  ],
+  "mock": [],
+  "bordas": [],
+  "n_avatar": 1,
+  "cabecalho": "babel-coop\nBuscar arquivo, comando ou acervo\nCtrl\nK\nTela da TV"
+ },
+ "foto": "theus",
+ "avatarComFoto": [
+  {
+   "onde": "ativ-perfil",
+   "tam": 22,
+   "bs": "none",
+   "anim": "none",
+   "borda": "rgb(90, 209, 255) 1.5px",
+   "filtro": "none"
+  }
+ ],
+ "vistas": {
+  "dia": "Boa noite, Theus. quarta, 23 de setembro · 0 na caixa de entrada · trabalho medido hoje 0 s 🎙 Falar uma ideia Nova demanda CAIXA DE ENTRADA Nada novo. Bom sinal. MINHAS DEMANDAS EM ANDAMENTO Nenhuma demanda rodando. ESPERANDO O SEU OK Ninguém esperando você. ",
+  "explorador": "Criar É aqui que tudo acontece. Dependendo do que você cria, a tela do meio vira a coisa certa: site vira Tela, backend vira Máquina, texto vira Pesquisa. Numa tela, o modo 3D mostra a página num ambiente 3D com os próximos itens ao lado: digite nela, aperte E",
+  "demandas": "Demandas para você Trabalho medido hoje: 0 s · 0 aguardando OK · 0 para começar Nova demanda Nada por aqui agora.",
+  "tarefas": "Tarefas com fluxo 0 tarefa(s) · colunas por tipo de fluxo Nova tarefa com fluxo Nenhuma tarefa aqui.",
+  "chat": "b babel-coop · todos todos da Babel Nenhuma mensagem ainda. Diga oi. 😊 📎 ➤",
+  "whatsapp": "WhatsApp Leia o QR code com o seu celular, como no WhatsApp Web. O seu WhatsApp passa a viver aqui, e o Assistente pode responder por você. Só você vê esta tela. Ela não entra no acervo nem na TV. Já escaneei (simulado)",
+  "reuniao": "Reunião A TV vira a mesa da reunião: cada um joga materiais do próprio computador. Abrir reunião MEMÓRIA DA SALA ◌ últimos 5 min em memória 💡 Salvar ideia falada ⏺ Começar a gravar ○ Conversa particular (pausar a memória) A sala guarda só os últimos 5 minutos",
+  "terminais": "Terminais ao vivo 1 pessoa · 1 terminal · 1 ao vivo. Todo mundo vê todo mundo; para ajudar, entre e digite. MAPA DA SALA EQUIPE: 1 PRESENÇA SINAL: AO VIVO Theus · Assistente a sala TH Assistente · Theus (você) ao vivo [matheussilveirapro] /var/folders/k6/6y2hf",
+  "projetos": "Projetos Duas ou mais pessoas na mesma coisa, sem ninguém abrir mão do próprio computador. Cada membro guarda a sua parte; o projeto é o que junta. ＋ Novo projeto",
+  "acervo": "Acervo Tudo o que a equipe cria vira busca. Sem LLM: por palavras (BM25) ou por semelhança (vetores calculados aqui). A memória tem nome: cada aprendizado, preset, prompt, ideia e ata cita quem ensinou e quantas vezes foi usado. Palavras Semelhança EXPERIMENTE",
+  "inteligencia": "Aprendizados Repetido não é aprendizado: soma +1 confirmado. O que é novo entra e a IA de todos passa a saber. Uma frase curta. Se a equipe já souber, soma +1 em vez de repetir. Registrar aprendizado",
+  "equipe": "Equipe 1 pessoas · 1 online · a equipe mediu 0 s hoje CUIDANDO DA GENTE · O QUE O SISTEMA NOTOU Ninguém precisando de uma mão agora. Contas simples, sem IA: tempo acima de 1,5× a estimativa, \"estou travado\", muitas trocas de tarefa, dias sem abrir a Estação, b",
+  "metas": "Metas e campanhas setembro · o mesmo painel que aparece na TV METAS DO MÊS SEM CAMPANHA 0/0 0 de 0 termina em 00:00:00 +1 cliente (demonstração) CRONÔMETRO NA TV Reunião geral · 15 min Foco · 25 min Stand-up · 10 min",
+  "mapa": "passe o mouse para acender clique para ver a carta arraste para mover pulso de luz = tarefa passando de mão",
+  "loja": "Loja da equipe 0 itens · 0 novos esta semana. O que uma pessoa monta para a IA dela serve para todas: instala com um clique no seu Claude Code. Tudo Skills MCPs Plugins Agentes CLAUDE.md",
+  "oficina": "BABEL COOP · VERSÃO ATUAL v0 NOTAS DA PRÓXIMA VERSÃO (V1) Publicar atualização v1 Ao publicar, todo mundo vê \"⬆ Atualizar para v1\" na barra de baixo. Quem clica recebe os arquivos da sua Estação e o app recarrega. AGUARDANDO PUBLICAÇÃO Nenhuma mudança esperand",
+  "maquina": "Máquina · Clínicas (exemplo) local ● branch produção v1 · 13 peças · 2 alertas Testar Publicar O que muda ▶ Ver o agente montando Projetar na TV Máquina inteira › todas as peças Inteira Domínio Peça por pessoa ARMÁRIO DA FRENTE · as gavetas daqui têm porta na "
+ },
+ "meioVazio": "Nada aberto · CtrlK para buscar · a lateral continua ao lado",
+ "arvore": "CRIAR ＋ Nota ＋ Mapa ＋ Quadro ＋ Pasta ＋ ↥ ⬚ Tela ⚙ Máquina ▤ Pesquisa Sozinho · minha pasta e o HD da equipe ▾ THEUS (você) MD ACERVO.md MD APRENDIZADOS.md MD CLAUDE.md MD README.md Sua pasta é ~/BabelCoop/theus: o que está nela a equipe vê; o resto do computador, não. Arraste um arquivo de texto para cá ou crie pelo ＋.",
+ "sessoes": [
+  {
+   "id": "assistente",
+   "agente": "assistente",
+   "nome": "Assistente",
+   "aberta": true,
+   "pid": 84923,
+   "estado": "shell",
+   "face": "presenca",
+   "pausada": false,
+   "modoAgente": false,
+   "agenteEstado": null,
+   "blocos": 0,
+   "cols": 56,
+   "rows": 24,
+   "frase": "em repouso",
+   "alvo": "babel-e2e-theus-eY4VDW/theus"
+  }
+ ],
+ "pos": {
+  "placar": {
+   "hoje": 15,
+   "eventos": 5
+  },
+  "nasc": [
+   {
+    "aba": "nascendo:auditoria-theus.md",
+    "rel": "auditoria-theus.md",
+    "linhas": 6,
+    "nascidas": 6,
+    "nascendo": false,
+    "vivo": true,
+    "concluido": true,
+    "agente": "Assistente",
+    "sessao": "theus/assistente",
+    "visivel": true
+   }
+  ],
+  "org": {
+   "somPedido": {
+    "acordar": 1,
+    "tique": 4,
+    "duas": 1
+   },
+   "somTocado": {
+    "acordar": 1,
+    "tique": 4,
+    "duas": 1
+   },
+   "somBloqueado": {},
+   "pulso": 4,
+   "faiscas": 5,
+   "particulas": 16,
+   "respirar": 2,
+   "acordar": 2,
+   "acender": 69,
+   "descartados": 2,
+   "preemptados": 1,
+   "maxVivos": 2
+  },
+  "anim": 17
+ }
+}

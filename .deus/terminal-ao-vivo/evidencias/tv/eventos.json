@@ -1,0 +1,489 @@
+{
+ "quando": "2026-09-23T22:24:35.257Z",
+ "resumo": "25/25",
+ "verificacoes": [
+  {
+   "nome": "abertura: o b se desenhou (vídeo tocou) e saiu da frente, uma vez",
+   "ok": true,
+   "achou": {
+    "a0": {
+     "naTela": true,
+     "video": 1.128636
+    },
+    "abertura": {
+     "feita": true,
+     "tocou": true,
+     "motivo": "terminou",
+     "ms": 4110,
+     "naTela": false
+    }
+   }
+  },
+  {
+   "nome": "sem botão na TV",
+   "ok": true,
+   "achou": "tem botão"
+  },
+  {
+   "nome": "chão --s0 liso, sem fundo que respira, sem o grafo antigo",
+   "ok": true,
+   "achou": "fundo"
+  },
+  {
+   "nome": "relógio e cronômetros em JetBrains Mono tabular (43–76 px); grade de 12 colunas",
+   "ok": true,
+   "achou": {
+    "hora": [
+     75.6,
+     "\"JetBrains Mono\"",
+     "tabular-nums"
+    ],
+    "cron": [
+     64.8,
+     "tabular-nums"
+    ],
+    "fala": null,
+    "colunas": 12
+   }
+  },
+  {
+   "nome": "MAPA DA SALA · N PRESENÇAS, planta com endereço e cronômetro",
+   "ok": true,
+   "achou": {
+    "salas": 1,
+    "presencas": 1,
+    "fonte": "endereco",
+    "pessoas": {
+     "theus": {
+      "sala": "at:explorador",
+      "peca": "README.md",
+      "cron": true
+     }
+    },
+    "carimbos": 0
+   }
+  },
+  {
+   "nome": "constelação do organismo com as pessoas",
+   "ok": true,
+   "achou": {
+    "tipo": "organismo",
+    "nos": 11,
+    "lacos": 0
+   }
+  },
+  {
+   "nome": "chão vivo tocando com a sala trabalhando (o vídeo anda)",
+   "ok": true,
+   "achou": {
+    "c1": {
+     "estado": "toca",
+     "trabalhando": 1,
+     "tocando": true,
+     "tempo": 0.28,
+     "trocas": 1
+    },
+    "c2": {
+     "estado": "toca",
+     "trabalhando": 1,
+     "tocando": true,
+     "tempo": 1.28,
+     "trocas": 1
+    }
+   }
+  },
+  {
+   "nome": "chão PARA quando a sala para (demanda pausada na Estação)",
+   "ok": true,
+   "achou": {
+    "rodando": [
+     "d2"
+    ],
+    "chao": {
+     "estado": "parado",
+     "trabalhando": 0,
+     "tocando": false,
+     "tempo": 1.29,
+     "trocas": 2
+    }
+   }
+  },
+  {
+   "nome": "chão volta a tocar quando retoma",
+   "ok": true,
+   "achou": {
+    "estado": "toca",
+    "trabalhando": 1,
+    "tocando": true,
+    "tempo": 2.49,
+    "trocas": 3
+   }
+  },
+  {
+   "nome": "zona que gira NÃO troca por tempo (13 s sem dado novo)",
+   "ok": true,
+   "achou": {
+    "g0": {
+     "atual": "trilhas",
+     "trocas": 1,
+     "historico": [
+      {
+       "id": "trilhas",
+       "ts": 1790202228836
+      }
+     ]
+    },
+    "g1": {
+     "atual": "trilhas",
+     "trocas": 1,
+     "historico": [
+      {
+       "id": "trilhas",
+       "ts": 1790202228836
+      }
+     ]
+    }
+   }
+  },
+  {
+   "nome": "aviso novo troca a zona para Avisos com crossfade de 400 ms",
+   "ok": true,
+   "achou": {
+    "g1": {
+     "atual": "trilhas",
+     "trocas": 1,
+     "historico": [
+      {
+       "id": "trilhas",
+       "ts": 1790202228836
+      }
+     ]
+    },
+    "g2": {
+     "atual": "avisos",
+     "trocas": 2,
+     "historico": [
+      {
+       "id": "trilhas",
+       "ts": 1790202228836
+      },
+      {
+       "id": "avisos",
+       "ts": 1790202254151
+      }
+     ]
+    },
+    "meio": {
+     "cartas": 2,
+     "sai": 1,
+     "trans": "0.4s"
+    }
+   }
+  },
+  {
+   "nome": "fala humana na zona em Cormorant ≥ 48 px, cor --latte",
+   "ok": true,
+   "achou": null
+  },
+  {
+   "nome": "OK de quem pediu = carimbo \"OK · Theus · hh:mm\" na planta",
+   "ok": true,
+   "achou": [
+    "OK · Theus · 19:24 → Eva"
+   ]
+  },
+  {
+   "nome": "o evento acende o anel e corre até o centro (pulso) e solta faíscas",
+   "ok": true,
+   "achou": {
+    "antes": {
+     "p": 1,
+     "f": 0,
+     "a": 3
+    },
+    "depois": {
+     "p": 3,
+     "f": 1,
+     "a": 5
+    }
+   }
+  },
+  {
+   "nome": "AGENTES TRABALHANDO mostra o agente pensando, com a mini presença do organismo",
+   "ok": true,
+   "achou": {
+    "agTxt": "AGENTES TRABALHANDO · 1 · Assistente · agente de Theus · pensando há 1 s",
+    "mini": "rodando",
+    "ag": {
+     "id": "assistente",
+     "nome": "Assistente",
+     "criado": true
+    }
+   }
+  },
+  {
+   "nome": "quando o agente para: \"terminou · hh:mm\" (esfria em 5 min)",
+   "ok": true,
+   "achou": "AGENTES TRABALHANDO · Assistente · agente de Theus · terminou · 19:24"
+  },
+  {
+   "nome": "peças novas da Máquina nascem tracejadas na parede",
+   "ok": true,
+   "achou": {
+    "corpo0": [
+     12,
+     12
+    ],
+    "corpo1": [
+     15,
+     12,
+     3
+    ]
+   }
+  },
+  {
+   "nome": "Publicar a Máquina: as peças ganham corpo na parede (animação 1,2 s + pulso nos canos)",
+   "ok": true,
+   "achou": {
+    "durante": [
+     7,
+     1611
+    ],
+    "corpo2": [
+     15,
+     15,
+     0
+    ],
+    "ganhou": [
+     "premueo7cki0",
+     "premueo7cki1",
+     "premueo7cki2"
+    ]
+   }
+  },
+  {
+   "nome": "o 3D não desenha sem dado (nenhum quadro em 4 s de repouso)",
+   "ok": true,
+   "achou": {
+    "r0": 103,
+    "r1": 103,
+    "motivos0": {
+     "dados": 3,
+     "montar": 1,
+     "tamanho": 2,
+     "glb": 12,
+     "corpo": 3,
+     "animacao": 96,
+     "pulso": 3,
+     "esfriar": 1
+    },
+    "motivos1": {
+     "dados": 3,
+     "montar": 1,
+     "tamanho": 2,
+     "glb": 12,
+     "corpo": 3,
+     "animacao": 96,
+     "pulso": 3,
+     "esfriar": 1
+    }
+   }
+  },
+  {
+   "nome": "o evento da publicação vai para a TV",
+   "ok": true,
+   "achou": "sem evento corpo"
+  },
+  {
+   "nome": "o placar da campanha sobe contando (passa pelos números do meio) e termina no valor da loja",
+   "ok": true,
+   "achou": {
+    "valores": [
+     38,
+     39,
+     40,
+     41
+    ],
+    "final": 41
+   }
+  },
+  {
+   "nome": "campanha batida: o anel fecha em ouro, sem confete",
+   "ok": true,
+   "achou": {
+    "aberta": true,
+    "anel": true,
+    "confete": "none",
+    "ouro": true
+   }
+  },
+  {
+   "nome": "nenhum som na TV",
+   "ok": true,
+   "achou": {
+    "naTV": true,
+    "ligado": false,
+    "tocados": {}
+   }
+  },
+  {
+   "nome": "prefers-reduced-motion: a sala trabalha mas o vídeo do chão não anda",
+   "ok": true,
+   "achou": {
+    "estado": "toca",
+    "trabalhando": 1,
+    "tocando": false,
+    "tempo": 3.65,
+    "trocas": 3
+   }
+  },
+  {
+   "nome": "zero erros de página na TV",
+   "ok": true,
+   "achou": []
+  }
+ ],
+ "erros": [],
+ "consoleErros": [],
+ "medidasFinais": {
+  "modo": "painel",
+  "tema": "noite",
+  "chao": {
+   "estado": "toca",
+   "trabalhando": 1,
+   "tocando": false,
+   "tempo": 3.65,
+   "trocas": 3
+  },
+  "abertura": {
+   "feita": true,
+   "tocou": true,
+   "motivo": "terminou",
+   "ms": 4110,
+   "naTela": false
+  },
+  "planta": {
+   "salas": 1,
+   "presencas": 1,
+   "fonte": "endereco",
+   "pessoas": {
+    "theus": {
+     "sala": "pj:clinicas",
+     "peca": "backend",
+     "cron": true
+    }
+   },
+   "carimbos": 1
+  },
+  "gira": {
+   "atual": "avisos",
+   "trocas": 2,
+   "historico": [
+    {
+     "id": "trilhas",
+     "ts": 1790202228836
+    },
+    {
+     "id": "avisos",
+     "ts": 1790202254151
+    }
+   ]
+  },
+  "constelacao": {
+   "tipo": "organismo",
+   "nos": 11,
+   "lacos": 0
+  },
+  "corpo": {
+   "pronto": true,
+   "semTres": false,
+   "total": 15,
+   "comCorpo": 15,
+   "tracejadas": 0,
+   "emCena": 15,
+   "glb": [
+    "carteiro",
+    "portaria",
+    "clinicas",
+    "pacientes",
+    "agendamentos",
+    "porta-novo",
+    "porta-listar",
+    "robo-zap",
+    "deposito",
+    "tela-agenda",
+    "cano",
+    "cofre"
+   ],
+   "renders": 104,
+   "ganhou": [
+    {
+     "id": "premueo7cki0",
+     "ts": 1790202263373
+    },
+    {
+     "id": "premueo7cki1",
+     "ts": 1790202263373
+    },
+    {
+     "id": "premueo7cki2",
+     "ts": 1790202263373
+    }
+   ],
+   "animando": 0,
+   "motivos": {
+    "dados": 3,
+    "montar": 1,
+    "tamanho": 2,
+    "glb": 12,
+    "corpo": 3,
+    "animacao": 96,
+    "pulso": 3,
+    "esfriar": 2
+   }
+  },
+  "agentes": [
+   {
+    "chave": "theus:assistente",
+    "nome": "Assistente",
+    "estado": "terminou"
+   }
+  ],
+  "metas": [
+   {
+    "id": "m1",
+    "pc": 0.72,
+    "fechou": false
+   },
+   {
+    "id": "m2",
+    "pc": 0.5857142857142857,
+    "fechou": false
+   },
+   {
+    "id": "m3",
+    "pc": 0.9090909090909091,
+    "fechou": false
+   },
+   {
+    "id": "m4",
+    "pc": 0.6363636363636364,
+    "fechou": false
+   },
+   {
+    "id": "m5",
+    "pc": null,
+    "fechou": false
+   }
+  ],
+  "efeitos": {
+   "pulsos": 1,
+   "faiscas": 15,
+   "acesos": 13,
+   "carimbos": 1,
+   "ganhou": 1
+  },
+  "organismo": true,
+  "som": "nunca"
+ }
+}

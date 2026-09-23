@@ -1,0 +1,76 @@
+{
+  "quando": "2026-09-23T22:27:12.605Z",
+  "app": "dist/mac-arm64/babel-coop.app",
+  "arch": "arm64",
+  "estatico": {
+    "infoPlist": {
+      "id": "com.babel.coop",
+      "nome": "babel-coop",
+      "versao": "0.1.0",
+      "sistemaMinimo": "12.0"
+    },
+    "asarArquivos": 103,
+    "codigoDoAppVerificado": 20,
+    "navegadorNoPacote": 1,
+    "spawnHelperModo": "755",
+    "tamanhoAppMB": 245,
+    "assinatura": "Format=app bundle with Mach-O thin (arm64) | CodeDirectory v=20400 size=392 flags=0x20002(adhoc,linker-signed) hashes=9+0 location=embedded | Signature=adhoc | TeamIdentifier=not set | Sealed Resources=none"
+  },
+  "dmg": {
+    "arquivo": "dist/babel-coop-0.1.0-arm64.dmg",
+    "tamanhoMB": 113.5,
+    "conteudo": [
+      "Applications",
+      "babel-coop.app"
+    ]
+  },
+  "abrirMs": 1629,
+  "principal": {
+    "empacotado": true,
+    "appPath": "/Users/matheussilveirapro/Desktop/babel-coop/app/dist/mac-arm64/babel-coop.app/Contents/Resources/app.asar",
+    "execPath": "/Users/matheussilveirapro/Desktop/babel-coop/app/dist/mac-arm64/babel-coop.app/Contents/MacOS/babel-coop",
+    "electron": "44.4.5",
+    "terminalReal": true
+  },
+  "fundar": {
+    "id": "theus",
+    "papel": "gestao",
+    "pasta": "/var/folders/k6/6y2hfq0d0zb5_fn8cnxkx_c00000gn/T/babel-pacote-zwWIZh/theus"
+  },
+  "pecasNaPagina": {
+    "coopReal": {
+      "terminal": true
+    },
+    "scriptsCoop": [
+      "/vendor/xterm.js",
+      "/vendor/addon-fit.js",
+      "ponte.js",
+      "/coop/organismo.js",
+      "/coop/terminal-real.js",
+      "/coop/parede-real.js"
+    ],
+    "organismo": true,
+    "xterm": 0,
+    "real": true
+  },
+  "pty": {
+    "abrirMs": 20,
+    "ecoMs": 21,
+    "pidShell": 7177,
+    "pai": 7065,
+    "paiExe": "/Users/matheussilveirapro/Desktop/babel-coop/app/dist/mac-arm64/babel-coop.app/Contents/MacOS/babel-coop",
+    "ptyNode": "/Users/matheussilveirapro/Desktop/babel-coop/app/dist/mac-arm64/babel-coop.app/Contents/Resources/app.asar.unpacked/node_modules/node-pty/prebuilds/darwin-arm64/pty.node",
+    "pwd": "/var/folders/k6/6y2hfq0d0zb5_fn8cnxkx_c00000gn/T/babel-pacote-zwWIZh/theus",
+    "saida": [
+      "pacote-ok",
+      "pwd=/var/folders/k6/6y2hfq0d0zb5_fn8cnxkx_c00000gn/T/babel-pacote-zwWIZh/theus",
+      "eu=7177 pai=7065",
+      "exe=/Users/matheussilveirapro/Desktop/babel-coop/app/dist/mac-arm64/babel-coop.app/Contents/MacOS/babel-coop",
+      "fim-42"
+    ]
+  },
+  "fechou": {
+    "pidPrincipal": 7065,
+    "vivoDepois": false
+  }
+}

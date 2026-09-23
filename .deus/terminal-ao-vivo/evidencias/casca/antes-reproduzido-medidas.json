@@ -1,0 +1,333 @@
+{
+  "prefixo": "antes-reproduzido",
+  "sem_casca": true,
+  "quando": "2026-09-23T20:42:46.555Z",
+  "auditoria_arquivo": {
+    "textos_medidos": 148,
+    "texto_t1_t2_menor_que_18px": [],
+    "contraste_por_regiao": {
+      "e-topo": {
+        "textos": 7,
+        "contraste_min": 3.63,
+        "contraste_medio": 8.42
+      },
+      "e-atividades": {
+        "textos": 4,
+        "contraste_min": 5.15,
+        "contraste_medio": 7.99
+      },
+      "e-lateral": {
+        "textos": 59,
+        "contraste_min": 3.46,
+        "contraste_medio": 8.49
+      },
+      "e-abas": {
+        "textos": 3,
+        "contraste_min": 3.47,
+        "contraste_medio": 8.32
+      },
+      "e-conteudo": {
+        "textos": 41,
+        "contraste_min": 1.52,
+        "contraste_medio": 12.3
+      },
+      "e-painel": {
+        "textos": 19,
+        "contraste_min": 3.47,
+        "contraste_medio": 7.08
+      },
+      "cronometro": {
+        "textos": 3,
+        "contraste_min": 3.63,
+        "contraste_medio": 7.26
+      },
+      "e-status": {
+        "textos": 12,
+        "contraste_min": 6.85,
+        "contraste_medio": 9.13
+      }
+    },
+    "texto_abaixo_de_4_5": [
+      "e-topo · \"Estação · protótipo\" · 3.63:1 · 10px",
+      "e-topo · \"ver como\" · 3.63:1 · 10px",
+      "e-lateral · \"Criar\" · 3.46:1 · 10.5px",
+      "e-lateral · \"(você)\" · 3.46:1 · 11px",
+      "e-lateral · \"Tudo aqui é visível para as \" · 3.46:1 · 12px",
+      "e-abas · \"×\" · 3.47:1 · 12.5px",
+      "e-conteudo · \"Theus\" · 3.46:1 · 11.5px",
+      "e-conteudo · \"›\" · 1.52:1 · 11.5px",
+      "e-painel · \"×\" · 3.47:1 · 11px",
+      "e-painel · \"Dev\" · 3.47:1 · 12px",
+      "e-painel · \"Receitas\" · 3.47:1 · 10.5px",
+      "cronometro · \"⋮⋮\" · 3.63:1 · 12px"
+    ],
+    "total_abaixo_de_4_5": 12,
+    "sombras_externas": [
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto offline → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "cronometro → rgba(0, 0, 0, 0.55) 0px 18px 50px 0px, rgba(134, 112, 255, 0",
+      "luz → rgb(127, 214, 166) 0px 0px 10px 0px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px"
+    ],
+    "corpo_do_meio": {
+      "cor": "rgb(201, 214, 238)",
+      "fundo": "rgb(6, 11, 22)",
+      "tamanho": "14.5px",
+      "fonte": "\"IBM Plex Sans\"",
+      "contraste": 13.43
+    }
+  },
+  "logo_repouso": {
+    "filter": "drop-shadow(rgba(145, 96, 236, 0.55) 0px 0px 6px)",
+    "animacao": "none",
+    "opacidade": "1"
+  },
+  "animacoes_em_repouso": [
+    "pulsar em marca-num vivo (laço)",
+    "neon em term-marca (laço)",
+    "pulsar em luz (laço)"
+  ],
+  "gancho_luz": {
+    "antes": {
+      "linha": "1",
+      "aba": "1",
+      "rodape": "rgb(135, 153, 188)"
+    },
+    "com_luz": {
+      "linha": "1",
+      "aba": "1",
+      "rodape": "rgb(135, 153, 188)"
+    },
+    "nota": "gancho para o motor do organismo; valores escritos pelo teste, não por evento"
+  },
+  "auditoria_terminais": {
+    "textos_medidos": 174,
+    "texto_t1_t2_menor_que_18px": [],
+    "contraste_por_regiao": {
+      "e-topo": {
+        "textos": 7,
+        "contraste_min": 3.63,
+        "contraste_medio": 8.42
+      },
+      "e-atividades": {
+        "textos": 4,
+        "contraste_min": 5.15,
+        "contraste_medio": 7.99
+      },
+      "e-lateral": {
+        "textos": 39,
+        "contraste_min": 3.46,
+        "contraste_medio": 5.55
+      },
+      "e-abas": {
+        "textos": 2,
+        "contraste_min": 3.47,
+        "contraste_medio": 7.73
+      },
+      "e-conteudo": {
+        "textos": 88,
+        "contraste_min": 2.27,
+        "contraste_medio": 8.26
+      },
+      "e-painel": {
+        "textos": 19,
+        "contraste_min": 3.47,
+        "contraste_medio": 7.08
+      },
+      "cronometro": {
+        "textos": 3,
+        "contraste_min": 3.63,
+        "contraste_medio": 7.26
+      },
+      "e-status": {
+        "textos": 12,
+        "contraste_min": 6.85,
+        "contraste_medio": 9.13
+      }
+    },
+    "texto_abaixo_de_4_5": [
+      "e-topo · \"Estação · protótipo\" · 3.63:1 · 10px",
+      "e-topo · \"ver como\" · 3.63:1 · 10px",
+      "e-lateral · \"Terminais da equipe\" · 3.46:1 · 10.5px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"pausado\" · 3.46:1 · 11px",
+      "e-lateral · \"offline\" · 3.46:1 · 11px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"ao vivo\" · 3.46:1 · 11px",
+      "e-lateral · \"Os seus agentes\" · 3.46:1 · 10.5px",
+      "e-lateral · \"● Transmitindo ao vivo. Paus\" · 3.46:1 · 12px",
+      "e-lateral · \"Todos veem todos. Para mexer\" · 3.46:1 · 12px",
+      "e-abas · \"×\" · 3.47:1 · 12.5px",
+      "e-conteudo · \"17:22\" · 2.27:1 · 11px",
+      "e-conteudo · \"17:22\" · 2.27:1 · 11px",
+      "e-conteudo · \"há 20 min\" · 3.66:1 · 10.5px",
+      "e-conteudo · \"17:12\" · 2.27:1 · 11px",
+      "e-conteudo · \"17:12\" · 2.27:1 · 11px",
+      "e-conteudo · \"há 30 min\" · 3.66:1 · 10.5px",
+      "e-conteudo · \"16:52\" · 2.27:1 · 11px",
+      "e-conteudo · \"16:53\" · 2.27:1 · 11px",
+      "e-conteudo · \"há 50 min\" · 3.66:1 · 10.5px",
+      "e-conteudo · \"17:02\" · 2.27:1 · 11px",
+      "e-conteudo · \"17:02\" · 2.27:1 · 11px",
+      "e-conteudo · \"há 40 min\" · 3.66:1 · 10.5px",
+      "e-conteudo · \"14:43\" · 2.27:1 · 11px",
+      "e-conteudo · \"14:44\" · 2.27:1 · 11px",
+      "e-conteudo · \"14:44\" · 2.27:1 · 11px",
+      "e-conteudo · \"há 3 horas\" · 3.66:1 · 10.5px",
+      "e-conteudo · \"13:42\" · 2.27:1 · 11px",
+      "e-conteudo · \"13:43\" · 2.27:1 · 11px",
+      "e-conteudo · \"há 4 horas\" · 3.66:1 · 10.5px",
+      "e-painel · \"×\" · 3.47:1 · 11px",
+      "e-painel · \"Dev\" · 3.47:1 · 12px",
+      "e-painel · \"Receitas\" · 3.47:1 · 10.5px"
+    ],
+    "total_abaixo_de_4_5": 41,
+    "sombras_externas": [
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto ausente → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto offline → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px",
+      "cronometro → rgba(0, 0, 0, 0.55) 0px 18px 50px 0px, rgba(134, 112, 255, 0",
+      "luz → rgb(127, 214, 166) 0px 0px 10px 0px",
+      "ponto online → rgb(10, 18, 33) 0px 0px 0px 2px"
+    ],
+    "corpo_do_meio": {
+      "cor": "rgb(135, 153, 188)",
+      "fundo": "rgb(6, 11, 22)",
+      "tamanho": "12px",
+      "fonte": "\"JetBrains Mono\"",
+      "contraste": 6.85
+    }
+  },
+  "evento_0s3": {
+    "filter": "drop-shadow(rgba(145, 96, 236, 0.55) 0px 0px 6px)",
+    "animacao": "none",
+    "opacidade": "1",
+    "aviso": {
+      "visivel": true,
+      "texto": "Salvo. A versão anterior ficou guardada.",
+      "borda": "rgb(89, 76, 134)"
+    }
+  },
+  "evento_5s6": {
+    "filter": "drop-shadow(rgba(145, 96, 236, 0.55) 0px 0px 6px)",
+    "animacao": "none",
+    "opacidade": "1",
+    "aviso_visivel": false
+  },
+  "evento_9s6": {
+    "filter": "drop-shadow(rgba(145, 96, 236, 0.55) 0px 0px 6px)",
+    "animacao": "none",
+    "opacidade": "1",
+    "aviso_visivel": false
+  },
+  "pensando": {
+    "filter": "drop-shadow(rgba(145, 96, 236, 0.55) 0px 0px 6px)",
+    "animacao": "none",
+    "opacidade": "1",
+    "abas": "term-estado pensando | term-estado parado"
+  },
+  "pensando_depois": {
+    "filter": "drop-shadow(rgba(145, 96, 236, 0.55) 0px 0px 6px)",
+    "animacao": "none",
+    "opacidade": "1",
+    "abas": "term-estado parado | term-estado parado"
+  },
+  "erros_estacao": [],
+  "movimento_reduzido": {
+    "logo_filtro": "drop-shadow(rgba(145, 96, 236, 0.55) 0px 0px 6px)",
+    "logo_animacao": "none",
+    "logo_transicao": "1e-05s",
+    "aviso_animacao": "sobe",
+    "aviso_borda": "rgb(89, 76, 134)"
+  },
+  "erros_tv": [],
+  "celular": {
+    "scrollWidth": 400,
+    "janela": 400,
+    "abas_celular": "flex",
+    "barra_atividades": "none"
+  },
+  "auditoria_celular": {
+    "textos_medidos": 60,
+    "texto_t1_t2_menor_que_18px": [],
+    "contraste_por_regiao": {
+      "e-topo": {
+        "textos": 1,
+        "contraste_min": 6.85,
+        "contraste_medio": 6.85
+      },
+      "e-lateral": {
+        "textos": 6,
+        "contraste_min": 3.46,
+        "contraste_medio": 4.99
+      },
+      "e-conteudo": {
+        "textos": 43,
+        "contraste_min": 3.63,
+        "contraste_medio": 10.57
+      },
+      "cronometro": {
+        "textos": 3,
+        "contraste_min": 3.63,
+        "contraste_medio": 7.26
+      },
+      "e-abas-celular": {
+        "textos": 7,
+        "contraste_min": 3.47,
+        "contraste_medio": 6.89
+      }
+    },
+    "texto_abaixo_de_4_5": [
+      "e-lateral · \"4\" · 3.46:1 · 11px",
+      "e-lateral · \"1\" · 3.46:1 · 11px",
+      "e-lateral · \"3\" · 3.46:1 · 11px",
+      "e-conteudo · \"Caixa de entrada\" · 3.63:1 · 10.5px",
+      "e-conteudo · \"Minhas demandas em andamento\" · 3.63:1 · 10.5px",
+      "e-conteudo · \"Esperando o seu OK\" · 3.63:1 · 10.5px",
+      "e-conteudo · \"Tarefas livres · pega quem p\" · 3.63:1 · 10.5px",
+      "cronometro · \"⋮⋮\" · 3.63:1 · 12px",
+      "e-abas-celular · \"Demandas\" · 3.47:1 · 10.5px",
+      "e-abas-celular · \"Chat\" · 3.47:1 · 10.5px",
+      "e-abas-celular · \"Criar\" · 3.47:1 · 10.5px",
+      "e-abas-celular · \"Mais\" · 3.47:1 · 10.5px"
+    ],
+    "total_abaixo_de_4_5": 12,
+    "sombras_externas": [
+      "cronometro → rgba(0, 0, 0, 0.55) 0px 18px 50px 0px, rgba(134, 112, 255, 0",
+      "luz → rgb(127, 214, 166) 0px 0px 10px 0px"
+    ],
+    "corpo_do_meio": {
+      "cor": "rgb(232, 226, 255)",
+      "fundo": "rgb(6, 11, 22)",
+      "tamanho": "28px",
+      "fonte": "\"Cormorant Garamond\"",
+      "contraste": 15.7
+    }
+  },
+  "erros_celular": []
+}

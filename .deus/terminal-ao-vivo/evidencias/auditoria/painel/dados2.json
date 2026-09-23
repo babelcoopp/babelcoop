@@ -1,0 +1,242 @@
+{
+  "criar": {
+    "r1": true,
+    "r2": true,
+    "a": "theus/landing.html",
+    "b": "theus/proposta.md",
+    "total": 3
+  },
+  "telaCab": {
+    "barra": "TH salvo por você · agora Site Código 3D ✎ Editar na tela ★ Salvar como preset Editar ▣ Projetar na TV Pedir ajuda Chamar para cá Versões (0)",
+    "abas": "Meu dia × MD proposta.md × <> landing.html × ××",
+    "lateral": "CRIAR ＋ Nota ＋ Mapa ＋ Quadro ＋ Pasta ＋ ↥ ⬚ Tela ⚙ Máquina ▤ Pesquisa Sozinho · minha pasta e o HD da equipe ▾ THEUS (você) <> landing.html MD proposta.md MD README.md Sua pasta é ~/BabelCoop/theus: o que está nela a equipe vê; o resto do computador, não. Arraste um arquivo de texto para cá ou crie pelo ＋.",
+    "regua": false,
+    "porPessoa": false,
+    "agenteEdita": false,
+    "selo": 2
+  },
+  "visual": {
+    "iframe": true,
+    "barra": "TH salvo por você · agora Site Código 3D ✓ Pronto ★ Salvar como preset Editar ▣ Projetar na TV Pedir ajuda Chamar para cá Versões (0)"
+  },
+  "visualSel": "TH salvo por você · agora Site Código 3D ✓ Pronto div Lembretes confirmação Texto ↑ ↓ Duplicar Apagar ★ Salvar como preset Editar ▣ Projetar na TV Pedir ajuda Chamar para cá Versões (0)",
+  "sessao": {
+    "eu": "theus",
+    "sessao": "assistente"
+  },
+  "painel": {
+    "txt": "Assistente × + Presença Terminal Ctrl J Entrar em… Neon Som ⟩ → babel-e2e-aud-painel2-K6bg7z/theus Assistente · em repouso ● ao vivo ASSISTENTE Seu agente: pesquisa, escreve, organiza e mexe no babel-coop por você. Peça em português: eu trabalho no seu terminal de verdade, em babel-e2e-aud-painel2-K6bg7z/theus. Cada passo aparece aqui com prova. PEDIDO 19:50 pedido cria a landing da clínica com agenda e depoimentos CONSULTA 19:50 consultei consultei: proposta.md · precos.csv PLANO 19:50 1. herói 2. três cartões 3. depoimento AÇÃO 19:50 escrevi escrevi landing.html (86 linhas) ver o comando RESULTADO 19:50 resultado prévia da landing · 3 blocos landing.html ESPERA 19:50 quer usar Bash Publicar a landing em produção? Permitir Negar ▶ Iniciar Assistente só terminal Melhorar o visual Revisar o texto Mostrar na TV ❯ → landing.html × enviar",
+    "anel": [
+      "tr-ic-anel"
+    ],
+    "status": "online 0 na caixa ◌ memória da sala 1 ponto · hoje TV não aberta ● terminal ao vivo acervo: 3 Salvo na equipe",
+    "kbd": [],
+    "desfazer": 0,
+    "abasAg": [
+      "tr-abas term-abas:Assistente\n×",
+      "term-aba tr-aba:Assistente\n×",
+      "tr-aba-nome:Assistente"
+    ]
+  },
+  "toca": {
+    "abas": "Meu dia × MD proposta.md × <> landing.html × ××",
+    "luzes": [
+      ".term-aba tr-aba",
+      ".bc-presenca bc-presenca--mini",
+      ".[object SVGAnimatedString]",
+      ".tr-cab",
+      ".bc-presenca bc-presenca--grande com-textura",
+      ".[object SVGAnimatedString]",
+      ".tr-bloco",
+      ".tr-bloco",
+      ".tr-bloco",
+      ".",
+      ".tr-bloco",
+      ".tr-bloco"
+    ],
+    "contagem": {
+      "somPedido": {
+        "acordar": 1,
+        "espera": 1,
+        "tique": 1
+      },
+      "somTocado": {
+        "acordar": 1,
+        "espera": 1,
+        "tique": 1
+      },
+      "somBloqueado": {},
+      "pulso": 1,
+      "faiscas": 1,
+      "particulas": 4,
+      "respirar": 0,
+      "acordar": 1,
+      "acender": 42,
+      "descartados": 0,
+      "preemptados": 0,
+      "maxVivos": 1
+    },
+    "registro": [
+      {
+        "tipo": "som",
+        "nome": "acordar",
+        "ok": true,
+        "motivo": "tocou",
+        "t": 726
+      },
+      {
+        "tipo": "acordar",
+        "ok": true,
+        "ms": 378,
+        "t": 756
+      },
+      {
+        "tipo": "som",
+        "nome": "espera",
+        "ok": true,
+        "motivo": "tocou",
+        "t": 9326
+      },
+      {
+        "tipo": "pulso",
+        "ok": true,
+        "ms": 619,
+        "t": 9842
+      },
+      {
+        "tipo": "som",
+        "nome": "tique",
+        "ok": true,
+        "motivo": "tocou",
+        "t": 9844
+      },
+      {
+        "tipo": "faiscas",
+        "ok": true,
+        "ms": 857,
+        "t": 10701
+      }
+    ]
+  },
+  "okClicado": "Permitir",
+  "acerto": {
+    "contagem": {
+      "somPedido": {
+        "acordar": 1,
+        "espera": 1,
+        "tique": 3,
+        "duas": 1
+      },
+      "somTocado": {
+        "acordar": 1,
+        "espera": 1,
+        "tique": 3,
+        "duas": 1
+      },
+      "somBloqueado": {},
+      "pulso": 3,
+      "faiscas": 4,
+      "particulas": 12,
+      "respirar": 1,
+      "acordar": 1,
+      "acender": 61,
+      "descartados": 2,
+      "preemptados": 0,
+      "maxVivos": 2
+    },
+    "reg": [
+      {
+        "tipo": "som",
+        "nome": "tique",
+        "ok": true,
+        "motivo": "tocou",
+        "t": 9844
+      },
+      {
+        "tipo": "faiscas",
+        "ok": true,
+        "ms": 857,
+        "t": 10701
+      },
+      {
+        "tipo": "pulso",
+        "ok": true,
+        "ms": 614,
+        "t": 13464
+      },
+      {
+        "tipo": "som",
+        "nome": "tique",
+        "ok": true,
+        "motivo": "tocou",
+        "t": 13465
+      },
+      {
+        "tipo": "pulso",
+        "ok": true,
+        "ms": 604,
+        "t": 14069
+      },
+      {
+        "tipo": "som",
+        "nome": "tique",
+        "ok": true,
+        "motivo": "tocou",
+        "t": 14070
+      },
+      {
+        "tipo": "respirar",
+        "ok": false,
+        "motivo": "teto",
+        "t": 14071
+      },
+      {
+        "tipo": "faiscas",
+        "ok": false,
+        "motivo": "teto",
+        "t": 14071
+      },
+      {
+        "tipo": "som",
+        "nome": "duas",
+        "ok": true,
+        "motivo": "tocou",
+        "t": 14071
+      },
+      {
+        "tipo": "faiscas",
+        "ok": true,
+        "ms": 838,
+        "t": 14303
+      }
+    ],
+    "status": "online 0 na caixa ◌ memória da sala 13 pontos · hoje TV não aberta ● terminal ao vivo acervo: 3 Salvo na equipe",
+    "painel": "Assistente × + Presença Terminal Ctrl J Entrar em… Neon Som ⟩ → landing.html Assistente · terminou · 19:50 ● ao vivo ASSISTENTE Seu agente: pesquisa, escreve, organiza e mexe no babel-coop por você. Peça em português: eu trabalho no seu terminal de verdade, em babel-e2e-aud-painel2-K6bg7z/theus. Cada passo aparece aqui com prova. PEDIDO 19:50 pedido cria a landing da clínica com agenda e depoimentos CONSULTA 19:50 consultei consultei: proposta.md · precos.csv PLANO 19:50 1. herói 2. três cartões 3. depoimento concluído · 3 de 3 · 19:50 AÇÃO 19:50 escrevi escrevi landing.html (86 linhas) ver o comando RESULTADO 19:50 resultado prévia da landing · 3 blocos landing.html ESPERA 19:50 quer usar Bash Publicar a landing em produção? OK · Theus · 19:50 Melhorar o visual Revisar o texto Mostrar na TV ❯ → landing.html × enviar"
+  },
+  "fotos": [
+    {
+      "c": "avatar",
+      "onde": "e-atividades",
+      "sh": "none",
+      "anim": "none",
+      "outline": "none"
+    },
+    {
+      "c": "avatar",
+      "onde": "e-conteudo",
+      "sh": "none",
+      "anim": "none",
+      "outline": "none"
+    }
+  ],
+  "maquina": "Máquina · Clínicas (exemplo) local ● branch produção v1 · 13 peças · 2 alertas Testar Publicar O que muda ▶ Ver o agente montando Projetar na TV Máquina inteira › todas as peças Inteira Domínio Peça por pessoa ARMÁRIO DA FRENTE · as gavetas daqui têm porta na rua Carteiro TH REMETENTE PADRÃO ⚠ padrão: 2 e-mails por hora, só para a equipe Portaria TH dono atendente entra com e-mail e senha Agenda a tela Agenda usa as portas \"novo\" e \"listar\" novo agendamento RECEBE PACIENTE + QUANDO recebe paciente e horário e grava na gaveta Agendamentos listar agendamentos DEVOLVE DIA devolve os agendamentos do dia da clínica EMPRESA cada uma vê só o seu Clínicas TH ¶ nome texto ¶ cnpj texto ¶ cidade texto ≡ plano lista TABELA · clinicas · 4 linhas Pacientes ¶ nome texto ▭ nascimento data ¶ telefone texto ○ clínica → Clínicas +1 campo(s) TABELA · pacientes · 20 linhas Agendamentos ▭ quando data e hora ○ paciente → Pacientes ≡ status lista: marcado, feito, faltou ¶ obs texto TABELA · agendamentos · 50 linhas aviso no WhatsApp QUANDO ENTRA · AGENDAMENTOS usa: ZAPI_TOKEN fotos 1,2 GB · PRIVADA Cofre TH BANCO_URL BANCO_CHAVE ZAPI_TOKEN pedir ao Theus ⚠ chave faltando: ZAPI_TOKEN ao vivo AO VIVO · AGEN",
+  "maquinaOutra": false,
+  "tv": "babel-coop SEM CAMPANHA · FALTAM NaN:NaN:NaN 19:51 qua, 23 set NO RITMO 00 concluídas hoje 00 rodando 00 livres para pegar 0 s medidas hoje MAPA DA SALA · 1 PRESENÇA SINAL · EM REPOUSO CRIAR 1 TH Theus → backend Theus a sala CORPO DO PROJETO CLÍNICAS EM CAMPINAS 12 peças com corpo · v6 · 17:51 · carla AGENTES TRABALHANDO nenhum agente trabalhando agora METAS DO MÊS SEM CAMPANHA 00/0 NaN% · meta batida PERGUNTA DA SEMANA Que trabalho acontece hoje fora de qualquer sistema, e ninguém vê? responda na sua Estação, em Meu dia protótipo com dados de exemplo · atualizado às 19:51:07 demonstração: sem Estação aberta, a própria TV simula a equipe",
+  "controles": {
+    "tema": false,
+    "temaAttr": null,
+    "rm": false,
+    "dens": false
+  },
+  "erros": []
+}

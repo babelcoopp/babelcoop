@@ -1,0 +1,17 @@
+{
+  "erros": [],
+  "medidas": {
+    "a5_saida_ms": 105,
+    "a7_tecla_ate_rita_ms": 126,
+    "a7_eco_teclas": {
+      "n": 60,
+      "p50": 1.8,
+      "p95": 4.5,
+      "max": 5.3
+    },
+    "sons_pedidos_theus": {
+      "antes": 2,
+      "depois": 2
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "quando": "2026-09-23T22:58:59.765Z",
+  "passos": [
+    {
+      "nome": "mapa criado pela presença e aberto (1 raiz + 6 galhos + 4 subgalhos)",
+      "ok": true,
+      "dado": {
+        "id": "theus/mapas/Lançamento.mapa",
+        "caminho": "theus/mapas/Lançamento.mapa",
+        "nos": 11
+      }
+    },
+    {
+      "nome": "carta de observatório: anéis, HUD com número real, galhos dos dois lados, vidro com borda ciano",
+      "ok": true,
+      "dado": {
+        "observatorio": true,
+        "aneis": 6,
+        "hud": "MAPA · OBSERVATÓRIO\nGALHOS 11 · MATERIALIZADOS 0 · FECHADOS 0\nSEM SINAL · nenhum galho materializado ainda",
+        "esq": 3,
+        "dir": 3,
+        "vidro": "blur(14px) saturate(1.15)",
+        "borda": "rgba(63, 227, 255, 0.22)",
+        "ficha": false
+      }
+    },
+    {
+      "nome": "em repouso nada anima (luz só com evento)",
+      "ok": true,
+      "dado": 0
+    },
+    {
+      "nome": "clique no galho abre a ficha com Materializar em Tela, Campanha, Demanda, Peça",
+      "ok": true,
+      "dado": "GALHO · NÍVEL 1\n×\nLanding\n\nLançamento › Landing\n\nMATERIALIZAR EM…\n\nTela\nCampanha\nDemanda\nPeça da Máquina\n\nO objeto nasce"
+    },
+    {
+      "nome": "Landing virou Tela: arquivo .html nasceu com as seções dos subgalhos e o galho guarda o endereço",
+      "ok": true,
+      "dado": {
+        "arquivo": "theus/Telas/Landing.html",
+        "endereco": "Criar › pasta de Theus › Telas › Landing.html",
+        "secoes": 2
+      }
+    },
+    {
+      "nome": "a luz andou pelo galho (pulso no fio) e o organismo soltou faíscas e som",
+      "ok": true,
+      "dado": {
+        "pulsoNoFio": 1,
+        "medidas": {
+          "luzes": 1,
+          "pulsos": 1,
+          "pulsosDescartados": 0,
+          "faiscasOrganismo": 1,
+          "faiscasCss": 0,
+          "focos": 0,
+          "materializar": 1,
+          "origem": [
+            "Landing"
+          ]
+        },
+        "faiscasOrganismo": [
+          0,
+          1
+        ],
+        "som": {
+          "acordar": 1,
+          "tique": 1
+        }
+      }
+    },
+    {
+      "nome": "Tela salva (evento real) → o galho acende e mostra \"salva por Theus\"",
+      "ok": true,
+      "dado": {
+        "vivo": {
+          "p": 0.6,
+          "fase": "andando",
+          "fechado": false,
+          "rotulo": "salva por Theus",
+          "quem": "theus",
+          "sig": "1790204348746",
+          "n": 2,
+          "ts": 1790204348750,
+          "fechouEm": 0
+        },
+        "luzes": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "nome": "zero erros de página na Estação",
+      "ok": true,
+      "dado": []
+    },
+    {
+      "nome": "zero erros de página na TV",
+      "ok": true,
+      "dado": []
+    }
+  ],
+  "erros": [],
+  "errosTv": [],
+  "falhou": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#mf-ficha [data-para=\"davi\"]')\u001b[22m\n\n    at /Users/matheussilveirapro/Desktop/babel-coop/.deus/terminal-ao-vivo/evidencias/mapa/prova.cjs:89:54",
+  "resumo": "9/9"
+}

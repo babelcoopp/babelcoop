@@ -1,0 +1,443 @@
+{
+  "resumo": {
+    "elementos": 58,
+    "pedidos": 8,
+    "falhas": 0,
+    "errosNoConsole": 2,
+    "fontes": 1,
+    "cores": 9,
+    "blocosDeCopy": 29
+  },
+  "elemento": {
+    "seletor": "h1",
+    "tag": "h1",
+    "rotulo": "Loja Teste",
+    "texto": "Loja Teste",
+    "html": "<h1>Loja Teste</h1>",
+    "htmlCortado": false,
+    "caixa": {
+      "x": 24,
+      "y": 120,
+      "w": 1052,
+      "h": 56
+    },
+    "atributos": {},
+    "estilos": {
+      "display": "block",
+      "width": "1052px",
+      "height": "55.5px",
+      "margin": "32.16px 0px",
+      "color": "rgb(42, 213, 229)",
+      "font-family": "\"Teste Sans\", Georgia, serif",
+      "font-size": "48px",
+      "font-weight": "700",
+      "letter-spacing": "-0.96px"
+    },
+    "cores": {
+      "texto": "#2ad5e5",
+      "fundo": null,
+      "borda": null
+    },
+    "senha": false,
+    "filhos": 0,
+    "regras": [
+      {
+        "seletor": "h1",
+        "origem": "http://localhost:4931/css/site.css",
+        "linha": 6,
+        "propriedades": [
+          {
+            "nome": "color",
+            "valor": "#2ad5e5"
+          },
+          {
+            "nome": "font-size",
+            "valor": "48px"
+          },
+          {
+            "nome": "letter-spacing",
+            "valor": "-0.02em"
+          },
+          {
+            "nome": "color",
+            "valor": "rgb(42, 213, 229)"
+          }
+        ]
+      }
+    ],
+    "herdadas": [
+      {
+        "seletor": "body",
+        "origem": "http://localhost:4931/css/site.css",
+        "nivel": 3,
+        "propriedades": [
+          {
+            "nome": "color",
+            "valor": "#c3cfe5"
+          },
+          {
+            "nome": "font-family",
+            "valor": "'Teste Sans', Georgia, serif"
+          },
+          {
+            "nome": "color",
+            "valor": "rgb(195, 207, 229)"
+          },
+          {
+            "nome": "font-family",
+            "valor": "\"Teste Sans\", Georgia, serif"
+          }
+        ]
+      }
+    ],
+    "regrasDoNavegador": 2,
+    "fontesRenderizadas": [
+      {
+        "familia": "Arial Rounded MT Bold",
+        "postScript": "ArialRoundedMTBold",
+        "glifos": 10,
+        "daPagina": true
+      }
+    ]
+  },
+  "fontes": {
+    "declaradas": [
+      {
+        "familia": "Teste Sans",
+        "peso": "normal",
+        "estilo": "normal",
+        "status": "loaded"
+      }
+    ],
+    "css": [
+      {
+        "familia": "Teste Sans",
+        "src": "url(\"../fontes/teste.woff2\") format(\"woff2\")",
+        "folha": "http://localhost:4931/css/site.css"
+      }
+    ],
+    "usadas": [
+      {
+        "familia": "\"Teste Sans\", Georgia, serif",
+        "elementos": 26
+      },
+      {
+        "familia": "Arial",
+        "elementos": 4
+      }
+    ],
+    "arquivos": [
+      {
+        "url": "http://localhost:4931/fontes/teste.woff2",
+        "status": 200,
+        "bytes": 31024,
+        "mime": "font/woff2"
+      }
+    ]
+  },
+  "cores": [
+    {
+      "cor": "#c3cfe5",
+      "vezes": 20,
+      "uso": [
+        "texto"
+      ]
+    },
+    {
+      "cor": "#2ad5e5",
+      "vezes": 5,
+      "uso": [
+        "texto",
+        "fundo"
+      ]
+    },
+    {
+      "cor": "#ffffff",
+      "vezes": 5,
+      "uso": [
+        "fundo"
+      ]
+    },
+    {
+      "cor": "#767676",
+      "vezes": 5,
+      "uso": [
+        "borda"
+      ]
+    },
+    {
+      "cor": "#060b16",
+      "vezes": 4,
+      "uso": [
+        "texto"
+      ]
+    },
+    {
+      "cor": "#a376e9",
+      "vezes": 3,
+      "uso": [
+        "texto"
+      ]
+    },
+    {
+      "cor": "#7ba4f0",
+      "vezes": 2,
+      "uso": [
+        "texto"
+      ]
+    },
+    {
+      "cor": "#1d2a3a",
+      "vezes": 1,
+      "uso": [
+        "borda"
+      ]
+    },
+    {
+      "cor": "#101820",
+      "vezes": 1,
+      "uso": [
+        "fundo da página"
+      ]
+    }
+  ],
+  "copy": [
+    {
+      "tag": "a",
+      "tipo": "link",
+      "texto": "Sobre"
+    },
+    {
+      "tag": "a",
+      "tipo": "link",
+      "texto": "Planos"
+    },
+    {
+      "tag": "h1",
+      "tipo": "h1",
+      "texto": "Loja Teste"
+    },
+    {
+      "tag": "p",
+      "tipo": "texto",
+      "texto": "A loja de mentira que o agente usa para provar o navegador."
+    },
+    {
+      "tag": "button",
+      "tipo": "botao",
+      "texto": "Cadastro"
+    },
+    {
+      "tag": "button",
+      "tipo": "botao",
+      "texto": "Avisar"
+    },
+    {
+      "tag": "button",
+      "tipo": "botao",
+      "texto": "Apagar conta"
+    },
+    {
+      "tag": "li",
+      "tipo": "item",
+      "texto": "Camiseta"
+    },
+    {
+      "tag": "li",
+      "tipo": "item",
+      "texto": "Caneca"
+    },
+    {
+      "tag": "li",
+      "tipo": "item",
+      "texto": "Adesivo"
+    },
+    {
+      "tag": "h2",
+      "tipo": "h2",
+      "texto": "Planos"
+    },
+    {
+      "tag": "h3",
+      "tipo": "h3",
+      "texto": "Básico"
+    },
+    {
+      "tag": "p",
+      "tipo": "texto",
+      "texto": "Para começar sem pagar nada."
+    },
+    {
+      "tag": "h3",
+      "tipo": "h3",
+      "texto": "Pro"
+    },
+    {
+      "tag": "p",
+      "tipo": "texto",
+      "texto": "Para quem vende todo dia."
+    },
+    {
+      "tag": "li",
+      "tipo": "item",
+      "texto": "Suporte humano"
+    },
+    {
+      "tag": "li",
+      "tipo": "item",
+      "texto": "Relatórios"
+    },
+    {
+      "tag": "h2",
+      "tipo": "h2",
+      "texto": "Cadastro"
+    },
+    {
+      "tag": "label",
+      "tipo": "rotulo",
+      "texto": "Nome"
+    },
+    {
+      "tag": "label",
+      "tipo": "rotulo",
+      "texto": "E-mail"
+    }
+  ],
+  "rede": [
+    {
+      "url": "http://localhost:4931/",
+      "metodo": "GET",
+      "tipo": "Document",
+      "status": 200,
+      "mime": "text/html",
+      "bytes": 1861,
+      "transferido": 2069,
+      "ms": 33,
+      "hora": 1790198715437
+    },
+    {
+      "url": "http://localhost:4931/css/site.css",
+      "metodo": "GET",
+      "tipo": "Stylesheet",
+      "status": 200,
+      "mime": "text/css",
+      "bytes": 759,
+      "transferido": 951,
+      "ms": 20,
+      "hora": 1790198715475
+    },
+    {
+      "url": "http://localhost:4931/img/logo.png",
+      "metodo": "GET",
+      "tipo": "Image",
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 220781,
+      "transferido": 220976,
+      "ms": 26,
+      "hora": 1790198715475
+    },
+    {
+      "url": "http://localhost:4931/js/site.js",
+      "metodo": "GET",
+      "tipo": "Script",
+      "status": 200,
+      "mime": "text/javascript",
+      "bytes": 1619,
+      "transferido": 1818,
+      "ms": 24,
+      "hora": 1790198715475
+    },
+    {
+      "url": "http://localhost:4931/api/produtos",
+      "metodo": "GET",
+      "tipo": "Fetch",
+      "status": 200,
+      "mime": "application/json",
+      "bytes": 58,
+      "transferido": 257,
+      "ms": 4,
+      "hora": 1790198715501
+    },
+    {
+      "url": "http://localhost:4931/img/fundo.png",
+      "metodo": "GET",
+      "tipo": "Image",
+      "status": 200,
+      "mime": "image/png",
+      "bytes": 204504,
+      "transferido": 204699,
+      "ms": 7,
+      "hora": 1790198715503
+    },
+    {
+      "url": "http://localhost:4931/fontes/teste.woff2",
+      "metodo": "GET",
+      "tipo": "Font",
+      "status": 200,
+      "mime": "font/woff2",
+      "bytes": 31024,
+      "transferido": 31219,
+      "ms": 9,
+      "hora": 1790198715503
+    },
+    {
+      "url": "http://localhost:4931/api/cadastro",
+      "metodo": "POST",
+      "tipo": "Fetch",
+      "status": 200,
+      "mime": "application/json",
+      "bytes": 31,
+      "transferido": 205,
+      "ms": 3,
+      "hora": 1790198721959
+    }
+  ],
+  "console": [
+    {
+      "nivel": "aviso",
+      "texto": "aviso de teste",
+      "url": "http://localhost:4931/js/site.js",
+      "linha": 17,
+      "hora": 1790198715501
+    },
+    {
+      "nivel": "erro",
+      "texto": "erro de teste proposital",
+      "url": "http://localhost:4931/js/site.js",
+      "linha": 18,
+      "hora": 1790198715502
+    },
+    {
+      "nivel": "log",
+      "texto": "site de teste pronto 3 produtos",
+      "url": "http://localhost:4931/js/site.js",
+      "linha": 15,
+      "hora": 1790198715507
+    },
+    {
+      "nivel": "aviso",
+      "texto": "Electron Security Warning (Insecure Content-Security-Policy) This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
+      "url": "node:electron/js2c/sandbox_bundle",
+      "linha": 2,
+      "hora": 1790198715524
+    },
+    {
+      "nivel": "erro",
+      "excecao": true,
+      "texto": "Error: exceção de teste\n    at http://localhost:4931/js/site.js:19:32",
+      "url": "http://localhost:4931/js/site.js",
+      "linha": 19,
+      "hora": 1790198715553
+    }
+  ],
+  "domRaiz": {
+    "t": "body",
+    "filhos": [
+      "header",
+      "main",
+      "footer",
+      "script"
+    ]
+  }
+}

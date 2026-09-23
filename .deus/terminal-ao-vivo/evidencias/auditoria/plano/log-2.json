@@ -1,0 +1,48 @@
+{
+ "log": {
+  "sessoes": [
+   {
+    "id": "assistente",
+    "agente": "assistente",
+    "nome": "Assistente",
+    "aberta": true,
+    "pid": 54479,
+    "estado": "shell",
+    "face": "presenca",
+    "pausada": false,
+    "modoAgente": false,
+    "agenteEstado": null,
+    "blocos": 0,
+    "cols": 56,
+    "rows": 30,
+    "frase": "em repouso",
+    "alvo": "babel-e2e-plano-DbLia2/theus"
+   }
+  ],
+  "placar": "11\npontos · hoje",
+  "acoes": [
+   "mapa-ir",
+   "ed-preset",
+   "novo-mapa",
+   "novo-quadro",
+   "nova-direta",
+   "nova-demanda",
+   "reu-quadro",
+   "pj-maquina",
+   "pj-quadro",
+   "pj-mapa",
+   "lj-nova-versao",
+   "nova-tarefa",
+   "tv-quadro",
+   "mq-preset-usar",
+   "mq-preset-form",
+   "preset-tela",
+   "mq-3d",
+   "criar-tela",
+   "criar-pesquisa",
+   "nova-pasta"
+  ],
+  "tv": "babel-coop\nBuscar arquivo, comando ou acervo\nCtrl\nK\nTela da TV\nMeu dia\nCriar\nTrabalho\nChat\nWhatsApp\nReunião\nTerminais\nProjetos\nAcervo\nEquipe\nLoja\nOficina\nTH\nCRIAR\n＋ Nota\n＋ Mapa\n＋ Quadro\n＋ Pasta\n＋\n↥\n⬚\nTela\n⚙\nMáquina\n▤\nPesquisa\nSozinho · minha pasta e o HD da equipe\n▾\nTHEUS (você)\n▸\nPropostas\nMD\nREADME.md\n\nSua pasta é ~/BabelCoop/theus: o que está nela a equipe vê; o resto do computador, não. Arraste um arquivo de texto para cá ou crie pelo ＋.\n\nMeu dia\n×\nproposta-clinica-vida.md\n×\nTerminais ao vivo\n×\nCriar\n×\n××\nCriar\nonde estão?\nCriar\n\nÉ aqui que tudo acontece. Dependendo do que você cria, a tela do meio vira a coisa certa: site vira Tela, backend vira Máquina, texto vira Pesquisa. Numa tela, o modo 3D mostra a página num ambiente 3D com os próximos itens ao lado: digite nela, aperte Enter e veja o pulso correr. O agente do terminal participa de tudo.\n\n⬚\nTela\numa página, uma landing, um login: abre já como site, edita no visual e tem o modo 3D\n⚙\nMáquina\no backend em peças de Lego: gavetas, portas, robôs, chaves; testa vendo os dados andar\n▤\nPesquisa\nMD, TXT ou PDF: o agente pesquisa e o texto abre em leitura\nCOMEÇAR DE UM PRESET · O QUE A EQUIPE JÁ CONSTRUIU E FUNCIONOU\nPRESETS DA EQUIPE\n0\n\nNada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".\n\nPresets são o que a equipe já construiu e funcionou: backends e telas. Entram em qualquer projeto com um clique ou por \"usa o preset X\" no terminal.\n\n＋ Nota\n＋ Mapa mental\n＋ Quadro\n↥ Abrir do compu"
+ },
+ "erros": []
+}

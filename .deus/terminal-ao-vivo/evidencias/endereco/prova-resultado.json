@@ -1,0 +1,101 @@
+{
+  "resumo": "37/37 passaram",
+  "falhas": [],
+  "tudo": [
+    "✓ A1 · o cabeçalho do objeto mostra Sala › bancada › peça",
+    "✓ A1 · a trilha antiga do editor sai quando o endereço aparece",
+    "✓ A1 · Davi está com o objeto (o que o app já grava em \"fazendo\")",
+    "✓ A1 · a posição de quem abriu vira estado da equipe (ação posicao)",
+    "✓ A2 · clicar na sala abre o projeto",
+    "✓ A2 · o endereço do projeto é a sala",
+    "✓ A2 · clicar na bancada abre o Criar do projeto com a linha do arquivo acesa",
+    "✓ A2 · clicar na peça copia o endereço inteiro",
+    "✓ A3 · luz dirigida: o anel da Carla acende no cabeçalho e diz \"Carla chegou\"",
+    "✓ A3 · leitor de tela ouve a chegada (aria-live)",
+    "✓ A3 · presença vira posição ao lado do arquivo na árvore",
+    "✓ A3 · a luz esfria sozinha (meia-vida de 6 s)",
+    "✓ A3 · clicar no anel de quem está aqui abre o rastro dela (só o que já é público)",
+    "✓ A4 · Ctrl K mostra o grupo \"Onde estão\" com a posição do Bruno",
+    "✓ A4 · Enter em \"Ir até\" abre o objeto onde o Bruno está (terminal dele)",
+    "✓ A4 · \"onde\" lista pessoas e agentes com a posição e \"Ir até\"",
+    "✓ A5 · a lateral de Equipe mostra a planta: pessoas por sala/projeto",
+    "✓ A5 · a sala onde você está (Equipe, aberta pelo ícone) é a superfície viva (vidro)",
+    "✓ A5 · → na planta leva até onde o Davi está (a Máquina do projeto)",
+    "✓ A6 · rastro do agente abre com as paradas (hora, endereço, o que fez)",
+    "✓ A6 · a parada nova é a mais acesa (luz que esfria com o tempo)",
+    "✓ A6 · a parada do pedido aponta para o arquivo citado (proposta-clinicas.md)",
+    "✓ A6 · clicar numa parada abre aquele objeto",
+    "✓ A7 · o seu rastro mostra por onde você passou hoje (landing, Máquina, terminal do Bruno)",
+    "✓ A7 · Esc fecha o balão do rastro",
+    "✓ A8 · celular: cabeçalho visível e nenhuma rolagem lateral",
+    "✓ A9 · movimento reduzido: luz em degrau (1) e nenhuma animação no cabeçalho",
+    "✓ A10 · luz acesa tem laço; em repouso o laço para (nada pulsa sem evento)",
+    "✓ A · zero erros de página",
+    "✓ B0 · duas Estações reais na rede (Theus fundou, Rita entrou com token)",
+    "✓ B1 · no app real o cabeçalho do Theus mostra o endereço da landing",
+    "✓ B2 · a Rita abre a landing na Estação dela e a do Theus acende \"Rita chegou\" (diário → rede → posição)",
+    "✓ B2 · a luz é dirigida pelo organismo: pulso + som suave",
+    "✓ B3 · a posição da Rita no Theus veio do evento dela (fonte posicao)",
+    "✓ B3 · Ctrl K no Theus: \"Rita · na landing.html\"",
+    "✓ B4 · a Rita vai para Demandas e sai do objeto do Theus (posição acompanha)",
+    "✓ B · zero erros de página nas duas Estações"
+  ],
+  "medidas": {
+    "quando": "2026-09-23T22:19:26.948Z",
+    "organismoNoProtótipo": false,
+    "chegadaMs": 12,
+    "luzChegada": {
+      "acesa": 1,
+      "depois7s": 0.439
+    },
+    "paletaOnde": [
+      "CA Carla vendo landing.html · Clínicas em Campinas · agora Ir até",
+      "IA Iara editando checklist-cliente-novo.md · Onboarding de clientes · agora Ir até",
+      "AN Ana lendo Proposta Grupo Norte.pdf · Criar Ir até",
+      "BR Bruno no terminal Bruno-bot · Terminais Ir até",
+      "DA Davi editando landing.html · Clínicas em Campinas Ir até",
+      "EV Eva no Chat · conversando · Chat Ir até",
+      "FE Felipe no terminal Zé · Terminais Ir até",
+      "JO João no terminal Pixel · Terminais Ir até",
+      "B Bruno-bot (agente de Bruno) no terminal Bruno-bot · terminou · Terminais · há 50 min Ir até",
+      "GA Gabi sem posição agora",
+      "HU Hugo desligado(a)",
+      "Por onde passou: Carla rastro",
+      "Por onde passou: Iara rastro",
+      "Por onde passou: Ana rastro"
+    ],
+    "planta": {
+      "salas": [
+        "Clínicas em Campinas: Davi, Carla",
+        "Site novo: ",
+        "Onboarding de clientes: Iara",
+        "Terminais: Bruno, Felipe, João, Bruno-bot · agente de Bruno",
+        "Equipe: você",
+        "Criar: Ana",
+        "Chat: Eva"
+      ],
+      "minha": "Equipe",
+      "luzDavi": 0
+    },
+    "rastroBruno": {
+      "titulo": "Bruno-bot · por onde passou",
+      "paradas": [
+        {
+          "hora": "19:19",
+          "onde": "Clínicas em Campinas › Texto · Bruno › proposta-clinicas.md",
+          "oque": "Resuma a proposta-clinicas.md em 5 linhas para o WhatsApp. →",
+          "luz": 0.999
+        },
+        {
+          "hora": "18:29",
+          "onde": "Terminais › terminal de Bruno › Bruno-bot",
+          "oque": "faz uma proposta → Para qual cliente? Com qual escopo e preç",
+          "luz": 0.001
+        }
+      ]
+    },
+    "laçoParouEm": "26 s depois da última chegada",
+    "organismoNoApp": true,
+    "chegadaEntreEstacoesMs": 1452
+  }
+}

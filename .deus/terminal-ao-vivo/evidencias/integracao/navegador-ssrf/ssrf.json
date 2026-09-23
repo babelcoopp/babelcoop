@@ -1,0 +1,12 @@
+{
+  "recusas": {
+    "agente127": "endereço interno: a pessoa abre pela barra de endereço (Assumir) (127.0.0.1:4952 → 127.0.0.1)",
+    "metadados": "endereço link-local (169.254.169.254): o agente nunca abre"
+  },
+  "redirecionamento": "endereço interno: a pessoa abre pela barra de endereço (Assumir) (127.0.0.1:4952)",
+  "download": {
+    "redirecionamento": "redirecionamento recusado (127.0.0.1:4952/segredo.csv): endereço interno: a pessoa abre pela barra de endereço (Assumir) (127.0.0.1:4952 → 127.0.0.1)",
+    "saltos": "redirecionamentos demais (mais de 5)",
+    "nome": "Downloads/fora-da-pasta.csv"
+  }
+}

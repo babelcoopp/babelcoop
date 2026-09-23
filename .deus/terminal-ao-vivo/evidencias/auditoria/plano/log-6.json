@@ -1,0 +1,33 @@
+{
+ "som": {
+  "somLigado": true,
+  "efeitos": true
+ },
+ "iconesAntigos": {
+  "dia": 0,
+  "explorador": 0,
+  "demandas": 0,
+  "chat": 0,
+  "reuniao": 0,
+  "terminais": 0,
+  "projetos": 0,
+  "acervo": 0,
+  "equipe": 0,
+  "loja": 0,
+  "oficina": 0,
+  "whatsapp": 0
+ },
+ "iconesTotal": "criar,dia,demandas,chat,reuniao,acervo,inteligencia,terminais,tarefas,metas,equipe,mapa,projetos,whatsapp,loja,oficina,tv,sino,paleta,fechar,lateral,mais,busca,filtro,configuracoes,perfil,atualizar,token,agente,presenca,ao-vivo,terminal,pausa,entrar-terminal,devolver,assumir,chamar,falar,pedir-ajuda,navegador,raio-x,clonar,print,projetar,levar-reuniao,versoes,salvar,desfazer,anexar,audio,foto,pontos,sequencia,tarefa-livre,ideia,aprendizado,pasta,arquivo,maquina,quadro,campanha,gaveta,campo,fio,chave,empresa,portaria,porta,robo,deposito,cofre,tela,cano,armario,ferramenta,carteiro,casa-de-maquinas,alerta,sujo,nao-publicado,fixado,barrado,preset",
+ "okBloco": [
+  "ASSISTENTE\nSeu agente: pesquisa, escreve, organiza e mexe no babel-coop por você.\nPeça em português: eu trabalho no seu terminal de verdade, em babel-e2e-plano6-ylaqaZ/theus. Cada passo aparece aqui com prova.\nESPERA\n19:57\nquer usar Bash\nrodar npm test\nOK · Theus · 19:57",
+  "ESPERA\n19:57\nquer usar Bash\nrodar npm test\nOK · Theus · 19:57"
+ ],
+ "placar": "2\npontos · hoje",
+ "perfil": "TH\nTheus\n\nGestão · gestão · online · agentes: Assistente\n\nAS\nAssistente · Seu agente: pesquisa, escreve, organiza\nEditar perfil\nNÍVEL 1\nAprendiz\n🔥 0 dias com aprendizado\n\n0% para o nível 2 · 0 pontos, só seus: contra você mesmo, nunca contra os outros\n\npróxima: 🥇 Primeiro aprendizado\nTRABALHOS · SETEMBRO\nver tudo\nDemandas com OK\n0\nAjudas dadas\n0\nIdeias · aprendizados\n0 · 0\nSkills publicadas\n0\nTarefas entregues\n0\nQuadros · mapas\n0 · 0\nTEMPO · SETEMBRO\nEm demandas\n0 s\nMédia por demanda\n0 s\nPausada\n0 s\nMelhor foco\n—\n\nÉ sobre a pessoa, para ela. Ninguém é comparado.\n\nVOCÊ NO BABEL COOP\n\nvocê é 100% do que a Babel sabe\n\nacervo\n100%\ndemandas do mês\n0%\najudas\n0%\nprojetos\n0 de 0\nDADOS E MATERIAIS\n\n4 arquivos · 0 mapas · 0 quadros · 0 clones\n\nMD\nREADME.md\naberto 0 vezes pelos outros\nMD\nACERVO.md\naberto 0 vezes pelos outros\nMD\nAPRENDIZADOS.md\naberto 0 vezes pelos outros\nLINHA DO TEMPO\nTheus crio",
+ "celular": "Buscar arquivo, comando ou acervo\nEquipe\nMetas\nMapa\nCuidando da gente\n0\nPessoas e carga\n1\nCheck-ins de hoje\n0/1\nControle da TV\npainel\nRegras\nGerar token\nEquipe\n›\nTheus\nonde estão?\nTH\nTheus\n\nGestão · gestão · online · agentes: Assistente\n\nAS\nAssistente · Seu agente: pesquisa, escreve, organiza\nEditar perfil\nNÍVEL 1\nAprendiz\n🔥 0 dias com aprendizado\n\n0% para o nível 2 · 0 pontos, só seus: contra você mesmo, nunca contra os outros\n\npróxima: 🥇 Primeiro aprendizado\nTRABALHOS · SETEMBRO\nver tudo\nDem",
+ "tvChao": {
+  "src": "http://localhost:5346/midia/chao-vivo.mp4",
+  "paused": true,
+  "vis": "0/block"
+ }
+}

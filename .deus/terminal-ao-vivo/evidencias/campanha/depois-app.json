@@ -1,0 +1,140 @@
+{
+  "quando": "2026-09-23T22:24:11.402Z",
+  "checagens": [
+    {
+      "parte": "app",
+      "nome": "BC.campanha.gerar devolve id, endereço e 6 peças com dono",
+      "ok": true
+    },
+    {
+      "parte": "app",
+      "nome": "com o organismo: 6 pulsos, faíscas, o palco respira e soa tique ×6 + duas",
+      "ok": true
+    },
+    {
+      "parte": "app",
+      "nome": "a presença do organismo no plano espera o OK",
+      "ok": true
+    },
+    {
+      "parte": "app",
+      "nome": "OK de quem pediu em todas: \"Campanha no ar\" e soa tres",
+      "ok": true
+    },
+    {
+      "parte": "app",
+      "nome": "em repouso: nenhum laço no palco, e a luz esfria sozinha até zerar",
+      "ok": true
+    },
+    {
+      "parte": "app",
+      "nome": "prefers-reduced-motion: nada anima no palco, plano inteiro à vista, pulsos viram cor",
+      "ok": true
+    },
+    {
+      "parte": "app",
+      "nome": "zero erros de página",
+      "ok": true
+    }
+  ],
+  "app": {
+    "organismo": "1.0.0",
+    "gerar": {
+      "id": "cp-mueo77ax-cwfq",
+      "estado": "gerando",
+      "endereco": "equipe/Campanhas/Clínica Vida",
+      "pecas": [
+        "tela·davi",
+        "anuncio-1·eva",
+        "anuncio-2·eva",
+        "anuncio-3·eva",
+        "whatsapp·iara",
+        "calendario·carla"
+      ]
+    },
+    "hud": {
+      "peca": "tela",
+      "vidro": "blur(10px) saturate(1.15)",
+      "borda": "rgba(63, 227, 255, 0.22)",
+      "scanOpacidade": 1,
+      "scanAlfaMax": 0.043
+    },
+    "pronta": {
+      "cont": {
+        "somPedido": {
+          "tique": 6,
+          "duas": 1
+        },
+        "somTocado": {
+          "tique": 6,
+          "duas": 1
+        },
+        "somBloqueado": {},
+        "pulso": 6,
+        "faiscas": 7,
+        "particulas": 38,
+        "respirar": 1,
+        "acordar": 0,
+        "acender": 54,
+        "descartados": 1,
+        "preemptados": 0,
+        "maxVivos": 2
+      },
+      "pulsos": [
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok"
+      ],
+      "rito": "Campanha pronta\n6 peças · 4 donos · 7 s · Assistente, agente de Theus · falta o OK de Theus em 6",
+      "pres": {
+        "estado": "espera",
+        "t": "1790202260309"
+      }
+    },
+    "noAr": {
+      "estado": "no-ar",
+      "tres": 1,
+      "rito": "Campanha no ar\n6 peças com OK de Theus · 19:24 · a parede já viu"
+    },
+    "repouso": {
+      "aos2s": [
+        {
+          "tipo": "CSSTransition",
+          "alvo": "bc-p-marcas-c",
+          "laco": false
+        },
+        {
+          "tipo": "CSSTransition",
+          "alvo": "bc-p-marcas-l",
+          "laco": false
+        },
+        {
+          "tipo": "CSSTransition",
+          "alvo": "bc-p-fecho",
+          "laco": false
+        }
+      ],
+      "lacos": 0,
+      "esfriouEmMs": 33111,
+      "depois": []
+    },
+    "reduzido": {
+      "animando": 0,
+      "itensVisiveis": 6,
+      "pulsos": [
+        "sem-movimento",
+        "sem-movimento",
+        "sem-movimento",
+        "sem-movimento",
+        "sem-movimento",
+        "sem-movimento"
+      ],
+      "tom": "Loja Aurora Black Friday: os melhores preços do ano, até 20/10"
+    },
+    "erros": []
+  },
+  "resumo": "7/7 passaram"
+}

@@ -1,0 +1,507 @@
+{
+ "eu": {
+  "pasta": "/var/folders/k6/6y2hfq0d0zb5_fn8cnxkx_c00000gn/T/babel-e2e-conceito-C40GiK/theus",
+  "id": "theus",
+  "nome": "Theus"
+ },
+ "medidaInicio": {
+  "atividades": {
+   "w": 56,
+   "h": 844,
+   "x": 0,
+   "y": 32,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "1px solid rgba(215, 228, 251, 0.09)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "lateral": {
+   "w": 264,
+   "h": 844,
+   "x": 56,
+   "y": 32,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "0px none rgb(215, 228, 251)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "abas": {
+   "w": 670,
+   "h": 33,
+   "x": 325,
+   "y": 32,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "0px none rgb(215, 228, 251)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "painel": {
+   "w": 440,
+   "h": 844,
+   "x": 1000,
+   "y": 32,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "0px none rgb(215, 228, 251)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "status": {
+   "w": 1440,
+   "h": 24,
+   "x": 0,
+   "y": 876,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(195, 207, 229)",
+   "br": "0px none rgb(195, 207, 229)",
+   "ff": "\"JetBrains Mono\"",
+   "fs": "11px",
+   "fw": "500"
+  },
+  "topo": {
+   "w": 1440,
+   "h": 32,
+   "x": 0,
+   "y": 0,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "0px none rgb(215, 228, 251)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "topoTexto": "babel-coop Buscar arquivo, comando ou acervo Ctrl K Tela da TV",
+  "statusTexto": "online 0 na caixa ◌ memória da sala 0 pontos · hoje TV não aberta ● terminal ao vivo acervo: 3 Salvo na equipe",
+  "statusFilhos": 4,
+  "abasTexto": "Meu dia ×",
+  "painelTopo": "Assistente × + Presença Terminal Ctrl J Entrar em… Neon Som ⟩ → babel-e2e-conceito-C40GiK/theus Assistente · em repouso nasceu na sua pasta · 19:50 ● ao vivo ASSISTENTE Seu agente: pesquisa, escreve, organiza e mexe no babel-coop por você. Peça em português: eu trabalho no seu terminal de verdade, em babel-e2e-conceito-C40GiK/theus. Cada passo aparece aqui com prova. ▶ Iniciar Assistente só termin",
+  "dataT": 3,
+  "selo": 2,
+  "anel": 3,
+  "seguir": 0,
+  "rotulosBarra": [
+   "Meu dia",
+   "Criar",
+   "Trabalho",
+   "Chat",
+   "WhatsApp",
+   "Reunião",
+   "Terminais",
+   "Projetos",
+   "Acervo",
+   "Equipe",
+   "Loja",
+   "Oficina",
+   "TH"
+  ],
+  "fonts": [
+   "Cormorant Garamond 500",
+   "Cormorant Garamond 500",
+   "IBM Plex Sans 400",
+   "IBM Plex Sans 500",
+   "IBM Plex Sans 600",
+   "JetBrains Mono 400",
+   "JetBrains Mono 500",
+   "JetBrains Mono 700"
+  ],
+  "sombraColorida": 4,
+  "vidro": 1,
+  "halo": 3,
+  "anim": [
+   "e-logo:casca-b-vivo:3.4s:infinite",
+   "tr-bloco tr-saudacao:tr-nasce:0.18s:1"
+  ],
+  "textoProibido": [
+   "Neon"
+  ]
+ },
+ "vistas": {
+  "explorador": {
+   "lateral": "CRIAR ＋ Nota ＋ Mapa ＋ Quadro ＋ Pasta ＋ ↥ ⬚ Tela ⚙ Máquina ▤ Pesquisa Sozinho · minha pasta e o HD da equipe ▾ THEUS (você) ▸ site CSV dados.csv MD README.md Sua pasta é ~/BabelCoop/theus: o que está nela a equipe vê; o resto do computador, não. Arraste um arquivo de texto para cá ou crie pelo ＋.",
+   "abas": "Meu dia × Criar × ××",
+   "ajuda": 0
+  },
+  "demandas": {
+   "lateral": "Demandas Tarefas DEMANDAS + Nova Recebidas 0 Livres: pega quem puder 0 Enviadas por mim 0 Concluídas 0 Quem recebe só pausa e retoma. Só quem pediu dá o OK e encerra o cronômetro. Cada pausa fica no histórico.",
+   "abas": "Meu dia × Criar × Demandas × ××",
+   "ajuda": 0
+  },
+  "tarefas": {
+   "lateral": "Demandas Tarefas TAREFAS COM FLUXO + Nova Todas abertas 0 Comigo agora 0 Passam por mim 0 Concluídas 0 Uma tarefa passa de mão em mão: cada etapa tem um responsável. A TV mostra a trilha e o pulso de luz quando ela muda de mão.",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × ××",
+   "ajuda": 0
+  },
+  "chat": {
+   "lateral": "CONVERSAS b babel-coop · todos 📌 Sem mensagens",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × ××",
+   "ajuda": 0
+  },
+  "whatsapp": {
+   "lateral": "WHATSAPP Só você vê esta tela. Ela não entra no acervo, nem na TV, nem aparece para a equipe.",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × ××",
+   "ajuda": 0
+  },
+  "reuniao": {
+   "lateral": "REUNIÕES Nenhuma agora ATAS NO ACERVO MOMENTOS FALADOS",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × ××",
+   "ajuda": 0
+  },
+  "terminais": {
+   "lateral": "TERMINAIS DA EQUIPE Parede (todos) 1 Theus (você) · Assistente ao vivo OS SEUS TERMINAIS Assistente ● ao vivo Pausar Todos veem todos. Para mexer: a gestão entra direto; membros do mesmo projeto também; os outros pedem e o dono aceita com um clique. Quem está no seu terminal aparece com um selo, e v",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × ××",
+   "ajuda": 0
+  },
+  "projetos": {
+   "lateral": "PROJETOS ＋ Novo Trabalhar sozinho é uma coisa; em projeto é outra. No projeto, o Explorador mostra só o projeto, agrupado por pessoa, e dá para arrastar arquivos para alguém.",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × ××",
+   "ajuda": 0
+  },
+  "acervo": {
+   "lateral": "Acervo Inteligência ACERVO 3 materiais e 8 termos indexados, sem LLM. Tudo 3 nota 1 planilha 1 código 1 MEMÓRIA COM NOME 0 coisas que a equipe aprendeu, cada uma com autor e usos (). Todo agente novo nasce sabendo. esta semana: usada 0× · 0 aprendizados novos o que você ensinou: 0 · usado 0× · +0 po",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × ××",
+   "ajuda": 0
+  },
+  "inteligencia": {
+   "lateral": "Acervo Inteligência INTELIGÊNCIA DA EQUIPE Aprendizados 0 O sonho 0 novos Melhores prompts 0 Pergunta da semana 0 Ideias 0 O que cada um aprende volta para a IA do terminal de todos, pelo APRENDIZADOS.md e pelo acervo.",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × ××",
+   "ajuda": 0
+  },
+  "equipe": {
+   "lateral": "Equipe Metas Mapa PLANTA DA SALA 1 presente Equipe 1 TH você em Equipe Clique numa pessoa para ver por onde passou; → vai até onde ela está. EQUIPE Cuidando da gente 0 Pessoas e carga 1 Check-ins de hoje 0/1 Controle da TV painel Regras CONVIDAR PESSOA Gerar token Horas por pessoa aparecem só para a",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × Equipe × ××",
+   "ajuda": 0
+  },
+  "metas": {
+   "lateral": "Equipe Metas Mapa METAS DO MÊS CAMPANHA Sem campanha 0/0 Meta sem número aparece como \"sem dado\", nunca como zero.",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × Equipe × Metas e campanhas × ××",
+   "ajuda": 0
+  },
+  "mapa": {
+   "lateral": "Equipe Metas Mapa MAPA DA EQUIPE ● pessoa ○ área ◐ tarefa (enche com a %) ◆ demanda (pulsa rodando) ■ arquivo (pontilhado = dono offline) CARTA Clique num ponto do mapa para ver a carta dele aqui.",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × Equipe × Metas e campanhas × Mapa da equipe ",
+   "ajuda": 0
+  },
+  "loja": {
+   "lateral": "PUBLICAR NA LOJA Skill MCP Plugin Agente CLAUDE.md Publicar Tudo o que estiver em Loja/ na sua pasta compartilhada aparece aqui para a equipe. Chaves nunca vão para a pasta: ficam no cofre de cada computador. O QUE EU PUBLIQUEI nada ainda",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × Equipe × Metas e campanhas × Mapa da equipe ",
+   "ajuda": 0
+  },
+  "oficina": {
+   "lateral": "OFICINA DO APP v0 Aguardando publicação 0 Quem pode mudar o app 1 Versões 0 Ainda na versão antiga 0 Você pode mudar o app: no terminal, diga \"muda no app: …\". A mudança fica aqui até o Theus publicar.",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × Equipe × Metas e campanhas × Mapa da equipe ",
+   "ajuda": 0
+  },
+  "dia": {
+   "lateral": "MEU DIA Caixa de entrada 0 Esperando meu OK 0 Tarefas livres 0 Primeiros passos com IA Minha contribuição Pergunta da semana 0 Ideias 0 Check-in do dia · A caixa de entrada junta o que chegou para você. A TV nunca mostra as suas horas; elas ficam aqui para você.",
+   "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × Equipe × Metas e campanhas × Mapa da equipe ",
+   "ajuda": 0
+  }
+ },
+ "abriuReadme": true,
+ "medidaArquivo": {
+  "linhas": [
+   {
+    "tag": "DIV",
+    "cls": "arv-linha arv-arq",
+    "h": 24,
+    "fs": "13px",
+    "fw": "400",
+    "t": "CSVdados.csv▣"
+   },
+   {
+    "tag": "SPAN",
+    "cls": "arv-nome",
+    "h": 16,
+    "fs": "13px",
+    "fw": "400",
+    "t": "dados.csv"
+   },
+   {
+    "tag": "DIV",
+    "cls": "arv-linha arv-arq aberto",
+    "h": 24,
+    "fs": "13px",
+    "fw": "400",
+    "t": "MDREADME.md▣"
+   },
+   {
+    "tag": "SPAN",
+    "cls": "arv-nome",
+    "h": 16,
+    "fs": "13px",
+    "fw": "400",
+    "t": "README.md"
+   }
+  ],
+  "verbos": [
+   "Editar",
+   "▣ Projetar na TV",
+   "Pedir ajuda",
+   "Chamar para cá",
+   "Versões (0)"
+  ],
+  "meioBg": "rgba(0, 0, 0, 0)",
+  "lateralTexto": "CRIAR ＋ Nota ＋ Mapa ＋ Quadro ＋ Pasta ＋ ↥ ⬚ Tela ⚙ Máquina ▤ Pesquisa Sozinho · minha pasta e o HD da equipe ▾ THEUS (você) ▸ site CSV dados.csv MD README.md Sua pasta é ~/BabelCoop/theus: o que está nela a equipe vê; o resto do computador, não. Arraste um arquivo de texto para cá ou crie pelo ＋."
+ },
+ "sessoes": [
+  {
+   "id": "assistente",
+   "nome": "Assistente",
+   "estado": "shell",
+   "agenteEstado": null,
+   "frase": "em repouso"
+  }
+ ],
+ "cabPensando": "Assistente × + Presença Terminal Ctrl J Entrar em… Neon Som ⟩ → claude Assistente · pensando há 1 s pensando · 19:50 nasceu na sua pasta · 19:50 ● ao vivo ASSISTENTE Seu agente: pesquisa, escreve, organiza e mexe no babel-coop por você. Peça em português: eu trabalho no seu terminal de verdade, em babel-e2e-conceito-C40GiK/theus. Cada passo aparece aqui com prova. Explicar este arquivo Resumir em 5 pontos Criar página desta nota ❯ → README.md × enviar",
+ "depoisArquivo": {
+  "abas": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × Equipe × Metas e campanhas × Mapa da equipe × Loja da equipe × Oficina do app × MD README.md × landing.html × ××",
+  "luzAcesa": [
+   "SPAN.bc-presenca bc-presenca--mini",
+   "DIV.term-aba tr-aba",
+   "SPAN.bc-presenca bc-presenca--mini",
+   "HEADER.tr-cab",
+   "SPAN.bc-presenca bc-presenca--grande com-text",
+   "DIV.tr-bloco",
+   "DIV.tr-bloco",
+   "LI.",
+   "DIV.tr-bloco",
+   "I.tr-hair",
+   "BUTTON.st-item st-placar"
+  ]
+ },
+ "espera": {
+  "painel": "Assistente × + Presença Terminal Ctrl J Entrar em… Neon Som ⟩ → claude Assistente · espera o seu OK ● ao vivo ASSISTENTE Seu agente: pesquisa, escreve, organiza e mexe no babel-coop por você. Peça em português: eu trabalho no seu terminal de verdade, em babel-e2e-conceito-C40GiK/theus. Cada passo aparece aqui com prova. CONSULTA 19:50 consultei README.md · dados.csv PLANO 19:50 1. Ler o README 2. Escrever a landing concluído · 2 de 2 · 19:50 AÇÃO 19:50 editou landing.html Write site/landing.html ver o comando ESPERA 19:50 quer usar Bash rm -rf build/ Permitir Negar Procurar no acervo Resumir o",
+  "status": "online 0 na caixa ◌ memória da sala 10 pontos · hoje TV não aberta ● terminal ao vivo acervo: 3 Salvo na equipe"
+ },
+ "terminou": {
+  "painel": "Assistente × + Presença Terminal Ctrl J Entrar em… Neon Som ⟩ → site/landing.html Assistente · terminou · 19:50 ● ao vivo ASSISTENTE Seu agente: pesquisa, escreve, organiza e mexe no babel-coop por você. Peça em português: eu trabalho no seu terminal de verdade, em babel-e2e-conceito-C40GiK/theus. Cada passo aparece aqui com prova. CONSULTA 19:50 consultei README.md · dados.csv PLANO 19:50 1. Ler o README 2. Escrever a landing concluído · 2 de 2 · 19:50 AÇÃO 19:50 editou landing.html Write site/landing.html ver o comando ESPERA 19:50 quer usar Bash rm -rf build/ respondido no terminal · 19:50 RESULTADO 19:50 pronto A landing ficou pronta. site/landing.html Procurar no acervo Resumir o dia Me",
+  "status": "online 0 na caixa ◌ memória da sala 10 pontos · hoje TV não aberta ● terminal ao vivo acervo: 3 Salvo na equipe",
+  "organismo": [
+   {
+    "tipo": "som",
+    "nome": "acordar",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 346
+   },
+   {
+    "tipo": "acordar",
+    "ok": true,
+    "ms": 242,
+    "t": 425
+   },
+   {
+    "tipo": "pulso",
+    "ok": true,
+    "ms": 648,
+    "t": 20350
+   },
+   {
+    "tipo": "som",
+    "nome": "tique",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 20351
+   },
+   {
+    "tipo": "faiscas",
+    "ok": true,
+    "ms": 1048,
+    "t": 21399
+   },
+   {
+    "tipo": "pulso",
+    "ok": true,
+    "ms": 638,
+    "t": 22646
+   },
+   {
+    "tipo": "som",
+    "nome": "tique",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 22648
+   },
+   {
+    "tipo": "faiscas",
+    "ok": false,
+    "motivo": "teto",
+    "t": 22649
+   },
+   {
+    "tipo": "som",
+    "nome": "duas",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 22649
+   },
+   {
+    "tipo": "som",
+    "nome": "espera",
+    "ok": true,
+    "motivo": "tocou",
+    "t": 23468
+   },
+   {
+    "tipo": "faiscas",
+    "ok": true,
+    "ms": 935,
+    "t": 23583
+   },
+   {
+    "tipo": "respirar",
+    "ok": true,
+    "ms": 1218,
+    "t": 23867
+   },
+   {
+    "tipo": "pulso",
+    "ok": false,
+    "motivo": "sem-alvo",
+    "t": 24239
+   }
+  ]
+ },
+ "medidaDepois": {
+  "atividades": {
+   "w": 56,
+   "h": 844,
+   "x": 0,
+   "y": 32,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "1px solid rgba(215, 228, 251, 0.09)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "lateral": {
+   "w": 264,
+   "h": 844,
+   "x": 56,
+   "y": 32,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "0px none rgb(215, 228, 251)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "abas": {
+   "w": 670,
+   "h": 36,
+   "x": 325,
+   "y": 32,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "0px none rgb(215, 228, 251)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "painel": {
+   "w": 440,
+   "h": 844,
+   "x": 1000,
+   "y": 32,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "0px none rgb(215, 228, 251)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "status": {
+   "w": 1440,
+   "h": 24,
+   "x": 0,
+   "y": 876,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(195, 207, 229)",
+   "br": "0px none rgb(195, 207, 229)",
+   "ff": "\"JetBrains Mono\"",
+   "fs": "11px",
+   "fw": "500"
+  },
+  "topo": {
+   "w": 1440,
+   "h": 32,
+   "x": 0,
+   "y": 0,
+   "bg": "rgb(6, 11, 22)",
+   "bl": "0px none rgb(215, 228, 251)",
+   "br": "0px none rgb(215, 228, 251)",
+   "ff": "\"IBM Plex Sans\"",
+   "fs": "14px",
+   "fw": "400"
+  },
+  "topoTexto": "babel-coop Buscar arquivo, comando ou acervo Ctrl K Tela da TV",
+  "statusTexto": "online 0 na caixa ◌ memória da sala 10 pontos · hoje TV não aberta ● terminal ao vivo acervo: 3 Salvo na equipe",
+  "statusFilhos": 4,
+  "abasTexto": "Meu dia × Criar × Demandas × Tarefas com fluxo × babel-coop · todos × WhatsApp × Reunião × Terminais ao vivo × Projetos × Acervo × Inteligência da equipe × Equipe × Metas e campanhas × Mapa da equipe × Loja da equipe × Oficina do app × MD README.md × landing.html × ××",
+  "painelTopo": "Assistente × + Presença Terminal Ctrl J Entrar em… Neon Som ⟩ → site/landing.html Assistente · terminou · 19:50 ● ao vivo ASSISTENTE Seu agente: pesquisa, escreve, organiza e mexe no babel-coop por você. Peça em português: eu trabalho no seu terminal de verdade, em babel-e2e-conceito-C40GiK/theus. Cada passo aparece aqui com prova. CONSULTA 19:50 consultei README.md · dados.csv PLANO 19:50 1. Ler ",
+  "dataT": 15,
+  "selo": 2,
+  "anel": 3,
+  "seguir": 0,
+  "rotulosBarra": [
+   "Meu dia",
+   "Criar",
+   "Trabalho",
+   "Chat",
+   "WhatsApp",
+   "Reunião",
+   "Terminais",
+   "Projetos",
+   "Acervo",
+   "Equipe",
+   "Loja",
+   "Oficina",
+   "TH"
+  ],
+  "fonts": [
+   "Cormorant Garamond 500",
+   "Cormorant Garamond 500",
+   "IBM Plex Sans 400",
+   "IBM Plex Sans 500",
+   "IBM Plex Sans 600",
+   "JetBrains Mono 400",
+   "JetBrains Mono 500",
+   "JetBrains Mono 700"
+  ],
+  "sombraColorida": 9,
+  "vidro": 2,
+  "halo": 3,
+  "anim": [
+   "e-logo:casca-b-vivo:3.4s:infinite",
+   "tr-bloco tr-saudacao:tr-nasce:0.18s:1",
+   "tr-bloco:tr-nasce:0.18s:1",
+   "tr-bloco:tr-nasce:0.18s:1",
+   "tr-bloco:tr-nasce:0.18s:1",
+   "tr-bloco:tr-nasce:0.18s:1",
+   "tr-bloco:tr-nasce:0.18s:1"
+  ],
+  "textoProibido": [
+   "Neon"
+  ]
+ },
+ "reduzido": [],
+ "celular": {
+  "abas": "Meu dia Demandas Chat Criar Mais",
+  "h": 58
+ },
+ "tv": {
+  "texto": "babel-coop SEM CAMPANHA · FALTAM NaN:NaN:NaN 19:50 qua, 23 set NO RITMO 00 concluídas hoje 00 rodando 00 livres para pegar 0 s medidas hoje MAPA DA SALA · 1 PRESENÇA SINAL · EM REPOUSO CRIAR 1 TH Theus → Criar Theus a sala CORPO DO PROJETO CLÍNICAS EM CAMPINAS 12 peças com corpo · v6 · 17:50 · carla AGENTES TRABALHANDO nenhum agente trabalhando agora METAS DO MÊS SEM CAMPANHA 00/0 NaN% · meta batida PERGUNTA DA SEMANA Que trabalho acontece hoje fora de qualquer sistema, e ninguém vê? responda na sua Estação, em Meu dia protótipo com dados de exemplo · atualizado às 19:50:42 demonstração: sem E",
+  "botoes": 3
+ },
+ "ipad": {
+  "texto": ""
+ }
+}

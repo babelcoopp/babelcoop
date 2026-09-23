@@ -1,0 +1,219 @@
+{
+  "fundou": "theus",
+  "casca": {
+    "temBCicones": true,
+    "nomesBCicones": 83,
+    "svgsVisiveis": 33,
+    "comDataIcone": 25,
+    "tracoComputado": {
+      "1.5px": 26,
+      "1.3px": 2,
+      "1px": 5
+    },
+    "barra": [
+      {
+        "id": "explorador",
+        "icone": "criar",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "dia",
+        "icone": "dia",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "demandas",
+        "icone": "demandas",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "chat",
+        "icone": "chat",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "reuniao",
+        "icone": "reuniao",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "acervo",
+        "icone": "acervo",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "inteligencia",
+        "icone": "inteligencia",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "terminais",
+        "icone": "terminais",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "tarefas",
+        "icone": "tarefas",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "metas",
+        "icone": "metas",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "equipe",
+        "icone": "equipe",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "mapa",
+        "icone": "mapa",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "projetos",
+        "icone": "projetos",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "whatsapp",
+        "icone": "whatsapp",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "loja",
+        "icone": "loja",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "oficina",
+        "icone": "oficina",
+        "traco": "1.5px",
+        "tam": 20
+      },
+      {
+        "id": "ir-tv",
+        "icone": "tv",
+        "traco": "1.5px",
+        "tam": 20
+      }
+    ]
+  },
+  "cliques": [
+    {
+      "id": "explorador",
+      "ativo": "explorador",
+      "icone": "criar"
+    },
+    {
+      "id": "dia",
+      "ativo": "dia",
+      "icone": "dia"
+    },
+    {
+      "id": "demandas",
+      "ativo": "demandas",
+      "icone": "demandas"
+    },
+    {
+      "id": "chat",
+      "ativo": "chat",
+      "icone": "chat"
+    },
+    {
+      "id": "reuniao",
+      "ativo": "reuniao",
+      "icone": "reuniao"
+    },
+    {
+      "id": "acervo",
+      "ativo": "acervo",
+      "icone": "acervo"
+    },
+    {
+      "id": "inteligencia",
+      "ativo": "inteligencia",
+      "icone": "inteligencia"
+    },
+    {
+      "id": "terminais",
+      "ativo": "terminais",
+      "icone": "terminais"
+    },
+    {
+      "id": "tarefas",
+      "ativo": "tarefas",
+      "icone": "tarefas"
+    },
+    {
+      "id": "metas",
+      "ativo": "metas",
+      "icone": "metas"
+    },
+    {
+      "id": "equipe",
+      "ativo": "equipe",
+      "icone": "equipe"
+    },
+    {
+      "id": "mapa",
+      "ativo": "mapa",
+      "icone": "mapa"
+    },
+    {
+      "id": "projetos",
+      "ativo": "projetos",
+      "icone": "projetos"
+    },
+    {
+      "id": "whatsapp",
+      "ativo": "whatsapp",
+      "icone": "whatsapp"
+    },
+    {
+      "id": "loja",
+      "ativo": "loja",
+      "icone": "loja"
+    },
+    {
+      "id": "oficina",
+      "ativo": "oficina",
+      "icone": "oficina"
+    }
+  ],
+  "mais": 19,
+  "celular": [
+    "dia:dia",
+    "demandas:demandas",
+    "*chat:chat",
+    "explorador:criar",
+    "mais:mais"
+  ],
+  "api": {
+    "hidratou": 2,
+    "cofre": "cofre@16",
+    "robo": true,
+    "inexistenteVazio": true,
+    "apelidoExplorador": "criar",
+    "rotulo": true,
+    "chaves": 83,
+    "sinoTopo": "sino"
+  },
+  "erros": []
+}

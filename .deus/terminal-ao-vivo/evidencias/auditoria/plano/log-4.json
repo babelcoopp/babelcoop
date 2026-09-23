@@ -1,0 +1,11 @@
+{
+ "log": {
+  "enviar": "ok",
+  "placar": "0\npontos · hoje",
+  "maqTxt": "Máquina · Clínicas (exemplo)\n\nlocal ●\nbranch\nprodução\n v1 · 13 peças · 2 alertas\n\nTestar\nPublicar\nO que muda\n▶ Ver o agente montando\nProjetar na TV\nMáquina inteira\n›\ntodas as peças\nInteira\nDomínio\nPeça\npor pessoa\nARMÁRIO DA FRENTE · as gavetas daqui têm porta na rua\nCarteiro\nTH\nREMETENTE PADRÃO\n⚠ padrão: 2 e-mails por hora, só para a equipe\nPortaria\nTH\ndono\natendente\nentra com e-mail e senha\nentrou: Beto\nAgenda\na tela Agenda usa as portas \"novo\" e \"listar\"\nenviou\nnovo agendamento\nRECEBE PACIENTE + QUANDO\nrecebe paciente e horário e grava na gaveta Agendamentos\n1 pedido\nlistar agendamentos\nDEVO",
+  "montando": "ok",
+  "telaTxt": "TH\nsalvo por você · agora\nSalvar\nCancelar\n▣ Projetar na TV\nPedir ajuda\nChamar para cá\nVersões (0)",
+  "t3d": "sem"
+ },
+ "erros": []
+}

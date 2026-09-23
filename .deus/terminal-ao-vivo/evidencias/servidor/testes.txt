@@ -1,0 +1,67 @@
+# Babel Coop · testes do servidor (agente servidor)
+# data: 2026-09-23 17:59:08 -0300 · máquina: Darwin arm64 · node v24.14.1
+# comando: cd app && node --test testes/servidor/
+
+▶ servidor dentro do runtime do Electron
+  ✔ funda, abre um terminal de verdade e lê a saída e a atividade (1107.709417ms)
+  ℹ motor: Electron 44.4.5 · Node 24.21.0
+  ✔ a página sai com a injeção na ordem, os arquivos de /coop/ e /vendor/, e nada fora das pastas (8.760834ms)
+✔ servidor dentro do runtime do Electron (1741.763792ms)
+▶ Estações de verdade: carteira, transmissão, controle, pausa e nada em disco
+  ✔ a) Theus funda (gestão), convida Rita e Bruno; as Estações se veem pelo encontro do token e pela descoberta, com id e papel da carteira (5018.1095ms)
+  ℹ encontro no token: 192.168.3.19:4810
+  ℹ Rita↔Bruno não estão no token um do outro: a ligação veio da descoberta UDP
+  ✔ b) A6 · Bruno assiste um terminal da Rita: recebe a saída e o tamanho quando a Rita redimensiona (439.875083ms)
+  ✔ atividade (presença) · shell → rodando → terminou, e espera com um processo "claude" parado; quem assiste de fora vê o mesmo (4136.971708ms)
+  ✔ c) A7 · Theus (gestão) pede o terminal da Rita, entra direto, digita e o comando roda na sessão da Rita (7.436ms)
+  ✔ d) A8 · Rita pede o terminal do Theus: pedido, teclas recusadas até o aceite; com projeto em comum entra direto; Bruno (fora) só pede (177.733583ms)
+  ✔ e) A9 · o dono encerra: o controlador recebe controle-fim e as teclas seguintes são recusadas; quem controla também pode sair (302.721875ms)
+  ✔ f) A10 · pausa: o marcador não chega a quem assiste (nem ao entrar depois, nem depois de retomar) e teclas de par são recusadas (912.455416ms)
+  ℹ mensagens conferidas sem o marcador: Bruno 102, Theus 38
+  ✔ h) segurança · Origin de outro site, navegador sem Origin, celular pela rede, par forjado, resposta errada e papel declarado (1021.336042ms)
+  ✔ i) A12 · latência: 200 teclas do Theus no terminal da Rita, tecla → eco no navegador do Theus, p95 < 100 ms (553.392083ms)
+  ℹ latência tecla→eco (Theus navegador → servidor Theus → servidor Rita → pty → volta), 200 teclas: p50 1.52 ms · p95 1.72 ms · máx 1.95 ms
+  ✔ g) A11 · nada em disco: o marcador não existe em nenhuma raiz temporária nem em app/, e nenhum shell ficou vivo (2255.169583ms)
+  ℹ busca do marcador: 8319 arquivos, 477.1 MB em 5 pastas
+  ℹ histórico do zsh da Rita (na raiz temporária) tem 7 linhas; o printf em partes está lá: true
+✔ Estações de verdade: carteira, transmissão, controle, pausa e nada em disco (14936.408666ms)
+▶ rede: uma ligação por par e reconexão
+  ✔ os dois lados ligam (zeca pelo encontro, Theus pela descoberta) e sobra uma ligação só, estável (11648.710875ms)
+  ℹ ligações abertas ao todo (série) e duplicadas fechadas: theus 3/1 · zeca 3/1 · ana 2/0
+  ℹ ligações verificadas por par: theus {"zeca":1,"ana":1} · zeca {"theus":1,"ana":1} · ana {"theus":1,"zeca":1}
+  ✔ Zeca reinicia (mesma raiz, mesma carteira) e volta a se ligar; enquanto isso aparece desligado (308.294042ms)
+✔ rede: uma ligação por par e reconexão (12277.861708ms)
+▶ carteira e token v2
+  ✔ fundar cria a carteira da gestão assinada pela chave da equipe (1.063375ms)
+  ✔ convite → ler: membro sem a chave da equipe; gestão com ela (1.046375ms)
+  ✔ só a gestão convida; nome vazio ou igual ao meu não passa (0.583667ms)
+  ✔ ler recusa token v1, lixo, carteira alterada, chave trocada e membro que vira gestão sem a chave da equipe (1.150792ms)
+✔ carteira e token v2 (3.930916ms)
+▶ aperto de mão (desafio/ola) e canal selado
+  ✔ ola verdadeiro passa e a carteira devolvida é a do outro (0.599417ms)
+  ✔ cada conferência derruba o ola quando falha (1.677875ms)
+  ✔ quem troca a chave efêmera no meio do caminho quebra a assinatura (0.276958ms)
+  ✔ canal: os dois lados derivam as mesmas chaves; alterar, repetir ou trocar a ordem falha (0.676208ms)
+✔ aperto de mão (desafio/ola) e canal selado (3.274125ms)
+▶ controle: matriz de permissões no servidor do dono
+  ✔ gestão entra direto; membro fora de projeto pede; o mesmo pedido volta o mesmo (0.166083ms)
+  ✔ mesmo projeto entra direto; projeto sem o dono não conta (0.090333ms)
+  ✔ aceitar, recusar, encerrar, sair (só o próprio), par caiu, terminal fechou e sessão null = todas (0.163875ms)
+  ✔ espelho só aceita controle sobre mim e some quando o dono cai (0.080333ms)
+✔ controle: matriz de permissões no servidor do dono (0.534208ms)
+▶ presença: estados a partir do processo da frente
+  ✔ shell, terminou, rodando, espera (nome ou comm com "claude", 1,5 s sem saída) e pausado (0.088834ms)
+✔ presença: estados a partir do processo da frente (0.104541ms)
+▶ página
+  ✔ INJETAR: ordem do PROTOCOLO (organismo antes de terminal-real e parede-real, ponte antes do organismo) (0.056208ms)
+✔ página (0.068625ms)
+ℹ tests 28
+ℹ suites 8
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 32822.316542
+
+# código de saída: 0

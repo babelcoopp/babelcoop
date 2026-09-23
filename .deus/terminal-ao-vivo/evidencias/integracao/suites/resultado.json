@@ -1,0 +1,218 @@
+{
+  "quando": "2026-09-23T22:59:23.358Z",
+  "erros": [],
+  "medidas": {
+    "vazio": {
+      "eu": "theus",
+      "pessoas": [
+        "theus"
+      ],
+      "demandas": 0,
+      "tarefas": 0,
+      "projetos": 0,
+      "arquivosExemplo": [],
+      "arquivosReais": [
+        "theus/README.md"
+      ],
+      "conversas": [
+        "geral"
+      ],
+      "mensagens": 0,
+      "metas": 0,
+      "avisos": 0,
+      "mural": 0,
+      "whatsapp": 0,
+      "loja": 0,
+      "acervoExemplo": 0,
+      "reuniao": false,
+      "rodando": 0,
+      "presets": 0,
+      "campanhas": 0,
+      "novidades": 1,
+      "agentes": [
+        "theus/Assistente"
+      ],
+      "agentesExemplo": 0,
+      "marcaProtótipo": false,
+      "verComoVisivel": false
+    },
+    "print_meu_dia": "limpo-1-meu-dia-vazio.png",
+    "print_demandas": "limpo-1-demandas-vazio.png",
+    "print_equipe": "limpo-1-equipe-so-theus.png",
+    "print_arvore": "limpo-2-arvore-readme.png",
+    "print_salvo": "limpo-3-arquivo-salvo.png",
+    "disco_para_arvore_ms": 104,
+    "arquivos_reais": [
+      "theus/ACERVO.md",
+      "theus/APRENDIZADOS.md",
+      "theus/CLAUDE.md",
+      "theus/Projetos/README.md",
+      "theus/README.md",
+      "theus/do-disco.md",
+      "theus/ideia.md"
+    ],
+    "print_pasta": "limpo-3-pasta-e-disco.png",
+    "rita_na_arvore_ms": 7,
+    "rita": {
+      "eu": "rita",
+      "pessoas": [
+        "rita",
+        "theus"
+      ],
+      "demandas": 0,
+      "tarefas": 0,
+      "projetos": 0,
+      "arquivosExemplo": [],
+      "arquivosReais": [
+        "rita/ACERVO.md",
+        "rita/APRENDIZADOS.md",
+        "rita/CLAUDE.md",
+        "rita/README.md",
+        "theus/ACERVO.md",
+        "theus/APRENDIZADOS.md",
+        "theus/CLAUDE.md",
+        "theus/Projetos/README.md",
+        "theus/README.md",
+        "theus/do-disco.md",
+        "theus/ideia.md"
+      ],
+      "conversas": [
+        "geral"
+      ],
+      "mensagens": 0,
+      "metas": 0,
+      "avisos": 0,
+      "mural": 0,
+      "whatsapp": 0,
+      "loja": 0,
+      "acervoExemplo": 0,
+      "reuniao": false,
+      "rodando": 0,
+      "presets": 0,
+      "campanhas": 0,
+      "novidades": 2,
+      "agentes": [
+        "rita/Assistente",
+        "theus/Assistente"
+      ],
+      "agentesExemplo": 0,
+      "marcaProtótipo": false,
+      "verComoVisivel": false
+    },
+    "print_arvore_rita": "limpo-4-arvore-com-a-rita.png",
+    "demanda_theus_para_rita_ms": 16,
+    "demanda_id": "d-vhpsskaq-4-1",
+    "print_rita": "limpo-5-demanda-na-rita.png",
+    "barra_theus": {
+      "ids": [
+        "dia",
+        "explorador",
+        "demandas",
+        "chat",
+        "whatsapp",
+        "reuniao",
+        "terminais",
+        "projetos",
+        "acervo",
+        "equipe",
+        "loja",
+        "oficina"
+      ],
+      "rotulos": [
+        "Meu dia",
+        "Criar",
+        "Trabalho",
+        "Chat",
+        "WhatsApp",
+        "Reunião",
+        "Terminais",
+        "Projetos",
+        "Acervo",
+        "Equipe",
+        "Loja",
+        "Oficina"
+      ],
+      "px": [
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px"
+      ],
+      "foto": 22,
+      "outros": 0
+    },
+    "barra_rita": {
+      "ids": [
+        "dia",
+        "explorador",
+        "demandas",
+        "chat",
+        "whatsapp",
+        "reuniao",
+        "terminais",
+        "projetos",
+        "acervo",
+        "equipe",
+        "loja",
+        "oficina"
+      ],
+      "rotulos": [
+        "Meu dia",
+        "Criar",
+        "Trabalho",
+        "Chat",
+        "WhatsApp",
+        "Reunião",
+        "Terminais",
+        "Projetos",
+        "Acervo",
+        "Equipe",
+        "Loja",
+        "Oficina"
+      ],
+      "px": [
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px",
+        "11px"
+      ],
+      "foto": 22,
+      "outros": 0
+    },
+    "grupos": {
+      "tarefas": {
+        "barra": "demandas",
+        "alternador": "Demandas | Tarefas*"
+      },
+      "inteligencia": {
+        "barra": "acervo",
+        "alternador": "Acervo | Inteligência*"
+      },
+      "metas": {
+        "barra": "equipe",
+        "alternador": "Equipe | Metas* | Mapa"
+      },
+      "mapa": {
+        "barra": "equipe",
+        "alternador": "Equipe | Metas | Mapa*"
+      }
+    },
+    "print_barra": "limpo-6-barra-do-plano.png"
+  }
+}

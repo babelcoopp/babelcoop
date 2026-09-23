@@ -1,0 +1,30 @@
+{
+  "abrir_ms": 84,
+  "clicar_ms": 511,
+  "digitar_ms": 533,
+  "digitar_modo": [
+    "teclado",
+    "teclado"
+  ],
+  "ler_ms": 2,
+  "ler_caracteres": 1017,
+  "raiox_ms": 14,
+  "print": {
+    "ms": 176,
+    "largura": 2200,
+    "altura": 5752,
+    "alturaPagina": 2876,
+    "bytes": 639903
+  },
+  "clonar": {
+    "ms": 26,
+    "arquivos": 5,
+    "bytes": 459082,
+    "porTipo": {
+      "imagem": 1,
+      "css-url": 2,
+      "css": 1
+    },
+    "faltaram": 0
+  }
+}

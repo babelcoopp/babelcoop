@@ -1,0 +1,19 @@
+▶ meio vivo e placar na Estação (Electron)
+  ✔ agente-arquivo abre no meio a aba com o arquivo real, e o texto nasce linha a linha (2112.660708ms)
+  ✔ edição subsequente acende só as linhas mudadas (3220.643959ms)
+  ✔ agente-plano de 0 a 3 itens feitos: o placar sobe contando com origem e o rito acontece uma vez (3717.282041ms)
+  ✔ OK dado a um pedido de permissão vale +2 só com pedido real; a meta escolhida fecha em ouro uma vez (940.821291ms)
+  ✔ o placar fica guardado por pessoa neste computador (recarregar a Estação não perde nem duplica) (1277.64025ms)
+  ✔ bordas: plano sem arquivo vira cartão; arquivo fora da pasta não abre; aba fechada volta acendendo só o que mudou (7520.696959ms)
+  ✔ com o painel da presença de verdade: um rito só por plano (o painel faz o dele; o documento vem depois, sem segundo "duas") (4093.393959ms)
+  ✔ prefers-reduced-motion: o arquivo aparece inteiro, sem movimento; o rito vira cor e texto (963.693667ms)
+  ✔ nenhum erro de página vindo do meio vivo ou do placar (0.328875ms)
+✔ meio vivo e placar na Estação (Electron) (24718.906542ms)
+ℹ tests 9
+ℹ suites 1
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24896.383333

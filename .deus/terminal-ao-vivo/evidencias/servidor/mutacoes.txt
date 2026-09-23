@@ -1,0 +1,22 @@
+# mutações: cada linha é uma cópia do servidor com um defeito de propósito; os testes têm de falhar
+# data: 2026-09-23 17:59:52 -0300 · script: mutacoes.js (nesta pasta)
+
+## pausa não bloqueia quem assiste → pass 7 · fail 3
+   ✖ f) A10 · pausa: o marcador não chega a quem assiste (nem ao entrar depois, nem depois de
+   ✖ h) segurança · Origin de outro site, navegador sem Origin, celular pela rede, par forjad
+   ✖ i) A12 · latência: 200 teclas do Theus no terminal da Rita, tecla → eco no navegador do 
+
+## dono não confere permissão de teclas → pass 7 · fail 3
+   ✖ d) A8 · Rita pede o terminal do Theus: pedido, teclas recusadas até o aceite; com projet
+   ✖ e) A9 · o dono encerra: o controlador recebe controle-fim e as teclas seguintes são recu
+   ✖ h) segurança · Origin de outro site, navegador sem Origin, celular pela rede, par forjad
+
+## carteira não é conferida → pass 9 · fail 1
+   ✖ h) segurança · Origin de outro site, navegador sem Origin, celular pela rede, par forjad
+
+## navegador sem Origin aceito → pass 9 · fail 1
+   ✖ h) segurança · Origin de outro site, navegador sem Origin, celular pela rede, par forjad
+
+## pausa não recusa teclas de par → pass 8 · fail 2
+   ✖ f) A10 · pausa: o marcador não chega a quem assiste (nem ao entrar depois, nem depois de
+   ✖ i) A12 · latência: 200 teclas do Theus no terminal da Rita, tecla → eco no navegador do 

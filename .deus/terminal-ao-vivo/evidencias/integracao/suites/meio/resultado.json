@@ -1,0 +1,266 @@
+{
+  "quando": "2026-09-23T22:59:23.708Z",
+  "porta": 4980,
+  "injecao": {
+    "nasc": true,
+    "placar": true
+  },
+  "fotoDoMeio": {
+    "vivo": "sim",
+    "nascidas": 12,
+    "cursor": true,
+    "visivel": true,
+    "vidro": "blur(10px) saturate(1.15)",
+    "borda": "rgba(63, 227, 255, 0.22)",
+    "scanOpacidadeMax": 0.043,
+    "status": "Aurora escreve · linha 12 de 22",
+    "conteudoEscondido": true,
+    "aba": "nascendo:Propostas/proposta-clinica-vida.md",
+    "tipo": "nascendo"
+  },
+  "nascimento": {
+    "linhas": 22,
+    "span": 1891,
+    "gaps": [
+      91,
+      89,
+      92,
+      91,
+      87,
+      92,
+      89,
+      90,
+      92,
+      88,
+      92,
+      89,
+      90,
+      92,
+      88,
+      90,
+      90,
+      91,
+      90,
+      90,
+      90
+    ],
+    "tarefasLongas": [],
+    "tempoInterno": {
+      "linhas": 22,
+      "tempos": [
+        0,
+        92,
+        181,
+        272,
+        362,
+        450,
+        542,
+        631,
+        721,
+        812,
+        901,
+        993,
+        1081,
+        1171,
+        1262,
+        1351,
+        1440,
+        1531,
+        1621,
+        1712,
+        1802,
+        1891
+      ],
+      "fim": 1892
+    },
+    "msAteAbrir": null,
+    "registro": [
+      {
+        "tipo": "nascer",
+        "rel": "Propostas/proposta-clinica-vida.md",
+        "linhas": 22,
+        "animar": true,
+        "t": 505
+      },
+      {
+        "tipo": "nasceu",
+        "rel": "Propostas/proposta-clinica-vida.md",
+        "linhas": 22,
+        "ms": 1892,
+        "motivo": "completo",
+        "t": 2397
+      }
+    ],
+    "gapMediano": 90,
+    "msDoPedidoAoFim": 1924
+  },
+  "edicao": {
+    "acesas": [
+      5,
+      12,
+      17
+    ],
+    "mudou": [
+      5,
+      12,
+      17
+    ],
+    "total": 23,
+    "texto": "# Proposta · Clínica Vida\n\nAgenda com confirmação automática pelo WhatsApp, lembretes 24 h antes e prontuário simples.\n\n## 1 · O problema (com números)\nA Clínica Vida perde cerca de 18 % dos horários por esquecimento.\n> \"O que a gente mais perde é paciente que esquece.\" (reunião de 22/09)\n\n## 2 · A solução\n- agenda online ligada ao WhatsApp\n- confirmação e lembrete automáticos\n- painel da recepção com os horários do dia e as faltas\n\n## 3 · Fases e prazo\n1. Fase 1 (2 semanas): agenda e lembretes\n2. Fase 2 (1 semana): prontuário e relatórios\n3. Fase 3 (opcional): integração com o convênio\n\n## 4 · Preço\nFase 1: **R$ 4.800** · Fase 2: **R$ 2.400** · manutenção `R$ 390/mês`.\n\n## 5 · Próximo passo\nAprovação da Dra. Ana até sexta; início na segunda seguinte.",
+    "status": "editado por Aurora · 19:59 · 3 linhas mudaram",
+    "luzDepoisDe3s": 0.69
+  },
+  "plano": {
+    "eventos": [
+      {
+        "pts": 1,
+        "origem": "item do plano feito · Escrever o problema e o contexto",
+        "conta": "1 × esforço 1 × surpresa 1",
+        "tipo": "item"
+      },
+      {
+        "pts": 1,
+        "origem": "item do plano feito · Montar fases, prazo e preço",
+        "conta": "1 × esforço 1 × surpresa 1",
+        "tipo": "item"
+      },
+      {
+        "pts": 1,
+        "origem": "item do plano feito · Revisar e fechar a proposta",
+        "conta": "1 × esforço 1 × surpresa 1",
+        "tipo": "item"
+      },
+      {
+        "pts": 8,
+        "origem": "plano concluído · 3 itens",
+        "conta": "8 × esforço 1 × surpresa 1",
+        "tipo": "plano"
+      }
+    ],
+    "amostrasDoNumero": [
+      1,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "subtitulo": "3 itens · 11 pontos · Aurora · agente de Theus · 19:59",
+    "registroRito": [
+      {
+        "tipo": "rito",
+        "rel": "Propostas/proposta-clinica-vida.md",
+        "naTela": true,
+        "sem": false,
+        "som": true,
+        "depoisDaPresenca": false,
+        "t": 6524
+      }
+    ],
+    "repeticao": {
+      "ritos": 1,
+      "hoje": 11,
+      "titulos": 1,
+      "recusados": 2,
+      "vivo": "nao"
+    }
+  },
+  "ok": {
+    "hoje": 13,
+    "ultimo": {
+      "tipo": "ok",
+      "chave": "ok:theus/ag-aurora:p-1:1790204373680",
+      "sessao": "theus/ag-aurora",
+      "agente": "Aurora",
+      "pts": 2,
+      "origem": "você decidiu um pedido de Aurora · permitiu",
+      "conta": "2 · a segurança funcionou (a pessoa viu antes de o agente agir)",
+      "prova": "Bash: npm publish --dry-run",
+      "t": 1790204373680
+    },
+    "recusados": [
+      "repetido",
+      "repetido",
+      "sem-pedido",
+      "sem-pedido",
+      "sem-pedido"
+    ],
+    "lista": [
+      "+2você decidiu um pedido de Aurora · permitiu2 · a segurança funcionou (a pessoa viu antes de o agente agir) · Aurora · 19:59prova: Bash: npm publish --dry-run",
+      "+8plano concluído · 3 itens8 × esforço 1 × surpresa 1 · Aurora · 19:59prova: Escrever o problema e o contexto · Montar fases, prazo e preço · Revisar e fechar a proposta",
+      "+1item do plano feito · Revisar e fechar a proposta1 × esforço 1 × surpresa 1 · Aurora · 19:59prova: item 3 de 3 do plano de Aurora",
+      "+1item do plano feito · Montar fases, prazo e preço1 × esforço 1 × surpresa 1 · Aurora · 19:59prova: item 2 de 3 do plano de Aurora",
+      "+1item do plano feito · Escrever o problema e o contexto1 × esforço 1 × surpresa 1 · Aurora · 19:59prova: item 1 de 3 do plano de Aurora"
+    ]
+  },
+  "guardado": {
+    "hoje": 13,
+    "meta": 13,
+    "sequencia": 1,
+    "ouro": true,
+    "rotulo": "13pontos · hoje"
+  },
+  "cartao": {
+    "n": 1,
+    "texto": "Plano concluído1 item · 9 pontos · Cris · agente de Theus · 19:59",
+    "fonte": "\"Cormorant Garamond\", \"Iowan Old Style\", Georgia, serif"
+  },
+  "fora": {
+    "abas": 1,
+    "aviso": "Aurora escreveu fora.md fora da pasta compartilhada: o meio só mostra o que a equipe pode ver.",
+    "reg": [
+      "fora-da-pasta",
+      "fora-da-pasta",
+      "outro-dono"
+    ]
+  },
+  "reabrir": [
+    3
+  ],
+  "comPainel": {
+    "sessao": "assistente",
+    "ritosPainel": 1,
+    "duas": 1,
+    "ultimo": {
+      "tipo": "rito",
+      "rel": "notas/nota-do-painel.md",
+      "naTela": true,
+      "sem": false,
+      "som": false,
+      "depoisDaPresenca": true,
+      "t": 11314
+    },
+    "eventos": [
+      "item do plano feito · Escrever a nota do painel",
+      "plano concluído · 1 item"
+    ]
+  },
+  "reduzido": {
+    "linhas": 9,
+    "span": 0,
+    "animacoes": 0,
+    "registro": {
+      "tipo": "nascer",
+      "rel": "Propostas/ata-22-09.md",
+      "linhas": 9,
+      "animar": false,
+      "t": 12981
+    },
+    "rito": {
+      "transicao": "0s",
+      "opacidade": "1",
+      "faiscas": {
+        "tipo": "faiscas",
+        "ok": false,
+        "motivo": "sem-movimento",
+        "t": 13820
+      }
+    }
+  },
+  "errosPagina": [],
+  "errosConsole": []
+}

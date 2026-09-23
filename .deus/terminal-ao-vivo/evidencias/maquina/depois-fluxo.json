@@ -1,0 +1,212 @@
+{
+  "passos": [
+    {
+      "nome": "a Máquina abre em 2D com nós e fios (12+ peças, 12+ fios)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "fios calculados pela posição real: começam e terminam na borda das peças",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "nenhuma peça por cima de outra",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "glifos de traço, nenhum emoji na Máquina",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "a Máquina não cita o fornecedor",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "Testar abre o formulário da porta com \"como quem\"",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "o pulso verde anda peça a peça (peças acesas em verde, narração cresce)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "no fim todas as peças do caminho brilham juntas (≥ 6) e a gaveta mostra a linha que entrou",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "teste passou dá +6 com origem",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "como a outra empresa: o cadeado treme e a bolha diz \"0 passaram · 1 barrado pela chave\"",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "barrado dá +2 com origem",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "\"Máquina funcionando\" em Cormorant, visível",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "as peças ganham corpo (imagens isométricas carregadas)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "Máquina funcionando dá +12 com origem",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "testar de novo sem mudar nada não dá ponto de novo (nunca por repetição)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "zoom \"Máquina inteira\": um cartão por domínio com fios entre eles",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "clicar no domínio Agenda desce um nível (trilha e peças de fora apagadas)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "duplo clique = zoom \"Peça\": a gaveta de perto, entradas à esquerda e saídas à direita, ficha com \"onde fica guardado\"",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "no zoom \"Peça\" os fios também saem e chegam nas bordas",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "vitrine com as 16 peças, nomes de gente",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "a peça nova entra tracejada (sem corpo)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "migração aplicada no local: segue tracejada até publicar, e o nó encaixado dá +1",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "Publicar: a peça tracejada ganha corpo (sólida, espessura 2 px) e a versão sobe",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "os eventos da Máquina vão para a equipe e a TV (loja)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "\"Ver o agente montando\": gaveta, robô e porta entram com fios novos",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "com as peças novas, os fios continuam presos e nada se sobrepõe",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "chave \"aberta para todos\": a gaveta sai da bandeja Empresa, cadeado aberto em vermelho, alerta e \"mudou depois do teste\"",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "com a chave aberta, a outra empresa passa: a Máquina avisa o vazamento e deixa de estar \"funcionando\"",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "fechar a chave de novo põe a gaveta de volta na bandeja",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "\"por pessoa\" acende o halo na cor de quem fez cada peça",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "Projetar na TV manda o retrato da Máquina para a parede (evento da equipe)",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "BC.maquina.retrato / ouvir / testar / publicar expostos",
+      "ok": true,
+      "achou": ""
+    },
+    {
+      "nome": "zero erros de página",
+      "ok": true,
+      "achou": ""
+    }
+  ],
+  "organismo": true,
+  "geometria": {
+    "escala": 0.745,
+    "pecas": 12,
+    "fios": 13,
+    "fiosVazios": 0,
+    "fiosSoltos": [],
+    "sobrepostas": [],
+    "pinos": 20,
+    "emojis": 0,
+    "supabase": false
+  },
+  "verde": {
+    "passou": true,
+    "linha": "João Lima · amanhã 14:30 · marcado · empresa: Clínica Vida",
+    "acesas": 6,
+    "caminho": [
+      "portaria",
+      "tela-agenda",
+      "porta-novo",
+      "agendamentos",
+      "cano",
+      "robo-zap"
+    ],
+    "pontos": [
+      "+6 teste passou · 6 peças"
+    ],
+    "linhas": 51,
+    "faiscas": 12,
+    "preset": true
+  },
+  "api": {
+    "pecas": 17,
+    "funcionando": false,
+    "corpo": 13,
+    "fios": 18,
+    "imagem": "midia/pecas/gaveta-iso.png",
+    "ouvir": "function",
+    "testar": "function",
+    "publicar": "function"
+  },
+  "erros": [],
+  "resumo": "33/33"
+}
