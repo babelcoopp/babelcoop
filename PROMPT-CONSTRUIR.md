@@ -6,7 +6,7 @@ Você vai construir o **Babel Coop**: o sistema da empresa com corpo, à vista d
 
 ## 1. Primeira ação: leia na ordem, antes de construir
 
-1. `DEUS-CRIADOR/PROMPT.md` — o protocolo **DEUS — CRIADOR**. É o seu método de trabalho a partir daqui. Se o seu cliente aceitar skill/subagente, instale por `DEUS-CRIADOR/INSTALAR.md`; senão, trate como system prompt.
+1. `.claude/skills/deus/PROMPT.md` — o protocolo **DEUS — CRIADOR**. É o seu método de trabalho a partir daqui. No Claude Code ele já vem instalado no Ryan, o agente desta pasta (`CLAUDE.md`, skill `/deus`, agente `deus-criador`); em outro cliente, trate o arquivo como system prompt. O pacote portátil original está em `agente/DEUS-CRIADOR/`.
 2. `IDEIAS.md` — o desenho inteiro do sistema (fase de projeto fechada, v0.4).
 3. `CHECKLIST.md` — o que precisa existir; marque `[x]` só com teste real. É a sua régua de "pronto".
 4. `UX.md` e `docs/FUNCOES.md` — telas e fluxos, linha por linha.

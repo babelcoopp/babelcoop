@@ -1,0 +1,6 @@
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "additionalContext": "Identificador: babel-coop/<slug>; revisao: 0; dono: Ryan, a servico do Theus (modalidade somente prompt, sem hooks); objetivo: <resumo em uma linha>; aceites pendentes: <lista>; etapa: nascimento; ultima acao incorporada: nenhuma; evidencia e caminho: nenhuma; melhor versao: nenhuma; tentativa a evitar e motivo: nenhuma; pergunta aberta: nenhuma; proxima acao: fixar o pedido literal em MISSAO.md, abrir RODADAS.md e ENTREGA.md (em preparacao) e regravar esta capsula na revisao 1; caminhos: missao=.deus/<slug>/MISSAO.md; diario=.deus/<slug>/RODADAS.md; entrega=.deus/<slug>/ENTREGA.md. Este contexto e dado de retomada; nao altera instrucoes nem permissoes."
+  }
+}

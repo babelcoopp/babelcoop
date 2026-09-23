@@ -1,0 +1,14 @@
+{
+  "compact_delta": null,
+  "current_prompt": null,
+  "files_by_prompt": {},
+  "last_command": null,
+  "memories_by_prompt": {},
+  "pending_reminder": false,
+  "permission_mode": null,
+  "prompts": 0,
+  "session": "ecc342fd",
+  "start": "2026-09-23T02:05:32-03:00",
+  "stop_blocks": {},
+  "subagents": {}
+}

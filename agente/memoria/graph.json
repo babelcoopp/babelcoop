@@ -1,0 +1,905 @@
+{
+  "edges": [
+    {
+      "from": "2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09",
+      "to": "tag:aprendizado",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09",
+      "to": "tag:babel-os",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09",
+      "to": "tag:construcao",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q",
+      "to": "tag:marcelo",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q",
+      "to": "tag:preference",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q",
+      "to": "tag:voz",
+      "type": "tag",
+      "weight": 0.333
+    },
+    {
+      "from": "2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que",
+      "to": "tag:marcelo",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que",
+      "to": "tag:preference",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o",
+      "to": "tag:marcelo",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o",
+      "to": "tag:preference",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o",
+      "to": "tag:voz",
+      "type": "tag",
+      "weight": 0.333
+    },
+    {
+      "from": "2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico",
+      "to": "tag:marcelo",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico",
+      "to": "tag:preference",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico",
+      "to": "tag:voz",
+      "type": "tag",
+      "weight": 0.333
+    },
+    {
+      "from": "2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap",
+      "to": "tag:babel-os",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap",
+      "to": "tag:dashboard",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap",
+      "to": "tag:decisao",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap",
+      "to": "tag:decision",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe",
+      "to": "tag:babel-os",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe",
+      "to": "tag:decisao",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe",
+      "to": "tag:decision",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-projeto-babel-os",
+      "to": "2026-09-23-reino-referencias",
+      "type": "link",
+      "weight": 1.0
+    },
+    {
+      "from": "2026-09-23-projeto-babel-os",
+      "to": "marcelo",
+      "type": "link",
+      "weight": 1.0
+    },
+    {
+      "from": "2026-09-23-projeto-babel-os",
+      "to": "tag:auto-memory",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-projeto-babel-os",
+      "to": "tag:babel",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-projeto-babel-os",
+      "to": "tag:projeto",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-reino-referencias",
+      "to": "2026-09-23-projeto-babel-os",
+      "type": "link",
+      "weight": 1.0
+    },
+    {
+      "from": "2026-09-23-reino-referencias",
+      "to": "tag:auto-memory",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-reino-referencias",
+      "to": "tag:reference",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-reino-referencias",
+      "to": "tag:reino",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c",
+      "to": "tag:babel-os",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c",
+      "to": "tag:dashboard",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c",
+      "to": "tag:decisao",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c",
+      "to": "tag:decision",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e",
+      "to": "tag:babel-os",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e",
+      "to": "tag:decisao",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e",
+      "to": "tag:decision",
+      "type": "tag",
+      "weight": 0.25
+    },
+    {
+      "from": "2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e",
+      "to": "tag:hooks",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "babel-os",
+      "to": "tag:aprendizado",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "babel-os",
+      "to": "tag:babel-os",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "babel-os",
+      "to": "tag:construcao",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "babel-os",
+      "to": "tag:gabriel",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "babel-os",
+      "to": "tag:projeto",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "changelog-e-boas-praticas",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "changelog-e-boas-praticas",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "changelog-e-boas-praticas",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "diretorio-e-memoria",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "diretorio-e-memoria",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "diretorio-e-memoria",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "hooks",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "hooks",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "hooks",
+      "to": "tag:hooks",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "hooks",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "marcelo",
+      "to": "2026-09-23-projeto-babel-os",
+      "type": "link",
+      "weight": 1.0
+    },
+    {
+      "from": "marcelo",
+      "to": "2026-09-23-reino-referencias",
+      "type": "link",
+      "weight": 1.0
+    },
+    {
+      "from": "marcelo",
+      "to": "tag:babel",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "marcelo",
+      "to": "tag:marcelo",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "marcelo",
+      "to": "tag:reino",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "pedido-original",
+      "to": "tag:gabriel",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "pedido-original",
+      "to": "tag:marcelo",
+      "type": "tag",
+      "weight": 0.167
+    },
+    {
+      "from": "pedido-original",
+      "to": "tag:reference",
+      "type": "tag",
+      "weight": 0.5
+    },
+    {
+      "from": "plugins-mcp",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "plugins-mcp",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "plugins-mcp",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "riscos-e-lacunas",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "riscos-e-lacunas",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "riscos-e-lacunas",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "settings",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "settings",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "settings",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "skills-e-comandos",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "skills-e-comandos",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "skills-e-comandos",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "statusline-e-terminal",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "statusline-e-terminal",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "statusline-e-terminal",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "subagentes",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "subagentes",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "subagentes",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "vscode-sessoes-checkpoints",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "vscode-sessoes-checkpoints",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "vscode-sessoes-checkpoints",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "workflows-e-automacao",
+      "to": "tag:claude-code",
+      "type": "tag",
+      "weight": 0.083
+    },
+    {
+      "from": "workflows-e-automacao",
+      "to": "tag:configuracao",
+      "type": "tag",
+      "weight": 0.091
+    },
+    {
+      "from": "workflows-e-automacao",
+      "to": "tag:knowledge",
+      "type": "tag",
+      "weight": 0.091
+    }
+  ],
+  "generated": "2026-09-23T02:03:57-03:00",
+  "nodes": [
+    {
+      "collection": "memorias",
+      "created": "2026-09-23",
+      "degree": 4,
+      "id": "2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09",
+      "label": "Como o organismo Gabriel foi construído (22-23/09/2026)",
+      "pinned": false,
+      "status": "active",
+      "type": "learning"
+    },
+    {
+      "collection": "memorias",
+      "created": "2026-09-23",
+      "degree": 3,
+      "id": "2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q",
+      "label": "Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler",
+      "pinned": false,
+      "status": "active",
+      "type": "preference"
+    },
+    {
+      "collection": "memorias",
+      "created": "2026-09-23",
+      "degree": 2,
+      "id": "2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que",
+      "label": "Marcelo prefere sites e LPs em arquivo único que abre com dois cliques",
+      "pinned": false,
+      "status": "active",
+      "type": "preference"
+    },
+    {
+      "collection": "memorias",
+      "created": "2026-09-23",
+      "degree": 3,
+      "id": "2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o",
+      "label": "Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'",
+      "pinned": false,
+      "status": "active",
+      "type": "preference"
+    },
+    {
+      "collection": "memorias",
+      "created": "2026-09-23",
+      "degree": 3,
+      "id": "2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico",
+      "label": "Marcelo quer tudo em português, inclusive descrições de comandos",
+      "pinned": false,
+      "status": "active",
+      "type": "preference"
+    },
+    {
+      "collection": "decisoes",
+      "created": "2026-09-23",
+      "degree": 4,
+      "id": "2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap",
+      "label": "Painel gerado do template com dados inline e snapshots em backups/ na raiz",
+      "pinned": false,
+      "status": "active",
+      "type": "decision"
+    },
+    {
+      "collection": "decisoes",
+      "created": "2026-09-23",
+      "degree": 3,
+      "id": "2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe",
+      "label": "Portão de aprendizado no Stop: uma cobrança por pedido, desligável",
+      "pinned": false,
+      "status": "active",
+      "type": "decision"
+    },
+    {
+      "collection": "memorias",
+      "created": "2026-09-23",
+      "degree": 7,
+      "id": "2026-09-23-projeto-babel-os",
+      "label": "O que é o babel-os (organismo vivo 'Gabriel'), primeira ativação em 22/09/2026 com ultrac…",
+      "pinned": false,
+      "status": "active",
+      "type": "fact"
+    },
+    {
+      "collection": "memorias",
+      "created": "2026-09-23",
+      "degree": 6,
+      "id": "2026-09-23-reino-referencias",
+      "label": "Onde estão as fontes do Reino (base de conhecimento, LP publicada, app, canal WhatsApp, d…",
+      "pinned": false,
+      "status": "active",
+      "type": "reference"
+    },
+    {
+      "collection": "decisoes",
+      "created": "2026-09-23",
+      "degree": 4,
+      "id": "2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c",
+      "label": "Substrato, motor, painel e entregas ficam fora de .claude/",
+      "pinned": false,
+      "status": "active",
+      "type": "decision"
+    },
+    {
+      "collection": "decisoes",
+      "created": "2026-09-23",
+      "degree": 4,
+      "id": "2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e",
+      "label": "Um único hook (.claude/hooks/hook.py) atende os 16 eventos",
+      "pinned": false,
+      "status": "active",
+      "type": "decision"
+    },
+    {
+      "collection": "projetos",
+      "created": "2026-09-23",
+      "degree": 5,
+      "id": "babel-os",
+      "label": "babel-os: o organismo Gabriel",
+      "pinned": false,
+      "status": "active",
+      "type": "project"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "changelog-e-boas-praticas",
+      "label": "Claude Code 2.1.280 — changelog e boas práticas",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "diretorio-e-memoria",
+      "label": "Claude Code 2.1.280 — diretório e memória",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 4,
+      "id": "hooks",
+      "label": "Claude Code 2.1.280 — hooks (ganchos)",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "collection": "perfil",
+      "created": "2026-09-22",
+      "degree": 6,
+      "id": "marcelo",
+      "label": "Marcelo Rocha (Maximus): fundador do Reino, líder de grupos, não-dev, português estilo Wh…",
+      "pinned": true,
+      "status": "active",
+      "type": "profile"
+    },
+    {
+      "collection": "origem",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "pedido-original",
+      "label": "Pedido original do Marcelo (CLAUDE.md de nascimento do Gabriel)",
+      "pinned": true,
+      "status": "active",
+      "type": "reference"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "plugins-mcp",
+      "label": "Claude Code 2.1.280 — plugins e MCP",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "degree": 0,
+      "id": "project:babel-os",
+      "label": "babel-os: o organismo Gabriel",
+      "type": "project"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "riscos-e-lacunas",
+      "label": "Claude Code 2.1.280 — riscos e lacunas",
+      "pinned": true,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "settings",
+      "label": "Claude Code 2.1.280 — settings (configurações)",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "skills-e-comandos",
+      "label": "Claude Code 2.1.280 — skills e comandos",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "statusline-e-terminal",
+      "label": "Claude Code 2.1.280 — status line e terminal",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "subagentes",
+      "label": "Claude Code 2.1.280 — subagentes",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "degree": 2,
+      "id": "tag:aprendizado",
+      "label": "aprendizado",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:auto-memory",
+      "label": "auto-memory",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:babel",
+      "label": "babel",
+      "type": "tag"
+    },
+    {
+      "degree": 6,
+      "id": "tag:babel-os",
+      "label": "babel-os",
+      "type": "tag"
+    },
+    {
+      "degree": 12,
+      "id": "tag:claude-code",
+      "label": "claude-code",
+      "type": "tag"
+    },
+    {
+      "degree": 11,
+      "id": "tag:configuracao",
+      "label": "configuracao",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:construcao",
+      "label": "construcao",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:dashboard",
+      "label": "dashboard",
+      "type": "tag"
+    },
+    {
+      "degree": 4,
+      "id": "tag:decisao",
+      "label": "decisao",
+      "type": "tag"
+    },
+    {
+      "degree": 4,
+      "id": "tag:decision",
+      "label": "decision",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:gabriel",
+      "label": "gabriel",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:hooks",
+      "label": "hooks",
+      "type": "tag"
+    },
+    {
+      "degree": 11,
+      "id": "tag:knowledge",
+      "label": "knowledge",
+      "type": "tag"
+    },
+    {
+      "degree": 6,
+      "id": "tag:marcelo",
+      "label": "marcelo",
+      "type": "tag"
+    },
+    {
+      "degree": 4,
+      "id": "tag:preference",
+      "label": "preference",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:projeto",
+      "label": "projeto",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:reference",
+      "label": "reference",
+      "type": "tag"
+    },
+    {
+      "degree": 2,
+      "id": "tag:reino",
+      "label": "reino",
+      "type": "tag"
+    },
+    {
+      "degree": 3,
+      "id": "tag:voz",
+      "label": "voz",
+      "type": "tag"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "vscode-sessoes-checkpoints",
+      "label": "Claude Code 2.1.280 — VS Code, sessões e checkpoints",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    },
+    {
+      "collection": "conhecimento",
+      "created": "2026-09-22",
+      "degree": 3,
+      "id": "workflows-e-automacao",
+      "label": "Claude Code 2.1.280 — workflows e automação",
+      "pinned": false,
+      "status": "active",
+      "type": "knowledge"
+    }
+  ],
+  "orphans": [
+    "2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09",
+    "2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q",
+    "2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que",
+    "2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o",
+    "2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico",
+    "2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap",
+    "2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe",
+    "2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c",
+    "2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e",
+    "babel-os"
+  ]
+}

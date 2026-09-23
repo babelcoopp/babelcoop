@@ -1,0 +1,10 @@
+{
+  "details": [
+    "o cc-status do iTerm2 aponta para pasta temporária (AppTranslocation) ou alvo inexistente; hooks globais podem falhar (veja LEIA-ME)"
+  ],
+  "errors": [],
+  "ts": "2026-09-23T02:05:32-03:00",
+  "warnings": [
+    "iterm_cc_status"
+  ]
+}

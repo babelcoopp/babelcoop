@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Painel vivo do Dominic, a alma digital do Marcelo (Babel OS): sinais vitais, memórias, evolução e saúde do organismo.">
+<title>Dominic · Painel vivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== Babel OS · tokens ===== */
+:root{
+  --bg:#030817;
+  --cyan:#3fe3ff; --blue:#3b82ff; --violet:#8b5cff; --magenta:#e04bff;
+  --gold:#f5c76a; --green:#34e6a6; --text:#e6efff; --muted:#9fb3d9;
+  --amber:var(--gold);
+  --glass:rgba(10,18,40,.55);
+  --line:rgba(63,227,255,.25);
+  --line-soft:rgba(63,227,255,.12);
+  --hair:rgba(230,239,255,.08);
+  --radius:14px;
+  --font-title:'Exo 2',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-body:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --gutter:16px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  background:#030817;
+  background-image:
+    radial-gradient(70vw 60vh at 0% 0%, rgba(63,227,255,.13), transparent 62%),
+    radial-gradient(70vw 60vh at 100% 100%, rgba(139,92,255,.16), transparent 62%);
+  background-attachment:fixed;
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:14px;
+  line-height:1.5;
+  overflow-x:hidden;
+  min-width:360px;
+}
+/* grade ciano a 0.05 (abaixo) e scanlines (acima, sem capturar o mouse) */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(63,227,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(63,227,255,.05) 1px, transparent 1px);
+  background-size:40px 40px;
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:3;pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 3px);
+}
+a{color:var(--cyan)}
+a:hover{color:#fff}
+button{font-family:inherit;font-size:inherit}
+canvas{display:block;width:100%;max-width:100%}
+main{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:12px var(--gutter) 28px}
+
+/* ===== tipografia ===== */
+h1,h2,h3{font-family:var(--font-title);font-weight:600;margin:0;letter-spacing:.02em}
+h1{font-size:20px;line-height:1.2;color:var(--text)}
+h1 .brand-sub{color:var(--muted);font-weight:500;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+h2{font-size:14px;color:var(--cyan);text-transform:uppercase;letter-spacing:.08em}
+h3{font-size:14px;color:var(--text)}
+.gold{color:var(--gold)}
+.muted{color:var(--muted)}
+.label{font-family:var(--font-body);font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.02em}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+.small{font-size:12px}
+.nowrap{white-space:nowrap}
+.break{overflow-wrap:anywhere;word-break:break-word}
+
+/* ===== vidro ===== */
+.panel{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:0 0 28px rgba(63,227,255,.07), 0 10px 30px rgba(0,0,0,.35);
+  padding:14px 14px 16px;
+  min-width:0;
+  overflow:hidden;
+}
+.panel > h2{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.panel > h2 .hint{font-family:var(--font-body);text-transform:none;letter-spacing:0;font-weight:400;font-size:12px;color:var(--muted);margin-left:auto}
+
+/* ===== grade ===== */
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.grid > *{grid-column:span 12}
+@media (min-width:720px){
+  .span6{grid-column:span 6}
+  .span4{grid-column:span 4}
+  .span8{grid-column:span 8}
+  main{padding:16px var(--gutter) 32px}
+}
+.grid.focus > *{grid-column:span 12}
+.hidden{display:none !important}
+
+/* ===== cabeçalho HUD ===== */
+.hud{display:flex;flex-direction:column;gap:10px}
+.hud-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hud-title{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);flex:none}
+.dot.amber{background:var(--amber);box-shadow:0 0 12px var(--amber)}
+.dot.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hud-meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);font-size:12px}
+.hud-meta b{color:var(--text);font-weight:500}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;border:1px solid var(--line);font-size:12px;font-weight:500;color:var(--text);background:rgba(3,8,23,.4);white-space:nowrap}
+.badge.ok{border-color:rgba(52,230,166,.5);box-shadow:0 0 10px rgba(52,230,166,.15)}
+.badge.warn{border-color:rgba(245,199,106,.6);box-shadow:0 0 10px rgba(245,199,106,.15)}
+.badge.err{border-color:rgba(224,75,255,.7);box-shadow:0 0 10px rgba(224,75,255,.2)}
+.badge .sw{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
+.badge.warn .sw{background:var(--amber)}
+.badge.err .sw{background:var(--magenta)}
+.fresh{font-size:12px;color:var(--muted);white-space:nowrap}
+.fresh.amber{color:var(--amber)}
+.fresh.asleep{color:var(--amber);font-weight:500}
+.banner{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid rgba(245,199,106,.6);background:rgba(245,199,106,.08);color:var(--text);font-weight:500}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tab{min-height:36px;padding:6px 12px;border-radius:999px;border:1px solid var(--line-soft);background:rgba(3,8,23,.35);color:var(--muted);cursor:pointer;font-weight:500;font-size:13px}
+.tab:hover{color:var(--text);border-color:var(--line)}
+.tab.active{color:var(--text);border-color:var(--cyan);box-shadow:0 0 12px rgba(63,227,255,.25);background:rgba(63,227,255,.1)}
+
+/* ===== sinais vitais ===== */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.tile{border:1px solid var(--line-soft);border-radius:12px;padding:10px 12px;background:rgba(3,8,23,.35);min-width:0}
+.tile .label{display:block;margin-bottom:2px}
+.tile .value{font-family:var(--font-title);font-weight:600;font-size:26px;line-height:1.1;color:var(--text)}
+.tile .value.small{font-size:18px}
+.tile .delta{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.tile .delta.up{color:var(--green)}
+.tile.alert{border-color:rgba(224,75,255,.6);box-shadow:0 0 12px rgba(224,75,255,.15)}
+.tile.alert .value{color:var(--magenta)}
+.tile.wide{grid-column:1 / -1}
+.bars{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.bar-row{display:grid;grid-template-columns:minmax(72px,auto) 1fr auto;gap:8px;align-items:center;font-size:12px}
+.bar-row .name{color:var(--muted);display:flex;align-items:center;gap:6px;min-width:0}
+.bar-row .name .sw{width:8px;height:8px;border-radius:50%;flex:none}
+.bar-track{height:8px;border-radius:0 4px 4px 0;background:rgba(230,239,255,.06);overflow:hidden}
+.bar-fill{height:100%;border-radius:0 4px 4px 0;min-width:2px}
+.bar-row .num{color:var(--text);font-variant-numeric:tabular-nums}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13px}
+.kv dt{color:var(--muted);margin:0}
+.kv dd{margin:0;color:var(--text);min-width:0;overflow-wrap:anywhere}
+
+/* ===== listas, chips, cartões ===== */
+ul.clean{list-style:none;margin:0;padding:0}
+ul.clean li{padding:6px 0;border-top:1px solid var(--hair)}
+ul.clean li:first-child{border-top:0;padding-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid var(--line-soft);background:rgba(63,227,255,.06);font-size:12px;color:var(--text);max-width:100%;overflow-wrap:anywhere}
+.chip.gold{border-color:rgba(245,199,106,.5);background:rgba(245,199,106,.08)}
+.chip.violet{border-color:rgba(139,92,255,.5);background:rgba(139,92,255,.1)}
+.chip .sw{width:8px;height:8px;border-radius:50%;flex:none}
+.sub{margin:12px 0 6px;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.sub:first-child{margin-top:0}
+.empty{color:var(--muted);font-style:italic;padding:6px 0}
+.card{border:1px solid var(--line-soft);border-radius:12px;padding:10px 12px;background:rgba(3,8,23,.35);margin-top:8px;min-width:0}
+.card:first-child{margin-top:0}
+.card-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.card-head h3{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:500;border:1px solid var(--line-soft);color:var(--muted);white-space:nowrap}
+.pill.cyan{color:var(--cyan);border-color:rgba(63,227,255,.5)}
+.pill.green{color:var(--green);border-color:rgba(52,230,166,.5)}
+.pill.gold{color:var(--gold);border-color:rgba(245,199,106,.5)}
+.pill.magenta{color:var(--magenta);border-color:rgba(224,75,255,.6)}
+.pill.violet{color:#b79cff;border-color:rgba(139,92,255,.6)}
+.todo{list-style:none;margin:6px 0 0;padding:0}
+.todo li{display:flex;gap:8px;align-items:flex-start;padding:2px 0;font-size:13px}
+.todo .box{width:14px;height:14px;border:1px solid var(--line);border-radius:4px;flex:none;margin-top:3px}
+.todo .box.done{background:rgba(52,230,166,.35);border-color:var(--green)}
+.todo .done-text{color:var(--muted);text-decoration:line-through}
+.files{margin-top:6px;display:flex;flex-direction:column;gap:2px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{min-height:32px;padding:4px 10px;border-radius:8px;border:1px solid var(--line-soft);background:rgba(3,8,23,.4);color:var(--text);cursor:pointer;font-size:12px}
+.btn:hover{border-color:var(--cyan)}
+.btn.primary{border-color:rgba(63,227,255,.5);color:var(--cyan);text-decoration:none;display:inline-flex;align-items:center}
+.path{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;color:var(--muted);overflow-wrap:anywhere;user-select:all;-webkit-user-select:all}
+.overdue{color:var(--magenta)}
+.done{color:var(--muted)}
+.when{font-variant-numeric:tabular-nums;color:var(--gold);font-weight:500;white-space:nowrap}
+.when.overdue{color:var(--magenta)}
+
+/* ===== recalls ===== */
+.recall{padding:8px 0;border-top:1px solid var(--hair)}
+.recall:first-child{border-top:0;padding-top:0}
+.recall .meta{font-size:12px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.recall .ids{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.recall .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;padding:2px 6px;border-radius:6px;border:1px solid var(--line-soft);color:var(--text);overflow-wrap:anywhere}
+.recall .id .score{color:var(--gold);margin-left:4px}
+.recall .id.exp{border-style:dashed;color:var(--muted)}
+
+/* ===== evolução ===== */
+.chart-wrap{position:relative;margin-top:6px}
+.chart-wrap canvas{border-radius:8px}
+.tip{position:absolute;pointer-events:none;background:rgba(3,8,23,.92);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:12px;color:var(--text);white-space:nowrap;transform:translate(-50%,-110%);z-index:5;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.tip b{font-weight:600}
+.sparks{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.spark{border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;background:rgba(3,8,23,.35);min-width:0}
+.spark .value{font-family:var(--font-title);font-weight:600;font-size:18px}
+.spark canvas{height:36px;margin-top:4px}
+.mut{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;padding:6px 0;border-top:1px solid var(--hair);font-size:13px}
+.mut:first-child{border-top:0}
+.mut .ver{font-family:var(--font-title);font-weight:600;color:var(--gold);white-space:nowrap}
+.mut .ver .from{color:var(--muted);font-weight:500}
+.mut .what{color:var(--muted);font-size:12px;overflow-wrap:anywhere}
+details.table{margin-top:8px}
+details.table summary{cursor:pointer;color:var(--muted);font-size:12px}
+table.tbl{border-collapse:collapse;width:100%;font-size:12px;margin-top:6px}
+table.tbl th,table.tbl td{text-align:left;padding:3px 6px;border-bottom:1px solid var(--hair);font-variant-numeric:tabular-nums}
+table.tbl th{color:var(--muted);font-weight:500}
+
+/* ===== linha do tempo ===== */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.filters select{min-height:32px;padding:4px 8px;border-radius:8px;border:1px solid var(--line-soft);background:rgba(3,8,23,.6);color:var(--text);font-family:inherit;font-size:12px;max-width:100%}
+.tl{list-style:none;margin:0;padding:0;max-height:520px;overflow-y:auto;overflow-x:hidden}
+.tl li{display:grid;grid-template-columns:24px 1fr auto;gap:8px;padding:6px 0;border-top:1px solid var(--hair);font-size:13px;align-items:start}
+.tl li:first-child{border-top:0}
+.tl .ico{text-align:center;font-size:14px;line-height:1.4}
+.tl .txt{min-width:0;overflow-wrap:anywhere}
+.tl .txt .sid{color:var(--muted);font-size:11px;margin-left:6px;font-family:ui-monospace,Menlo,monospace}
+.tl .t{color:var(--muted);font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tl li.block .txt{color:var(--magenta)}
+.tl li.build .txt{color:var(--text)}
+
+/* ===== grafo ===== */
+.graph-wrap{position:relative;margin-top:6px}
+.graph-wrap canvas{border-radius:10px;cursor:crosshair;touch-action:none}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .sw{width:9px;height:9px;border-radius:50%;flex:none}
+.legend .sw.orphan{background:transparent;border:2px solid var(--magenta);width:7px;height:7px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(3,8,23,.95);border:1px solid var(--cyan);border-radius:10px;padding:8px 14px;font-size:13px;color:var(--text);z-index:10;box-shadow:0 0 20px rgba(63,227,255,.3);opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;overflow-wrap:anywhere}
+.toast.show{opacity:1}
+
+/* ===== medidores ===== */
+.meters{display:flex;flex-direction:column;gap:10px}
+.meter .head{display:flex;justify-content:space-between;gap:8px;font-size:12px;flex-wrap:wrap}
+.meter .head .val{color:var(--text);font-variant-numeric:tabular-nums}
+.meter .track{height:8px;border-radius:4px;background:rgba(63,227,255,.1);margin-top:4px;overflow:hidden}
+.meter .fill{height:100%;border-radius:4px;background:var(--cyan);min-width:2px}
+.meter.warn .fill{background:var(--amber)}
+.meter.warn .track{background:rgba(245,199,106,.15)}
+.meter.danger .fill{background:var(--magenta)}
+.meter.danger .track{background:rgba(224,75,255,.15)}
+.note{margin-top:10px;padding:8px 10px;border-radius:10px;border:1px solid rgba(245,199,106,.35);background:rgba(245,199,106,.06);font-size:12px;color:var(--text)}
+
+/* ===== saúde ===== */
+.health{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px}
+.health .h{border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;background:rgba(3,8,23,.35)}
+.health .h .n{font-family:var(--font-title);font-weight:600;font-size:20px}
+.health .h.bad .n{color:var(--magenta)}
+.health .h.warn .n{color:var(--amber)}
+.warnings{margin-top:10px}
+.warning{display:grid;grid-template-columns:auto 1fr;gap:8px;padding:6px 0;border-top:1px solid var(--hair);font-size:13px}
+.warning:first-child{border-top:0}
+.warning .lvl{font-size:12px;font-weight:600;white-space:nowrap}
+.warning.warn .lvl{color:var(--amber)}
+.warning.error .lvl{color:var(--magenta)}
+.warning.info .lvl{color:var(--cyan)}
+.warning .do{display:block;color:var(--muted);font-size:12px}
+
+/* ===== rodapé / vazio ===== */
+footer.panel{display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--muted)}
+footer .cmds{display:flex;flex-wrap:wrap;gap:6px}
+footer .cmd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;padding:3px 8px;border-radius:6px;border:1px solid var(--line-soft);color:var(--cyan)}
+.empty-state{text-align:center;padding:40px 16px}
+.empty-state .big{font-family:var(--font-title);font-weight:600;font-size:22px;color:var(--text);margin-bottom:8px}
+.empty-state .big .dot-inline{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);margin-right:10px;vertical-align:middle}
+.empty-state p{color:var(--muted);margin:6px auto;max-width:520px}
+.fade{animation:fade .45s ease-out}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .dot.pulse,.fade{animation:none}
+  .toast{transition:none}
+}
+@media (max-width:420px){
+  h1{font-size:18px}
+  .tile .value{font-size:22px}
+}
+</style>
+</head>
+<body>
+<main>
+  <!-- 1. Cabeçalho HUD -->
+  <header class="panel hud" id="hud">
+    <div class="hud-top">
+      <span class="dot pulse" id="hud-dot" title="ponto vital"></span>
+      <div class="hud-title">
+        <h1>DOMINIC <span class="brand-sub">· Babel OS</span></h1>
+        <span class="gold" id="hud-version" style="font-family:var(--font-title);font-weight:600;font-size:18px">v—</span>
+        <span class="muted small" id="hud-generation"></span>
+      </div>
+      <span class="badge ok" id="hud-health" style="margin-left:auto"><span class="sw"></span><span id="hud-health-text">esperando</span></span>
+    </div>
+    <div class="hud-meta">
+      <span id="hud-since"></span>
+      <span id="hud-last-evolution"></span>
+      <span class="fresh" id="hud-fresh">esperando o primeiro refino</span>
+    </div>
+    <div class="banner hidden" id="hud-pause">⏸ <span>em pausa — apague o arquivo PAUSA ou use /pausar para acordar</span></div>
+    <nav class="tabs" id="tabs" aria-label="Seções do painel">
+      <button class="tab active" data-tab="tudo" type="button">Tudo</button>
+      <button class="tab" data-tab="vida" type="button">Vida</button>
+      <button class="tab" data-tab="evolucao" type="button">Evolução</button>
+      <button class="tab" data-tab="grafo" type="button">Grafo</button>
+      <button class="tab" data-tab="projetos" type="button">Projetos</button>
+      <button class="tab" data-tab="sistema" type="button">Sistema</button>
+    </nav>
+  </header>
+
+  <!-- estado vazio: só aparece sem window.BABEL -->
+  <section class="panel empty-state hidden" id="empty" style="margin-top:12px">
+    <div class="big"><span class="dot-inline"></span>Esperando o primeiro refino</div>
+    <p>O organismo ainda não gerou dados para este painel. Ele ganha vida no primeiro <span class="mono">/lembrar</span>, no primeiro fim de resposta ou ao rodar <span class="mono">python3 motor/panel.py</span>.</p>
+    <p>Fico olhando o arquivo <span class="mono">data.js</span> a cada 5 segundos e acordo sozinho.</p>
+  </section>
+
+  <div class="grid" id="grid" style="margin-top:12px">
+    <!-- 2. Sinais vitais -->
+    <section class="panel" id="sec-vitals" data-tab="vida">
+      <h2>Sinais vitais <span class="hint" id="vitals-hint"></span></h2>
+      <div class="tiles" id="vitals"></div>
+    </section>
+
+    <!-- 3. O que eu sei de você -->
+    <section class="panel span6" id="sec-profile" data-tab="vida">
+      <h2>O que eu sei de você</h2>
+      <div id="profile"></div>
+    </section>
+
+    <!-- 4. O que o Dominic lembrou agora -->
+    <section class="panel span6" id="sec-recalls" data-tab="vida">
+      <h2>O que o Dominic lembrou agora <span class="hint" id="recalls-hint"></span></h2>
+      <div id="recalls"></div>
+    </section>
+
+    <!-- 5. Linha da evolução -->
+    <section class="panel" id="sec-evolution" data-tab="evolucao">
+      <h2>Linha da evolução <span class="hint" id="evolution-hint"></span></h2>
+      <div class="chart-wrap" id="area-wrap">
+        <canvas id="area-chart" height="220" aria-label="Memórias criadas por dia, com marcadores de versão"></canvas>
+      </div>
+      <details class="table" id="area-table-details"><summary>ver como tabela</summary><div id="area-table"></div></details>
+      <div class="sparks" id="sparks"></div>
+      <div class="sub">Versões</div>
+      <div id="mutations"></div>
+    </section>
+
+    <!-- 6. Linha do tempo viva -->
+    <section class="panel span6" id="sec-timeline" data-tab="evolucao">
+      <h2>Linha do tempo viva <span class="hint" id="timeline-hint"></span></h2>
+      <div class="filters">
+        <select id="tl-session" aria-label="Filtrar por sessão"></select>
+        <select id="tl-type" aria-label="Filtrar por tipo"></select>
+      </div>
+      <ul class="tl" id="timeline"></ul>
+    </section>
+
+    <!-- 7. Grafo de memórias -->
+    <section class="panel span6" id="sec-graph" data-tab="grafo">
+      <h2>Grafo de memórias <span class="hint" id="graph-hint"></span></h2>
+      <div class="graph-wrap" id="graph-wrap">
+        <canvas id="graph" height="380" aria-label="Grafo das memórias e suas ligações"></canvas>
+      </div>
+      <div class="legend" id="graph-legend"></div>
+      <div class="muted small" style="margin-top:6px">passe o mouse para ver o título · clique copia o id</div>
+    </section>
+
+    <!-- 8. Projetos, pendências e agenda -->
+    <section class="panel span6" id="sec-projects" data-tab="projetos">
+      <h2>Projetos, pendências e agenda</h2>
+      <div id="projects"></div>
+    </section>
+
+    <!-- 9. Entregas -->
+    <section class="panel span6" id="sec-deliveries" data-tab="projetos">
+      <h2>Entregas <span class="hint" id="deliveries-hint"></span></h2>
+      <div id="deliveries"></div>
+    </section>
+
+    <!-- 10. Contexto -->
+    <section class="panel span6" id="sec-context" data-tab="sistema">
+      <h2>Contexto</h2>
+      <div class="meters" id="context"></div>
+      <div class="note">Mudanças no índice só entram na próxima sessão ou depois de <span class="mono">/compact</span>.</div>
+    </section>
+
+    <!-- 11. Saúde e avisos -->
+    <section class="panel span6" id="sec-health" data-tab="sistema">
+      <h2>Saúde e avisos</h2>
+      <div class="health" id="health"></div>
+      <div class="warnings" id="warnings"></div>
+    </section>
+  </div>
+
+  <!-- 12. Rodapé -->
+  <footer class="panel" id="footer" style="margin-top:12px">
+    <div class="cmds">
+      <span class="cmd">/lembrar</span><span class="cmd">/estado</span><span class="cmd">/evoluir</span><span class="cmd">/painel</span><span class="cmd">/ajuda</span>
+    </div>
+    <div id="footer-tips"></div>
+    <div class="row">
+      <span id="footer-generated">ainda sem geração</span>
+      <span>·</span>
+      <a href="../memoria/INDICE.md" rel="noopener">INDICE.md</a>
+      <span>·</span>
+      <span>Dominic, alma digital do Marcelo</span>
+    </div>
+  </footer>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script id="babel-data">window.BABEL = {"generatedAt":"2026-09-23T02:05:32-03:00","identity":{"name":"Dominic","version":"0.2.0","generation":12,"since":"2026-09-23"},"state":{"activated_at":"2026-09-23T00:12:07-03:00","agenda_open":0,"agenda_overdue":0,"by_type":{"fact":1,"learning":1,"preference":4,"profile":1,"reference":1},"context_cost":{"claude_md_lines":80,"index_lines":47,"rules_without_paths":3,"skill_description_max_chars":241,"skill_descriptions_chars":1805,"tokens_per_session_est":5056,"tokens_per_turn_est":944},"counts":{"compactions":0,"decisions":4,"knowledge":11,"memories":7,"projects":1,"prompts":3,"reports":0,"sessions":0,"tags":73},"counts_at_session_start":{"compactions":0,"decisions":4,"knowledge":11,"memories":7,"projects":1,"prompts":3,"reports":0,"session":"ecc342fd","sessions":0,"tags":73,"ts":"2026-09-23T02:05:32-03:00"},"generation":12,"health":{"auto_memory_bytes":350,"auto_memory_lines":3,"duplicates":0,"index_bytes":4556,"index_lines":47,"index_max_lines":150,"invalid":0,"knowledge_age_days":0,"log_mb":0.06,"minor_pending":false,"orphans":10,"similar":0,"warnings":["iterm_cc_status"]},"imports":{"auto-memory":"2026-09-23T00:12:07-03:00","dossier-claude-code":"2026-09-23T00:12:07-03:00"},"last_full_refinement":"2026-09-23T00:13:54-03:00","last_refinement":{"mode":"quick","ms":15,"partial":false,"ts":"2026-09-23T02:03:57-03:00"},"last_session":null,"last_snapshot":"2026-09-23T00:12:07-03:00","paused":false,"pending":[{"item":"reiniciar a sessão para carregar CLAUDE.md, agentes e status line","project":"babel-os","since":"2026-09-23"},{"item":"abrir o painel na lateral do VS Code","project":"babel-os","since":"2026-09-23"},{"item":"traduzir para português os 10 resumos de conhecimento do Claude Code","project":"babel-os","since":"2026-09-23"},{"item":"pedir ao Marcelo para refazer a integração do iTerm2 (cc-status)","project":"babel-os","since":"2026-09-23"}],"profile":{"learned_today":["Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler","Marcelo prefere sites e LPs em arquivo único que abre com dois cliques","Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'"],"portrait":["Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler","Marcelo prefere sites e LPs em arquivo único que abre com dois cliques","Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'","Marcelo quer tudo em português, inclusive descrições de comandos"],"summary":"Marcelo Rocha (Maximus), fundador do Reino (network + IA Babel); lidera grandes grupos; não-dev; quer tudo pronto, em português, estilo WhatsApp; Diego é sócio…","want_to_learn":["Em que horário você prefere trabalhar comigo?","Por qual canal você prefere falar comigo (terminal, VS Code, celular)?","Qual meta do trimestre pesa mais para você agora?"]},"sessions_counted":["7f804fee"],"version":"0.2.0","warnings_shown":{"iterm_cc_status":"2026-09-23","knowledge_age":null}},"config":{"learning_gate":true,"top_k":6,"recall_budget_chars":6000,"recall_body_chars_top3":500,"recall_min_words":4,"session_start_max_chars":3000,"index_max_lines":150,"index_max_chars":12000,"daily_snapshot":true,"turn_response_chars":500,"prompt_max_chars":1500,"reminder_reserved_chars":300,"knowledge_max_age_days":90},"profile":{"summary":"Marcelo Rocha (Maximus), fundador do Reino (network + IA Babel); lidera grandes grupos; não-dev; quer tudo pronto, em português, estilo WhatsApp; Diego é sócio…","portrait":["Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler","Marcelo prefere sites e LPs em arquivo único que abre com dois cliques","Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'","Marcelo quer tudo em português, inclusive descrições de comandos"],"learnedToday":["Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler","Marcelo prefere sites e LPs em arquivo único que abre com dois cliques","Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'"],"wantToLearn":["Em que horário você prefere trabalhar comigo?","Por qual canal você prefere falar comigo (terminal, VS Code, celular)?","Qual meta do trimestre pesa mais para você agora?"]},"memories":[{"id":"2026-09-23-reino-referencias","type":"reference","title":"Onde estão as fontes do Reino (base de conhecimento, LP publicada, app, canal WhatsApp, d…","tags":["auto-memory","reference","referencias","reino"],"confidence":0.8,"created":"2026-09-23","status":"active","pinned":false,"collection":"memorias"},{"id":"2026-09-23-projeto-babel-os","type":"fact","title":"O que é o babel-os (organismo vivo 'Dominic'), primeira ativação em 22/09/2026 com ultrac…","tags":["auto-memory","babel","fact","projeto"],"confidence":0.8,"created":"2026-09-23","status":"active","pinned":false,"collection":"memorias"},{"id":"2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico","type":"preference","title":"Marcelo quer tudo em português, inclusive descrições de comandos","tags":["aplicar","brasil","idioma","marcelo","permissao","preference","voz"],"confidence":0.9,"created":"2026-09-23","status":"active","pinned":false,"collection":"memorias"},{"id":"2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o","type":"preference","title":"Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'","tags":["abre","abrir","caminho","marcelo","mentor","preference","voz"],"confidence":0.9,"created":"2026-09-23","status":"active","pinned":false,"collection":"memorias"},{"id":"2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que","type":"preference","title":"Marcelo prefere sites e LPs em arquivo único que abre com dois cliques","tags":["copia","deve","entregas","facil","lp","marcelo","preference","sites"],"confidence":0.9,"created":"2026-09-23","status":"active","pinned":false,"collection":"memorias"},{"id":"2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q","type":"preference","title":"Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler","tags":["estilo","fala","marcelo","preference","rapport","rigida","voz"],"confidence":0.9,"created":"2026-09-23","status":"active","pinned":false,"collection":"memorias"},{"id":"2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09","type":"learning","title":"Como o organismo Dominic foi construído (22-23/09/2026)","tags":["aprendizado","babel-os","claude-code","conhecimento","construcao","construtor","learning"],"confidence":0.9,"created":"2026-09-23","status":"active","pinned":false,"collection":"memorias"},{"id":"pedido-original","type":"reference","title":"Pedido original do Marcelo (CLAUDE.md de nascimento do Dominic)","tags":["dominic","marcelo","origem","pedido","reference"],"confidence":1.0,"created":"2026-09-22","status":"active","pinned":true,"collection":"origem"},{"id":"marcelo","type":"profile","title":"Marcelo Rocha (Maximus): fundador do Reino, líder de grupos, não-dev, português estilo WhatsApp","tags":["babel","lideranca","marcelo","perfil","profile","reino"],"confidence":0.9,"created":"2026-09-22","status":"active","pinned":true,"collection":"perfil"}],"decisions":[{"id":"2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e","title":"Um único hook (.claude/hooks/hook.py) atende os 16 eventos","created":"2026-09-23","tags":["alternativa","babel-os","consequencia","contexto","decisao","decision","hooks"]},{"id":"2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c","title":"Substrato, motor, painel e entregas ficam fora de .claude/","created":"2026-09-23","tags":["arquitetura","babel-os","dashboard","decisao","decision","evolui","painel"]},{"id":"2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe","title":"Portão de aprendizado no Stop: uma cobrança por pedido, desligável","created":"2026-09-23","tags":["babel-os","conversa","decisao","decision","entrega","esquece","memoria"]},{"id":"2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap","title":"Painel gerado do template com dados inline e snapshots em backups/ na raiz","created":"2026-09-23","tags":["babel-os","backup","backups","dashboard","decisao","decision","dentro","fora"]}],"projects":[{"id":"babel-os","title":"babel-os: o organismo Dominic","summary":"Corpo do Dominic: substrato de memória, motor determinístico, hook único, 16 skills, 5 agentes, 4 workflows, painel Babel OS e status line em português","situation":"in-progress","next":["reiniciar a sessão para carregar CLAUDE.md, agentes e status line","abrir o painel na lateral do VS Code","traduzir para português os 10 resumos de conhecimento do Claude Code","pedir ao Marcelo para refazer a integração do iTerm2 (cc-status)"],"files":["CLAUDE.md","LEIA-ME.md",".claude/settings.json",".claude/hooks/hook.py","motor/selftest.py","dashboard/template.html"],"updated":"2026-09-23T00:13:05-03:00"}],"pending":[{"project":"babel-os","item":"reiniciar a sessão para carregar CLAUDE.md, agentes e status line","since":"2026-09-23"},{"project":"babel-os","item":"abrir o painel na lateral do VS Code","since":"2026-09-23"},{"project":"babel-os","item":"traduzir para português os 10 resumos de conhecimento do Claude Code","since":"2026-09-23"},{"project":"babel-os","item":"pedir ao Marcelo para refazer a integração do iTerm2 (cc-status)","since":"2026-09-23"}],"agenda":[],"timeline":[{"ts":"2026-09-23T00:13:04-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/decisoes/2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c.md","summary":"new decisão 2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c: Substrato, motor, painel e entregas ficam fora de .claude/","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:04-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/decisoes/2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e.md","summary":"new decisão 2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e: Um único hook (.claude/hooks/hook.py) atende os 16 eventos","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:04-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/decisoes/2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe.md","summary":"new decisão 2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe: Portão de aprendizado no Stop: uma cobrança por pedido, desligável","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:05-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/decisoes/2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap.md","summary":"new decisão 2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap: Painel gerado do template com dados inline e snapshots em backups/ na raiz","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:05-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/memorias/2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09.md","summary":"new aprendizado 2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09: Como o organismo Dominic foi construído (22-23/09/2026)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:05-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/projetos/babel-os.md","summary":"new projeto babel-os: babel-os: o organismo Dominic","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:05-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"SID=\"${CLAUDE_CODE_SESSION_ID:-7f804fee}\"; R() { /usr/bin/python3 motor/remember.py --session \"$SID\" --source marcelo-said \"$@\" 2>&1 | tail -2; }\nR --type decision --title \"Substrato, motor, painel e…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:05-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"bash dashboard/serve.sh; sleep 1; curl -s -o /dev/null -w \"painel http: %{http_code}\\n\" http://127.0.0.1:8765/dashboard/; echo \"=== LEIA-ME.md ===\"; cat LEIA-ME.md","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:07-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"bash dashboard/serve.sh; sleep 1; curl -s -o /dev/null -w \"painel http: %{http_code}\\n\" http://127.0.0.1:8765/dashboard/; echo \"=== LEIA-ME.md ===\"; cat LEIA-ME.md","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:34-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"deny: rm recursivo fora de entregas/: mova para memoria/.lixeira/","agent":null,"denied":true,"blocked":null},{"ts":"2026-09-23T00:13:53-03:00","session":"7f804fee","event":"PostToolUse","tool":"mcp__claude-in-chrome__navigate","file":null,"summary":"mcp__claude-in-chrome__navigate","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:53-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"echo \"---events.jsonl (últimas 8)---\"; tail -8 memoria/log/events.jsonl 2>/dev/null | cut -c1-220; echo \"---prompts/turns---\"; wc -l memoria/log/*.jsonl 2>/dev/null; echo \"---ligando o portão---\"; /u…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:54-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"echo \"---events.jsonl (últimas 8)---\"; tail -8 memoria/log/events.jsonl 2>/dev/null | cut -c1-220; echo \"---prompts/turns---\"; wc -l memoria/log/*.jsonl 2>/dev/null; echo \"---ligando o portão---\"; /u…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:54-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"M=/Users/marcelomaximos/.claude/projects/-Users-marcelomaximos-Desktop-babel-os/memory; cat > \"$M/projeto-babel-os.md\" <<'EOF'\n---\nname: projeto-babel-os\ndescription: O babel-os é o organismo Dominic…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:13:54-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"M=/Users/marcelomaximos/.claude/projects/-Users-marcelomaximos-Desktop-babel-os/memory; cat > \"$M/projeto-babel-os.md\" <<'EOF'\n---\nname: projeto-babel-os\ndescription: O babel-os é o organismo Dominic…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:18-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"grep -n -E \"def protect|rm recursivo|entregas|lixeira\" .claude/hooks/hook.py | head -20","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:18-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"grep -n -E \"def protect|rm recursivo|entregas|lixeira\" .claude/hooks/hook.py | head -20","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:20-03:00","session":"7f804fee","event":"PostToolUse","tool":"mcp__claude-in-chrome__computer","file":null,"summary":"mcp__claude-in-chrome__computer","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:30-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"sed -n '380,406p' .claude/hooks/hook.py","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:30-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"sed -n '380,406p' .claude/hooks/hook.py","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:32-03:00","session":"7f804fee","event":"PostToolUse","tool":"mcp__claude-in-chrome__computer","file":null,"summary":"mcp__claude-in-chrome__computer","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:50-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"/usr/bin/python3 - <<'EOF'\nimport io\np=\".claude/hooks/hook.py\"; s=io.open(p,encoding=\"utf-8\").read()\na='''        ap = resolve_path(t, base)\n        if ap is None:\n            continue\n        r = _n…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:52-03:00","session":"t","event":"PreToolUse","tool":"Bash","file":null,"summary":"rm -f /tmp/dominic-debug.txt","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:14:52-03:00","session":"t","event":"PreToolUse","tool":"Bash","file":null,"summary":"deny: rm recursivo fora de entregas/: mova para memoria/.lixeira/","agent":null,"denied":true,"blocked":null},{"ts":"2026-09-23T00:15:07-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":"deny","summary":"/usr/bin/python3 - <<'EOF'\nimport io\np=\".claude/hooks/hook.py\"; s=io.open(p,encoding=\"utf-8\").read()\na='''        ap = resolve_path(t, base)\n        if ap is None:\n            continue\n        r = _n…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:09-03:00","session":"7f804fee","event":"PostToolUse","tool":"mcp__claude-in-chrome__computer","file":null,"summary":"mcp__claude-in-chrome__computer","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:47-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"R() { /usr/bin/python3 motor/remember.py --session 7f804fee --source marcelo-said --type preference --confidence 0.9 \"$@\" 2>&1 | tail -1; }\nR --title \"Marcelo quer tudo em português, inclusive descri…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/memorias/2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico.md","summary":"new preferência 2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico: Marcelo quer tudo em português, inclusive descrições de comandos","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/memorias/2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que.md","summary":"new preferência 2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que: Marcelo prefere sites e LPs em arquivo único que abre com dois cliques","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/memorias/2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q.md","summary":"new preferência 2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q: Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"7f804fee","event":"memoria","tool":null,"file":"memoria/memorias/2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o.md","summary":"new preferência 2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o: Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"ba37cd83","event":"InstructionsLoaded","tool":null,"file":".claude/rules/seguranca.md","summary":"carregou .claude/rules/seguranca.md (Project, session_start)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"ba37cd83","event":"InstructionsLoaded","tool":null,"file":"memoria/INDICE.md","summary":"carregou memoria/INDICE.md (Project, include)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"ba37cd83","event":"InstructionsLoaded","tool":null,"file":"CLAUDE.md","summary":"carregou CLAUDE.md (Project, session_start)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"ba37cd83","event":"InstructionsLoaded","tool":null,"file":".claude/rules/voz-dominic.md","summary":"carregou .claude/rules/voz-dominic.md (Project, session_start)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"ba37cd83","event":"InstructionsLoaded","tool":null,"file":".claude/rules/memoria.md","summary":"carregou .claude/rules/memoria.md (Project, session_start)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:50-03:00","session":"ba37cd83","event":"Setup","tool":null,"file":null,"summary":"verify --repair rc=0","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:51-03:00","session":"ba37cd83","event":"SessionStart","tool":null,"file":null,"summary":"contexto de 1884 chars","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:51-03:00","session":"ba37cd83","event":"SessionEnd","tool":null,"file":null,"summary":"fim: 0 pedido(s), 0 memoria(s), 0 arquivo(s)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:52-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"R() { /usr/bin/python3 motor/remember.py --session 7f804fee --source marcelo-said --type preference --confidence 0.9 \"$@\" 2>&1 | tail -1; }\nR --title \"Marcelo quer tudo em português, inclusive descri…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:15:54-03:00","session":"7f804fee","event":"PostToolUse","tool":"mcp__claude-in-chrome__computer","file":null,"summary":"mcp__claude-in-chrome__computer","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:16:15-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"echo \"--- verify (plano) ---\"; /usr/bin/python3 motor/verify.py 2>&1 | tail -8; echo \"--- verify.json ---\"; cat memoria/.cache/verify.json 2>/dev/null | head -c 600; echo; echo \"--- onde 'settings_au…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:16:16-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"echo \"--- verify (plano) ---\"; /usr/bin/python3 motor/verify.py 2>&1 | tail -8; echo \"--- verify.json ---\"; cat memoria/.cache/verify.json 2>/dev/null | head -c 600; echo; echo \"--- onde 'settings_au…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:16:18-03:00","session":"7f804fee","event":"PostToolUse","tool":"mcp__claude-in-chrome__computer","file":null,"summary":"mcp__claude-in-chrome__computer","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:16:19-03:00","session":"7f804fee","event":"PostToolUse","tool":"mcp__claude-in-chrome__read_console_messages","file":null,"summary":"mcp__claude-in-chrome__read_console_messages","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:16:32-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"sed -n '1106,1122p' motor/refine.py; echo \"--- verify.json lido no refine? ---\"; grep -n \"verify.json\\|verify_json\\|\\\"verify\\\"\" motor/refine.py | head","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:16:32-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"sed -n '1106,1122p' motor/refine.py; echo \"--- verify.json lido no refine? ---\"; grep -n \"verify.json\\|verify_json\\|\\\"verify\\\"\" motor/refine.py | head","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:16:47-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"/usr/bin/python3 - <<'EOF'\nimport io\np=\"motor/refine.py\"; s=io.open(p,encoding=\"utf-8\").read()\na='''    kept = [w for w in (old_health.get(\"warnings\") or []) if isinstance(w, str) and not w.startswit…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:17:03-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"/usr/bin/python3 - <<'EOF'\nimport io\np=\"motor/refine.py\"; s=io.open(p,encoding=\"utf-8\").read()\na='''    kept = [w for w in (old_health.get(\"warnings\") or []) if isinstance(w, str) and not w.startswit…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:17:04-03:00","session":"7f804fee","event":"PostToolUse","tool":"mcp__claude-in-chrome__tabs_close_mcp","file":null,"summary":"mcp__claude-in-chrome__tabs_close_mcp","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:17:19-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"sed -i '' \"s/(veja LEIA-ME, aviso 8a)/(veja LEIA-ME, 'Dois avisos importantes')/; s/(LEIA-ME, aviso 8a)/(LEIA-ME, 'Dois avisos importantes')/\" motor/wake.py motor/report.py && grep -c \"Dois avisos im…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:17:21-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":"motor/report.py","summary":"sed -i '' \"s/(veja LEIA-ME, aviso 8a)/(veja LEIA-ME, 'Dois avisos importantes')/; s/(LEIA-ME, aviso 8a)/(LEIA-ME, 'Dois avisos importantes')/\" motor/wake.py motor/report.py && grep -c \"Dois avisos im…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T00:17:42-03:00","session":"7f804fee","event":"Stop","tool":null,"file":null,"summary":"refino rapido 0.1 s: refino quick 29 ms · v0.2.0 · 25 docs · +0 novas · 0 alteradas · 0 superadas","agent":null,"denied":null,"blocked":false},{"ts":"2026-09-23T00:20:46-03:00","session":"7f804fee","event":"SubagentStop","tool":null,"file":null,"summary":"subagente ? terminou","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T01:20:28-03:00","session":"7f804fee","event":"ConfigChange","tool":null,"file":"outside:SKILL.md","summary":"config skills outside:SKILL.md","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T01:59:05-03:00","session":"7f804fee","event":"UserPromptSubmit","tool":null,"file":null,"summary":"/Users/marcelomaximos/Desktop/babel-os/entregas/sites/LP Reino/networkreino.html fui abrir a LP no preview site e deu erro, provavelemente precise baixar algo no VS code e já aproveitando baixe tuso…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T01:59:15-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"cd \"/Users/marcelomaximos/Desktop/babel-os/entregas/sites/LP Reino\" 2>/dev/null && ls -la | head; C=\"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\"; ls -la \"$C\"; \"$C\" --list-ex…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T01:59:18-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"cd \"/Users/marcelomaximos/Desktop/babel-os/entregas/sites/LP Reino\" 2>/dev/null && ls -la | head; C=\"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\"; ls -la \"$C\"; \"$C\" --list-ex…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T01:59:25-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"C=\"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\"; for e in ms-vscode.live-server MS-CEINTL.vscode-language-pack-pt-BR ms-python.python ms-python.vscode-pylance esbenp.prettier…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:00:13-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"C=\"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\"; for e in ms-vscode.live-server MS-CEINTL.vscode-language-pack-pt-BR ms-python.python ms-python.vscode-pylance esbenp.prettier…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:00:16-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"C=\"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\"; for i in 1 2 3 4; do \"$C\" --install-extension ms-vscode.live-server --force 2>&1 | tail -1 && \"$C\" --list-extensions | grep -…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:00:19-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"C=\"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\"; for i in 1 2 3 4; do \"$C\" --install-extension ms-vscode.live-server --force 2>&1 | tail -1 && \"$C\" --list-extensions | grep -…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:00:27-03:00","session":"7f804fee","event":"Stop","tool":null,"file":null,"summary":"refino rapido 0.1 s: refino quick 23 ms · v0.2.0 · 25 docs · +0 novas · 0 alteradas · 0 superadas","agent":null,"denied":null,"blocked":false},{"ts":"2026-09-23T02:00:29-03:00","session":"7f804fee","event":"SubagentStop","tool":null,"file":null,"summary":"subagente ? terminou","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:02:44-03:00","session":"7f804fee","event":"UserPromptSubmit","tool":null,"file":null,"summary":"[Image #1]/Users/marcelomaximos/Desktop/babel-os/entregas/sites/LP Reino/networkreino.html precisa abrir, nao mexa no codigo mexa no vs code","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:02:51-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"F=\"$HOME/Library/Application Support/Code/User/settings.json\"; cat \"$F\" 2>/dev/null || echo \"(sem arquivo)\"","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:02:52-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"F=\"$HOME/Library/Application Support/Code/User/settings.json\"; cat \"$F\" 2>/dev/null || echo \"(sem arquivo)\"","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:02:56-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"F=\"$HOME/Library/Application Support/Code/User/settings.json\"; cp \"$F\" \"$F.bak\"; cat > \"$F\" <<'EOF'\n{\n    \"claudeCode.hideOnboarding\": true,\n    \"security.workspace.trust.enabled\": false,\n    \"workbe…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:02:57-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"F=\"$HOME/Library/Application Support/Code/User/settings.json\"; cp \"$F\" \"$F.bak\"; cat > \"$F\" <<'EOF'\n{\n    \"claudeCode.hideOnboarding\": true,\n    \"security.workspace.trust.enabled\": false,\n    \"workbe…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:03:02-03:00","session":"7f804fee","event":"Stop","tool":null,"file":null,"summary":"refino rapido 0.1 s: refino quick 21 ms · v0.2.0 · 25 docs · +0 novas · 0 alteradas · 0 superadas","agent":null,"denied":null,"blocked":false},{"ts":"2026-09-23T02:03:04-03:00","session":"7f804fee","event":"SubagentStop","tool":null,"file":null,"summary":"subagente ? terminou","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:03:47-03:00","session":"7f804fee","event":"UserPromptSubmit","tool":null,"file":null,"summary":"[Image #2] olha essa msg","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:03:53-03:00","session":"7f804fee","event":"PreToolUse","tool":"Bash","file":null,"summary":"F=\"$HOME/Library/Application Support/Code/User/settings.json\"; /usr/bin/python3 - \"$F\" <<'EOF'\nimport json,sys\np=sys.argv[1]; d=json.load(open(p))\nd[\"cSpell.blockCheckingWhenLineLengthGreaterThan\"]=0…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:03:54-03:00","session":"7f804fee","event":"PostToolUse","tool":"Bash","file":null,"summary":"F=\"$HOME/Library/Application Support/Code/User/settings.json\"; /usr/bin/python3 - \"$F\" <<'EOF'\nimport json,sys\np=sys.argv[1]; d=json.load(open(p))\nd[\"cSpell.blockCheckingWhenLineLengthGreaterThan\"]=0…","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:03:57-03:00","session":"7f804fee","event":"Stop","tool":null,"file":null,"summary":"refino rapido 0.1 s: refino quick 22 ms · v0.2.0 · 25 docs · +0 novas · 0 alteradas · 0 superadas","agent":null,"denied":null,"blocked":false},{"ts":"2026-09-23T02:05:32-03:00","session":"ecc342fd","event":"InstructionsLoaded","tool":null,"file":"memoria/INDICE.md","summary":"carregou memoria/INDICE.md (Project, include)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:05:32-03:00","session":"ecc342fd","event":"InstructionsLoaded","tool":null,"file":"CLAUDE.md","summary":"carregou CLAUDE.md (Project, session_start)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:05:32-03:00","session":"ecc342fd","event":"InstructionsLoaded","tool":null,"file":".claude/rules/voz-dominic.md","summary":"carregou .claude/rules/voz-dominic.md (Project, session_start)","agent":null,"denied":null,"blocked":null},{"ts":"2026-09-23T02:05:32-03:00","session":"ecc342fd","event":"InstructionsLoaded","tool":null,"file":".claude/rules/memoria.md","summary":"carregou .claude/rules/memoria.md (Project, session_start)","agent":null,"denied":null,"blocked":null}],"recalls":[{"ts":"2026-09-23T02:02:44-03:00","top":[["2026-09-23-reino-referencias",34.21],["2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que",23.94],["marcelo",20.11],["babel-os",8.03],["2026-09-23-projeto-babel-os",6.29],["2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap",6.17]],"expanded":[],"chars":2942,"ms":4,"history":{"times":1,"last":"2026-09-23"}},{"ts":"2026-09-23T02:03:47-03:00","top":[["2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09",1.08]],"expanded":[],"chars":1007,"ms":3,"history":{"times":1,"last":"2026-09-23"}}],"mutations":[{"ts":"2026-09-23T00:12:07-03:00","versionBefore":"0.1.0","versionAfter":"0.1.1","new":["2026-09-23-projeto-babel-os","2026-09-23-reino-referencias","changelog-e-boas-praticas","diretorio-e-memoria","hooks","marcelo","pedido-original","plugins-mcp","riscos-e-lacunas","settings","skills-e-comandos","statusline-e-terminal","subagentes","vscode-sessoes-checkpoints","workflows-e-automacao"],"changed":[],"superseded":[],"trigger":"install","reason":null},{"ts":"2026-09-23T00:13:04-03:00","versionBefore":"0.1.1","versionAfter":"0.1.2","new":["2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:13:04-03:00","versionBefore":"0.1.2","versionAfter":"0.1.3","new":["2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:13:05-03:00","versionBefore":"0.1.3","versionAfter":"0.1.4","new":["2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:13:05-03:00","versionBefore":"0.1.4","versionAfter":"0.1.5","new":["2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:13:05-03:00","versionBefore":"0.1.5","versionAfter":"0.1.6","new":["2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:13:05-03:00","versionBefore":"0.1.6","versionAfter":"0.1.7","new":["babel-os"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:15:50-03:00","versionBefore":"0.1.7","versionAfter":"0.1.8","new":["2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:15:50-03:00","versionBefore":"0.1.8","versionAfter":"0.1.9","new":["2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:15:50-03:00","versionBefore":"0.1.9","versionAfter":"0.1.10","new":["2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:15:50-03:00","versionBefore":"0.1.10","versionAfter":"0.1.11","new":["2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o"],"changed":[],"superseded":[],"trigger":"remember","reason":null},{"ts":"2026-09-23T00:15:51-03:00","versionBefore":"0.1.11","versionAfter":"0.2.0","new":[],"changed":[],"superseded":[],"trigger":"SessionStart","reason":"sessões 7f804fee deixaram 10 memórias"}],"refinements":[{"ts":"2026-09-23T00:12:07-03:00","mode":"full","ms":40,"version":"0.1.1","partial":false,"skipped":null},{"ts":"2026-09-23T00:12:07-03:00","mode":"state-only","ms":3,"version":"0.1.1","partial":false,"skipped":null},{"ts":"2026-09-23T00:13:04-03:00","mode":"quick","ms":17,"version":"0.1.2","partial":false,"skipped":null},{"ts":"2026-09-23T00:13:04-03:00","mode":"quick","ms":10,"version":"0.1.3","partial":false,"skipped":null},{"ts":"2026-09-23T00:13:05-03:00","mode":"quick","ms":11,"version":"0.1.4","partial":false,"skipped":null},{"ts":"2026-09-23T00:13:05-03:00","mode":"quick","ms":11,"version":"0.1.5","partial":false,"skipped":null},{"ts":"2026-09-23T00:13:05-03:00","mode":"quick","ms":13,"version":"0.1.6","partial":false,"skipped":null},{"ts":"2026-09-23T00:13:05-03:00","mode":"quick","ms":13,"version":"0.1.7","partial":false,"skipped":null},{"ts":"2026-09-23T00:13:54-03:00","mode":"full","ms":38,"version":"0.1.7","partial":false,"skipped":null},{"ts":"2026-09-23T00:15:50-03:00","mode":"quick","ms":20,"version":"0.1.8","partial":false,"skipped":null},{"ts":"2026-09-23T00:15:50-03:00","mode":"quick","ms":13,"version":"0.1.9","partial":false,"skipped":null},{"ts":"2026-09-23T00:15:50-03:00","mode":"quick","ms":14,"version":"0.1.10","partial":false,"skipped":null},{"ts":"2026-09-23T00:15:50-03:00","mode":"quick","ms":14,"version":"0.1.11","partial":false,"skipped":null},{"ts":"2026-09-23T00:15:50-03:00","mode":"state-only","ms":2,"version":"0.1.11","partial":false,"skipped":null},{"ts":"2026-09-23T00:15:51-03:00","mode":"state-only","ms":4,"version":"0.1.11","partial":false,"skipped":null},{"ts":"2026-09-23T00:15:51-03:00","mode":"state-only","ms":2,"version":"0.1.11","partial":false,"skipped":null},{"ts":"2026-09-23T00:15:51-03:00","mode":"state-only","ms":2,"version":"0.2.0","partial":false,"skipped":null},{"ts":"2026-09-23T00:16:48-03:00","mode":"state-only","ms":8,"version":"0.2.0","partial":false,"skipped":null},{"ts":"2026-09-23T00:17:42-03:00","mode":"quick","ms":29,"version":"0.2.0","partial":false,"skipped":null},{"ts":"2026-09-23T02:00:27-03:00","mode":"quick","ms":23,"version":"0.2.0","partial":false,"skipped":null},{"ts":"2026-09-23T02:03:02-03:00","mode":"quick","ms":21,"version":"0.2.0","partial":false,"skipped":null},{"ts":"2026-09-23T02:03:57-03:00","mode":"quick","ms":22,"version":"0.2.0","partial":false,"skipped":null},{"ts":"2026-09-23T02:05:32-03:00","mode":"state-only","ms":7,"version":"0.2.0","partial":false,"skipped":null},{"ts":"2026-09-23T02:05:32-03:00","mode":"state-only","ms":2,"version":"0.2.0","partial":false,"skipped":null}],"heartbeats":[{"ts":"2026-09-23T00:13:05-03:00","session":"7f804fee","contextPct":57,"costUsd":389.98778749999974,"fiveHourPct":29,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:14:05-03:00","session":"7f804fee","contextPct":58,"costUsd":390.48715949999973,"fiveHourPct":29,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:15:20-03:00","session":"7f804fee","contextPct":59,"costUsd":391.35297549999973,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:16:20-03:00","session":"7f804fee","contextPct":60,"costUsd":392.12988849999977,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:17:20-03:00","session":"7f804fee","contextPct":61,"costUsd":392.61753724999977,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:18:20-03:00","session":"7f804fee","contextPct":61,"costUsd":393.11406599999975,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:19:20-03:00","session":"7f804fee","contextPct":61,"costUsd":393.11406599999975,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:20:35-03:00","session":"7f804fee","contextPct":61,"costUsd":393.11406599999975,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:21:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:22:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:24:05-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:25:05-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:26:05-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:27:05-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:28:05-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:29:05-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:30:05-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:31:20-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:32:20-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:33:20-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:34:20-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:35:35-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:36:35-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:37:35-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:38:35-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:39:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:40:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:41:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:42:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:43:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:44:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:45:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:46:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:47:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:48:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:49:50-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:50:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:51:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:53:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:54:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:55:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:56:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:57:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:58:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T00:59:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:00:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:01:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:02:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:03:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:04:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:05:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:06:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:08:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:09:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:10:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:11:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:12:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:13:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:15:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:16:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:17:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:18:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:19:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:20:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":true},{"ts":"2026-09-23T01:21:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:22:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:23:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:24:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:25:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:26:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:27:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:29:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:30:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:31:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:32:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:33:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:34:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:35:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:36:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:37:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:38:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:39:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:40:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:41:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:43:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:44:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:45:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:46:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:47:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:48:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:49:21-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:50:36-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:51:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:52:51-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:54:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:55:06-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Fable 5.1","cacheWarm":false},{"ts":"2026-09-23T01:56:18-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Opus 5.5 (1M context)","cacheWarm":false},{"ts":"2026-09-23T01:57:29-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Opus 5.5 (1M context)","cacheWarm":false},{"ts":"2026-09-23T01:58:44-03:00","session":"7f804fee","contextPct":61,"costUsd":393.29951249999976,"fiveHourPct":30,"model":"Opus 5.5 (1M context)","cacheWarm":false},{"ts":"2026-09-23T01:59:59-03:00","session":"7f804fee","contextPct":56,"costUsd":397.7481462999998,"fiveHourPct":33,"model":"Opus 5.5 (1M context)","cacheWarm":true},{"ts":"2026-09-23T02:00:59-03:00","session":"7f804fee","contextPct":57,"costUsd":398.1281480999998,"fiveHourPct":33,"model":"Opus 5.5 (1M context)","cacheWarm":true},{"ts":"2026-09-23T02:01:59-03:00","session":"7f804fee","contextPct":57,"costUsd":398.1281480999998,"fiveHourPct":33,"model":"Opus 5.5 (1M context)","cacheWarm":true},{"ts":"2026-09-23T02:03:01-03:00","session":"7f804fee","contextPct":57,"costUsd":398.4085630999998,"fiveHourPct":33,"model":"Opus 5.5 (1M context)","cacheWarm":true},{"ts":"2026-09-23T02:04:11-03:00","session":"7f804fee","contextPct":58,"costUsd":398.9290010999998,"fiveHourPct":33,"model":"Opus 5.5 (1M context)","cacheWarm":true},{"ts":"2026-09-23T02:05:11-03:00","session":"7f804fee","contextPct":58,"costUsd":398.9290010999998,"fiveHourPct":33,"model":"Opus 5.5 (1M context)","cacheWarm":true},{"ts":"2026-09-23T02:05:32-03:00","session":"ecc342fd","contextPct":null,"costUsd":0,"fiveHourPct":null,"model":"Opus 5.5 (1M context)","cacheWarm":null}],"compactions":[],"sessions":[],"deliveries":[{"name":"transcricao-completa.md","path":"entregas/sites/LP Reino/transcricao-completa.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"index.html","path":"entregas/sites/LP Reino/site-networkreino/index.html","type":"prototipo","when":"2026-09-23T01:54:55-03:00"},{"name":"hino-do-reino.mp3","path":"entregas/sites/LP Reino/site-networkreino/audio/hino-do-reino.mp3","type":"arquivo","when":"2026-09-23T01:54:55-03:00"},{"name":"site-networkreino.zip","path":"entregas/sites/LP Reino/site-networkreino.zip","type":"arquivo","when":"2026-09-23T01:54:55-03:00"},{"name":"reino-base-de-conhecimento.md","path":"entregas/sites/LP Reino/reino-base-de-conhecimento.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"prompt-suno-hino-do-reino.md","path":"entregas/sites/LP Reino/prompt-suno-hino-do-reino.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"networkreino.html","path":"entregas/sites/LP Reino/networkreino.html","type":"prototipo","when":"2026-09-23T01:54:55-03:00"},{"name":"supabase-pre-cadastro.sql","path":"entregas/sites/LP Reino/documentos/supabase-pre-cadastro.sql","type":"arquivo","when":"2026-09-23T01:54:55-03:00"},{"name":"prompt-agentico-lp.md","path":"entregas/sites/LP Reino/documentos/prompt-agentico-lp.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"mitologia-ufologica.md","path":"entregas/sites/LP Reino/documentos/mitologia-ufologica.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"ideias-pertencimento.md","path":"entregas/sites/LP Reino/documentos/ideias-pertencimento.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"copy-lp-v1.md","path":"entregas/sites/LP Reino/documentos/copy-lp-v1.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"anel.md","path":"entregas/sites/LP Reino/documentos/anel.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"LEIA-ME.md","path":"entregas/sites/LP Reino/documentos/LEIA-ME.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"INDICACAO.md","path":"entregas/sites/LP Reino/documentos/INDICACAO.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"DIRECAO.md","path":"entregas/sites/LP Reino/documentos/DIRECAO.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"DECISOES.md","path":"entregas/sites/LP Reino/documentos/DECISOES.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"conversa-reino.md","path":"entregas/sites/LP Reino/conversa-reino.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"},{"name":"hino-do-reino.mp3","path":"entregas/sites/LP Reino/audio/hino-do-reino.mp3","type":"arquivo","when":"2026-09-23T01:54:55-03:00"},{"name":"Hino do Reino (prévia).mp3","path":"entregas/sites/LP Reino/Hino do Reino (prévia).mp3","type":"arquivo","when":"2026-09-23T01:54:55-03:00"},{"name":"CONTINUAR-EM-OUTRA-CONTA.md","path":"entregas/sites/LP Reino/CONTINUAR-EM-OUTRA-CONTA.md","type":"sistema","when":"2026-09-23T01:54:55-03:00"}],"graph":{"nodes":[{"id":"2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09","type":"learning","label":"Como o organismo Dominic foi construído (22-23/09/2026)","degree":4,"collection":"memorias","created":"2026-09-23","status":"active","orphan":true},{"id":"2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q","type":"preference","label":"Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler","degree":3,"collection":"memorias","created":"2026-09-23","status":"active","orphan":true},{"id":"2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que","type":"preference","label":"Marcelo prefere sites e LPs em arquivo único que abre com dois cliques","degree":2,"collection":"memorias","created":"2026-09-23","status":"active","orphan":true},{"id":"2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o","type":"preference","label":"Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'","degree":3,"collection":"memorias","created":"2026-09-23","status":"active","orphan":true},{"id":"2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico","type":"preference","label":"Marcelo quer tudo em português, inclusive descrições de comandos","degree":3,"collection":"memorias","created":"2026-09-23","status":"active","orphan":true},{"id":"2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap","type":"decision","label":"Painel gerado do template com dados inline e snapshots em backups/ na raiz","degree":4,"collection":"decisoes","created":"2026-09-23","status":"active","orphan":true},{"id":"2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe","type":"decision","label":"Portão de aprendizado no Stop: uma cobrança por pedido, desligável","degree":3,"collection":"decisoes","created":"2026-09-23","status":"active","orphan":true},{"id":"2026-09-23-projeto-babel-os","type":"fact","label":"O que é o babel-os (organismo vivo 'Dominic'), primeira ativação em 22/09/2026 com ultrac…","degree":7,"collection":"memorias","created":"2026-09-23","status":"active"},{"id":"2026-09-23-reino-referencias","type":"reference","label":"Onde estão as fontes do Reino (base de conhecimento, LP publicada, app, canal WhatsApp, d…","degree":6,"collection":"memorias","created":"2026-09-23","status":"active"},{"id":"2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c","type":"decision","label":"Substrato, motor, painel e entregas ficam fora de .claude/","degree":4,"collection":"decisoes","created":"2026-09-23","status":"active","orphan":true},{"id":"2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e","type":"decision","label":"Um único hook (.claude/hooks/hook.py) atende os 16 eventos","degree":4,"collection":"decisoes","created":"2026-09-23","status":"active","orphan":true},{"id":"babel-os","type":"project","label":"babel-os: o organismo Dominic","degree":5,"collection":"projetos","created":"2026-09-23","status":"active","orphan":true},{"id":"changelog-e-boas-praticas","type":"knowledge","label":"Claude Code 2.1.280 — changelog e boas práticas","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"diretorio-e-memoria","type":"knowledge","label":"Claude Code 2.1.280 — diretório e memória","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"hooks","type":"knowledge","label":"Claude Code 2.1.280 — hooks (ganchos)","degree":4,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"marcelo","type":"profile","label":"Marcelo Rocha (Maximus): fundador do Reino, líder de grupos, não-dev, português estilo Wh…","degree":6,"collection":"perfil","created":"2026-09-22","status":"active"},{"id":"pedido-original","type":"reference","label":"Pedido original do Marcelo (CLAUDE.md de nascimento do Dominic)","degree":3,"collection":"origem","created":"2026-09-22","status":"active"},{"id":"plugins-mcp","type":"knowledge","label":"Claude Code 2.1.280 — plugins e MCP","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"project:babel-os","type":"project","label":"babel-os: o organismo Dominic","degree":0},{"id":"riscos-e-lacunas","type":"knowledge","label":"Claude Code 2.1.280 — riscos e lacunas","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"settings","type":"knowledge","label":"Claude Code 2.1.280 — settings (configurações)","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"skills-e-comandos","type":"knowledge","label":"Claude Code 2.1.280 — skills e comandos","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"statusline-e-terminal","type":"knowledge","label":"Claude Code 2.1.280 — status line e terminal","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"subagentes","type":"knowledge","label":"Claude Code 2.1.280 — subagentes","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"tag:aprendizado","type":"tag","label":"aprendizado","degree":2},{"id":"tag:auto-memory","type":"tag","label":"auto-memory","degree":2},{"id":"tag:babel","type":"tag","label":"babel","degree":2},{"id":"tag:babel-os","type":"tag","label":"babel-os","degree":6},{"id":"tag:claude-code","type":"tag","label":"claude-code","degree":12},{"id":"tag:configuracao","type":"tag","label":"configuracao","degree":11},{"id":"tag:construcao","type":"tag","label":"construcao","degree":2},{"id":"tag:dashboard","type":"tag","label":"dashboard","degree":2},{"id":"tag:decisao","type":"tag","label":"decisao","degree":4},{"id":"tag:decision","type":"tag","label":"decision","degree":4},{"id":"tag:dominic","type":"tag","label":"dominic","degree":2},{"id":"tag:hooks","type":"tag","label":"hooks","degree":2},{"id":"tag:knowledge","type":"tag","label":"knowledge","degree":11},{"id":"tag:marcelo","type":"tag","label":"marcelo","degree":6},{"id":"tag:preference","type":"tag","label":"preference","degree":4},{"id":"tag:projeto","type":"tag","label":"projeto","degree":2},{"id":"tag:reference","type":"tag","label":"reference","degree":2},{"id":"tag:reino","type":"tag","label":"reino","degree":2},{"id":"tag:voz","type":"tag","label":"voz","degree":3},{"id":"vscode-sessoes-checkpoints","type":"knowledge","label":"Claude Code 2.1.280 — VS Code, sessões e checkpoints","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"},{"id":"workflows-e-automacao","type":"knowledge","label":"Claude Code 2.1.280 — workflows e automação","degree":3,"collection":"conhecimento","created":"2026-09-22","status":"active"}],"edges":[{"from":"2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09","to":"tag:aprendizado","type":"tag","weight":0.5},{"from":"2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09","to":"tag:babel-os","type":"tag","weight":0.167},{"from":"2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"2026-09-23-como-o-organismo-dominic-foi-construido-22-23-09","to":"tag:construcao","type":"tag","weight":0.5},{"from":"2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q","to":"tag:marcelo","type":"tag","weight":0.167},{"from":"2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q","to":"tag:preference","type":"tag","weight":0.25},{"from":"2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q","to":"tag:voz","type":"tag","weight":0.333},{"from":"2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que","to":"tag:marcelo","type":"tag","weight":0.167},{"from":"2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que","to":"tag:preference","type":"tag","weight":0.25},{"from":"2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o","to":"tag:marcelo","type":"tag","weight":0.167},{"from":"2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o","to":"tag:preference","type":"tag","weight":0.25},{"from":"2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o","to":"tag:voz","type":"tag","weight":0.333},{"from":"2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico","to":"tag:marcelo","type":"tag","weight":0.167},{"from":"2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico","to":"tag:preference","type":"tag","weight":0.25},{"from":"2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico","to":"tag:voz","type":"tag","weight":0.333},{"from":"2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap","to":"tag:babel-os","type":"tag","weight":0.167},{"from":"2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap","to":"tag:dashboard","type":"tag","weight":0.5},{"from":"2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap","to":"tag:decisao","type":"tag","weight":0.25},{"from":"2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap","to":"tag:decision","type":"tag","weight":0.25},{"from":"2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe","to":"tag:babel-os","type":"tag","weight":0.167},{"from":"2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe","to":"tag:decisao","type":"tag","weight":0.25},{"from":"2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe","to":"tag:decision","type":"tag","weight":0.25},{"from":"2026-09-23-projeto-babel-os","to":"2026-09-23-reino-referencias","type":"link","weight":1.0},{"from":"2026-09-23-projeto-babel-os","to":"marcelo","type":"link","weight":1.0},{"from":"2026-09-23-projeto-babel-os","to":"tag:auto-memory","type":"tag","weight":0.5},{"from":"2026-09-23-projeto-babel-os","to":"tag:babel","type":"tag","weight":0.5},{"from":"2026-09-23-projeto-babel-os","to":"tag:projeto","type":"tag","weight":0.5},{"from":"2026-09-23-reino-referencias","to":"2026-09-23-projeto-babel-os","type":"link","weight":1.0},{"from":"2026-09-23-reino-referencias","to":"tag:auto-memory","type":"tag","weight":0.5},{"from":"2026-09-23-reino-referencias","to":"tag:reference","type":"tag","weight":0.5},{"from":"2026-09-23-reino-referencias","to":"tag:reino","type":"tag","weight":0.5},{"from":"2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c","to":"tag:babel-os","type":"tag","weight":0.167},{"from":"2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c","to":"tag:dashboard","type":"tag","weight":0.5},{"from":"2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c","to":"tag:decisao","type":"tag","weight":0.25},{"from":"2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c","to":"tag:decision","type":"tag","weight":0.25},{"from":"2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e","to":"tag:babel-os","type":"tag","weight":0.167},{"from":"2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e","to":"tag:decisao","type":"tag","weight":0.25},{"from":"2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e","to":"tag:decision","type":"tag","weight":0.25},{"from":"2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e","to":"tag:hooks","type":"tag","weight":0.5},{"from":"babel-os","to":"tag:aprendizado","type":"tag","weight":0.5},{"from":"babel-os","to":"tag:babel-os","type":"tag","weight":0.167},{"from":"babel-os","to":"tag:construcao","type":"tag","weight":0.5},{"from":"babel-os","to":"tag:dominic","type":"tag","weight":0.5},{"from":"babel-os","to":"tag:projeto","type":"tag","weight":0.5},{"from":"changelog-e-boas-praticas","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"changelog-e-boas-praticas","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"changelog-e-boas-praticas","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"diretorio-e-memoria","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"diretorio-e-memoria","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"diretorio-e-memoria","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"hooks","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"hooks","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"hooks","to":"tag:hooks","type":"tag","weight":0.5},{"from":"hooks","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"marcelo","to":"2026-09-23-projeto-babel-os","type":"link","weight":1.0},{"from":"marcelo","to":"2026-09-23-reino-referencias","type":"link","weight":1.0},{"from":"marcelo","to":"tag:babel","type":"tag","weight":0.5},{"from":"marcelo","to":"tag:marcelo","type":"tag","weight":0.167},{"from":"marcelo","to":"tag:reino","type":"tag","weight":0.5},{"from":"pedido-original","to":"tag:dominic","type":"tag","weight":0.5},{"from":"pedido-original","to":"tag:marcelo","type":"tag","weight":0.167},{"from":"pedido-original","to":"tag:reference","type":"tag","weight":0.5},{"from":"plugins-mcp","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"plugins-mcp","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"plugins-mcp","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"riscos-e-lacunas","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"riscos-e-lacunas","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"riscos-e-lacunas","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"settings","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"settings","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"settings","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"skills-e-comandos","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"skills-e-comandos","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"skills-e-comandos","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"statusline-e-terminal","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"statusline-e-terminal","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"statusline-e-terminal","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"subagentes","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"subagentes","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"subagentes","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"vscode-sessoes-checkpoints","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"vscode-sessoes-checkpoints","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"vscode-sessoes-checkpoints","to":"tag:knowledge","type":"tag","weight":0.091},{"from":"workflows-e-automacao","to":"tag:claude-code","type":"tag","weight":0.083},{"from":"workflows-e-automacao","to":"tag:configuracao","type":"tag","weight":0.091},{"from":"workflows-e-automacao","to":"tag:knowledge","type":"tag","weight":0.091}]},"contextCost":{"claudeMdLines":80,"indexLines":47,"rulesWithoutPaths":3,"skillDescriptionsChars":1805,"skillDescriptionMaxChars":241,"tokensPerSessionEst":5056,"tokensPerTurnEst":944,"autoMemoryLines":3,"autoMemoryBytes":350},"health":{"auto_memory_bytes":350,"auto_memory_lines":3,"duplicates":0,"index_bytes":4556,"index_lines":47,"index_max_lines":150,"invalid":0,"knowledge_age_days":0,"log_mb":0.06,"minor_pending":false,"orphans":10,"similar":0,"warnings":["iterm_cc_status"]},"warnings":[{"level":"atencao","text":"Integração cc-status do iTerm2 quebrada (veja LEIA-ME)."},{"level":"info","text":"10 memória(s) órfã(s): ligue a um projeto com /lembrar --project."}],"tips":["O índice fixo (CLAUDE.md + INDICE.md) só recarrega em /clear, /compact ou ao reiniciar.","Registre o que aprendeu com /lembrar; o painel e o índice mudam no mesmo instante.","/consultar <tema> acha tudo, inclusive o que não coube no índice.","Um arquivo PAUSA na raiz desliga os ganchos e a status line (/pausar)."],"templateMissing":false};</script>
+<script>
+'use strict';
+/* =====================================================================
+   Painel do Dominic — só textContent/createElement para dados (nunca
+   HTML montado com dados). Datas dd/mm HH:MM. Rótulos em português.
+   ===================================================================== */
+var LAST_GENERATED = null;
+var POLL_COUNTER = 0;
+var POLL_SCRIPT = null;
+var CURRENT = null;          // último BABEL renderizado
+var GRAPH_STATE = null;      // layout do grafo (para redesenho e hover)
+var AREA_STATE = null;       // dados do gráfico de área (para hover/resize)
+
+var TYPE_COLOR = {
+  profile: '#f5c76a', preference: '#3fe3ff', decision: '#8b5cff', project: '#3b82ff',
+  fact: '#34e6a6', learning: '#34e6a6', idea: '#e04bff', reference: '#9fb3d9',
+  knowledge: '#7aa2ff', compaction: '#6b7a99', report: '#6b7a99', tag: '#8290ad'
+};
+var TYPE_LABEL = {
+  profile: 'perfil', preference: 'preferência', fact: 'fato', learning: 'aprendizado',
+  idea: 'ideia', reference: 'referência', decision: 'decisão', project: 'projeto',
+  knowledge: 'conhecimento', compaction: 'compactação', report: 'relatório', tag: 'tag'
+};
+var SITUATION_LABEL = { idea: 'ideia', 'in-progress': 'em andamento', delivered: 'entregue', paused: 'pausado' };
+var SITUATION_CLASS = { idea: 'violet', 'in-progress': 'cyan', delivered: 'green', paused: 'gold' };
+
+/* ---------- utilidades DOM ---------- */
+function $(id) { return document.getElementById(id); }
+function el(tag, attrs, children) {
+  var n = document.createElement(tag);
+  if (attrs) {
+    Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v === null || v === undefined) return;
+      if (k === 'class') n.className = v;
+      else if (k === 'text') n.textContent = v;
+      else if (k === 'style') n.style.cssText = v;
+      else if (k.indexOf('on') === 0) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v);
+    });
+  }
+  if (children !== undefined && children !== null) {
+    (Array.isArray(children) ? children : [children]).forEach(function (c) {
+      if (c === null || c === undefined || c === false) return;
+      n.appendChild(typeof c === 'string' || typeof c === 'number' ? document.createTextNode(String(c)) : c);
+    });
+  }
+  return n;
+}
+function clear(n) { while (n && n.firstChild) n.removeChild(n.firstChild); return n; }
+function setText(id, text) { var n = $(id); if (n) n.textContent = text === null || text === undefined ? '' : String(text); }
+function arr(v) { return Array.isArray(v) ? v : []; }
+function obj(v) { return v && typeof v === 'object' && !Array.isArray(v) ? v : {}; }
+function str(v, max) { if (v === null || v === undefined) return ''; var s = String(v); return max && s.length > max ? s.slice(0, max - 1).replace(/\s+$/, '') + '…' : s; }
+function num(v) { var n = Number(v); return isFinite(n) ? n : null; }
+function storeGet(k) { try { return window.localStorage.getItem('babel.' + k); } catch (e) { return null; } }
+function storeSet(k, v) { try { window.localStorage.setItem('babel.' + k, String(v)); } catch (e) { /* sem armazenamento: tudo bem */ } }
+function debounce(fn, ms) { var t = null; return function () { var a = arguments; clearTimeout(t); t = setTimeout(function () { fn.apply(null, a); }, ms); }; }
+
+/* ---------- datas e números (pt-BR) ---------- */
+function parseTs(s) {
+  if (!s) return null;
+  if (s instanceof Date) return isNaN(s.getTime()) ? null : s;
+  var t = String(s).trim();
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(t);
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  var d = new Date(t);
+  return isNaN(d.getTime()) ? null : d;
+}
+function pad(n) { return (n < 10 ? '0' : '') + n; }
+function fmtDate(s) { var d = parseTs(s); return d ? pad(d.getDate()) + '/' + pad(d.getMonth() + 1) : '—'; }
+function fmtDateFull(s) { var d = parseTs(s); return d ? pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() : '—'; }
+function fmtTime(s) { var d = parseTs(s); return d ? pad(d.getHours()) + ':' + pad(d.getMinutes()) : '—'; }
+function fmtDateTime(s) { var d = parseTs(s); return d ? fmtDate(d) + ' ' + fmtTime(d) : '—'; }
+function dayKey(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function minutesSince(s, now) { var d = parseTs(s); if (!d) return null; return Math.max(0, ((now || new Date()) - d) / 60000); }
+function relTime(s, now) {
+  var mins = minutesSince(s, now);
+  if (mins === null) return '';
+  if (mins < 1) return 'agora';
+  if (mins < 60) return 'há ' + Math.floor(mins) + ' min';
+  var h = Math.floor(mins / 60);
+  if (h < 24) return 'há ' + h + ' h';
+  var dd = Math.floor(h / 24);
+  return dd === 1 ? 'ontem' : 'há ' + dd + ' dias';
+}
+function fmtNum(v) { var n = num(v); return n === null ? '—' : n.toLocaleString('pt-BR'); }
+function fmtDec(v, digits) { var n = num(v); return n === null ? '—' : n.toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits }); }
+function fmtUSD(v) { var n = num(v); return n === null ? '—' : 'US$ ' + fmtDec(n, 2); }
+function fmtKB(bytes) { var n = num(bytes); return n === null ? '—' : fmtDec(n / 1024, 1) + ' KB'; }
+function fmtSigned(n) { return (n > 0 ? '+' : '') + fmtNum(n); }
+function sortByTsDesc(list) { return arr(list).slice().sort(function (a, b) { var ta = parseTs(a && a.ts), tb = parseTs(b && b.ts); return (tb ? tb.getTime() : 0) - (ta ? ta.getTime() : 0); }); }
+function fnv1a(s) { var h = 2166136261 >>> 0; s = String(s); for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
+function cssVar(name) { try { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || ''; } catch (e) { return ''; } }
+function toast(text) {
+  var t = $('toast'); if (!t) return;
+  t.textContent = text; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove('show'); }, 1800);
+}
+function copyText(text) {
+  var done = function () { toast('copiado: ' + str(text, 80)); };
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, function () { copyFallback(text, done); }); return; }
+  } catch (e) { /* segue para o fallback */ }
+  copyFallback(text, done);
+}
+function copyFallback(text, done) {
+  try {
+    var ta = el('textarea', { style: 'position:fixed;left:-9999px;top:0' });
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta); done();
+  } catch (e) { toast('não consegui copiar; selecione o texto'); }
+}
+function emptyLine(text) { return el('div', { class: 'empty', text: text || 'nada ainda' }); }
+
+/* ---------- 1. cabeçalho HUD ---------- */
+function healthLevel(B) {
+  var h = obj(B.health), warns = arr(B.warnings), hw = arr(h.warnings);
+  var hasError = warns.some(function (w) { return w && String(w.level || '').toLowerCase() === 'error'; }) || (num(h.invalid) || 0) > 0;
+  if (hasError) return { cls: 'err', text: 'erro' };
+  var attention = warns.length > 0 || hw.length > 0 || (num(h.orphans) || 0) > 0 || (num(h.duplicates) || 0) > 0 || (num(h.similar) || 0) > 0 || h.minor_pending === true || obj(B.state).paused === true;
+  if (attention) return { cls: 'warn', text: 'atenção' };
+  return { cls: 'ok', text: 'saudável' };
+}
+function lastEvolutionTs(B) {
+  var muts = sortByTsDesc(B.mutations);
+  if (muts.length && muts[0].ts) return muts[0].ts;
+  var lr = obj(obj(B.state).last_refinement);
+  return lr.ts || B.generatedAt || null;
+}
+function renderHeader(B) {
+  var id = obj(B.identity), st = obj(B.state);
+  setText('hud-version', 'v' + (id.version || st.version || '—'));
+  var gen = id.generation !== undefined ? id.generation : st.generation;
+  setText('hud-generation', gen !== undefined && gen !== null ? '· geração ' + fmtNum(gen) : '');
+  var since = id.since || st.activated_at;
+  var sinceEl = clear($('hud-since'));
+  if (since) { sinceEl.appendChild(document.createTextNode('vivo desde ')); sinceEl.appendChild(el('b', { text: fmtDateFull(since) })); }
+  var lev = healthLevel(B);
+  var badge = $('hud-health'); badge.className = 'badge ' + lev.cls; setText('hud-health-text', lev.text);
+  $('hud-pause').classList.toggle('hidden', st.paused !== true);
+  tickFreshness();
+}
+function tickFreshness() {
+  var B = CURRENT, now = new Date();
+  var fresh = $('hud-fresh'), dot = $('hud-dot');
+  if (!B || !B.generatedAt) {
+    fresh.className = 'fresh amber'; fresh.textContent = 'esperando o primeiro refino';
+    dot.className = 'dot amber pulse'; return;
+  }
+  var mins = minutesSince(B.generatedAt, now);
+  var hora = fmtTime(B.generatedAt);
+  if (mins === null) { fresh.className = 'fresh amber'; fresh.textContent = 'dados sem data'; }
+  else if (mins > 30) { fresh.className = 'fresh asleep'; fresh.textContent = 'organismo dormindo · dados de ' + hora; }
+  else if (mins > 2) { fresh.className = 'fresh amber'; fresh.textContent = 'dados de ' + hora; }
+  else { fresh.className = 'fresh'; fresh.textContent = 'dados de ' + hora + ' · ao vivo'; }
+  dot.className = 'dot pulse' + (mins !== null && mins < 10 ? '' : ' amber');
+  var ev = lastEvolutionTs(B);
+  var le = clear($('hud-last-evolution'));
+  if (ev) { le.appendChild(document.createTextNode('última evolução ')); le.appendChild(el('b', { text: relTime(ev, now), title: fmtDateTime(ev) })); }
+  var rels = document.querySelectorAll('[data-rel]');
+  for (var i = 0; i < rels.length; i++) rels[i].textContent = relTime(rels[i].getAttribute('data-rel'), now);
+}
+
+/* ---------- 2. sinais vitais ---------- */
+function tile(label, value, deltaText, opts) {
+  opts = opts || {};
+  var t = el('div', { class: 'tile' + (opts.alert ? ' alert' : '') + (opts.wide ? ' wide' : '') });
+  t.appendChild(el('span', { class: 'label', text: label }));
+  t.appendChild(el('div', { class: 'value' + (opts.small ? ' small' : ''), text: value }));
+  if (deltaText) t.appendChild(el('span', { class: 'delta' + (opts.up ? ' up' : ''), text: deltaText }));
+  if (opts.extra) t.appendChild(opts.extra);
+  return t;
+}
+function deltaFor(counts, base, key) {
+  if (!base || base[key] === undefined || base[key] === null || counts[key] === undefined || counts[key] === null) return null;
+  var d = (num(counts[key]) || 0) - (num(base[key]) || 0);
+  return { text: (d === 0 ? 'sem mudança' : fmtSigned(d)) + ' nesta sessão', up: d > 0 };
+}
+function renderVitals(B) {
+  var st = obj(B.state), counts = obj(st.counts), base = obj(st.counts_at_session_start);
+  var hasBase = base && base.ts;
+  var box = clear($('vitals'));
+  setText('vitals-hint', hasBase ? 'delta desde a sessão de ' + fmtDateTime(base.ts) : 'sem base de sessão ainda');
+  var byType = obj(st.by_type);
+  var bars = el('div', { class: 'bars' });
+  var types = Object.keys(byType).map(function (k) { return [k, num(byType[k]) || 0]; }).sort(function (a, b) { return b[1] - a[1]; });
+  var maxT = types.length ? Math.max.apply(null, types.map(function (t) { return t[1]; })) : 0;
+  types.forEach(function (t) {
+    var row = el('div', { class: 'bar-row' });
+    row.appendChild(el('span', { class: 'name' }, [el('span', { class: 'sw', style: 'background:' + (TYPE_COLOR[t[0]] || '#9fb3d9') }), el('span', { text: TYPE_LABEL[t[0]] || t[0] })]));
+    var track = el('div', { class: 'bar-track' });
+    track.appendChild(el('div', { class: 'bar-fill', style: 'width:' + (maxT ? Math.max(2, Math.round(t[1] / maxT * 100)) : 0) + '%;background:' + (TYPE_COLOR[t[0]] || '#9fb3d9') }));
+    row.appendChild(track);
+    row.appendChild(el('span', { class: 'num', text: fmtNum(t[1]) }));
+    bars.appendChild(row);
+  });
+  var defs = [
+    ['memories', 'memórias', { wide: types.length > 0, extra: types.length ? bars : null }],
+    ['decisions', 'decisões', {}],
+    ['projects', 'projetos', {}],
+    ['knowledge', 'conhecimento', {}],
+    ['prompts', 'pedidos', {}],
+    ['sessions', 'sessões', {}],
+    ['compactions', 'compactações', {}]
+  ];
+  defs.forEach(function (d) {
+    var dl = hasBase ? deltaFor(counts, base, d[0]) : null;
+    box.appendChild(tile(d[1], fmtNum(counts[d[0]]), dl ? dl.text : '', { up: dl && dl.up, wide: d[2].wide, extra: d[2].extra }));
+  });
+  var pend = arr(st.pending).length, overdue = num(st.agenda_overdue) || 0, openAg = num(st.agenda_open) || 0;
+  box.appendChild(tile('pendências', fmtNum(pend), openAg + ' lembrete' + (openAg === 1 ? '' : 's') + (overdue ? ' · ' + overdue + ' vencido' + (overdue === 1 ? '' : 's') : ''), { alert: overdue > 0 }));
+  // batimento
+  var hbs = sortByTsDesc(B.heartbeats); var hb = hbs.length ? hbs[0] : null;
+  var extra = el('dl', { class: 'kv', style: 'margin-top:6px' });
+  if (hb) {
+    var pairs = [
+      ['cérebro', hb.model || hb.modelName || '—'],
+      ['contexto', hb.contextPct !== undefined && hb.contextPct !== null ? fmtNum(hb.contextPct) + '%' : '—'],
+      ['custo', fmtUSD(hb.costUsd)],
+      ['limite 5 h', hb.fiveHourPct !== undefined && hb.fiveHourPct !== null ? fmtNum(hb.fiveHourPct) + '%' : '—']
+    ];
+    if (hb.cacheWarm !== undefined && hb.cacheWarm !== null) pairs.push(['cache', hb.cacheWarm ? 'quente' : 'frio']);
+    pairs.forEach(function (p) { extra.appendChild(el('dt', { text: p[0] })); extra.appendChild(el('dd', { text: p[1] })); });
+  }
+  box.appendChild(tile('batimento', hb ? relTime(hb.ts) : 'sem batimento', hb ? 'sessão ' + str(hb.session, 8) + ' · ' + fmtDateTime(hb.ts) : 'a status line ainda não bateu', { small: true, extra: hb ? extra : null, wide: false }));
+}
+
+/* ---------- 3. o que eu sei de você ---------- */
+function renderProfile(B) {
+  var p = obj(B.profile), sp = obj(obj(B.state).profile);
+  var box = clear($('profile'));
+  var summary = p.summary || sp.summary;
+  if (summary) box.appendChild(el('p', { class: 'break', style: 'margin:0 0 10px', text: summary }));
+  box.appendChild(el('div', { class: 'sub', text: 'Retrato' }));
+  var portrait = arr(p.portrait);
+  if (portrait.length) {
+    var chips = el('div', { class: 'chips' });
+    portrait.forEach(function (t) { chips.appendChild(el('span', { class: 'chip', text: str(t, 160) })); });
+    box.appendChild(chips);
+  } else box.appendChild(emptyLine('ainda estou te conhecendo — me conte coisas com /lembrar'));
+  box.appendChild(el('div', { class: 'sub', text: '✨ Aprendi hoje' }));
+  var learned = arr(p.learnedToday).length ? arr(p.learnedToday) : arr(sp.learned_today);
+  if (learned.length) {
+    var ul = el('ul', { class: 'clean' });
+    learned.forEach(function (t) { ul.appendChild(el('li', { class: 'break', text: str(t, 200) })); });
+    box.appendChild(ul);
+  } else box.appendChild(emptyLine('nada ainda hoje'));
+  box.appendChild(el('div', { class: 'sub', text: 'Ainda quero aprender' }));
+  var want = arr(p.wantToLearn).length ? arr(p.wantToLearn) : arr(sp.want_to_learn);
+  if (want.length) {
+    var ol = el('ol', { style: 'margin:0;padding-left:20px' });
+    want.slice(0, 3).forEach(function (q) { ol.appendChild(el('li', { class: 'break', text: str(q, 200) })); });
+    box.appendChild(ol);
+  } else box.appendChild(emptyLine('por enquanto, nenhuma pergunta aberta'));
+}
+
+/* ---------- 4. o que o Dominic lembrou agora ---------- */
+function renderRecalls(B) {
+  var list = sortByTsDesc(B.recalls).slice(0, 12);
+  var box = clear($('recalls'));
+  setText('recalls-hint', list.length ? list.length + ' cruzamento' + (list.length === 1 ? '' : 's') : '');
+  if (!list.length) { box.appendChild(emptyLine('nenhum cruzamento ainda — no próximo pedido eu lembro')); return; }
+  list.forEach(function (r) {
+    var top = arr(r.top), exp = arr(r.expanded), hist = obj(r.history);
+    var item = el('div', { class: 'recall' });
+    var meta = el('div', { class: 'meta' });
+    meta.appendChild(el('span', { text: fmtDateTime(r.ts) }));
+    meta.appendChild(el('span', { 'data-rel': r.ts || '', text: relTime(r.ts) }));
+    meta.appendChild(el('span', { text: fmtNum(r.chars) + ' chars' }));
+    if (r.ms !== undefined && r.ms !== null) meta.appendChild(el('span', { text: fmtNum(r.ms) + ' ms' }));
+    if (hist.times) meta.appendChild(el('span', { class: 'gold', text: 'já tratou disso ' + fmtNum(hist.times) + (hist.times === 1 ? ' vez' : ' vezes') + (hist.last ? ', última em ' + fmtDate(hist.last) : '') }));
+    item.appendChild(meta);
+    var ids = el('div', { class: 'ids' });
+    top.forEach(function (t) {
+      var id = Array.isArray(t) ? t[0] : (t && t.id); var score = Array.isArray(t) ? t[1] : (t && t.score);
+      if (!id) return;
+      var chip = el('span', { class: 'id', title: 'clique copia o id', onclick: function () { copyText(String(id)); } });
+      chip.appendChild(document.createTextNode(str(id, 60)));
+      if (num(score) !== null) chip.appendChild(el('span', { class: 'score', text: fmtDec(score, 1) }));
+      ids.appendChild(chip);
+    });
+    exp.forEach(function (id) { if (id) ids.appendChild(el('span', { class: 'id exp', title: 'chegou pelo grafo (1 salto) · clique copia', text: str(id, 60), onclick: function () { copyText(String(id)); } })); });
+    if (!top.length && !exp.length) ids.appendChild(el('span', { class: 'muted small', text: 'nada encontrado para esse pedido' }));
+    item.appendChild(ids);
+    box.appendChild(item);
+  });
+}
+</script>
+<script>
+'use strict';
+/* ---------- canvas: preparação com DPR ---------- */
+function prepCanvas(canvas, cssHeight) {
+  var dpr = window.devicePixelRatio || 1;
+  var w = Math.max(200, Math.floor(canvas.parentNode ? canvas.parentNode.clientWidth : canvas.clientWidth) || 300);
+  var h = cssHeight || 220;
+  canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+  canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+  var ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  return { ctx: ctx, w: w, h: h };
+}
+function hexToRgba(hex, a) {
+  var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(String(hex || '').trim());
+  if (!m) return 'rgba(63,227,255,' + a + ')';
+  return 'rgba(' + parseInt(m[1], 16) + ',' + parseInt(m[2], 16) + ',' + parseInt(m[3], 16) + ',' + a + ')';
+}
+var SURFACE = '#0a1228';
+
+/* ---------- 5. linha da evolução ---------- */
+function buildAreaData(B) {
+  var days = 30, today = new Date(); today.setHours(0, 0, 0, 0);
+  var keys = [], map = {};
+  for (var i = days - 1; i >= 0; i--) { var d = new Date(today.getTime() - i * 86400000); var k = dayKey(d); keys.push(k); map[k] = { date: d, count: 0, versions: [] }; }
+  arr(B.memories).forEach(function (m) { var d = parseTs(m && m.created); if (!d) return; var k = dayKey(d); if (map[k]) map[k].count++; });
+  arr(B.decisions).forEach(function (m) { var d = parseTs(m && m.created); if (!d) return; var k = dayKey(d); if (map[k]) map[k].count++; });
+  arr(B.mutations).forEach(function (mu) {
+    var d = parseTs(mu && mu.ts); if (!d) return; var k = dayKey(d); if (!map[k]) return;
+    var vb = String(mu.versionBefore || ''), va = String(mu.versionAfter || '');
+    var pb = vb.split('.'), pa = va.split('.');
+    var kind = (pa[0] !== pb[0]) ? 'major' : (pa[1] !== pb[1]) ? 'minor' : 'patch';
+    map[k].versions.push({ v: va, kind: kind, ts: mu.ts });
+  });
+  return keys.map(function (k) { return map[k]; });
+}
+function drawArea(hoverIdx) {
+  var canvas = $('area-chart'); if (!canvas || !AREA_STATE) return;
+  var data = AREA_STATE.data;
+  var c = prepCanvas(canvas, 220), ctx = c.ctx, w = c.w, h = c.h;
+  var padL = 30, padR = 26, padT = 22, padB = 22;
+  var pw = w - padL - padR, ph = h - padT - padB;
+  var maxV = Math.max(1, Math.max.apply(null, data.map(function (d) { return d.count; })));
+  var yMax = maxV <= 4 ? 4 : Math.ceil(maxV / 2) * 2;
+  var x = function (i) { return padL + (data.length > 1 ? i / (data.length - 1) : 0.5) * pw; };
+  var y = function (v) { return padT + ph - (v / yMax) * ph; };
+  var muted = cssVar('--muted') || '#9fb3d9', cyan = cssVar('--cyan') || '#3fe3ff', gold = cssVar('--gold') || '#f5c76a';
+  ctx.font = '11px ' + (cssVar('--font-body') || 'Inter, system-ui, sans-serif');
+  // grade: 3 linhas sólidas finas
+  ctx.strokeStyle = 'rgba(230,239,255,.08)'; ctx.lineWidth = 1; ctx.fillStyle = muted; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  [0, yMax / 2, yMax].forEach(function (v) { ctx.beginPath(); ctx.moveTo(padL, y(v) + .5); ctx.lineTo(w - padR, y(v) + .5); ctx.stroke(); ctx.fillText(fmtNum(v), padL - 6, y(v)); });
+  // eixo x: 4 datas
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  var step = Math.max(1, Math.round((data.length - 1) / 3));
+  for (var i = 0; i < data.length; i += step) ctx.fillText(fmtDate(data[i].date), x(i), padT + ph + 6);
+  if ((data.length - 1) % step !== 0) ctx.fillText(fmtDate(data[data.length - 1].date), x(data.length - 1), padT + ph + 6);
+  // área (10 %) + linha 2 px
+  ctx.beginPath(); ctx.moveTo(x(0), y(0));
+  data.forEach(function (d, i) { ctx.lineTo(x(i), y(d.count)); });
+  ctx.lineTo(x(data.length - 1), y(0)); ctx.closePath();
+  ctx.fillStyle = hexToRgba(cyan, .12); ctx.fill();
+  ctx.beginPath(); data.forEach(function (d, i) { if (i === 0) ctx.moveTo(x(i), y(d.count)); else ctx.lineTo(x(i), y(d.count)); });
+  ctx.strokeStyle = cyan; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke();
+  // marcadores de versão (ouro)
+  var labelBudget = 0;
+  data.forEach(function (d, i) {
+    if (!d.versions.length) return;
+    var best = d.versions.reduce(function (acc, v) { var rank = { major: 3, minor: 2, patch: 1 }; return (!acc || rank[v.kind] > rank[acc.kind]) ? v : acc; }, null);
+    ctx.strokeStyle = hexToRgba(gold, best.kind === 'patch' ? .35 : .8); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x(i) + .5, padT - 6); ctx.lineTo(x(i) + .5, padT + ph); ctx.stroke();
+    if (best.kind !== 'patch' && labelBudget < 8) { labelBudget++; ctx.fillStyle = gold; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.font = '600 10px ' + (cssVar('--font-title') || 'system-ui'); ctx.fillText('v' + best.v, x(i), padT - 7); ctx.font = '11px ' + (cssVar('--font-body') || 'system-ui'); }
+  });
+  // marcador final (r 4 + anel 2 px na cor da superfície)
+  var li = data.length - 1;
+  ctx.beginPath(); ctx.arc(x(li), y(data[li].count), 6, 0, Math.PI * 2); ctx.fillStyle = SURFACE; ctx.fill();
+  ctx.beginPath(); ctx.arc(x(li), y(data[li].count), 4, 0, Math.PI * 2); ctx.fillStyle = cyan; ctx.fill();
+  // crosshair
+  if (hoverIdx !== undefined && hoverIdx !== null && data[hoverIdx]) {
+    ctx.strokeStyle = 'rgba(230,239,255,.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x(hoverIdx) + .5, padT); ctx.lineTo(x(hoverIdx) + .5, padT + ph); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x(hoverIdx), y(data[hoverIdx].count), 6, 0, Math.PI * 2); ctx.fillStyle = SURFACE; ctx.fill();
+    ctx.beginPath(); ctx.arc(x(hoverIdx), y(data[hoverIdx].count), 4, 0, Math.PI * 2); ctx.fillStyle = gold; ctx.fill();
+  }
+  AREA_STATE.geom = { x: x, y: y, padL: padL, pw: pw, padT: padT, ph: ph };
+}
+function areaHover(ev) {
+  if (!AREA_STATE || !AREA_STATE.geom) return;
+  var canvas = $('area-chart'), wrap = $('area-wrap');
+  var rect = canvas.getBoundingClientRect();
+  var px = ev.clientX - rect.left;
+  var data = AREA_STATE.data, g = AREA_STATE.geom;
+  var idx = Math.round(((px - g.padL) / g.pw) * (data.length - 1));
+  idx = Math.max(0, Math.min(data.length - 1, idx));
+  if (AREA_STATE.hover === idx) return;
+  AREA_STATE.hover = idx; drawArea(idx);
+  var d = data[idx];
+  var tip = AREA_STATE.tip; if (!tip) { tip = el('div', { class: 'tip' }); wrap.appendChild(tip); AREA_STATE.tip = tip; }
+  clear(tip);
+  tip.appendChild(el('b', { text: fmtNum(d.count) + (d.count === 1 ? ' memória' : ' memórias') }));
+  tip.appendChild(document.createTextNode(' · ' + fmtDate(d.date)));
+  if (d.versions.length) tip.appendChild(el('div', { class: 'gold', text: d.versions.map(function (v) { return 'v' + v.v; }).slice(0, 4).join(' · ') }));
+  var left = Math.max(60, Math.min(rect.width - 60, g.x(idx)));
+  tip.style.left = left + 'px'; tip.style.top = (g.y(d.count) + canvas.offsetTop) + 'px';
+}
+function areaLeave() { if (!AREA_STATE) return; AREA_STATE.hover = null; drawArea(null); if (AREA_STATE.tip && AREA_STATE.tip.parentNode) { AREA_STATE.tip.parentNode.removeChild(AREA_STATE.tip); AREA_STATE.tip = null; } }
+function sparkline(canvas, values, color) {
+  var c = prepCanvas(canvas, 36), ctx = c.ctx, w = c.w, h = c.h;
+  var vals = values.map(function (v) { return num(v) || 0; });
+  if (vals.length < 2) { if (vals.length === 1) { ctx.beginPath(); ctx.arc(w - 6, h / 2, 4, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); } return; }
+  var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals); if (mx === mn) { mx = mn + 1; }
+  var x = function (i) { return 4 + i / (vals.length - 1) * (w - 12); }, y = function (v) { return 4 + (1 - (v - mn) / (mx - mn)) * (h - 8); };
+  ctx.beginPath(); vals.forEach(function (v, i) { if (i === 0) ctx.moveTo(x(i), y(v)); else ctx.lineTo(x(i), y(v)); });
+  ctx.strokeStyle = hexToRgba(color, .75); ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.stroke();
+  var li = vals.length - 1;
+  ctx.beginPath(); ctx.arc(x(li), y(vals[li]), 6, 0, Math.PI * 2); ctx.fillStyle = SURFACE; ctx.fill();
+  ctx.beginPath(); ctx.arc(x(li), y(vals[li]), 4, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+}
+function sparkTile(label, valueText, subText, values, color) {
+  var box = el('div', { class: 'spark' });
+  box.appendChild(el('span', { class: 'label', text: label }));
+  box.appendChild(el('div', { class: 'value', text: valueText }));
+  if (subText) box.appendChild(el('div', { class: 'muted small', text: subText }));
+  var canvas = el('canvas', { height: '36', 'aria-label': label });
+  box.appendChild(canvas);
+  box._draw = function () { sparkline(canvas, values, color); };
+  return box;
+}
+function costPerSession(B) {
+  var bySession = {}, order = [];
+  sortByTsDesc(B.heartbeats).reverse().forEach(function (h) {
+    var s = h && h.session; if (!s) return;
+    if (!bySession[s]) { bySession[s] = 0; order.push(s); }
+    bySession[s] = Math.max(bySession[s], num(h.costUsd) || 0);
+  });
+  return order.map(function (s) { return bySession[s]; });
+}
+function renderEvolution(B) {
+  var data = buildAreaData(B);
+  AREA_STATE = { data: data, hover: null, tip: null };
+  var total = data.reduce(function (a, d) { return a + d.count; }, 0);
+  setText('evolution-hint', 'memórias e decisões por dia · últimos 30 dias · ' + fmtNum(total) + ' no período');
+  drawArea(null);
+  var canvas = $('area-chart');
+  if (!canvas._bound) { canvas._bound = true; canvas.addEventListener('mousemove', areaHover); canvas.addEventListener('mouseleave', areaLeave); }
+  // tabela gêmea (só dias com valor)
+  var tb = clear($('area-table'));
+  var withData = data.filter(function (d) { return d.count > 0 || d.versions.length; });
+  if (!withData.length) tb.appendChild(emptyLine('nenhuma memória nos últimos 30 dias'));
+  else {
+    var table = el('table', { class: 'tbl' });
+    var thead = el('thead'); thead.appendChild(el('tr', null, [el('th', { text: 'dia' }), el('th', { text: 'memórias' }), el('th', { text: 'versões' })])); table.appendChild(thead);
+    var tbody = el('tbody');
+    withData.forEach(function (d) { tbody.appendChild(el('tr', null, [el('td', { text: fmtDate(d.date) }), el('td', { text: fmtNum(d.count) }), el('td', { text: d.versions.map(function (v) { return 'v' + v.v; }).join(', ') || '—' })])); });
+    table.appendChild(tbody); tb.appendChild(table);
+  }
+  // sparklines: refinos (ms) e custo por sessão
+  var sparks = clear($('sparks'));
+  var refs = sortByTsDesc(B.refinements).reverse();
+  var ms = refs.map(function (r) { return num(r.ms) || 0; });
+  var lastMs = ms.length ? ms[ms.length - 1] : null;
+  var avg = ms.length ? ms.reduce(function (a, b) { return a + b; }, 0) / ms.length : null;
+  sparks.appendChild(sparkTile('refinos (ms)', lastMs === null ? '—' : fmtNum(lastMs) + ' ms', ms.length ? fmtNum(ms.length) + ' refinos · média ' + fmtNum(Math.round(avg)) + ' ms' : 'nenhum refino ainda', ms.slice(-60), cssVar('--cyan') || '#3fe3ff'));
+  var costs = costPerSession(B);
+  var lastCost = costs.length ? costs[costs.length - 1] : null;
+  sparks.appendChild(sparkTile('custo por sessão', lastCost === null ? '—' : fmtUSD(lastCost), costs.length ? fmtNum(costs.length) + ' sessões com batimento' : 'sem batimento ainda', costs.slice(-40), cssVar('--violet') || '#8b5cff'));
+  var sessions = sortByTsDesc(arr(B.sessions).map(function (s) { return { ts: s && s.start, s: s }; })).reverse().map(function (x) { return x.s; });
+  var newMem = sessions.map(function (s) { return num(s.newMemories) || 0; });
+  sparks.appendChild(sparkTile('memórias por sessão', newMem.length ? fmtNum(newMem[newMem.length - 1]) : '—', sessions.length ? 'última sessão ' + str(sessions[sessions.length - 1].id, 8) + ' · ' + fmtNum(num(sessions[sessions.length - 1].prompts) || 0) + ' pedidos' : 'nenhuma sessão ainda', newMem.slice(-40), cssVar('--green') || '#34e6a6'));
+  Array.prototype.forEach.call(sparks.children, function (s) { if (s._draw) s._draw(); });
+  // mutações
+  var muts = sortByTsDesc(B.mutations).slice(0, 15);
+  var mbox = clear($('mutations'));
+  if (!muts.length) { mbox.appendChild(emptyLine('nenhuma mudança de versão ainda — a primeira memória nova começa a contagem')); return; }
+  muts.forEach(function (mu) {
+    var row = el('div', { class: 'mut' });
+    var ver = el('div', { class: 'ver' });
+    ver.appendChild(el('span', { class: 'from', text: 'v' + (mu.versionBefore || '?') + ' → ' }));
+    ver.appendChild(document.createTextNode('v' + (mu.versionAfter || '?')));
+    row.appendChild(ver);
+    var parts = [];
+    var n = arr(mu.new).length, ch = arr(mu.changed).length, su = arr(mu.superseded).length;
+    if (n) parts.push(n + (n === 1 ? ' nova' : ' novas'));
+    if (ch) parts.push(ch + (ch === 1 ? ' alterada' : ' alteradas'));
+    if (su) parts.push(su + (su === 1 ? ' superada' : ' superadas'));
+    var trig = mu.trigger ? 'gatilho ' + triggerLabel(mu.trigger) : '';
+    var what = el('div', { class: 'what' });
+    what.appendChild(el('span', { class: 'when', text: fmtDateTime(mu.ts) }));
+    what.appendChild(document.createTextNode(' · ' + [trig, parts.join(', ') || 'sem mudança de conteúdo'].filter(Boolean).join(' · ')));
+    if (mu.reason) what.appendChild(el('div', { class: 'break', text: str(mu.reason, 160) }));
+    row.appendChild(what);
+    mbox.appendChild(row);
+  });
+}
+function triggerLabel(t) {
+  var m = { Stop: 'fim de resposta', SessionStart: 'início de sessão', remember: '/lembrar', agenda: 'agenda', evolve: '/evoluir', major: '/evoluir major', maintenance: 'manutenção', rebuild: 'reconstrução', full: 'refino completo', manual: 'manual' };
+  return m[t] || String(t);
+}
+
+/* ---------- 6. linha do tempo viva ---------- */
+var EVENT_GROUPS = [
+  ['tudo', 'todos os tipos'], ['construcao', 'construções e edições'], ['memoria', 'memória e refino'],
+  ['sessao', 'sessões'], ['agente', 'agentes e pesquisas'], ['protecao', 'proteção e bloqueios'], ['outro', 'outros']
+];
+function describeEvent(e) {
+  e = obj(e);
+  var ev = String(e.event || ''), tool = String(e.tool || ''), file = e.file ? String(e.file) : '', agent = e.agent ? String(e.agent) : '', sum = e.summary ? String(e.summary) : '';
+  var r = { icon: '•', text: '', group: 'outro', cls: '' };
+  if (ev === 'PostToolUse') {
+    if (tool === 'Write') { r.icon = '🛠'; r.text = 'Dominic construiu ' + (file || 'um arquivo'); r.group = 'construcao'; r.cls = 'build'; }
+    else if (tool === 'Edit' || tool === 'NotebookEdit') { r.icon = '✏️'; r.text = 'Dominic editou ' + (file || 'um arquivo'); r.group = 'construcao'; r.cls = 'build'; }
+    else if (tool === 'Read') { r.icon = '📖'; r.text = 'leu ' + (file || sum || 'um arquivo'); r.group = 'construcao'; }
+    else if (tool === 'Bash') { r.icon = '⌨️'; r.text = 'rodou um comando' + (file ? ' e mexeu em ' + file : '') + (sum ? ': ' + str(sum, 90) : ''); r.group = 'construcao'; }
+    else if (tool === 'SubagentHandback') { r.icon = '📨'; r.text = (agent || 'um agente') + ' entregou relatório' + (sum ? ' (' + str(sum, 80) + ')' : ''); r.group = 'agente'; }
+    else if (tool === 'Agent') { r.icon = '🤖'; r.text = 'chamou um agente' + (sum ? ': ' + str(sum, 90) : ''); r.group = 'agente'; }
+    else if (tool === 'Skill') { r.icon = '⚡'; r.text = 'usou o comando ' + (sum ? str(sum, 90) : ''); r.group = 'memoria'; }
+    else if (tool === 'WebSearch' || tool === 'WebFetch') { r.icon = '🔎'; r.text = 'pesquisou na web' + (sum ? ': ' + str(sum, 90) : ''); r.group = 'agente'; }
+    else if (tool === 'Workflow') { r.icon = '🧩'; r.text = 'rodou um workflow' + (sum ? ': ' + str(sum, 90) : ''); r.group = 'agente'; }
+    else { r.icon = '🔧'; r.text = (tool ? tool + ' ' : 'ferramenta ') + (sum ? str(sum, 90) : ''); r.group = 'construcao'; }
+  }
+  else if (ev === 'Stop') { if (e.blocked) { r.icon = '🛑'; r.text = 'bloqueio: pediu registro antes de parar'; r.group = 'protecao'; r.cls = 'block'; } else { r.icon = '✨'; r.text = 'terminou a resposta' + (sum ? ' · ' + str(sum, 90) : ''); r.group = 'memoria'; } }
+  else if (ev === 'bloqueio') { r.icon = '🛑'; r.text = 'bloqueio: pediu registro' + (sum ? ' · ' + str(sum, 80) : ''); r.group = 'protecao'; r.cls = 'block'; }
+  else if (ev === 'memoria') { r.icon = '📌'; r.text = 'anotou na memória' + (sum ? ': ' + str(sum, 100) : ''); r.group = 'memoria'; }
+  else if (ev === 'PreToolUse') { r.icon = e.denied ? '🔒' : '🛡'; r.text = (e.denied ? 'protegeu: ' : 'conferiu: ') + (sum ? str(sum, 100) : tool); r.group = 'protecao'; }
+  else if (ev === 'UserPromptSubmit') { r.icon = '💬'; r.text = 'Marcelo pediu algo' + (sum ? ': ' + str(sum, 100) : ''); r.group = 'sessao'; }
+  else if (ev === 'UserPromptExpansion') { r.icon = '⚡'; r.text = 'comando usado' + (sum ? ': ' + str(sum, 80) : ''); r.group = 'memoria'; }
+  else if (ev === 'SessionStart') { r.icon = '🚪'; r.text = 'sessão iniciada' + (sum ? ' (' + str(sum, 60) + ')' : ''); r.group = 'sessao'; }
+  else if (ev === 'SessionEnd') { r.icon = '🌙'; r.text = 'sessão encerrada' + (sum ? ' · ' + str(sum, 80) : ''); r.group = 'sessao'; }
+  else if (ev === 'PreCompact') { r.icon = '📸'; r.text = 'vai compactar; foto da memória tirada'; r.group = 'memoria'; }
+  else if (ev === 'PostCompact') { r.icon = '🗜'; r.text = 'memória compactada; resumo guardado'; r.group = 'memoria'; }
+  else if (ev === 'SubagentStart') { r.icon = '🤖'; r.text = (agent || 'agente') + ' começou a trabalhar'; r.group = 'agente'; }
+  else if (ev === 'SubagentStop') { r.icon = '🤖'; r.text = (agent || 'agente') + ' terminou'; r.group = 'agente'; }
+  else if (ev === 'StopFailure' || ev === 'PostToolUseFailure') { r.icon = '⚠️'; r.text = 'falha: ' + (sum ? str(sum, 100) : ev); r.group = 'protecao'; }
+  else if (ev === 'error_hook' || ev === 'error_engine') { r.icon = '⚠️'; r.text = 'erro interno registrado' + (sum ? ': ' + str(sum, 80) : ''); r.group = 'protecao'; }
+  else if (ev === 'ConfigChange') { r.icon = '⚙️'; r.text = 'configuração mudou' + (sum ? ': ' + str(sum, 80) : ''); r.group = 'outro'; }
+  else if (ev === 'InstructionsLoaded') { r.icon = '📄'; r.text = 'instruções entraram no contexto' + (sum ? ': ' + str(sum, 80) : ''); r.group = 'outro'; }
+  else if (ev === 'Setup') { r.icon = '🧬'; r.text = 'organismo verificado (setup)'; r.group = 'sessao'; }
+  else { r.icon = '•'; r.text = (ev || 'evento') + (sum ? ': ' + str(sum, 100) : ''); r.group = 'outro'; }
+  return r;
+}
+function fillSelect(sel, options, current) {
+  clear(sel);
+  options.forEach(function (o) { sel.appendChild(el('option', { value: o[0], text: o[1] })); });
+  var values = options.map(function (o) { return o[0]; });
+  sel.value = values.indexOf(current) >= 0 ? current : values[0];
+}
+function renderTimeline(B) {
+  var events = sortByTsDesc(B.timeline).slice(0, 120);
+  var selS = $('tl-session'), selT = $('tl-type');
+  var sessions = []; events.forEach(function (e) { var s = e && e.session ? String(e.session) : ''; if (s && sessions.indexOf(s) < 0) sessions.push(s); });
+  var sOpts = [['tudo', 'todas as sessões']].concat(sessions.map(function (s) { return [s, 'sessão ' + s.slice(0, 8)]; }));
+  fillSelect(selS, sOpts, storeGet('tlSession') || 'tudo');
+  fillSelect(selT, EVENT_GROUPS, storeGet('tlType') || 'tudo');
+  if (!selS._bound) {
+    selS._bound = true;
+    selS.addEventListener('change', function () { storeSet('tlSession', selS.value); paintTimeline(); });
+    selT.addEventListener('change', function () { storeSet('tlType', selT.value); paintTimeline(); });
+  }
+  renderTimeline._events = events;
+  paintTimeline();
+}
+function paintTimeline() {
+  var events = renderTimeline._events || [];
+  var fs = $('tl-session').value, ft = $('tl-type').value;
+  var ul = clear($('timeline')), shown = 0, now = new Date();
+  events.forEach(function (e) {
+    var d = describeEvent(e);
+    if (fs !== 'tudo' && String(e.session || '') !== fs) return;
+    if (ft !== 'tudo' && d.group !== ft) return;
+    shown++;
+    var li = el('li', { class: d.cls });
+    li.appendChild(el('span', { class: 'ico', text: d.icon, 'aria-hidden': 'true' }));
+    var txt = el('div', { class: 'txt' });
+    txt.appendChild(document.createTextNode(d.text));
+    if (e.session) txt.appendChild(el('span', { class: 'sid', text: String(e.session).slice(0, 8) }));
+    li.appendChild(txt);
+    li.appendChild(el('span', { class: 't', 'data-rel': e.ts || '', title: fmtDateTime(e.ts), text: relTime(e.ts, now) }));
+    ul.appendChild(li);
+  });
+  setText('timeline-hint', events.length ? shown + ' de ' + events.length + ' eventos' : '');
+  if (!shown) ul.appendChild(el('li', null, el('div', { class: 'empty', text: events.length ? 'nada com esse filtro' : 'nenhum evento ainda — a primeira conversa começa a história' })));
+}
+</script>
+<script>
+'use strict';
+/* ---------- 7. grafo de memórias (força determinística, sem aleatoriedade) ---------- */
+function graphNodeColor(n) { return TYPE_COLOR[n.type] || '#9fb3d9'; }
+function layoutGraph(B) {
+  var g = obj(B.graph);
+  var nodes = arr(g.nodes).filter(function (n) { return n && n.id; }).slice(0, 400);
+  var index = {}; nodes.forEach(function (n, i) { index[String(n.id)] = i; });
+  var edges = arr(g.edges).filter(function (e) { return e && index[String(e.from)] !== undefined && index[String(e.to)] !== undefined; }).slice(0, 1200);
+  var orphanSet = {};
+  if (Array.isArray(g.orphans)) g.orphans.forEach(function (id) { orphanSet[String(id)] = true; });
+  else {
+    var linked = {};
+    edges.forEach(function (e) { if (e.type === 'link' || e.type === 'project' || e.type === 'supersedes') { linked[String(e.from)] = true; linked[String(e.to)] = true; } });
+    nodes.forEach(function (n) { var t = String(n.type || ''); if (t !== 'tag' && t !== 'project' && t !== 'compaction' && t !== 'report' && !linked[String(n.id)] && String(n.status || 'active') === 'active') orphanSet[String(n.id)] = true; });
+  }
+  var N = nodes.length;
+  var S = 1000;                                   // espaço abstrato S×S
+  var pos = nodes.map(function (n) {
+    var h = fnv1a(String(n.id));
+    var ang = (h % 3600) / 3600 * Math.PI * 2;
+    var rad = 0.18 + ((h >>> 12) % 1000) / 1000 * 0.30;
+    return { x: S / 2 + Math.cos(ang) * rad * S, y: S / 2 + Math.sin(ang) * rad * S, dx: 0, dy: 0 };
+  });
+  var deg = nodes.map(function (n) { return Math.max(0, num(n.degree) || 0); });
+  var es = edges.map(function (e) { return { a: index[String(e.from)], b: index[String(e.to)], w: Math.max(0.15, Math.min(1, num(e.weight) || 0.5)), type: String(e.type || 'link') }; });
+  es.forEach(function (e) { if (!deg[e.a]) deg[e.a] = 0; if (!deg[e.b]) deg[e.b] = 0; });
+  if (N) {
+    var area = S * S, k = Math.sqrt(area / N) * 0.9, k2 = k * k;
+    var iters = 200, t0 = S / 8;
+    for (var it = 0; it < iters; it++) {
+      var temp = t0 * (1 - it / iters) + 0.5;
+      for (var i = 0; i < N; i++) { pos[i].dx = 0; pos[i].dy = 0; }
+      for (i = 0; i < N; i++) {
+        var pi = pos[i];
+        for (var j = i + 1; j < N; j++) {
+          var pj = pos[j];
+          var ddx = pi.x - pj.x, ddy = pi.y - pj.y;
+          var d2 = ddx * ddx + ddy * ddy;
+          if (d2 < 1e-6) { ddx = ((i * 7919 + j * 104729) % 97 - 48) / 48; ddy = ((i * 104729 + j * 7919) % 89 - 44) / 44; d2 = ddx * ddx + ddy * ddy + 1e-3; }
+          var d = Math.sqrt(d2);
+          var f = k2 / d;                       // repulsão
+          var fx = ddx / d * f, fy = ddy / d * f;
+          pi.dx += fx; pi.dy += fy; pj.dx -= fx; pj.dy -= fy;
+        }
+      }
+      for (var e = 0; e < es.length; e++) {
+        var A = pos[es[e].a], Bp = pos[es[e].b];
+        var ex = A.x - Bp.x, ey = A.y - Bp.y;
+        var ed = Math.sqrt(ex * ex + ey * ey) || 0.01;
+        var fa = ed * ed / k * (0.3 + es[e].w * 0.7);   // atração
+        var ax = ex / ed * fa, ay = ey / ed * fa;
+        A.dx -= ax; A.dy -= ay; Bp.dx += ax; Bp.dy += ay;
+      }
+      for (i = 0; i < N; i++) {
+        var p = pos[i];
+        var gx = S / 2 - p.x, gy = S / 2 - p.y;                 // gravidade leve
+        p.dx += gx * 0.03; p.dy += gy * 0.03;
+        var disp = Math.sqrt(p.dx * p.dx + p.dy * p.dy) || 0.01;
+        var lim = Math.min(disp, temp);
+        p.x += p.dx / disp * lim; p.y += p.dy / disp * lim;
+        p.x = Math.max(0, Math.min(S, p.x)); p.y = Math.max(0, Math.min(S, p.y));
+      }
+    }
+  }
+  // normaliza para [0,1] com margem
+  var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  pos.forEach(function (p) { if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x; if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y; });
+  var spanX = Math.max(1, maxX - minX), spanY = Math.max(1, maxY - minY);
+  var maxDeg = Math.max(1, Math.max.apply(null, deg.concat([1])));
+  var out = nodes.map(function (n, i) {
+    var t = String(n.type || 'fact');
+    var r = t === 'tag' ? 2.5 + Math.sqrt(deg[i] / maxDeg) * 3 : 4 + Math.sqrt(deg[i] / maxDeg) * 9;
+    return { id: String(n.id), label: String(n.label || n.id), type: t, degree: deg[i], nx: N > 1 ? (pos[i].x - minX) / spanX : 0.5, ny: N > 1 ? (pos[i].y - minY) / spanY : 0.5, r: r, orphan: !!orphanSet[String(n.id)], pinned: !!n.pinned, color: graphNodeColor({ type: t }) };
+  });
+  return { nodes: out, edges: es, hover: null };
+}
+function drawGraph() {
+  var canvas = $('graph'); if (!canvas || !GRAPH_STATE) return;
+  var w0 = canvas.parentNode.clientWidth || 300;
+  var height = Math.max(260, Math.min(460, Math.round(w0 * 0.78)));
+  var c = prepCanvas(canvas, height), ctx = c.ctx, w = c.w, h = c.h;
+  var G = GRAPH_STATE, pad = 22;
+  G.nodes.forEach(function (n) { n.x = pad + n.nx * (w - pad * 2); n.y = pad + n.ny * (h - pad * 2); });
+  if (!G.nodes.length) { ctx.fillStyle = cssVar('--muted') || '#9fb3d9'; ctx.font = '13px ' + (cssVar('--font-body') || 'system-ui'); ctx.textAlign = 'center'; ctx.fillText('o grafo nasce com a primeira memória ligada', w / 2, h / 2); return; }
+  var EDGE_COLOR = { link: 'rgba(63,227,255,.35)', project: 'rgba(59,130,255,.35)', tag: 'rgba(159,179,217,.14)', supersedes: 'rgba(224,75,255,.45)' };
+  var hov = G.hover;
+  G.edges.forEach(function (e) {
+    var a = G.nodes[e.a], b = G.nodes[e.b];
+    var lit = hov !== null && (e.a === hov || e.b === hov);
+    ctx.strokeStyle = lit ? 'rgba(255,255,255,.7)' : (EDGE_COLOR[e.type] || EDGE_COLOR.link);
+    ctx.lineWidth = lit ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  });
+  G.nodes.forEach(function (n, i) {
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 2, 0, Math.PI * 2); ctx.fillStyle = SURFACE; ctx.fill();   // anel 2 px na cor da superfície
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fillStyle = n.color; ctx.fill();
+    if (n.orphan) { ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 1.5, 0, Math.PI * 2); ctx.strokeStyle = cssVar('--magenta') || '#e04bff'; ctx.lineWidth = 2; ctx.stroke(); }
+    if (i === hov) { ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 4, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 1.5; ctx.stroke(); }
+  });
+  // rótulos: só os mais ligados / projetos (o hover mostra o resto)
+  var labeled = G.nodes.map(function (n, i) { return i; }).filter(function (i) { return G.nodes[i].type !== 'tag'; })
+    .sort(function (a, b) { return G.nodes[b].degree - G.nodes[a].degree; }).slice(0, w < 480 ? 6 : 12);
+  ctx.font = '11px ' + (cssVar('--font-body') || 'system-ui'); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  var drawn = [];
+  labeled.forEach(function (i) {
+    var n = G.nodes[i]; var text = str(n.label, 28);
+    var tw = ctx.measureText(text).width;
+    var lx = n.x + n.r + 5; if (lx + tw > w - 4) lx = n.x - n.r - 5 - tw;
+    var box = { x: lx - 2, y: n.y - 8, w: tw + 4, h: 16 };
+    var collides = drawn.some(function (b) { return box.x < b.x + b.w && box.x + box.w > b.x && box.y < b.y + b.h && box.y + box.h > b.y; });
+    if (collides) return;                          // o hover mostra o título dos que não couberam
+    drawn.push(box);
+    ctx.fillStyle = 'rgba(3,8,23,.75)'; ctx.fillRect(lx - 2, n.y - 7, tw + 4, 14);
+    ctx.fillStyle = cssVar('--text') || '#e6efff'; ctx.fillText(text, lx, n.y);
+  });
+}
+function graphHit(ev) {
+  var canvas = $('graph'), G = GRAPH_STATE; if (!G) return -1;
+  var rect = canvas.getBoundingClientRect();
+  var px = ev.clientX - rect.left, py = ev.clientY - rect.top;
+  var best = -1, bestD = Infinity;
+  G.nodes.forEach(function (n, i) { var dx = n.x - px, dy = n.y - py; var d = Math.sqrt(dx * dx + dy * dy); var hit = Math.max(12, n.r + 6); if (d <= hit && d < bestD) { bestD = d; best = i; } });
+  return best;
+}
+function graphHover(ev) {
+  var G = GRAPH_STATE; if (!G) return;
+  var i = graphHit(ev); if (i === G.hover) return;
+  G.hover = i === -1 ? null : i; drawGraph();
+  var wrap = $('graph-wrap');
+  if (G.tip && G.tip.parentNode) { G.tip.parentNode.removeChild(G.tip); G.tip = null; }
+  if (i === -1) return;
+  var n = G.nodes[i];
+  var tip = el('div', { class: 'tip' });
+  tip.appendChild(el('b', { text: str(n.label, 70) }));
+  tip.appendChild(el('div', { class: 'muted', text: (TYPE_LABEL[n.type] || n.type) + ' · ' + fmtNum(n.degree) + (n.degree === 1 ? ' ligação' : ' ligações') + (n.orphan ? ' · órfã' : '') + (n.pinned ? ' · fixada' : '') }));
+  tip.appendChild(el('div', { class: 'mono muted', text: str(n.id, 60) }));
+  tip.style.whiteSpace = 'normal'; tip.style.maxWidth = '240px';
+  var canvas = $('graph'); var rect = canvas.getBoundingClientRect();
+  tip.style.left = Math.max(110, Math.min(rect.width - 110, n.x)) + 'px'; tip.style.top = (n.y - n.r - 4 + canvas.offsetTop) + 'px';
+  wrap.appendChild(tip); G.tip = tip;
+}
+function graphLeave() { var G = GRAPH_STATE; if (!G) return; G.hover = null; drawGraph(); if (G.tip && G.tip.parentNode) { G.tip.parentNode.removeChild(G.tip); G.tip = null; } }
+function graphClick(ev) { var G = GRAPH_STATE; if (!G) return; var i = graphHit(ev); if (i >= 0) copyText(G.nodes[i].id); }
+function renderGraph(B) {
+  GRAPH_STATE = layoutGraph(B);
+  var docs = GRAPH_STATE.nodes.filter(function (n) { return n.type !== 'tag' && n.type !== 'project'; }).length;
+  var orphans = GRAPH_STATE.nodes.filter(function (n) { return n.orphan; }).length;
+  setText('graph-hint', GRAPH_STATE.nodes.length ? fmtNum(GRAPH_STATE.nodes.length) + ' nós · ' + fmtNum(GRAPH_STATE.edges.length) + ' ligações' + (orphans ? ' · ' + orphans + (orphans === 1 ? ' órfã' : ' órfãs') : '') : '');
+  drawGraph();
+  var canvas = $('graph');
+  if (!canvas._bound) { canvas._bound = true; canvas.addEventListener('mousemove', graphHover); canvas.addEventListener('mouseleave', graphLeave); canvas.addEventListener('click', graphClick); }
+  var leg = clear($('graph-legend'));
+  var present = {}; GRAPH_STATE.nodes.forEach(function (n) { present[n.type] = true; });
+  ['profile', 'preference', 'decision', 'project', 'fact', 'learning', 'idea', 'reference', 'knowledge', 'compaction', 'report', 'tag'].forEach(function (t) {
+    if (!present[t]) return;
+    if (t === 'learning' && present.fact) return;   // mesma cor de fato: rótulo combinado
+    var label = t === 'fact' && present.learning ? 'fato / aprendizado' : (TYPE_LABEL[t] || t);
+    leg.appendChild(el('span', null, [el('span', { class: 'sw', style: 'background:' + TYPE_COLOR[t] }), el('span', { text: label })]));
+  });
+  if (orphans) leg.appendChild(el('span', null, [el('span', { class: 'sw orphan' }), el('span', { text: 'órfã (sem ligação)' })]));
+  void docs;
+}
+
+/* ---------- 8. projetos, pendências e agenda ---------- */
+function renderProjects(B) {
+  var box = clear($('projects')), st = obj(B.state);
+  var projects = arr(B.projects).slice().sort(function (a, b) {
+    var order = { 'in-progress': 0, idea: 1, paused: 2, delivered: 3 };
+    var oa = order[a && a.situation] !== undefined ? order[a.situation] : 1, ob = order[b && b.situation] !== undefined ? order[b.situation] : 1;
+    if (oa !== ob) return oa - ob;
+    var ta = parseTs(a && a.updated), tb = parseTs(b && b.updated);
+    return (tb ? tb.getTime() : 0) - (ta ? ta.getTime() : 0);
+  });
+  box.appendChild(el('div', { class: 'sub', text: 'Projetos' }));
+  if (!projects.length) box.appendChild(emptyLine('nenhum projeto ainda — /site ou /sistema abrem o primeiro'));
+  projects.slice(0, 12).forEach(function (p) {
+    var card = el('div', { class: 'card' });
+    var head = el('div', { class: 'card-head' });
+    head.appendChild(el('h3', { text: str(p.title || p.id, 90) }));
+    head.appendChild(el('span', { class: 'pill ' + (SITUATION_CLASS[p.situation] || ''), text: SITUATION_LABEL[p.situation] || str(p.situation, 20) || 'sem situação' }));
+    if (p.updated) head.appendChild(el('span', { class: 'muted small nowrap', text: fmtDate(p.updated) }));
+    card.appendChild(head);
+    if (p.summary) card.appendChild(el('div', { class: 'small break', style: 'margin-top:4px', text: str(p.summary, 200) }));
+    var next = arr(p.next);
+    if (next.length) {
+      var ul = el('ul', { class: 'todo' });
+      next.slice(0, 8).forEach(function (n) {
+        var text = typeof n === 'string' ? n : String((n && (n.text || n.item)) || '');
+        var done = typeof n === 'object' && n && n.done === true;
+        var m = /^\s*\[( |x|X)\]\s*(.*)$/.exec(text); if (m) { done = m[1] !== ' '; text = m[2]; }
+        ul.appendChild(el('li', null, [el('span', { class: 'box' + (done ? ' done' : '') }), el('span', { class: 'break' + (done ? ' done-text' : ''), text: str(text, 160) })]));
+      });
+      card.appendChild(ul);
+    }
+    var files = arr(p.files);
+    if (files.length) { var fl = el('div', { class: 'files' }); files.slice(0, 6).forEach(function (f) { fl.appendChild(el('span', { class: 'path', text: str(f, 120) })); }); card.appendChild(fl); }
+    box.appendChild(card);
+  });
+  box.appendChild(el('div', { class: 'sub', text: 'Pendências' }));
+  var pend = arr(st.pending).length ? arr(st.pending) : arr(B.pending);
+  if (!pend.length) box.appendChild(emptyLine('nenhuma pendência aberta'));
+  else {
+    var pl = el('ul', { class: 'clean' });
+    pend.slice(0, 20).forEach(function (p) {
+      var li = el('li', { class: 'break' });
+      li.appendChild(el('span', { class: 'box', style: 'display:inline-block;width:12px;height:12px;border:1px solid var(--line);border-radius:3px;margin-right:8px;vertical-align:-1px' }));
+      if (p.project) li.appendChild(el('b', { style: 'font-weight:500', text: str(p.project, 40) + ': ' }));
+      li.appendChild(document.createTextNode(str(p.item, 160)));
+      if (p.since) li.appendChild(el('span', { class: 'muted small', text: ' · desde ' + fmtDate(p.since) }));
+      pl.appendChild(li);
+    });
+    box.appendChild(pl);
+  }
+  box.appendChild(el('div', { class: 'sub', text: 'Agenda' }));
+  var today = dayKey(new Date());
+  var agenda = arr(B.agenda).slice().sort(function (a, b) { return String(a && a.when || '').localeCompare(String(b && b.when || '')); });
+  var open = agenda.filter(function (a) { return a && a.status !== 'done'; }), done = agenda.filter(function (a) { return a && a.status === 'done'; });
+  if (!open.length && !done.length) box.appendChild(emptyLine('agenda vazia — /lembrete <quando> <texto> cria um'));
+  else {
+    var al = el('ul', { class: 'clean' });
+    open.slice(0, 20).forEach(function (a) {
+      var overdue = a.when && String(a.when) < today;
+      var li = el('li', { class: 'break' });
+      li.appendChild(el('span', { class: 'when' + (overdue ? ' overdue' : ''), text: fmtDate(a.when) + (overdue ? ' · vencido' : (String(a.when) === today ? ' · hoje' : '')) }));
+      li.appendChild(document.createTextNode(' · ' + str(a.text, 160)));
+      if (a.id) li.appendChild(el('span', { class: 'muted small mono', text: ' (' + str(a.id, 12) + ')' }));
+      al.appendChild(li);
+    });
+    done.slice(-5).forEach(function (a) {
+      var li = el('li', { class: 'break done' });
+      li.appendChild(el('span', { text: '✓ ' + fmtDate(a.when) + ' · ' + str(a.text, 120) }));
+      al.appendChild(li);
+    });
+    box.appendChild(al);
+  }
+}
+
+/* ---------- 9. entregas ---------- */
+function projectRootFile() {
+  try {
+    if (location.protocol === 'file:') {
+      var parts = location.pathname.split('/'); parts.pop(); parts.pop();   // remove index.html e dashboard/
+      return decodeURIComponent(parts.join('/')) || null;
+    }
+  } catch (e) { /* ignora */ }
+  var B = CURRENT; if (B && (B.root || obj(B.identity).root)) return String(B.root || obj(B.identity).root);
+  return null;
+}
+function deliveryTypeLabel(t) { var m = { site: 'site / LP', lp: 'LP', sistema: 'sistema', system: 'sistema', prototipo: 'protótipo', prototype: 'protótipo', html: 'página', md: 'documento' }; return m[String(t || '').toLowerCase()] || str(t, 20) || 'entrega'; }
+function renderDeliveries(B) {
+  var box = clear($('deliveries'));
+  var list = arr(B.deliveries).slice().sort(function (a, b) { var ta = parseTs(a && a.when), tb = parseTs(b && b.when); return (tb ? tb.getTime() : 0) - (ta ? ta.getTime() : 0); });
+  setText('deliveries-hint', list.length ? fmtNum(list.length) + (list.length === 1 ? ' arquivo' : ' arquivos') : '');
+  if (!list.length) { box.appendChild(emptyLine('nenhuma entrega ainda — /site <briefing> faz a primeira')); return; }
+  var root = projectRootFile();
+  list.slice(0, 30).forEach(function (d) {
+    var path = String(d.path || '').replace(/^\/+/, '');
+    var card = el('div', { class: 'card' });
+    var head = el('div', { class: 'card-head' });
+    head.appendChild(el('h3', { text: str(d.name || path.split('/').pop() || 'entrega', 80) }));
+    head.appendChild(el('span', { class: 'pill cyan', text: deliveryTypeLabel(d.type) }));
+    if (d.when) head.appendChild(el('span', { class: 'muted small nowrap', text: fmtDateTime(d.when) }));
+    card.appendChild(head);
+    var row = el('div', { class: 'row', style: 'margin-top:6px' });
+    if (path) row.appendChild(el('a', { class: 'btn primary', href: '../' + path, target: '_blank', rel: 'noopener', text: 'abrir' }));
+    var abs = root && path ? 'file://' + root + '/' + path : path;
+    if (abs) {
+      row.appendChild(el('button', { class: 'btn', type: 'button', text: 'copiar caminho', onclick: function () { copyText(abs); } }));
+    }
+    card.appendChild(row);
+    if (abs) card.appendChild(el('div', { class: 'path', style: 'margin-top:4px', text: abs, title: 'caminho copiável' }));
+    box.appendChild(card);
+  });
+}
+
+/* ---------- 10. contexto ---------- */
+function meter(label, value, max, valueText, warnAt, dangerAt) {
+  var pct = max ? Math.max(0, Math.min(100, (num(value) || 0) / max * 100)) : 0;
+  var cls = 'meter' + (dangerAt !== undefined && pct >= dangerAt ? ' danger' : (warnAt !== undefined && pct >= warnAt ? ' warn' : ''));
+  var m = el('div', { class: cls });
+  m.appendChild(el('div', { class: 'head' }, [el('span', { class: 'label', text: label }), el('span', { class: 'val', text: valueText })]));
+  var track = el('div', { class: 'track' }); track.appendChild(el('div', { class: 'fill', style: 'width:' + pct.toFixed(1) + '%' })); m.appendChild(track);
+  return m;
+}
+function renderContext(B) {
+  var box = clear($('context')), cc = obj(B.contextCost), h = obj(B.health), cfg = obj(B.config), st = obj(B.state), scc = obj(st.context_cost);
+  var idxLines = num(h.index_lines) !== null ? num(h.index_lines) : num(cc.indexLines);
+  var idxMax = num(h.index_max_lines) || num(cfg.index_max_lines) || 150;
+  var idxBytes = num(h.index_bytes), idxBytesMax = num(cfg.index_max_chars) || 12000;
+  box.appendChild(meter('INDICE.md · linhas', idxLines, idxMax, (idxLines === null ? '—' : fmtNum(idxLines)) + '/' + fmtNum(idxMax) + ' linhas', 80, 95));
+  box.appendChild(meter('INDICE.md · tamanho', idxBytes, idxBytesMax, (idxBytes === null ? '—' : fmtDec(idxBytes / 1024, 1)) + '/' + fmtDec(idxBytesMax / 1024, 0) + ' KB', 80, 95));
+  var cl = num(cc.claudeMdLines) !== null ? num(cc.claudeMdLines) : num(scc.claude_md_lines);
+  box.appendChild(meter('CLAUDE.md · linhas', cl, 200, (cl === null ? '—' : fmtNum(cl)) + '/200 linhas', 75, 95));
+  var rw = num(cc.rulesWithoutPaths) !== null ? num(cc.rulesWithoutPaths) : num(scc.rules_without_paths);
+  var sd = num(cc.skillDescriptionsChars) !== null ? num(cc.skillDescriptionsChars) : num(scc.skill_descriptions_chars);
+  var sdMax = num(cc.skillDescriptionMaxChars) || num(scc.skill_description_max_chars) || 260;
+  box.appendChild(meter('descrições das skills (entram em todo turno)', sd, sdMax * 10, (sd === null ? '—' : fmtNum(sd)) + ' chars · limite ' + fmtNum(sdMax) + ' por skill', 90, 100));
+  var aml = num(h.auto_memory_lines), amb = num(h.auto_memory_bytes);
+  box.appendChild(meter('memória automática do Claude Code · linhas', aml, 200, (aml === null ? '—' : fmtNum(aml)) + '/200 linhas', 75, 90));
+  box.appendChild(meter('memória automática · tamanho', amb, 25 * 1024, (amb === null ? '—' : fmtDec(amb / 1024, 1)) + '/25 KB', 75, 90));
+  var dl = el('dl', { class: 'kv', style: 'margin-top:4px' });
+  var ts = num(cc.tokensPerSessionEst) !== null ? num(cc.tokensPerSessionEst) : num(scc.tokens_per_session_est);
+  var tt = num(cc.tokensPerTurnEst) !== null ? num(cc.tokensPerTurnEst) : num(scc.tokens_per_turn_est);
+  [['regras sem paths (sempre carregadas)', rw === null ? '—' : fmtNum(rw)], ['tokens por sessão (estimativa)', ts === null ? '—' : '≈ ' + fmtNum(ts)], ['tokens por turno (estimativa)', tt === null ? '—' : '≈ ' + fmtNum(tt)]]
+    .forEach(function (p) { dl.appendChild(el('dt', { text: p[0] })); dl.appendChild(el('dd', { text: p[1] })); });
+  box.appendChild(dl);
+}
+
+/* ---------- 11. saúde e avisos ---------- */
+var WARNING_TEXT = {
+  iterm_cc_status: ['Integração do iTerm2 (cc-status) quebrada', 'refaça a integração do iTerm2 (LEIA-ME, seção do iTerm); os hooks globais podem estar falhando em silêncio'],
+  pausa: ['Organismo em pausa', 'apague o arquivo PAUSA na raiz ou use /pausar'],
+  paused: ['Organismo em pausa', 'apague o arquivo PAUSA na raiz ou use /pausar'],
+  settings_invalido: ['.claude/settings.json inválido', 'rode /evoluir reparar ou confira o JSON com python3 -m json.tool'],
+  settings_invalid: ['.claude/settings.json inválido', 'rode /evoluir reparar ou confira o JSON com python3 -m json.tool'],
+  config_corrompido: ['config.json estava corrompido', 'foi recriado com os padrões; confira memoria/config.json'],
+  cache_regenerado: ['Cache regenerado', 'nada a fazer: o próximo refino completo acontece na manutenção'],
+  conhecimento_antigo: ['Conhecimento do Claude Code envelheceu', '/pesquisar claude code (ou /pesquisa-profunda) atualiza'],
+  indice_cheio: ['Índice perto do limite', 'fixe menos memórias e arquive mais (/evoluir mostra sugestões)'],
+  template_ausente: ['template.html do painel sumiu', 'o painel está no modo mínimo; recrie dashboard/template.html'],
+  minor_pending: ['Evolução de versão pendente', 'a manutenção da próxima sessão conclui o bump de versão'],
+  at_solto: ['@ solto em algum arquivo', 'o refinador avisa qual; coloque o token entre crases']
+};
+var WARNING_KEY = { iterm_cc_status: /iterm/i, pausa: /pausa/i, paused: /pausa/i, settings_invalido: /settings/i, settings_invalid: /settings/i, config_corrompido: /config/i, cache_regenerado: /cache/i, conhecimento_antigo: /conhecimento/i, indice_cheio: /[íi]ndice/i, template_ausente: /template/i, minor_pending: /vers[ãa]o/i, at_solto: /@/ };
+function warningAlreadyListed(code, list) {
+  var base = String(code || '').split(':')[0]; var rx = WARNING_KEY[base];
+  return list.some(function (w) { return w.code === code || (rx && rx.test(w.text || '')); });
+}
+function warningTextFor(code) {
+  var c = String(code || ''); var base = c.split(':')[0];
+  if (WARNING_TEXT[base]) return { title: WARNING_TEXT[base][0] + (c.indexOf(':') > 0 ? ' (' + c.split(':').slice(1).join(':') + ')' : ''), action: WARNING_TEXT[base][1] };
+  return { title: c.replace(/_/g, ' '), action: '/estado mostra o detalhe' };
+}
+function renderHealth(B) {
+  var h = obj(B.health), box = clear($('health'));
+  var items = [['órfãs', h.orphans, 'warn'], ['duplicadas', h.duplicates, 'bad'], ['similares', h.similar, 'warn'], ['inválidas', h.invalid, 'bad'], ['log', h.log_mb, 'mb']];
+  items.forEach(function (it) {
+    var v = num(it[1]); var cls = 'h';
+    if (it[2] === 'mb') { box.appendChild(el('div', { class: cls }, [el('span', { class: 'label', text: it[0] }), el('div', { class: 'n', text: v === null ? '—' : fmtDec(v, 1) + ' MB' })])); return; }
+    if (v !== null && v > 0) cls += ' ' + it[2];
+    box.appendChild(el('div', { class: cls }, [el('span', { class: 'label', text: it[0] }), el('div', { class: 'n', text: v === null ? '—' : fmtNum(v) })]));
+  });
+  var wbox = clear($('warnings'));
+  var list = [];
+  arr(B.warnings).forEach(function (w) { if (!w) return; if (typeof w === 'string') list.push({ level: 'warn', text: w }); else list.push({ level: String(w.level || 'warn').toLowerCase(), text: String(w.text || ''), action: w.action, code: w.code }); });
+  arr(h.warnings).forEach(function (code) {
+    if (warningAlreadyListed(code, list)) return;
+    var t = warningTextFor(code);
+    list.push({ level: 'warn', text: t.title, action: t.action, code: code });
+  });
+  if (obj(B.state).paused === true && !list.some(function (w) { return /pausa/i.test(w.text); })) list.push({ level: 'warn', text: 'Organismo em pausa', action: 'apague o arquivo PAUSA na raiz ou use /pausar' });
+  if (!list.length) { wbox.appendChild(el('div', { class: 'empty', text: 'nenhum aviso — organismo em dia' })); return; }
+  list.slice(0, 12).forEach(function (w) {
+    var lvl = w.level === 'error' ? 'error' : (w.level === 'info' ? 'info' : 'warn');
+    var row = el('div', { class: 'warning ' + lvl });
+    row.appendChild(el('span', { class: 'lvl', text: lvl === 'error' ? 'erro' : (lvl === 'info' ? 'info' : 'atenção') }));
+    var body = el('div', { class: 'break' });
+    body.appendChild(document.createTextNode(str(w.text, 200)));
+    if (w.action) body.appendChild(el('span', { class: 'do', text: 'o que fazer: ' + str(w.action, 200) }));
+    row.appendChild(body); wbox.appendChild(row);
+  });
+}
+
+/* ---------- 12. rodapé ---------- */
+function renderFooter(B) {
+  setText('footer-generated', B.generatedAt ? 'gerado em ' + fmtDateTime(B.generatedAt) : 'ainda sem geração');
+  var tips = clear($('footer-tips'));
+  var list = arr(B.tips).filter(function (t) { return typeof t === 'string' && t; }).slice(0, 3);
+  if (list.length) { var ul = el('ul', { class: 'clean' }); list.forEach(function (t) { ul.appendChild(el('li', { class: 'break', text: '💡 ' + str(t, 200) })); }); tips.appendChild(ul); }
+}
+
+/* ---------- render principal (global) ---------- */
+function render(BABEL) {
+  var B = BABEL && typeof BABEL === 'object' ? BABEL : null;
+  CURRENT = B;
+  var grid = $('grid'), empty = $('empty');
+  if (!B) {
+    LAST_GENERATED = null;
+    grid.classList.add('hidden'); empty.classList.remove('hidden');
+    setText('hud-version', 'v—'); setText('hud-generation', ''); clear($('hud-since')); clear($('hud-last-evolution'));
+    $('hud-health').className = 'badge warn'; setText('hud-health-text', 'esperando');
+    $('hud-pause').classList.add('hidden');
+    renderFooter({}); tickFreshness();
+    return false;
+  }
+  LAST_GENERATED = B.generatedAt || null;
+  empty.classList.add('hidden'); grid.classList.remove('hidden');
+  var steps = [renderHeader, renderVitals, renderProfile, renderRecalls, renderEvolution, renderTimeline, renderGraph, renderProjects, renderDeliveries, renderContext, renderHealth, renderFooter];
+  steps.forEach(function (fn) { try { fn(B); } catch (e) { try { console.error('painel: falha em ' + fn.name, e); } catch (e2) { /* nada */ } } });
+  grid.classList.remove('fade'); void grid.offsetWidth; grid.classList.add('fade');
+  return true;
+}
+window.render = render;
+
+/* ---------- abas, rolagem, polling ---------- */
+function applyTab(name) {
+  var tabs = document.querySelectorAll('#tabs .tab');
+  var valid = false;
+  for (var i = 0; i < tabs.length; i++) if (tabs[i].getAttribute('data-tab') === name) valid = true;
+  if (!valid) name = 'tudo';
+  for (i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === name);
+  var secs = document.querySelectorAll('#grid > section');
+  for (i = 0; i < secs.length; i++) secs[i].classList.toggle('hidden', name !== 'tudo' && secs[i].getAttribute('data-tab') !== name);
+  $('grid').classList.toggle('focus', name !== 'tudo');
+  storeSet('tab', name);
+  redrawCanvases();
+}
+function initTabs() {
+  var tabs = document.querySelectorAll('#tabs .tab');
+  for (var i = 0; i < tabs.length; i++) tabs[i].addEventListener('click', function (ev) { applyTab(ev.currentTarget.getAttribute('data-tab')); });
+  applyTab(storeGet('tab') || 'tudo');
+}
+function redrawCanvases() {
+  try { if (AREA_STATE) drawArea(AREA_STATE.hover); } catch (e) { /* nada */ }
+  try { if (GRAPH_STATE) drawGraph(); } catch (e) { /* nada */ }
+  try { var sparks = $('sparks'); if (sparks) Array.prototype.forEach.call(sparks.children, function (s) { if (s._draw) s._draw(); }); } catch (e) { /* nada */ }
+}
+function checkNewData() {
+  var B = window.BABEL;
+  if (!B || typeof B !== 'object') return;
+  if (B.generatedAt !== LAST_GENERATED || CURRENT === null) render(B);
+}
+function poll() {
+  POLL_COUNTER++;
+  if (POLL_SCRIPT && POLL_SCRIPT.parentNode) POLL_SCRIPT.parentNode.removeChild(POLL_SCRIPT);
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'data.js?v=' + POLL_COUNTER;
+  s.addEventListener('load', function () { checkNewData(); });
+  s.addEventListener('error', function () { if (s.parentNode) s.parentNode.removeChild(s); });
+  POLL_SCRIPT = s;
+  document.body.appendChild(s);
+}
+function tick() { tickFreshness(); poll(); }
+var saveScroll = debounce(function () { storeSet('scroll', Math.round(window.scrollY || window.pageYOffset || 0)); }, 200);
+function restoreScroll() { var y = Number(storeGet('scroll') || 0); if (y > 0) { try { window.scrollTo(0, y); } catch (e) { /* nada */ } } }
+(function boot() {
+  try { initTabs(); } catch (e) { /* nada */ }
+  try { render(window.BABEL || null); } catch (e) { try { console.error('painel: falha ao renderizar', e); } catch (e2) { /* nada */ } }
+  restoreScroll();
+  window.addEventListener('scroll', saveScroll, { passive: true });
+  window.addEventListener('resize', debounce(redrawCanvases, 150));
+  setInterval(tick, 5000);
+})();
+</script>
+</body>
+</html>

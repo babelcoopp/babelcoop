@@ -1,0 +1,51 @@
+{
+  "compact_delta": null,
+  "current_prompt": "9b9e9d72-09f4-4bd7-86cc-b842e585e0ad",
+  "files_by_prompt": {
+    "1dfbc194-8479-4730-ae7a-888f7afbb157": [],
+    "25073973-5057-458c-b799-7e06c0dc7d34": [],
+    "7749bcc0-641a-4ca3-b935-2ac3dff7296d": [
+      "deny",
+      "motor/report.py"
+    ],
+    "9b9e9d72-09f4-4bd7-86cc-b842e585e0ad": []
+  },
+  "memories_by_prompt": {
+    "1dfbc194-8479-4730-ae7a-888f7afbb157": [],
+    "25073973-5057-458c-b799-7e06c0dc7d34": [],
+    "7749bcc0-641a-4ca3-b935-2ac3dff7296d": [
+      "cli",
+      "cli",
+      "cli"
+    ],
+    "9b9e9d72-09f4-4bd7-86cc-b842e585e0ad": []
+  },
+  "pending_reminder": false,
+  "permission_mode": "auto",
+  "prompts": 3,
+  "session": "7f804fee",
+  "start": "2026-09-23T01:59:05-03:00",
+  "stop_blocks": {},
+  "subagents": {
+    "a1ac67bae33dcf680": {
+      "end": "2026-09-23T02:03:04-03:00",
+      "start": null,
+      "type": null
+    },
+    "a334d6f1603fcdbb0": {
+      "end": "2026-09-23T02:00:29-03:00",
+      "start": null,
+      "type": null
+    },
+    "a3f4e2926c9d74a0e": {
+      "end": "2026-09-23T00:20:46-03:00",
+      "start": null,
+      "type": null
+    },
+    "a818db3e35746a7e0": {
+      "end": "2026-09-23T02:07:00-03:00",
+      "start": null,
+      "type": null
+    }
+  }
+}

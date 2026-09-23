@@ -1,0 +1,8328 @@
+{
+  "N": 28,
+  "avgdl": 49.11,
+  "df": {
+    "0": 2,
+    "00": 1,
+    "0029vbe2vhj0bidspqhw9f06": 1,
+    "009": 1,
+    "09": 18,
+    "1": 18,
+    "10": 3,
+    "11": 1,
+    "12": 1,
+    "13": 1,
+    "135": 2,
+    "144": 1,
+    "16": 1,
+    "18": 2,
+    "2": 15,
+    "2026": 18,
+    "22": 15,
+    "23": 5,
+    "280": 14,
+    "3": 2,
+    "300": 1,
+    "5": 1,
+    "59": 1,
+    "597": 1,
+    "6": 1,
+    "60": 1,
+    "8": 1,
+    "9": 1,
+    "94": 1,
+    "abertura": 1,
+    "above": 1,
+    "abre": 2,
+    "abrir": 4,
+    "aceitando": 1,
+    "achar": 1,
+    "acros": 1,
+    "add": 1,
+    "additionalcontext": 1,
+    "adesao": 1,
+    "adotada": 1,
+    "afiliado": 2,
+    "against": 1,
+    "agent": 8,
+    "agente": 2,
+    "ajude": 1,
+    "all": 2,
+    "alma": 1,
+    "alternativa": 4,
+    "ambicao": 1,
+    "ansi": 1,
+    "anthrop": 1,
+    "anthropic": 1,
+    "any": 1,
+    "apaixonado": 1,
+    "api": 1,
+    "aplicar": 5,
+    "aplicativo": 2,
+    "apoio": 1,
+    "app": 2,
+    "aprende": 1,
+    "aprendizado": 3,
+    "apro": 1,
+    "aproveitando": 1,
+    "args": 2,
+    "arquiteto": 1,
+    "arquitetura": 1,
+    "arquivo": 5,
+    "array": 1,
+    "artifact": 1,
+    "assistant": 1,
+    "atende": 1,
+    "ativacao": 3,
+    "ativado": 1,
+    "atomica": 1,
+    "atual": 1,
+    "atualiza": 1,
+    "authoring": 1,
+    "auto": 4,
+    "autocomplete": 1,
+    "autocontido": 1,
+    "autoinstallideextension": 1,
+    "automacao": 1,
+    "automatizado": 1,
+    "autonoma": 1,
+    "auxiliar": 1,
+    "avancando": 1,
+    "avancar": 1,
+    "avanco": 1,
+    "babel": 15,
+    "backup": 2,
+    "badg": 1,
+    "baixar": 1,
+    "baixe": 1,
+    "barata": 1,
+    "base": 2,
+    "bin": 3,
+    "binary": 2,
+    "block": 1,
+    "bloqueado": 1,
+    "bloquear": 1,
+    "bloqueia": 1,
+    "boas": 1,
+    "bool": 1,
+    "brasil": 2,
+    "builder": 4,
+    "bundl": 1,
+    "buscar": 2,
+    "camelcase": 1,
+    "caminho": 2,
+    "canal": 5,
+    "cannot": 1,
+    "carrega": 1,
+    "carregar": 1,
+    "carrinho": 1,
+    "caso": 1,
+    "cerimonia": 1,
+    "certo": 2,
+    "cetico": 1,
+    "change": 1,
+    "changelog": 1,
+    "channel": 1,
+    "chave": 3,
+    "checkpoint": 1,
+    "chrome": 1,
+    "cidade": 1,
+    "classificador": 1,
+    "claude": 18,
+    "cli": 2,
+    "cliqu": 1,
+    "clube": 2,
+    "cobra": 1,
+    "cobranca": 1,
+    "cobre": 1,
+    "code": 18,
+    "codigo": 1,
+    "color": 1,
+    "comando": 3,
+    "comentario": 1,
+    "command": 5,
+    "compact": 1,
+    "compactacao": 1,
+    "complet": 1,
+    "completar": 1,
+    "completude": 1,
+    "comunidade": 2,
+    "conceito": 1,
+    "conectar": 1,
+    "confiar": 1,
+    "config": 4,
+    "configuracao": 11,
+    "conhecimento": 3,
+    "consegue": 1,
+    "consequencia": 4,
+    "console": 1,
+    "const": 1,
+    "construcao": 3,
+    "construido": 1,
+    "construir": 1,
+    "construtor": 2,
+    "contained": 1,
+    "context": 1,
+    "contexto": 4,
+    "continua": 1,
+    "contra": 11,
+    "conversa": 2,
+    "copia": 2,
+    "corpo": 2,
+    "corte": 3,
+    "criado": 1,
+    "criou": 1,
+    "critico": 1,
+    "cruza": 1,
+    "css": 1,
+    "curta": 1,
+    "curto": 1,
+    "custom": 2,
+    "dado": 1,
+    "dashboard": 5,
+    "data": 1,
+    "decisao": 4,
+    "decision": 4,
+    "degrau": 1,
+    "dentro": 2,
+    "derruba": 1,
+    "descartada": 1,
+    "descobrir": 2,
+    "descricao": 1,
+    "description": 2,
+    "desktop": 4,
+    "desliga": 1,
+    "desligavel": 1,
+    "despachante": 1,
+    "despacho": 1,
+    "detail": 1,
+    "detalh": 11,
+    "deterministica": 1,
+    "deterministico": 1,
+    "dev": 2,
+    "deve": 2,
+    "dia": 1,
+    "dias": 1,
+    "digital": 1,
+    "dinamico": 1,
+    "dir": 2,
+    "directory": 2,
+    "diretorio": 1,
+    "disableallhook": 1,
+    "disallowedtool": 1,
+    "dizer": 1,
+    "docs": 13,
+    "does": 1,
+    "dois": 2,
+    "dossie": 1,
+    "editado": 1,
+    "empresario": 3,
+    "encontrar": 1,
+    "encontro": 1,
+    "end": 1,
+    "enterprise": 1,
+    "entra": 1,
+    "entrega": 5,
+    "entregar": 2,
+    "env": 1,
+    "erro": 1,
+    "error": 1,
+    "esc": 1,
+    "escolha": 4,
+    "escrever": 1,
+    "escrita": 1,
+    "escrito": 1,
+    "especificacao": 1,
+    "espelho": 1,
+    "esquece": 2,
+    "estado": 1,
+    "estilo": 2,
+    "event": 3,
+    "evento": 1,
+    "evolucao": 2,
+    "evolui": 3,
+    "exact": 1,
+    "excecao": 1,
+    "exec": 2,
+    "exit": 1,
+    "expansao": 1,
+    "explicacao": 1,
+    "explicado": 1,
+    "export": 1,
+    "extension": 1,
+    "facil": 2,
+    "fact": 4,
+    "fala": 2,
+    "fallback": 2,
+    "false": 1,
+    "fato": 2,
+    "fecha": 1,
+    "ferramenta": 1,
+    "fetch": 1,
+    "fica": 1,
+    "ficam": 1,
+    "ficar": 2,
+    "field": 2,
+    "file": 7,
+    "fim": 1,
+    "folder": 1,
+    "font": 13,
+    "fonte": 3,
+    "footer": 1,
+    "fora": 2,
+    "form": 2,
+    "forma": 1,
+    "formatting": 1,
+    "forte": 1,
+    "fragei": 1,
+    "frontmatter": 2,
+    "fui": 1,
+    "fundador": 1,
+    "gancho": 2,
+    "gate": 1,
+    "gerado": 1,
+    "git": 1,
+    "gitignore": 1,
+    "globai": 1,
+    "global": 1,
+    "goes": 1,
+    "grafico": 4,
+    "grand": 2,
+    "grupo": 5,
+    "guardado": 1,
+    "guardar": 1,
+    "hidevimmodeindicator": 1,
+    "high": 1,
+    "hint": 1,
+    "historico": 1,
+    "hold": 1,
+    "hook": 8,
+    "html": 6,
+    "http": 1,
+    "ia": 8,
+    "ide": 1,
+    "identity": 1,
+    "idioma": 1,
+    "ignored": 1,
+    "igual": 1,
+    "image": 2,
+    "imersao": 1,
+    "imersiva": 1,
+    "import": 1,
+    "impossivel": 2,
+    "inauguracao": 1,
+    "inclusive": 1,
+    "index": 1,
+    "influencia": 1,
+    "informal": 1,
+    "ingl": 1,
+    "iniciando": 1,
+    "initialprompt": 1,
+    "inline": 2,
+    "inside": 2,
+    "intacto": 1,
+    "integracao": 2,
+    "integrado": 1,
+    "integral": 1,
+    "integrated": 1,
+    "inteligencia": 1,
+    "intencao": 1,
+    "interrupt": 1,
+    "iterm2": 2,
+    "its": 2,
+    "json": 9,
+    "jsonl": 2,
+    "juiz": 1,
+    "junto": 1,
+    "key": 4,
+    "keys": 1,
+    "kkkk": 1,
+    "know": 1,
+    "knowledge": 11,
+    "label": 1,
+    "lacuna": 2,
+    "landing": 2,
+    "lateral": 3,
+    "leading": 1,
+    "learning": 2,
+    "legado": 1,
+    "lembranca": 6,
+    "lembrar": 6,
+    "ler": 1,
+    "levaria": 1,
+    "level": 1,
+    "lider": 3,
+    "lidera": 2,
+    "lideranca": 2,
+    "liga": 1,
+    "ligado": 1,
+    "ligavel": 1,
+    "line": 4,
+    "linha": 3,
+    "link": 1,
+    "literal": 1,
+    "live": 1,
+    "llm": 1,
+    "loaded": 1,
+    "locai": 1,
+    "local": 5,
+    "low": 1,
+    "lp": 4,
+    "lps": 1,
+    "lsp": 1,
+    "lugar": 1,
+    "maco": 1,
+    "maior": 1,
+    "make": 1,
+    "managed": 2,
+    "manda": 1,
+    "maneira": 1,
+    "manually": 1,
+    "maquina": 1,
+    "marcelo": 11,
+    "marcelomaximo": 3,
+    "markdown": 3,
+    "matcher": 2,
+    "maxima": 1,
+    "maximu": 2,
+    "maxturn": 1,
+    "mcp": 2,
+    "mcpserver": 1,
+    "mdm": 1,
+    "membro": 2,
+    "memoria": 6,
+    "memory": 3,
+    "mensagen": 1,
+    "mente": 1,
+    "mentor": 2,
+    "merge": 1,
+    "mes": 1,
+    "message": 1,
+    "meta": 1,
+    "metafora": 1,
+    "mexa": 1,
+    "mexer": 1,
+    "mil": 1,
+    "mim": 1,
+    "min": 1,
+    "misspelled": 1,
+    "mode": 1,
+    "model": 1,
+    "monitor": 1,
+    "most": 1,
+    "motor": 2,
+    "msg": 1,
+    "muda": 1,
+    "mudar": 1,
+    "mudou": 1,
+    "mundo": 1,
+    "must": 3,
+    "name": 6,
+    "nascimento": 1,
+    "native": 1,
+    "navegador": 2,
+    "need": 1,
+    "nenhum": 1,
+    "nenhuma": 1,
+    "nervoso": 1,
+    "nesta": 1,
+    "nested": 1,
+    "netlify": 1,
+    "network": 2,
+    "networkreino": 3,
+    "never": 1,
+    "new": 1,
+    "next": 1,
+    "node": 2,
+    "nome": 3,
+    "nordeste": 1,
+    "notification": 1,
+    "nova": 1,
+    "novo": 1,
+    "num": 1,
+    "obrigatoria": 1,
+    "ocupado": 1,
+    "oferecer": 1,
+    "off": 1,
+    "oficiai": 13,
+    "olha": 1,
+    "omitclaudemd": 1,
+    "only": 3,
+    "opcao": 1,
+    "opcionai": 1,
+    "oportunidade": 1,
+    "organismo": 7,
+    "origem": 1,
+    "original": 1,
+    "osc": 1,
+    "other": 1,
+    "outside": 1,
+    "ouvir": 1,
+    "own": 2,
+    "padding": 1,
+    "pagina": 2,
+    "painel": 5,
+    "panel": 1,
+    "paralela": 1,
+    "parent": 1,
+    "parte": 1,
+    "passa": 1,
+    "passo": 1,
+    "pasta": 4,
+    "path": 1,
+    "pausa": 1,
+    "pedido": 4,
+    "pedir": 3,
+    "pediu": 4,
+    "pensar": 1,
+    "perfil": 1,
+    "perguntado": 1,
+    "permissao": 2,
+    "permission": 1,
+    "permissionmode": 1,
+    "permissionrequest": 1,
+    "persona": 3,
+    "personal": 1,
+    "pesquisa": 2,
+    "pesquisar": 2,
+    "pessoal": 1,
+    "phas": 1,
+    "phase": 1,
+    "pior": 1,
+    "plano": 1,
+    "plataforma": 2,
+    "plugin": 3,
+    "plus": 1,
+    "polling": 1,
+    "pontuacao": 1,
+    "portao": 2,
+    "portugu": 3,
+    "posttooluse": 1,
+    "potencia": 1,
+    "pratica": 2,
+    "precedence": 1,
+    "precisa": 3,
+    "precise": 1,
+    "prefere": 1,
+    "preference": 4,
+    "prender": 1,
+    "present": 1,
+    "presente": 1,
+    "pretooluse": 1,
+    "preview": 1,
+    "primary": 1,
+    "primeira": 5,
+    "primeiro": 3,
+    "profile": 1,
+    "proibido": 1,
+    "proibir": 1,
+    "proibiu": 1,
+    "project": 7,
+    "projeto": 6,
+    "prompt": 3,
+    "proposta": 1,
+    "proprio": 1,
+    "protegido": 1,
+    "prototipo": 1,
+    "provavele": 1,
+    "proximo": 2,
+    "publicada": 1,
+    "puro": 2,
+    "puxado": 1,
+    "puxam": 1,
+    "python3": 4,
+    "quebra": 1,
+    "raiz": 2,
+    "rapport": 1,
+    "read": 1,
+    "recarrega": 1,
+    "reclamou": 1,
+    "recursive": 1,
+    "recursively": 1,
+    "recusou": 1,
+    "redundancia": 1,
+    "refazer": 1,
+    "reference": 2,
+    "referencia": 3,
+    "refinamento": 1,
+    "refreshinterval": 1,
+    "regiao": 1,
+    "registram": 2,
+    "registrar": 1,
+    "regra": 1,
+    "regrava": 1,
+    "reiniciar": 1,
+    "reino": 11,
+    "reinstall": 1,
+    "relacionamento": 1,
+    "relatorio": 1,
+    "removed": 1,
+    "render": 1,
+    "replace": 1,
+    "repo": 1,
+    "required": 2,
+    "responder": 1,
+    "respondida": 1,
+    "resposta": 3,
+    "resultado": 1,
+    "resume": 1,
+    "resumo": 13,
+    "reuniao": 1,
+    "reunindo": 1,
+    "revisao": 1,
+    "rigida": 2,
+    "risco": 1,
+    "ritmo": 1,
+    "rocha": 1,
+    "rodando": 1,
+    "rodar": 2,
+    "root": 2,
+    "rotacao": 1,
+    "row": 1,
+    "rule": 2,
+    "running": 1,
+    "runs": 1,
+    "sabe": 1,
+    "saida": 2,
+    "sair": 1,
+    "salvo": 1,
+    "same": 1,
+    "scanned": 1,
+    "schem": 1,
+    "scope": 2,
+    "script": 2,
+    "scro": 1,
+    "seja": 1,
+    "self": 1,
+    "selftest": 3,
+    "sendo": 1,
+    "separado": 1,
+    "servidor": 1,
+    "sessao": 3,
+    "session": 2,
+    "sessionend": 2,
+    "sessionstart": 1,
+    "setting": 8,
+    "shared": 1,
+    "shell": 1,
+    "shortcut": 1,
+    "silently": 1,
+    "sintese": 1,
+    "sistema": 2,
+    "sit": 1,
+    "site": 4,
+    "sits": 1,
+    "situacao": 1,
+    "skill": 7,
+    "skip": 1,
+    "skipped": 1,
+    "snapshot": 1,
+    "sobrando": 1,
+    "sobrevive": 1,
+    "solucao": 1,
+    "sozinho": 3,
+    "space": 1,
+    "speak": 1,
+    "specifier": 1,
+    "spread": 1,
+    "standalone": 2,
+    "start": 1,
+    "state": 1,
+    "statement": 1,
+    "statu": 5,
+    "statusline": 1,
+    "stay": 1,
+    "stdout": 1,
+    "stop": 3,
+    "stopfailure": 1,
+    "structure": 1,
+    "subagent": 2,
+    "subagentstatusline": 1,
+    "subagentstop": 1,
+    "substrato": 6,
+    "suggestion": 1,
+    "suppress": 1,
+    "tar": 1,
+    "tarefa": 1,
+    "tecnico": 2,
+    "tela": 1,
+    "tema": 1,
+    "template": 2,
+    "terminal": 2,
+    "termo": 1,
+    "testar": 1,
+    "text": 1,
+    "texto": 1,
+    "timeout": 1,
+    "title": 1,
+    "tool": 1,
+    "topic": 1,
+    "totalment": 1,
+    "traduzir": 1,
+    "transformar": 1,
+    "trava": 1,
+    "travam": 1,
+    "true": 1,
+    "trust": 1,
+    "turn": 1,
+    "tuso": 1,
+    "twer": 1,
+    "type": 2,
+    "ultrac": 1,
+    "ultracode": 2,
+    "under": 1,
+    "unico": 3,
+    "unknown": 1,
+    "usado": 1,
+    "use": 1,
+    "user": 5,
+    "userpromptsubmit": 1,
+    "usr": 1,
+    "validate": 1,
+    "variavel": 1,
+    "vars": 1,
+    "vazio": 2,
+    "vence": 2,
+    "ver": 2,
+    "vercel": 1,
+    "verdade": 1,
+    "verificada": 1,
+    "verificado": 11,
+    "verificador": 1,
+    "verified": 1,
+    "versao": 1,
+    "vira": 3,
+    "virgula": 1,
+    "vivo": 1,
+    "voz": 3,
+    "vscode": 1,
+    "web": 1,
+    "whatsapp": 4,
+    "whentouse": 1,
+    "why": 1,
+    "window": 2,
+    "wins": 1,
+    "workflow": 5,
+    "working": 1,
+    "written": 1,
+    "yaml": 2,
+    "zap": 4,
+    "zero": 1,
+    "zshrc": 1
+  },
+  "docs": [
+    "2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09",
+    "2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q",
+    "2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que",
+    "2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o",
+    "2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico",
+    "2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap",
+    "2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe",
+    "2026-09-23-projeto-babel-os",
+    "2026-09-23-reino-referencias",
+    "2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c",
+    "2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e",
+    "babel-os",
+    "changelog-e-boas-praticas",
+    "diretorio-e-memoria",
+    "hooks",
+    "marcelo",
+    "pedido-original",
+    "plugins-mcp",
+    "riscos-e-lacunas",
+    "settings",
+    "skills-e-comandos",
+    "statusline-e-terminal",
+    "subagentes",
+    "vscode-sessoes-checkpoints",
+    "workflows-e-automacao",
+    "prompt:1dfbc194-8479-4730-ae7a-888f7afbb157",
+    "prompt:25073973-5057-458c-b799-7e06c0dc7d34",
+    "prompt:9b9e9d72-09f4-4bd7-86cc-b842e585e0ad"
+  ],
+  "format": 1,
+  "generated": "2026-09-23T02:03:57-03:00",
+  "meta": {
+    "2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09": {
+      "collection": "memorias",
+      "confidence": 0.9,
+      "created": "2026-09-23",
+      "head": "Primeira ativação em ultracode: (1) pesquisa dos docs oficiais do Claude Code 2.1.280 com 59 agentes (10 temas, 2 verificadores por tema, crítico de completude, 18 lacunas respondidas) → memoria/conh…",
+      "len": 65,
+      "links": [],
+      "open": [],
+      "path": "memoria/memorias/2026-09-23-como-o-organismo-gabriel-foi-construido-22-23-09.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "aprendizado",
+        "babel-os",
+        "claude-code",
+        "conhecimento",
+        "construcao",
+        "construtor",
+        "learning"
+      ],
+      "title": "Como o organismo Gabriel foi construído (22-23/09/2026)",
+      "type": "learning"
+    },
+    "2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q": {
+      "collection": "memorias",
+      "confidence": 0.9,
+      "created": "2026-09-23",
+      "head": "Mensagens dele são curtas, sem pontuação rígida (kkkk, liga, né). Ele quer o resultado na tela antes de qualquer explicação. **Por quê:** é líder ocupado, não técnico. **Como aplicar:** responder no…",
+      "len": 35,
+      "links": [],
+      "open": [],
+      "path": "memoria/memorias/2026-09-23-marcelo-fala-curto-e-informal-estilo-whatsapp-e-q.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "estilo",
+        "fala",
+        "marcelo",
+        "preference",
+        "rapport",
+        "rigida",
+        "voz"
+      ],
+      "title": "Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler",
+      "type": "preference"
+    },
+    "2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que": {
+      "collection": "memorias",
+      "confidence": 0.9,
+      "created": "2026-09-23",
+      "head": "Cada site ou LP deve sair como um único .html autocontido, com uma cópia de nome fácil de achar na pasta. **Por quê:** ele não é dev, abre no navegador e manda por WhatsApp. **Como aplicar:** CSS e J…",
+      "len": 42,
+      "links": [],
+      "open": [],
+      "path": "memoria/memorias/2026-09-23-marcelo-prefere-sites-e-lps-em-arquivo-unico-que.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "copia",
+        "deve",
+        "entregas",
+        "facil",
+        "lp",
+        "marcelo",
+        "preference",
+        "sites"
+      ],
+      "title": "Marcelo prefere sites e LPs em arquivo único que abre com dois cliques",
+      "type": "preference"
+    },
+    "2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o": {
+      "collection": "memorias",
+      "confidence": 0.9,
+      "created": "2026-09-23",
+      "head": "Ele pediu um mentor que abre a mente para o mais e proibiu respostas que travam em não dá, impossível ou não deu certo. **Por quê:** lidera grandes grupos e quer o Gabriel avançando sozinho. **Como a…",
+      "len": 33,
+      "links": [],
+      "open": [],
+      "path": "memoria/memorias/2026-09-23-marcelo-quer-ser-puxado-para-pensar-maior-nunca-o.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "abre",
+        "abrir",
+        "caminho",
+        "marcelo",
+        "mentor",
+        "preference",
+        "voz"
+      ],
+      "title": "Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'",
+      "type": "preference"
+    },
+    "2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico": {
+      "collection": "memorias",
+      "confidence": 0.9,
+      "created": "2026-09-23",
+      "head": "Tudo que o Marcelo lê tem que estar em português do Brasil: respostas, descrições dos comandos nos pedidos de permissão, opções e resumos. **Por quê:** em 22/09/2026 ele recusou um comando e reclamou…",
+      "len": 27,
+      "links": [],
+      "open": [],
+      "path": "memoria/memorias/2026-09-23-marcelo-quer-tudo-em-portugues-inclusive-descrico.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "aplicar",
+        "brasil",
+        "idioma",
+        "marcelo",
+        "permissao",
+        "preference",
+        "voz"
+      ],
+      "title": "Marcelo quer tudo em português, inclusive descrições de comandos",
+      "type": "preference"
+    },
+    "2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap": {
+      "collection": "decisoes",
+      "confidence": 0.9,
+      "created": "2026-09-23",
+      "head": "**Contexto:** o navegador integrado do VS Code recarrega file:// só quando o próprio index.html muda e bloqueia fetch() local; um rm -rf memoria levaria substrato e cópias juntos. **Alternativas:** d…",
+      "len": 59,
+      "links": [],
+      "open": [],
+      "path": "memoria/decisoes/2026-09-23-painel-gerado-do-template-com-dados-inline-e-snap.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "babel-os",
+        "backup",
+        "backups",
+        "dashboard",
+        "decisao",
+        "decision",
+        "dentro",
+        "fora"
+      ],
+      "title": "Painel gerado do template com dados inline e snapshots em backups/ na raiz",
+      "type": "decision"
+    },
+    "2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe": {
+      "collection": "decisoes",
+      "confidence": 0.9,
+      "created": "2026-09-23",
+      "head": "**Contexto:** o Marcelo pediu um organismo que evolui a cada pedido e não esquece nada. **Alternativas:** confiar só na persona; bloquear todo Stop; registrar por hook sem LLM. **Escolha:** os hooks…",
+      "len": 53,
+      "links": [],
+      "open": [],
+      "path": "memoria/decisoes/2026-09-23-portao-de-aprendizado-no-stop-uma-cobranca-por-pe.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "babel-os",
+        "conversa",
+        "decisao",
+        "decision",
+        "entrega",
+        "esquece",
+        "memoria"
+      ],
+      "title": "Portão de aprendizado no Stop: uma cobrança por pedido, desligável",
+      "type": "decision"
+    },
+    "2026-09-23-projeto-babel-os": {
+      "collection": "memorias",
+      "confidence": 0.8,
+      "created": "2026-09-23",
+      "head": "O babel-os é a pasta que o Marcelo quer transformar num \"empresário automatizado\": o agente Gabriel (persona no CLAUDE.md) com um substrato de memória dentro da pasta (markdown + jsonl), hooks que re…",
+      "len": 73,
+      "links": [
+        "marcelo",
+        "2026-09-23-reino-referencias"
+      ],
+      "open": [],
+      "path": "memoria/memorias/2026-09-23-projeto-babel-os.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "auto-memory",
+        "babel",
+        "fact",
+        "projeto"
+      ],
+      "title": "O que é o babel-os (organismo vivo 'Gabriel'), primeira ativação em 22/09/2026 com ultrac…",
+      "type": "fact"
+    },
+    "2026-09-23-reino-referencias": {
+      "collection": "memorias",
+      "confidence": 0.8,
+      "created": "2026-09-23",
+      "head": "- Fonte da verdade do Reino: ~/reino/conhecimento/reino.md (espelho em ~/Desktop/LP Reino/reino-base-de-conhecimento.md); falas-chave em ~/Desktop/LP Reino/conversa-reino.md. - LP publicada: https://…",
+      "len": 62,
+      "links": [
+        "2026-09-23-projeto-babel-os"
+      ],
+      "open": [],
+      "path": "memoria/memorias/2026-09-23-reino-referencias.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "auto-memory",
+        "reference",
+        "referencias",
+        "reino"
+      ],
+      "title": "Onde estão as fontes do Reino (base de conhecimento, LP publicada, app, canal WhatsApp, d…",
+      "type": "reference"
+    },
+    "2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c": {
+      "collection": "decisoes",
+      "confidence": 0.95,
+      "created": "2026-09-23",
+      "head": "**Contexto:** a pasta .claude/ é caminho protegido no Claude Code 2.1.280 (toda escrita passa pelo classificador ou por prompt). **Alternativas:** guardar a memória em .claude/memoria (proposta desca…",
+      "len": 57,
+      "links": [],
+      "open": [],
+      "path": "memoria/decisoes/2026-09-23-substrato-motor-painel-e-entregas-ficam-fora-de-c.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "arquitetura",
+        "babel-os",
+        "dashboard",
+        "decisao",
+        "decision",
+        "evolui",
+        "painel"
+      ],
+      "title": "Substrato, motor, painel e entregas ficam fora de .claude/",
+      "type": "decision"
+    },
+    "2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e": {
+      "collection": "decisoes",
+      "confidence": 0.95,
+      "created": "2026-09-23",
+      "head": "**Contexto:** hooks têm regras de saída rígidas (stdout vazio ou um único JSON; Stop trava com additionalContext; SessionEnd tem 1,5 s). **Alternativas:** 11 scripts separados ou um despachante. **Es…",
+      "len": 55,
+      "links": [],
+      "open": [],
+      "path": "memoria/decisoes/2026-09-23-um-unico-hook-claude-hooks-hook-py-atende-os-16-e.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "alternativa",
+        "babel-os",
+        "consequencia",
+        "contexto",
+        "decisao",
+        "decision",
+        "hooks"
+      ],
+      "title": "Um único hook (.claude/hooks/hook.py) atende os 16 eventos",
+      "type": "decision"
+    },
+    "babel-os": {
+      "collection": "projetos",
+      "confidence": 0.95,
+      "created": "2026-09-23",
+      "head": "## Situação Ativado em 23/09/2026 00:12 (v0.1.1). Construção verificada: selftest 135/135, claude plugin validate ok. Portão de aprendizado será ligado ao fim da construção. ## Próximos passos - [ ]…",
+      "len": 52,
+      "links": [],
+      "open": [
+        "reiniciar a sessão para carregar CLAUDE.md, agentes e status line",
+        "abrir o painel na lateral do VS Code",
+        "traduzir para português os 10 resumos de conhecimento do Claude Code",
+        "pedir ao Marcelo para refazer a integração do iTerm2 (cc-status)"
+      ],
+      "path": "memoria/projetos/babel-os.md",
+      "pinned": false,
+      "project": null,
+      "situation": "in-progress",
+      "status": "active",
+      "summary": "Corpo do Gabriel: substrato de memória, motor determinístico, hook único, 16 skills, 5 agentes, 4 workflows, painel Babel OS e status line em português",
+      "tags": [
+        "aprendizado",
+        "babel-os",
+        "construcao",
+        "gabriel",
+        "portao",
+        "project",
+        "projeto"
+      ],
+      "title": "babel-os: o organismo Gabriel",
+      "type": "project"
+    },
+    "changelog-e-boas-praticas": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — changelog e boas práticas Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. Claude Code 2.1.280 (2026-09-22), native binary, no Node. Key facts for…",
+      "len": 57,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/changelog-e-boas-praticas.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "changelog-e-boas-praticas",
+        "claude-code",
+        "configuracao",
+        "knowledge"
+      ],
+      "title": "Claude Code 2.1.280 — changelog e boas práticas",
+      "type": "knowledge"
+    },
+    "diretorio-e-memoria": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — diretório e memória Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. Key facts for the babel-os builder (topic: .claude directory, CLAUDE.md, `@im…",
+      "len": 55,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/diretorio-e-memoria.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "diretorio-e-memoria",
+        "knowledge"
+      ],
+      "title": "Claude Code 2.1.280 — diretório e memória",
+      "type": "knowledge"
+    },
+    "hooks": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — hooks (ganchos) Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. Fatos-chave de hooks para quem vai construir o babel-os (Claude Code 2.1.280, mac…",
+      "len": 55,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/hooks.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "hooks",
+        "knowledge"
+      ],
+      "title": "Claude Code 2.1.280 — hooks (ganchos)",
+      "type": "knowledge"
+    },
+    "marcelo": {
+      "collection": "perfil",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Marcelo Rocha (Marcelo Maximus) — o que o Gabriel sabe ## Quem ele é - Fundador do **Reino**: clube de network entre empresários com a IA **Babel** (REINO = Relacionamento, Empresários, Influência,…",
+      "len": 61,
+      "links": [
+        "2026-09-23-projeto-babel-os",
+        "2026-09-23-reino-referencias"
+      ],
+      "open": [],
+      "path": "memoria/perfil/marcelo.md",
+      "pinned": true,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": "Marcelo Rocha (Maximus), fundador do Reino (network + IA Babel); lidera grandes grupos; não-dev; quer tudo pronto, em português, estilo WhatsApp; Diego é sócio…",
+      "tags": [
+        "babel",
+        "lideranca",
+        "marcelo",
+        "perfil",
+        "profile",
+        "reino"
+      ],
+      "title": "Marcelo Rocha (Maximus): fundador do Reino, líder de grupos, não-dev, português estilo WhatsApp",
+      "type": "profile"
+    },
+    "pedido-original": {
+      "collection": "origem",
+      "confidence": 1.0,
+      "created": "2026-09-22",
+      "head": "# Pedido original do Marcelo > Texto integral do `CLAUDE.md` escrito pelo Marcelo em 22/09/2026, guardado intacto antes da primeira ativação do organismo. Nada aqui é editado; é a fonte da intenção.…",
+      "len": 47,
+      "links": [],
+      "open": [],
+      "path": "memoria/origem/pedido-original.md",
+      "pinned": true,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "gabriel",
+        "marcelo",
+        "origem",
+        "pedido",
+        "reference"
+      ],
+      "title": "Pedido original do Marcelo (CLAUDE.md de nascimento do Gabriel)",
+      "type": "reference"
+    },
+    "plugins-mcp": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — plugins e MCP Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. - Plugins: a plugin is a self-contained folder; only `.claude-plugin/plugin.json` g…",
+      "len": 46,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/plugins-mcp.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "knowledge",
+        "plugins-mcp"
+      ],
+      "title": "Claude Code 2.1.280 — plugins e MCP",
+      "type": "knowledge"
+    },
+    "prompt:1dfbc194-8479-4730-ae7a-888f7afbb157": {
+      "collection": "prompts",
+      "confidence": 1.0,
+      "created": "2026-09-23",
+      "head": "",
+      "len": 28,
+      "path": null,
+      "pinned": false,
+      "session": "7f804fee",
+      "status": "active",
+      "tags": [],
+      "title": "/Users/marcelomaximos/Desktop/babel-os/entregas/sites/LP Reino/networkreino.htm…",
+      "type": "prompt"
+    },
+    "prompt:25073973-5057-458c-b799-7e06c0dc7d34": {
+      "collection": "prompts",
+      "confidence": 1.0,
+      "created": "2026-09-23",
+      "head": "",
+      "len": 17,
+      "path": null,
+      "pinned": false,
+      "session": "7f804fee",
+      "status": "active",
+      "tags": [],
+      "title": "[Image #1]/Users/marcelomaximos/Desktop/babel-os/entregas/sites/LP Reino/networ…",
+      "type": "prompt"
+    },
+    "prompt:9b9e9d72-09f4-4bd7-86cc-b842e585e0ad": {
+      "collection": "prompts",
+      "confidence": 1.0,
+      "created": "2026-09-23",
+      "head": "",
+      "len": 4,
+      "path": null,
+      "pinned": false,
+      "session": "7f804fee",
+      "status": "active",
+      "tags": [],
+      "title": "[Image #2] olha essa msg",
+      "type": "prompt"
+    },
+    "riscos-e-lacunas": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — riscos e lacunas Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. Parte B do dossiê de construção (2026-09-22): riscos verificados nesta máquina e…",
+      "len": 50,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/riscos-e-lacunas.md",
+      "pinned": true,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "knowledge",
+        "riscos-e-lacunas"
+      ],
+      "title": "Claude Code 2.1.280 — riscos e lacunas",
+      "type": "knowledge"
+    },
+    "settings": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — settings (configurações) Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. - Files: ~/.claude/settings.json (User), .claude/settings.json (Shared p…",
+      "len": 53,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/settings.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "knowledge",
+        "settings"
+      ],
+      "title": "Claude Code 2.1.280 — settings (configurações)",
+      "type": "knowledge"
+    },
+    "skills-e-comandos": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — skills e comandos Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. Skills e comandos (Claude Code 2.1.280, docs 2026-09-22) — fatos-chave para o b…",
+      "len": 51,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/skills-e-comandos.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "knowledge",
+        "skills-e-comandos"
+      ],
+      "title": "Claude Code 2.1.280 — skills e comandos",
+      "type": "knowledge"
+    },
+    "statusline-e-terminal": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — status line e terminal Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. - statusLine key (settings.json, Scope Any file): {\"type\":\"command\",\"comma…",
+      "len": 73,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/statusline-e-terminal.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "knowledge",
+        "statusline-e-terminal"
+      ],
+      "title": "Claude Code 2.1.280 — status line e terminal",
+      "type": "knowledge"
+    },
+    "subagentes": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — subagentes Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. - Subagents = Markdown file with YAML frontmatter in .claude/agents/ (project) or ~/.c…",
+      "len": 52,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/subagentes.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "knowledge",
+        "subagentes"
+      ],
+      "title": "Claude Code 2.1.280 — subagentes",
+      "type": "knowledge"
+    },
+    "vscode-sessoes-checkpoints": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — VS Code, sessões e checkpoints Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. Key facts a builder must know (VS Code / Desktop / sessions / chec…",
+      "len": 55,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/vscode-sessoes-checkpoints.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "knowledge",
+        "vscode-sessoes-checkpoints"
+      ],
+      "title": "Claude Code 2.1.280 — VS Code, sessões e checkpoints",
+      "type": "knowledge"
+    },
+    "workflows-e-automacao": {
+      "collection": "conhecimento",
+      "confidence": 0.9,
+      "created": "2026-09-22",
+      "head": "# Claude Code 2.1.280 — workflows e automação Resumo verificado em 2026-09-22 contra os docs oficiais; detalhes nas fontes. - Workflows dinâmicos: arquivo .claude/workflows/<name>.js (JS puro, não TS…",
+      "len": 58,
+      "links": [],
+      "open": [],
+      "path": "memoria/conhecimento/claude-code/workflows-e-automacao.md",
+      "pinned": false,
+      "project": null,
+      "situation": null,
+      "status": "active",
+      "summary": null,
+      "tags": [
+        "claude-code",
+        "configuracao",
+        "knowledge",
+        "workflows-e-automacao"
+      ],
+      "title": "Claude Code 2.1.280 — workflows e automação",
+      "type": "knowledge"
+    }
+  },
+  "postings": {
+    "0": [
+      [
+        10,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "00": [
+      [
+        11,
+        2.0
+      ]
+    ],
+    "0029vbe2vhj0bidspqhw9f06": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "009": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "09": [
+      [
+        0,
+        3.0
+      ],
+      [
+        4,
+        1.0
+      ],
+      [
+        7,
+        5.5
+      ],
+      [
+        8,
+        1.5
+      ],
+      [
+        11,
+        2.0
+      ],
+      [
+        12,
+        2.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        15,
+        3.0
+      ],
+      [
+        16,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        2.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        2.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        2.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "1": [
+      [
+        0,
+        2.0
+      ],
+      [
+        5,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        10,
+        1.0
+      ],
+      [
+        11,
+        2.0
+      ],
+      [
+        12,
+        6.0
+      ],
+      [
+        13,
+        5.0
+      ],
+      [
+        14,
+        6.0
+      ],
+      [
+        17,
+        4.0
+      ],
+      [
+        18,
+        5.0
+      ],
+      [
+        19,
+        4.0
+      ],
+      [
+        20,
+        7.0
+      ],
+      [
+        21,
+        5.0
+      ],
+      [
+        22,
+        4.0
+      ],
+      [
+        23,
+        5.0
+      ],
+      [
+        24,
+        4.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "10": [
+      [
+        0,
+        2.0
+      ],
+      [
+        8,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "11": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "12": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "13": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "135": [
+      [
+        0,
+        2.0
+      ],
+      [
+        11,
+        2.0
+      ]
+    ],
+    "144": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "16": [
+      [
+        10,
+        4.0
+      ]
+    ],
+    "18": [
+      [
+        0,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ]
+    ],
+    "2": [
+      [
+        0,
+        5.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        12,
+        6.0
+      ],
+      [
+        13,
+        4.0
+      ],
+      [
+        14,
+        5.0
+      ],
+      [
+        17,
+        4.0
+      ],
+      [
+        18,
+        4.0
+      ],
+      [
+        19,
+        4.0
+      ],
+      [
+        20,
+        6.0
+      ],
+      [
+        21,
+        4.0
+      ],
+      [
+        22,
+        4.0
+      ],
+      [
+        23,
+        4.0
+      ],
+      [
+        24,
+        4.0
+      ],
+      [
+        27,
+        1.0
+      ]
+    ],
+    "2026": [
+      [
+        0,
+        3.0
+      ],
+      [
+        4,
+        1.0
+      ],
+      [
+        7,
+        5.5
+      ],
+      [
+        8,
+        2.5
+      ],
+      [
+        11,
+        1.0
+      ],
+      [
+        12,
+        2.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        15,
+        3.0
+      ],
+      [
+        16,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        2.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        2.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        2.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "22": [
+      [
+        0,
+        3.0
+      ],
+      [
+        4,
+        1.0
+      ],
+      [
+        7,
+        4.0
+      ],
+      [
+        12,
+        2.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        16,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        2.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        2.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        2.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "23": [
+      [
+        0,
+        3.0
+      ],
+      [
+        7,
+        1.5
+      ],
+      [
+        8,
+        2.5
+      ],
+      [
+        11,
+        2.0
+      ],
+      [
+        15,
+        3.0
+      ]
+    ],
+    "280": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        12,
+        5.0
+      ],
+      [
+        13,
+        4.0
+      ],
+      [
+        14,
+        5.0
+      ],
+      [
+        17,
+        4.0
+      ],
+      [
+        18,
+        4.0
+      ],
+      [
+        19,
+        4.0
+      ],
+      [
+        20,
+        5.0
+      ],
+      [
+        21,
+        4.0
+      ],
+      [
+        22,
+        4.0
+      ],
+      [
+        23,
+        4.0
+      ],
+      [
+        24,
+        4.0
+      ]
+    ],
+    "3": [
+      [
+        0,
+        3.0
+      ],
+      [
+        14,
+        1.0
+      ]
+    ],
+    "300": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "5": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "59": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "597": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "6": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "60": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "8": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "9": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "94": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "abertura": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "above": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "abre": [
+      [
+        2,
+        4.0
+      ],
+      [
+        3,
+        4.0
+      ]
+    ],
+    "abrir": [
+      [
+        3,
+        4.0
+      ],
+      [
+        11,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "aceitando": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "achar": [
+      [
+        2,
+        1.0
+      ]
+    ],
+    "acros": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "add": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "additionalcontext": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "adesao": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "adotada": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "afiliado": [
+      [
+        7,
+        1.0
+      ],
+      [
+        15,
+        5.0
+      ]
+    ],
+    "against": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "agent": [
+      [
+        0,
+        1.0
+      ],
+      [
+        8,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        17,
+        2.0
+      ],
+      [
+        22,
+        2.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "agente": [
+      [
+        7,
+        1.0
+      ],
+      [
+        8,
+        1.0
+      ]
+    ],
+    "ajude": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "all": [
+      [
+        21,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "alma": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "alternativa": [
+      [
+        5,
+        1.0
+      ],
+      [
+        6,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        10,
+        4.0
+      ]
+    ],
+    "ambicao": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "ansi": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "anthrop": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "anthropic": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "any": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "apaixonado": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "api": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "aplicar": [
+      [
+        0,
+        1.0
+      ],
+      [
+        1,
+        1.0
+      ],
+      [
+        2,
+        1.0
+      ],
+      [
+        3,
+        1.0
+      ],
+      [
+        4,
+        4.0
+      ]
+    ],
+    "aplicativo": [
+      [
+        8,
+        6.0
+      ],
+      [
+        9,
+        1.0
+      ]
+    ],
+    "apoio": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "app": [
+      [
+        8,
+        6.0
+      ],
+      [
+        9,
+        1.0
+      ]
+    ],
+    "aprende": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "aprendizado": [
+      [
+        0,
+        3.0
+      ],
+      [
+        6,
+        3.0
+      ],
+      [
+        11,
+        4.0
+      ]
+    ],
+    "apro": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "aproveitando": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "args": [
+      [
+        14,
+        2.0
+      ],
+      [
+        19,
+        1.0
+      ]
+    ],
+    "arquiteto": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "arquitetura": [
+      [
+        9,
+        3.0
+      ]
+    ],
+    "arquivo": [
+      [
+        2,
+        3.0
+      ],
+      [
+        6,
+        1.0
+      ],
+      [
+        8,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "array": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "artifact": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "assistant": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "atende": [
+      [
+        10,
+        3.0
+      ]
+    ],
+    "ativacao": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        4.0
+      ],
+      [
+        16,
+        1.0
+      ]
+    ],
+    "ativado": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "atomica": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "atual": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "atualiza": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "authoring": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "auto": [
+      [
+        7,
+        3.0
+      ],
+      [
+        8,
+        3.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        23,
+        2.0
+      ]
+    ],
+    "autocomplete": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "autocontido": [
+      [
+        2,
+        1.0
+      ]
+    ],
+    "autoinstallideextension": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "automacao": [
+      [
+        24,
+        7.0
+      ]
+    ],
+    "automatizado": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "autonoma": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "auxiliar": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "avancando": [
+      [
+        3,
+        1.0
+      ]
+    ],
+    "avancar": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "avanco": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "babel": [
+      [
+        0,
+        3.0
+      ],
+      [
+        5,
+        4.0
+      ],
+      [
+        6,
+        3.0
+      ],
+      [
+        7,
+        7.0
+      ],
+      [
+        8,
+        14.5
+      ],
+      [
+        9,
+        3.0
+      ],
+      [
+        10,
+        3.0
+      ],
+      [
+        11,
+        6.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        15,
+        14.5
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "backup": [
+      [
+        5,
+        10.0
+      ],
+      [
+        9,
+        1.0
+      ]
+    ],
+    "badg": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "baixar": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "baixe": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "barata": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "base": [
+      [
+        8,
+        4.0
+      ],
+      [
+        15,
+        1.0
+      ]
+    ],
+    "bin": [
+      [
+        10,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "binary": [
+      [
+        12,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "block": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "bloqueado": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "bloquear": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "bloqueia": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "boas": [
+      [
+        12,
+        7.0
+      ]
+    ],
+    "bool": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "brasil": [
+      [
+        4,
+        4.0
+      ],
+      [
+        15,
+        1.0
+      ]
+    ],
+    "builder": [
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "bundl": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "buscar": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "camelcase": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "caminho": [
+      [
+        3,
+        4.0
+      ],
+      [
+        9,
+        1.0
+      ]
+    ],
+    "canal": [
+      [
+        1,
+        3.0
+      ],
+      [
+        2,
+        1.0
+      ],
+      [
+        3,
+        1.0
+      ],
+      [
+        8,
+        9.0
+      ],
+      [
+        15,
+        7.0
+      ]
+    ],
+    "cannot": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "carrega": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "carregar": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "carrinho": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "caso": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "cerimonia": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "certo": [
+      [
+        3,
+        1.0
+      ],
+      [
+        16,
+        1.0
+      ]
+    ],
+    "cetico": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "change": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "changelog": [
+      [
+        12,
+        7.0
+      ]
+    ],
+    "channel": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "chave": [
+      [
+        8,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ]
+    ],
+    "checkpoint": [
+      [
+        23,
+        8.0
+      ]
+    ],
+    "chrome": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "cidade": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "classificador": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "claude": [
+      [
+        0,
+        7.0
+      ],
+      [
+        7,
+        2.0
+      ],
+      [
+        8,
+        1.0
+      ],
+      [
+        9,
+        8.0
+      ],
+      [
+        10,
+        3.0
+      ],
+      [
+        11,
+        3.0
+      ],
+      [
+        12,
+        11.0
+      ],
+      [
+        13,
+        21.0
+      ],
+      [
+        14,
+        11.0
+      ],
+      [
+        16,
+        4.0
+      ],
+      [
+        17,
+        11.0
+      ],
+      [
+        18,
+        8.0
+      ],
+      [
+        19,
+        12.0
+      ],
+      [
+        20,
+        12.0
+      ],
+      [
+        21,
+        7.0
+      ],
+      [
+        22,
+        9.0
+      ],
+      [
+        23,
+        13.0
+      ],
+      [
+        24,
+        9.0
+      ]
+    ],
+    "cli": [
+      [
+        19,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "cliqu": [
+      [
+        2,
+        3.0
+      ]
+    ],
+    "clube": [
+      [
+        8,
+        13.0
+      ],
+      [
+        15,
+        9.0
+      ]
+    ],
+    "cobra": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "cobranca": [
+      [
+        6,
+        3.0
+      ]
+    ],
+    "cobre": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "code": [
+      [
+        0,
+        5.0
+      ],
+      [
+        5,
+        2.0
+      ],
+      [
+        7,
+        2.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        11,
+        2.0
+      ],
+      [
+        12,
+        8.0
+      ],
+      [
+        13,
+        7.0
+      ],
+      [
+        14,
+        8.0
+      ],
+      [
+        17,
+        7.0
+      ],
+      [
+        18,
+        7.0
+      ],
+      [
+        19,
+        8.0
+      ],
+      [
+        20,
+        8.0
+      ],
+      [
+        21,
+        7.0
+      ],
+      [
+        22,
+        7.0
+      ],
+      [
+        23,
+        16.0
+      ],
+      [
+        24,
+        7.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "codigo": [
+      [
+        26,
+        1.0
+      ]
+    ],
+    "color": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "comando": [
+      [
+        4,
+        6.0
+      ],
+      [
+        20,
+        9.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "comentario": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "command": [
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        2.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        21,
+        2.0
+      ]
+    ],
+    "compact": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "compactacao": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "complet": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "completar": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "completude": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "comunidade": [
+      [
+        3,
+        1.0
+      ],
+      [
+        15,
+        4.0
+      ]
+    ],
+    "conceito": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "conectar": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "confiar": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "config": [
+      [
+        6,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ],
+      [
+        19,
+        1.0
+      ]
+    ],
+    "configuracao": [
+      [
+        12,
+        3.0
+      ],
+      [
+        13,
+        3.0
+      ],
+      [
+        14,
+        3.0
+      ],
+      [
+        17,
+        3.0
+      ],
+      [
+        18,
+        3.0
+      ],
+      [
+        19,
+        7.0
+      ],
+      [
+        20,
+        3.0
+      ],
+      [
+        21,
+        3.0
+      ],
+      [
+        22,
+        3.0
+      ],
+      [
+        23,
+        3.0
+      ],
+      [
+        24,
+        3.0
+      ]
+    ],
+    "conhecimento": [
+      [
+        0,
+        5.0
+      ],
+      [
+        8,
+        5.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "consegue": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "consequencia": [
+      [
+        5,
+        1.0
+      ],
+      [
+        6,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        10,
+        4.0
+      ]
+    ],
+    "console": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "const": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "construcao": [
+      [
+        0,
+        4.0
+      ],
+      [
+        11,
+        5.0
+      ],
+      [
+        18,
+        1.0
+      ]
+    ],
+    "construido": [
+      [
+        0,
+        3.0
+      ]
+    ],
+    "construir": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "construtor": [
+      [
+        0,
+        4.0
+      ],
+      [
+        8,
+        1.0
+      ]
+    ],
+    "contained": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "context": [
+      [
+        13,
+        1.0
+      ]
+    ],
+    "contexto": [
+      [
+        5,
+        1.0
+      ],
+      [
+        6,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        10,
+        4.0
+      ]
+    ],
+    "continua": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "contra": [
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "conversa": [
+      [
+        6,
+        4.0
+      ],
+      [
+        8,
+        1.0
+      ]
+    ],
+    "copia": [
+      [
+        2,
+        4.0
+      ],
+      [
+        5,
+        1.0
+      ]
+    ],
+    "corpo": [
+      [
+        20,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "corte": [
+      [
+        3,
+        1.0
+      ],
+      [
+        8,
+        1.0
+      ],
+      [
+        15,
+        4.0
+      ]
+    ],
+    "criado": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "criou": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "critico": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "cruza": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "css": [
+      [
+        2,
+        1.0
+      ]
+    ],
+    "curta": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "curto": [
+      [
+        1,
+        3.0
+      ]
+    ],
+    "custom": [
+      [
+        12,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ]
+    ],
+    "dado": [
+      [
+        5,
+        3.0
+      ]
+    ],
+    "dashboard": [
+      [
+        0,
+        1.0
+      ],
+      [
+        5,
+        8.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        7.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "data": [
+      [
+        5,
+        2.0
+      ]
+    ],
+    "decisao": [
+      [
+        5,
+        3.0
+      ],
+      [
+        6,
+        3.0
+      ],
+      [
+        9,
+        3.0
+      ],
+      [
+        10,
+        3.0
+      ]
+    ],
+    "decision": [
+      [
+        5,
+        3.0
+      ],
+      [
+        6,
+        4.0
+      ],
+      [
+        9,
+        3.0
+      ],
+      [
+        10,
+        3.0
+      ]
+    ],
+    "degrau": [
+      [
+        3,
+        1.0
+      ]
+    ],
+    "dentro": [
+      [
+        5,
+        4.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "derruba": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "descartada": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "descobrir": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "descricao": [
+      [
+        4,
+        5.0
+      ]
+    ],
+    "description": [
+      [
+        22,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "desktop": [
+      [
+        8,
+        3.0
+      ],
+      [
+        23,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "desliga": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "desligavel": [
+      [
+        6,
+        3.0
+      ]
+    ],
+    "despachante": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "despacho": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "detail": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "detalh": [
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "deterministica": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "deterministico": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "dev": [
+      [
+        2,
+        1.0
+      ],
+      [
+        15,
+        3.0
+      ]
+    ],
+    "deve": [
+      [
+        2,
+        4.0
+      ],
+      [
+        16,
+        1.0
+      ]
+    ],
+    "dia": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "dias": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "digital": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "dinamico": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "dir": [
+      [
+        14,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ]
+    ],
+    "directory": [
+      [
+        13,
+        1.0
+      ],
+      [
+        19,
+        1.0
+      ]
+    ],
+    "diretorio": [
+      [
+        13,
+        7.0
+      ]
+    ],
+    "disableallhook": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "disallowedtool": [
+      [
+        22,
+        2.0
+      ]
+    ],
+    "dizer": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "docs": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        2.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        2.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        2.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "does": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "dois": [
+      [
+        2,
+        3.0
+      ],
+      [
+        3,
+        1.0
+      ]
+    ],
+    "dossie": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "editado": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "empresario": [
+      [
+        1,
+        1.0
+      ],
+      [
+        7,
+        2.0
+      ],
+      [
+        15,
+        12.0
+      ]
+    ],
+    "encontrar": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "encontro": [
+      [
+        10,
+        4.0
+      ]
+    ],
+    "end": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "enterprise": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "entra": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "entrega": [
+      [
+        2,
+        3.0
+      ],
+      [
+        6,
+        4.0
+      ],
+      [
+        9,
+        4.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "entregar": [
+      [
+        2,
+        1.0
+      ],
+      [
+        3,
+        1.0
+      ]
+    ],
+    "env": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "erro": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "error": [
+      [
+        10,
+        2.0
+      ]
+    ],
+    "esc": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "escolha": [
+      [
+        5,
+        1.0
+      ],
+      [
+        6,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        10,
+        1.0
+      ]
+    ],
+    "escrever": [
+      [
+        4,
+        1.0
+      ]
+    ],
+    "escrita": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "escrito": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "especificacao": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "espelho": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "esquece": [
+      [
+        6,
+        4.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "estado": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "estilo": [
+      [
+        1,
+        6.0
+      ],
+      [
+        15,
+        3.0
+      ]
+    ],
+    "event": [
+      [
+        10,
+        1.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ]
+    ],
+    "evento": [
+      [
+        10,
+        4.0
+      ]
+    ],
+    "evolucao": [
+      [
+        6,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "evolui": [
+      [
+        6,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        4.0
+      ]
+    ],
+    "exact": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "excecao": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "exec": [
+      [
+        10,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ]
+    ],
+    "exit": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "expansao": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "explicacao": [
+      [
+        1,
+        2.0
+      ]
+    ],
+    "explicado": [
+      [
+        4,
+        1.0
+      ]
+    ],
+    "export": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "extension": [
+      [
+        23,
+        3.0
+      ]
+    ],
+    "facil": [
+      [
+        2,
+        4.0
+      ],
+      [
+        15,
+        1.0
+      ]
+    ],
+    "fact": [
+      [
+        7,
+        3.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "fala": [
+      [
+        1,
+        6.0
+      ],
+      [
+        8,
+        1.0
+      ]
+    ],
+    "fallback": [
+      [
+        2,
+        1.0
+      ],
+      [
+        19,
+        1.0
+      ]
+    ],
+    "false": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "fato": [
+      [
+        14,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ]
+    ],
+    "fecha": [
+      [
+        3,
+        1.0
+      ]
+    ],
+    "ferramenta": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "fetch": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "fica": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "ficam": [
+      [
+        9,
+        3.0
+      ]
+    ],
+    "ficar": [
+      [
+        4,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ]
+    ],
+    "field": [
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ]
+    ],
+    "file": [
+      [
+        2,
+        1.0
+      ],
+      [
+        5,
+        1.0
+      ],
+      [
+        12,
+        4.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        19,
+        2.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        2.0
+      ]
+    ],
+    "fim": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "folder": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "font": [
+      [
+        2,
+        1.0
+      ],
+      [
+        8,
+        3.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "fonte": [
+      [
+        8,
+        1.0
+      ],
+      [
+        16,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "footer": [
+      [
+        21,
+        2.0
+      ]
+    ],
+    "fora": [
+      [
+        5,
+        4.0
+      ],
+      [
+        9,
+        4.0
+      ]
+    ],
+    "form": [
+      [
+        10,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ]
+    ],
+    "forma": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "formatting": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "forte": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "fragei": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "frontmatter": [
+      [
+        20,
+        1.0
+      ],
+      [
+        22,
+        2.0
+      ]
+    ],
+    "fui": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "fundador": [
+      [
+        15,
+        4.0
+      ]
+    ],
+    "gancho": [
+      [
+        10,
+        1.0
+      ],
+      [
+        14,
+        4.0
+      ]
+    ],
+    "gate": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "gerado": [
+      [
+        5,
+        3.0
+      ]
+    ],
+    "git": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "gitignore": [
+      [
+        13,
+        1.0
+      ]
+    ],
+    "globai": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "global": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "goes": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "grafico": [
+      [
+        0,
+        1.0
+      ],
+      [
+        5,
+        4.0
+      ],
+      [
+        9,
+        3.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "grand": [
+      [
+        3,
+        1.0
+      ],
+      [
+        15,
+        1.0
+      ]
+    ],
+    "grupo": [
+      [
+        1,
+        3.0
+      ],
+      [
+        2,
+        1.0
+      ],
+      [
+        3,
+        1.0
+      ],
+      [
+        8,
+        5.0
+      ],
+      [
+        15,
+        7.0
+      ]
+    ],
+    "guardado": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "guardar": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "hidevimmodeindicator": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "high": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "hint": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "historico": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "hold": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "hook": [
+      [
+        6,
+        2.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        10,
+        15.0
+      ],
+      [
+        12,
+        6.0
+      ],
+      [
+        14,
+        13.0
+      ],
+      [
+        17,
+        2.0
+      ],
+      [
+        18,
+        2.0
+      ]
+    ],
+    "html": [
+      [
+        2,
+        1.0
+      ],
+      [
+        5,
+        2.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        8,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "http": [
+      [
+        8,
+        3.0
+      ]
+    ],
+    "ia": [
+      [
+        5,
+        1.0
+      ],
+      [
+        7,
+        4.0
+      ],
+      [
+        11,
+        3.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        15,
+        3.0
+      ],
+      [
+        20,
+        1.0
+      ]
+    ],
+    "ide": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "identity": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "idioma": [
+      [
+        4,
+        3.0
+      ]
+    ],
+    "ignored": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "igual": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "image": [
+      [
+        26,
+        1.0
+      ],
+      [
+        27,
+        1.0
+      ]
+    ],
+    "imersao": [
+      [
+        10,
+        4.0
+      ]
+    ],
+    "imersiva": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "import": [
+      [
+        13,
+        1.0
+      ]
+    ],
+    "impossivel": [
+      [
+        3,
+        1.0
+      ],
+      [
+        16,
+        1.0
+      ]
+    ],
+    "inauguracao": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "inclusive": [
+      [
+        4,
+        3.0
+      ]
+    ],
+    "index": [
+      [
+        5,
+        2.0
+      ]
+    ],
+    "influencia": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "informal": [
+      [
+        1,
+        3.0
+      ]
+    ],
+    "ingl": [
+      [
+        4,
+        1.0
+      ]
+    ],
+    "iniciando": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "initialprompt": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "inline": [
+      [
+        2,
+        1.0
+      ],
+      [
+        5,
+        4.0
+      ]
+    ],
+    "inside": [
+      [
+        13,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ]
+    ],
+    "intacto": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "integracao": [
+      [
+        0,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "integrado": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "integral": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "integrated": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "inteligencia": [
+      [
+        15,
+        2.0
+      ]
+    ],
+    "intencao": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "interrupt": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "iterm2": [
+      [
+        11,
+        1.0
+      ],
+      [
+        18,
+        2.0
+      ]
+    ],
+    "its": [
+      [
+        21,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "json": [
+      [
+        6,
+        1.0
+      ],
+      [
+        10,
+        1.0
+      ],
+      [
+        12,
+        3.0
+      ],
+      [
+        13,
+        3.0
+      ],
+      [
+        14,
+        2.0
+      ],
+      [
+        17,
+        7.0
+      ],
+      [
+        18,
+        1.0
+      ],
+      [
+        19,
+        5.0
+      ],
+      [
+        21,
+        1.0
+      ]
+    ],
+    "jsonl": [
+      [
+        7,
+        1.0
+      ],
+      [
+        10,
+        1.0
+      ]
+    ],
+    "juiz": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "junto": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "key": [
+      [
+        12,
+        2.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "keys": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "kkkk": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "know": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "knowledge": [
+      [
+        12,
+        3.0
+      ],
+      [
+        13,
+        3.0
+      ],
+      [
+        14,
+        3.0
+      ],
+      [
+        17,
+        3.0
+      ],
+      [
+        18,
+        3.0
+      ],
+      [
+        19,
+        3.0
+      ],
+      [
+        20,
+        3.0
+      ],
+      [
+        21,
+        3.0
+      ],
+      [
+        22,
+        3.0
+      ],
+      [
+        23,
+        3.0
+      ],
+      [
+        24,
+        3.0
+      ]
+    ],
+    "label": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "lacuna": [
+      [
+        0,
+        1.0
+      ],
+      [
+        18,
+        8.0
+      ]
+    ],
+    "landing": [
+      [
+        2,
+        1.0
+      ],
+      [
+        8,
+        9.0
+      ]
+    ],
+    "lateral": [
+      [
+        5,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "leading": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "learning": [
+      [
+        0,
+        3.0
+      ],
+      [
+        6,
+        1.0
+      ]
+    ],
+    "legado": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "lembranca": [
+      [
+        0,
+        1.0
+      ],
+      [
+        5,
+        4.0
+      ],
+      [
+        6,
+        2.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        3.0
+      ],
+      [
+        13,
+        4.0
+      ]
+    ],
+    "lembrar": [
+      [
+        0,
+        1.0
+      ],
+      [
+        5,
+        4.0
+      ],
+      [
+        6,
+        2.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        3.0
+      ],
+      [
+        13,
+        4.0
+      ]
+    ],
+    "ler": [
+      [
+        1,
+        3.0
+      ]
+    ],
+    "levaria": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "level": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "lider": [
+      [
+        1,
+        2.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        15,
+        12.0
+      ]
+    ],
+    "lidera": [
+      [
+        3,
+        1.0
+      ],
+      [
+        15,
+        1.0
+      ]
+    ],
+    "lideranca": [
+      [
+        1,
+        1.0
+      ],
+      [
+        15,
+        7.0
+      ]
+    ],
+    "liga": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "ligado": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "ligavel": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "line": [
+      [
+        7,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        21,
+        5.0
+      ]
+    ],
+    "linha": [
+      [
+        0,
+        1.0
+      ],
+      [
+        2,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ]
+    ],
+    "link": [
+      [
+        2,
+        1.0
+      ]
+    ],
+    "literal": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "live": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "llm": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "loaded": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "locai": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "local": [
+      [
+        5,
+        1.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        2.0
+      ],
+      [
+        19,
+        3.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "low": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "lp": [
+      [
+        2,
+        8.0
+      ],
+      [
+        8,
+        9.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "lps": [
+      [
+        2,
+        3.0
+      ]
+    ],
+    "lsp": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "lugar": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "maco": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "maior": [
+      [
+        3,
+        3.0
+      ]
+    ],
+    "make": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "managed": [
+      [
+        12,
+        1.0
+      ],
+      [
+        19,
+        3.0
+      ]
+    ],
+    "manda": [
+      [
+        2,
+        1.0
+      ]
+    ],
+    "maneira": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "manually": [
+      [
+        13,
+        1.0
+      ]
+    ],
+    "maquina": [
+      [
+        18,
+        2.0
+      ]
+    ],
+    "marcelo": [
+      [
+        0,
+        1.0
+      ],
+      [
+        1,
+        6.0
+      ],
+      [
+        2,
+        6.0
+      ],
+      [
+        3,
+        6.0
+      ],
+      [
+        4,
+        7.0
+      ],
+      [
+        6,
+        1.0
+      ],
+      [
+        7,
+        3.5
+      ],
+      [
+        10,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ],
+      [
+        15,
+        8.0
+      ],
+      [
+        16,
+        9.0
+      ]
+    ],
+    "marcelomaximo": [
+      [
+        18,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "markdown": [
+      [
+        7,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ]
+    ],
+    "matcher": [
+      [
+        12,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ]
+    ],
+    "maxima": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "maximu": [
+      [
+        15,
+        4.0
+      ],
+      [
+        16,
+        1.0
+      ]
+    ],
+    "maxturn": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "mcp": [
+      [
+        13,
+        1.0
+      ],
+      [
+        17,
+        8.0
+      ]
+    ],
+    "mcpserver": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "mdm": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "membro": [
+      [
+        7,
+        1.0
+      ],
+      [
+        15,
+        4.0
+      ]
+    ],
+    "memoria": [
+      [
+        0,
+        1.0
+      ],
+      [
+        5,
+        4.0
+      ],
+      [
+        6,
+        5.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        3.0
+      ],
+      [
+        13,
+        7.0
+      ]
+    ],
+    "memory": [
+      [
+        7,
+        3.0
+      ],
+      [
+        8,
+        3.0
+      ],
+      [
+        13,
+        1.0
+      ]
+    ],
+    "mensagen": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "mente": [
+      [
+        3,
+        1.0
+      ]
+    ],
+    "mentor": [
+      [
+        3,
+        4.0
+      ],
+      [
+        16,
+        1.0
+      ]
+    ],
+    "merge": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "mes": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "message": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "meta": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "metafora": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "mexa": [
+      [
+        26,
+        1.0
+      ]
+    ],
+    "mexer": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "mil": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "mim": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "min": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "misspelled": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "mode": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "model": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "monitor": [
+      [
+        17,
+        2.0
+      ]
+    ],
+    "most": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "motor": [
+      [
+        0,
+        2.0
+      ],
+      [
+        9,
+        4.0
+      ]
+    ],
+    "msg": [
+      [
+        27,
+        1.0
+      ]
+    ],
+    "muda": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "mudar": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "mudou": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "mundo": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "must": [
+      [
+        17,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "name": [
+      [
+        10,
+        1.0
+      ],
+      [
+        13,
+        2.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        22,
+        3.0
+      ],
+      [
+        24,
+        4.0
+      ]
+    ],
+    "nascimento": [
+      [
+        16,
+        3.0
+      ]
+    ],
+    "native": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "navegador": [
+      [
+        2,
+        1.0
+      ],
+      [
+        5,
+        1.0
+      ]
+    ],
+    "need": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "nenhum": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "nenhuma": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "nervoso": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "nesta": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "nested": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "netlify": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "network": [
+      [
+        8,
+        13.0
+      ],
+      [
+        15,
+        11.0
+      ]
+    ],
+    "networkreino": [
+      [
+        8,
+        2.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "never": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "new": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "next": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "node": [
+      [
+        12,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ]
+    ],
+    "nome": [
+      [
+        2,
+        1.0
+      ],
+      [
+        20,
+        3.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "nordeste": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "notification": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "nova": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "novo": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "num": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "obrigatoria": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "ocupado": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "oferecer": [
+      [
+        3,
+        1.0
+      ]
+    ],
+    "off": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "oficiai": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        2.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "olha": [
+      [
+        27,
+        1.0
+      ]
+    ],
+    "omitclaudemd": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "only": [
+      [
+        12,
+        1.0
+      ],
+      [
+        17,
+        3.0
+      ],
+      [
+        22,
+        2.0
+      ]
+    ],
+    "opcao": [
+      [
+        4,
+        2.0
+      ]
+    ],
+    "opcionai": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "oportunidade": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "organismo": [
+      [
+        0,
+        4.0
+      ],
+      [
+        6,
+        1.0
+      ],
+      [
+        7,
+        4.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        11,
+        3.0
+      ],
+      [
+        16,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ]
+    ],
+    "origem": [
+      [
+        16,
+        3.0
+      ]
+    ],
+    "original": [
+      [
+        16,
+        4.0
+      ]
+    ],
+    "osc": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "other": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "outside": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "ouvir": [
+      [
+        3,
+        3.0
+      ]
+    ],
+    "own": [
+      [
+        21,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "padding": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "pagina": [
+      [
+        2,
+        5.0
+      ],
+      [
+        8,
+        9.0
+      ]
+    ],
+    "painel": [
+      [
+        0,
+        1.0
+      ],
+      [
+        5,
+        5.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        7.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "panel": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "paralela": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "parent": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "parte": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "passa": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "passo": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "pasta": [
+      [
+        2,
+        1.0
+      ],
+      [
+        7,
+        2.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        20,
+        2.0
+      ]
+    ],
+    "path": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "pausa": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "pedido": [
+      [
+        4,
+        1.0
+      ],
+      [
+        6,
+        5.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        16,
+        7.0
+      ]
+    ],
+    "pedir": [
+      [
+        1,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "pediu": [
+      [
+        0,
+        1.0
+      ],
+      [
+        3,
+        1.0
+      ],
+      [
+        6,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "pensar": [
+      [
+        3,
+        3.0
+      ]
+    ],
+    "perfil": [
+      [
+        15,
+        3.0
+      ]
+    ],
+    "perguntado": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "permissao": [
+      [
+        4,
+        4.0
+      ],
+      [
+        9,
+        1.0
+      ]
+    ],
+    "permission": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "permissionmode": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "permissionrequest": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "persona": [
+      [
+        6,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ]
+    ],
+    "personal": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "pesquisa": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "pesquisar": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "pessoal": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "phas": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "phase": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "pior": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "plano": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "plataforma": [
+      [
+        8,
+        6.0
+      ],
+      [
+        9,
+        1.0
+      ]
+    ],
+    "plugin": [
+      [
+        11,
+        1.0
+      ],
+      [
+        17,
+        15.0
+      ],
+      [
+        20,
+        1.0
+      ]
+    ],
+    "plus": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "polling": [
+      [
+        5,
+        2.0
+      ]
+    ],
+    "pontuacao": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "portao": [
+      [
+        6,
+        3.0
+      ],
+      [
+        11,
+        4.0
+      ]
+    ],
+    "portugu": [
+      [
+        4,
+        5.0
+      ],
+      [
+        11,
+        1.0
+      ],
+      [
+        15,
+        3.0
+      ]
+    ],
+    "posttooluse": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "potencia": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "pratica": [
+      [
+        12,
+        7.0
+      ],
+      [
+        18,
+        1.0
+      ]
+    ],
+    "precedence": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "precisa": [
+      [
+        15,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "precise": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "prefere": [
+      [
+        2,
+        3.0
+      ]
+    ],
+    "preference": [
+      [
+        1,
+        3.0
+      ],
+      [
+        2,
+        3.0
+      ],
+      [
+        3,
+        3.0
+      ],
+      [
+        4,
+        3.0
+      ]
+    ],
+    "prender": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "present": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "presente": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "pretooluse": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "preview": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "primary": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "primeira": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        4.0
+      ],
+      [
+        8,
+        1.0
+      ],
+      [
+        16,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "primeiro": [
+      [
+        1,
+        1.0
+      ],
+      [
+        2,
+        1.0
+      ],
+      [
+        15,
+        1.0
+      ]
+    ],
+    "profile": [
+      [
+        15,
+        3.0
+      ]
+    ],
+    "proibido": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "proibir": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "proibiu": [
+      [
+        3,
+        1.0
+      ]
+    ],
+    "project": [
+      [
+        11,
+        3.0
+      ],
+      [
+        13,
+        2.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        19,
+        4.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ]
+    ],
+    "projeto": [
+      [
+        7,
+        3.0
+      ],
+      [
+        8,
+        1.5
+      ],
+      [
+        11,
+        4.0
+      ],
+      [
+        15,
+        1.5
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "prompt": [
+      [
+        6,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "proposta": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "proprio": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "protegido": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "prototipo": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "provavele": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "proximo": [
+      [
+        3,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "publicada": [
+      [
+        8,
+        4.0
+      ]
+    ],
+    "puro": [
+      [
+        14,
+        1.0
+      ],
+      [
+        24,
+        2.0
+      ]
+    ],
+    "puxado": [
+      [
+        3,
+        3.0
+      ]
+    ],
+    "puxam": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "python3": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ],
+      [
+        10,
+        1.0
+      ],
+      [
+        14,
+        2.0
+      ]
+    ],
+    "quebra": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "raiz": [
+      [
+        5,
+        3.0
+      ],
+      [
+        9,
+        1.0
+      ]
+    ],
+    "rapport": [
+      [
+        1,
+        3.0
+      ]
+    ],
+    "read": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "recarrega": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "reclamou": [
+      [
+        4,
+        1.0
+      ]
+    ],
+    "recursive": [
+      [
+        13,
+        1.0
+      ]
+    ],
+    "recursively": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "recusou": [
+      [
+        4,
+        1.0
+      ]
+    ],
+    "redundancia": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "refazer": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "reference": [
+      [
+        8,
+        3.0
+      ],
+      [
+        16,
+        3.0
+      ]
+    ],
+    "referencia": [
+      [
+        7,
+        1.5
+      ],
+      [
+        8,
+        3.0
+      ],
+      [
+        15,
+        1.5
+      ]
+    ],
+    "refinamento": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "refreshinterval": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "regiao": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "registram": [
+      [
+        6,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "registrar": [
+      [
+        6,
+        2.0
+      ]
+    ],
+    "regra": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "regrava": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "reiniciar": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "reino": [
+      [
+        5,
+        1.0
+      ],
+      [
+        7,
+        5.5
+      ],
+      [
+        8,
+        16.0
+      ],
+      [
+        11,
+        3.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        15,
+        12.5
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "reinstall": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "relacionamento": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "relatorio": [
+      [
+        6,
+        1.0
+      ]
+    ],
+    "removed": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "render": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "replace": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "repo": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "required": [
+      [
+        17,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ]
+    ],
+    "responder": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "respondida": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "resposta": [
+      [
+        3,
+        1.0
+      ],
+      [
+        4,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ]
+    ],
+    "resultado": [
+      [
+        1,
+        2.0
+      ]
+    ],
+    "resume": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "resumo": [
+      [
+        4,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "reuniao": [
+      [
+        10,
+        4.0
+      ]
+    ],
+    "reunindo": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "revisao": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "rigida": [
+      [
+        1,
+        4.0
+      ],
+      [
+        10,
+        1.0
+      ]
+    ],
+    "risco": [
+      [
+        18,
+        9.0
+      ]
+    ],
+    "ritmo": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "rocha": [
+      [
+        15,
+        4.0
+      ]
+    ],
+    "rodando": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "rodar": [
+      [
+        0,
+        1.0
+      ],
+      [
+        4,
+        1.0
+      ]
+    ],
+    "root": [
+      [
+        13,
+        1.0
+      ],
+      [
+        17,
+        2.0
+      ]
+    ],
+    "rotacao": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "row": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "rule": [
+      [
+        9,
+        1.0
+      ],
+      [
+        13,
+        2.0
+      ]
+    ],
+    "running": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "runs": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "sabe": [
+      [
+        15,
+        1.0
+      ]
+    ],
+    "saida": [
+      [
+        10,
+        1.0
+      ],
+      [
+        16,
+        1.0
+      ]
+    ],
+    "sair": [
+      [
+        2,
+        1.0
+      ]
+    ],
+    "salvo": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "same": [
+      [
+        13,
+        1.0
+      ]
+    ],
+    "scanned": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "schem": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "scope": [
+      [
+        13,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ]
+    ],
+    "script": [
+      [
+        10,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ]
+    ],
+    "scro": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "seja": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "self": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "selftest": [
+      [
+        0,
+        2.0
+      ],
+      [
+        10,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ]
+    ],
+    "sendo": [
+      [
+        9,
+        1.0
+      ]
+    ],
+    "separado": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "servidor": [
+      [
+        2,
+        1.0
+      ]
+    ],
+    "sessao": [
+      [
+        6,
+        1.0
+      ],
+      [
+        11,
+        1.0
+      ],
+      [
+        23,
+        7.0
+      ]
+    ],
+    "session": [
+      [
+        21,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "sessionend": [
+      [
+        10,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ]
+    ],
+    "sessionstart": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "setting": [
+      [
+        9,
+        1.0
+      ],
+      [
+        12,
+        4.0
+      ],
+      [
+        13,
+        2.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ],
+      [
+        19,
+        12.0
+      ],
+      [
+        21,
+        1.0
+      ]
+    ],
+    "shared": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "shell": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "shortcut": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "silently": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "sintese": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "sistema": [
+      [
+        8,
+        6.0
+      ],
+      [
+        9,
+        1.0
+      ]
+    ],
+    "sit": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "site": [
+      [
+        2,
+        8.0
+      ],
+      [
+        8,
+        9.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "sits": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "situacao": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "skill": [
+      [
+        7,
+        1.0
+      ],
+      [
+        8,
+        2.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        13,
+        3.0
+      ],
+      [
+        17,
+        2.0
+      ],
+      [
+        20,
+        14.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "skip": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "skipped": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "snapshot": [
+      [
+        5,
+        5.0
+      ]
+    ],
+    "sobrando": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "sobrevive": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "solucao": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "sozinho": [
+      [
+        3,
+        1.0
+      ],
+      [
+        5,
+        1.0
+      ],
+      [
+        6,
+        1.0
+      ]
+    ],
+    "space": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "speak": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "specifier": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "spread": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "standalone": [
+      [
+        12,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ]
+    ],
+    "start": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "state": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "statement": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "statu": [
+      [
+        7,
+        1.0
+      ],
+      [
+        11,
+        2.0
+      ],
+      [
+        12,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ],
+      [
+        21,
+        5.0
+      ]
+    ],
+    "statusline": [
+      [
+        21,
+        4.0
+      ]
+    ],
+    "stay": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "stdout": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "stop": [
+      [
+        6,
+        5.0
+      ],
+      [
+        10,
+        1.0
+      ],
+      [
+        18,
+        1.0
+      ]
+    ],
+    "stopfailure": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "structure": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "subagent": [
+      [
+        7,
+        1.0
+      ],
+      [
+        22,
+        8.0
+      ]
+    ],
+    "subagentstatusline": [
+      [
+        17,
+        1.0
+      ]
+    ],
+    "subagentstop": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "substrato": [
+      [
+        0,
+        1.0
+      ],
+      [
+        5,
+        5.0
+      ],
+      [
+        6,
+        2.0
+      ],
+      [
+        7,
+        2.0
+      ],
+      [
+        9,
+        6.0
+      ],
+      [
+        13,
+        4.0
+      ]
+    ],
+    "suggestion": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "suppress": [
+      [
+        21,
+        1.0
+      ]
+    ],
+    "tar": [
+      [
+        5,
+        1.0
+      ]
+    ],
+    "tarefa": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "tecnico": [
+      [
+        1,
+        1.0
+      ],
+      [
+        4,
+        1.0
+      ]
+    ],
+    "tela": [
+      [
+        1,
+        1.0
+      ]
+    ],
+    "tema": [
+      [
+        0,
+        2.0
+      ]
+    ],
+    "template": [
+      [
+        5,
+        3.0
+      ],
+      [
+        21,
+        1.0
+      ]
+    ],
+    "terminal": [
+      [
+        21,
+        7.0
+      ],
+      [
+        23,
+        2.0
+      ]
+    ],
+    "termo": [
+      [
+        4,
+        1.0
+      ]
+    ],
+    "testar": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "text": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "texto": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "timeout": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "title": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "tool": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "topic": [
+      [
+        13,
+        1.0
+      ]
+    ],
+    "totalment": [
+      [
+        16,
+        1.0
+      ]
+    ],
+    "traduzir": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "transformar": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "trava": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "travam": [
+      [
+        3,
+        1.0
+      ]
+    ],
+    "true": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "trust": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "turn": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "tuso": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "twer": [
+      [
+        25,
+        1.0
+      ]
+    ],
+    "type": [
+      [
+        14,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ]
+    ],
+    "ultrac": [
+      [
+        7,
+        3.0
+      ]
+    ],
+    "ultracode": [
+      [
+        0,
+        1.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "under": [
+      [
+        12,
+        1.0
+      ]
+    ],
+    "unico": [
+      [
+        2,
+        4.0
+      ],
+      [
+        8,
+        1.0
+      ],
+      [
+        10,
+        4.0
+      ]
+    ],
+    "unknown": [
+      [
+        22,
+        1.0
+      ]
+    ],
+    "usado": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "use": [
+      [
+        20,
+        1.0
+      ]
+    ],
+    "user": [
+      [
+        18,
+        1.0
+      ],
+      [
+        19,
+        2.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        25,
+        1.0
+      ],
+      [
+        26,
+        1.0
+      ]
+    ],
+    "userpromptsubmit": [
+      [
+        18,
+        1.0
+      ]
+    ],
+    "usr": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "validate": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "variavel": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "vars": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "vazio": [
+      [
+        10,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ]
+    ],
+    "vence": [
+      [
+        20,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "ver": [
+      [
+        1,
+        3.0
+      ],
+      [
+        7,
+        1.0
+      ]
+    ],
+    "vercel": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "verdade": [
+      [
+        8,
+        1.0
+      ]
+    ],
+    "verificada": [
+      [
+        11,
+        1.0
+      ]
+    ],
+    "verificado": [
+      [
+        12,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        14,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        18,
+        3.0
+      ],
+      [
+        19,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        21,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ],
+      [
+        23,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "verificador": [
+      [
+        0,
+        1.0
+      ]
+    ],
+    "verified": [
+      [
+        23,
+        1.0
+      ]
+    ],
+    "versao": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "vira": [
+      [
+        10,
+        1.0
+      ],
+      [
+        20,
+        1.0
+      ],
+      [
+        24,
+        1.0
+      ]
+    ],
+    "virgula": [
+      [
+        14,
+        1.0
+      ]
+    ],
+    "vivo": [
+      [
+        7,
+        3.0
+      ]
+    ],
+    "voz": [
+      [
+        1,
+        3.0
+      ],
+      [
+        3,
+        3.0
+      ],
+      [
+        4,
+        3.0
+      ]
+    ],
+    "vscode": [
+      [
+        23,
+        3.0
+      ]
+    ],
+    "web": [
+      [
+        2,
+        4.0
+      ]
+    ],
+    "whatsapp": [
+      [
+        1,
+        3.0
+      ],
+      [
+        2,
+        1.0
+      ],
+      [
+        8,
+        5.0
+      ],
+      [
+        15,
+        3.0
+      ]
+    ],
+    "whentouse": [
+      [
+        24,
+        1.0
+      ]
+    ],
+    "why": [
+      [
+        7,
+        1.0
+      ]
+    ],
+    "window": [
+      [
+        5,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ]
+    ],
+    "wins": [
+      [
+        13,
+        1.0
+      ]
+    ],
+    "workflow": [
+      [
+        7,
+        1.0
+      ],
+      [
+        9,
+        1.0
+      ],
+      [
+        13,
+        1.0
+      ],
+      [
+        17,
+        1.0
+      ],
+      [
+        24,
+        12.0
+      ]
+    ],
+    "working": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "written": [
+      [
+        19,
+        1.0
+      ]
+    ],
+    "yaml": [
+      [
+        20,
+        1.0
+      ],
+      [
+        22,
+        1.0
+      ]
+    ],
+    "zap": [
+      [
+        1,
+        3.0
+      ],
+      [
+        2,
+        1.0
+      ],
+      [
+        8,
+        5.0
+      ],
+      [
+        15,
+        3.0
+      ]
+    ],
+    "zero": [
+      [
+        10,
+        1.0
+      ]
+    ],
+    "zshrc": [
+      [
+        14,
+        1.0
+      ]
+    ]
+  }
+}

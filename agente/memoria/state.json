@@ -1,0 +1,126 @@
+{
+  "activated_at": "2026-09-23T00:12:07-03:00",
+  "agenda_open": 0,
+  "agenda_overdue": 0,
+  "by_type": {
+    "fact": 1,
+    "learning": 1,
+    "preference": 4,
+    "profile": 1,
+    "reference": 1
+  },
+  "context_cost": {
+    "claude_md_lines": 80,
+    "index_lines": 47,
+    "rules_without_paths": 3,
+    "skill_description_max_chars": 241,
+    "skill_descriptions_chars": 1805,
+    "tokens_per_session_est": 5056,
+    "tokens_per_turn_est": 944
+  },
+  "counts": {
+    "compactions": 0,
+    "decisions": 4,
+    "knowledge": 11,
+    "memories": 7,
+    "projects": 1,
+    "prompts": 3,
+    "reports": 0,
+    "sessions": 0,
+    "tags": 73
+  },
+  "counts_at_session_start": {
+    "compactions": 0,
+    "decisions": 4,
+    "knowledge": 11,
+    "memories": 7,
+    "projects": 1,
+    "prompts": 3,
+    "reports": 0,
+    "session": "ecc342fd",
+    "sessions": 0,
+    "tags": 73,
+    "ts": "2026-09-23T02:05:32-03:00"
+  },
+  "generation": 12,
+  "health": {
+    "auto_memory_bytes": 350,
+    "auto_memory_lines": 3,
+    "duplicates": 0,
+    "index_bytes": 4556,
+    "index_lines": 47,
+    "index_max_lines": 150,
+    "invalid": 0,
+    "knowledge_age_days": 0,
+    "log_mb": 0.06,
+    "minor_pending": false,
+    "orphans": 10,
+    "similar": 0,
+    "warnings": [
+      "iterm_cc_status"
+    ]
+  },
+  "imports": {
+    "auto-memory": "2026-09-23T00:12:07-03:00",
+    "dossier-claude-code": "2026-09-23T00:12:07-03:00"
+  },
+  "last_full_refinement": "2026-09-23T00:13:54-03:00",
+  "last_refinement": {
+    "mode": "quick",
+    "ms": 15,
+    "partial": false,
+    "ts": "2026-09-23T02:03:57-03:00"
+  },
+  "last_session": null,
+  "last_snapshot": "2026-09-23T00:12:07-03:00",
+  "paused": false,
+  "pending": [
+    {
+      "item": "reiniciar a sessão para carregar CLAUDE.md, agentes e status line",
+      "project": "babel-os",
+      "since": "2026-09-23"
+    },
+    {
+      "item": "abrir o painel na lateral do VS Code",
+      "project": "babel-os",
+      "since": "2026-09-23"
+    },
+    {
+      "item": "traduzir para português os 10 resumos de conhecimento do Claude Code",
+      "project": "babel-os",
+      "since": "2026-09-23"
+    },
+    {
+      "item": "pedir ao Marcelo para refazer a integração do iTerm2 (cc-status)",
+      "project": "babel-os",
+      "since": "2026-09-23"
+    }
+  ],
+  "profile": {
+    "learned_today": [
+      "Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler",
+      "Marcelo prefere sites e LPs em arquivo único que abre com dois cliques",
+      "Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'"
+    ],
+    "portrait": [
+      "Marcelo fala curto e informal, estilo WhatsApp, e quer ver antes de ler",
+      "Marcelo prefere sites e LPs em arquivo único que abre com dois cliques",
+      "Marcelo quer ser puxado para pensar maior, nunca ouvir 'não dá'",
+      "Marcelo quer tudo em português, inclusive descrições de comandos"
+    ],
+    "summary": "Marcelo Rocha (Maximus), fundador do Reino (network + IA Babel); lidera grandes grupos; não-dev; quer tudo pronto, em português, estilo WhatsApp; Diego é sócio…",
+    "want_to_learn": [
+      "Em que horário você prefere trabalhar comigo?",
+      "Por qual canal você prefere falar comigo (terminal, VS Code, celular)?",
+      "Qual meta do trimestre pesa mais para você agora?"
+    ]
+  },
+  "sessions_counted": [
+    "7f804fee"
+  ],
+  "version": "0.2.0",
+  "warnings_shown": {
+    "iterm_cc_status": "2026-09-23",
+    "knowledge_age": null
+  }
+}

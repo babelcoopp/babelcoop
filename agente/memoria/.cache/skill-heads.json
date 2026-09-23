@@ -1,0 +1,18 @@
+{
+  "ajuda": "Monte uma tabela curta (comando · o que faz · exemplo) com: /lembrar, /decidir, /consultar, /estado, /perfil, /pendencias, /lembrete, /site, /sistema, /pesquisar, /evoluir, /esquecer, /painel, /origem",
+  "consultar": "## Memórias mais recentes (geradas agora)",
+  "decidir": "Decisão: $ARGUMENTS",
+  "esquecer": "Pedido: $ARGUMENTS",
+  "estado": "Estado atual do organismo (gerado agora pelo motor):",
+  "evoluir": "Refino completo executado agora:",
+  "lembrar": "Pedido: $ARGUMENTS",
+  "lembrete": "Pedido: $ARGUMENTS",
+  "origem": "!`/usr/bin/python3 ${CLAUDE_PROJECT_DIR}/motor/report.py --origin`",
+  "painel": "!`/usr/bin/python3 ${CLAUDE_PROJECT_DIR}/motor/report.py --panel`",
+  "pausar": "!`/usr/bin/python3 ${CLAUDE_PROJECT_DIR}/motor/pause.py --toggle`",
+  "pendencias": "!`/usr/bin/python3 ${CLAUDE_PROJECT_DIR}/motor/report.py --pending`",
+  "perfil": "!`/usr/bin/python3 ${CLAUDE_PROJECT_DIR}/motor/report.py --profile`",
+  "pesquisar": "Tema: $ARGUMENTS",
+  "sistema": "Ideia: $ARGUMENTS",
+  "site": "Briefing: $ARGUMENTS"
+}

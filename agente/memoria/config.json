@@ -1,0 +1,15 @@
+{
+  "learning_gate": true,
+  "top_k": 6,
+  "recall_budget_chars": 6000,
+  "recall_body_chars_top3": 500,
+  "recall_min_words": 4,
+  "session_start_max_chars": 3000,
+  "index_max_lines": 150,
+  "index_max_chars": 12000,
+  "daily_snapshot": true,
+  "turn_response_chars": 500,
+  "prompt_max_chars": 1500,
+  "reminder_reserved_chars": 300,
+  "knowledge_max_age_days": 90
+}

@@ -1,0 +1,383 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "language": "portuguese",
+  "timeZone": "America/Sao_Paulo",
+  "timeFormat": "24-hour",
+  "cleanupPeriodDays": 3650,
+  "plansDirectory": "./planos",
+  "showTurnDuration": true,
+  "spinnerVerbs": {
+    "mode": "append",
+    "verbs": [
+      "Pensando junto com o Marcelo",
+      "Cruzando memórias",
+      "Abrindo caminhos",
+      "Costurando ideias",
+      "Lapidando a entrega",
+      "Arquitetando",
+      "Semeando",
+      "Evoluindo o organismo"
+    ]
+  },
+  "spinnerTipsOverride": {
+    "tips": [
+      "Digite /ajuda para ver os comandos do Gabriel em português.",
+      "Digite /estado para ver os sinais vitais do organismo.",
+      "Digite /lembrar e o fato: eu guardo e cruzo com o resto.",
+      "Errei algo? /esquecer <id> marca como superado; eu nunca apago.",
+      "Shift+Tab troca o modo de permissão. Esc Esc volta no tempo.",
+      "O painel: /painel explica como abrir na lateral do VS Code.",
+      "O que eu aprendo entra no índice fixo em /clear, /compact ou ao reiniciar.",
+      "Para pausar o organismo, crie um arquivo chamado PAUSA na pasta (ou /pausar)."
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "/usr/bin/python3 /Users/marcelomaximos/Desktop/babel-os/motor/statusline.py",
+    "padding": 0,
+    "refreshInterval": 15
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit(/memoria/**)",
+      "Edit(/entregas/**)",
+      "Edit(/planos/**)",
+      "Edit(/dashboard/template.html)",
+      "Edit(/dashboard/serve.sh)",
+      "Edit(/LEIA-ME.md)",
+      "Bash(python3 motor/*)",
+      "Bash(/usr/bin/python3 motor/*)",
+      "Bash(python3 /Users/marcelomaximos/Desktop/babel-os/motor/*)",
+      "Bash(/usr/bin/python3 /Users/marcelomaximos/Desktop/babel-os/motor/*)",
+      "Bash(bash dashboard/serve.sh)",
+      "Bash(bash dashboard/serve.sh *)",
+      "Bash(bash /Users/marcelomaximos/Desktop/babel-os/dashboard/serve.sh)",
+      "Bash(bash /Users/marcelomaximos/Desktop/babel-os/dashboard/serve.sh *)",
+      "Bash(open entregas/*)",
+      "Bash(open /Users/marcelomaximos/Desktop/babel-os/entregas/*)",
+      "Bash(open dashboard/index.html)",
+      "Bash(open /Users/marcelomaximos/Desktop/babel-os/dashboard/index.html)",
+      "Bash(python3 -m json.tool *)",
+      "Bash(/usr/bin/python3 -m json.tool *)",
+      "Bash(claude plugin validate *)",
+      "Bash(claude doctor)",
+      "WebSearch",
+      "WebFetch",
+      "Skill(lembrar)",
+      "Skill(lembrar *)",
+      "Skill(decidir)",
+      "Skill(decidir *)",
+      "Skill(consultar)",
+      "Skill(consultar *)",
+      "Skill(estado)",
+      "Skill(estado *)",
+      "Skill(perfil)",
+      "Skill(perfil *)",
+      "Skill(pendencias)",
+      "Skill(pendencias *)",
+      "Skill(lembrete)",
+      "Skill(lembrete *)",
+      "Skill(site)",
+      "Skill(site *)",
+      "Skill(sistema)",
+      "Skill(sistema *)",
+      "Skill(pesquisar)",
+      "Skill(pesquisar *)",
+      "Agent(pesquisador)",
+      "Agent(construtor-web)",
+      "Agent(arquiteto-sistemas)",
+      "Agent(critico)",
+      "Agent(bibliotecario)",
+      "Workflow(cruzar-memoria)",
+      "Workflow(pesquisa-profunda)",
+      "Workflow(construir-lp)",
+      "Workflow(auditoria-organismo)"
+    ],
+    "ask": [
+      "Bash(rm *)",
+      "Bash(git push *)",
+      "Bash(osascript *)"
+    ],
+    "deny": [
+      "Read(//**/.env)",
+      "Read(//**/.env.*)",
+      "Read(//**/*.pem)",
+      "Read(//**/*.key)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.config/gh/**)",
+      "Read(~/.claude/projects/**/*.jsonl)",
+      "Edit(~/.claude/settings.json)",
+      "Edit(~/.claude.json)",
+      "Edit(/memoria/log/**)",
+      "Edit(/memoria/INDICE.md)",
+      "Edit(/memoria/INDICE-completo.md)",
+      "Edit(/memoria/state.json)",
+      "Edit(/memoria/graph.json)",
+      "Edit(/memoria/perfil/retrato.md)",
+      "Edit(/memoria/.cache/**)",
+      "Edit(/memoria/.history/**)",
+      "Edit(/memoria/.lixeira/**)",
+      "Edit(/memoria/origem/**)",
+      "Edit(/backups/**)",
+      "Edit(/dashboard/index.html)",
+      "Edit(/dashboard/data.js)",
+      "Bash(sudo *)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~*)",
+      "Bash(rm -rf .claude*)",
+      "Bash(rm -rf motor*)",
+      "Bash(rm -rf backups*)",
+      "Bash(rm -r backups*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)"
+    ]
+  },
+  "hooks": {
+    "Setup": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 30,
+            "statusMessage": "Gabriel montando o corpo…"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 15,
+            "statusMessage": "Gabriel acordando e lembrando…"
+          }
+        ]
+      },
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py",
+              "--maintenance"
+            ],
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 8,
+            "statusMessage": "Gabriel cruzando memórias…"
+          }
+        ]
+      }
+    ],
+    "UserPromptExpansion": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write|Edit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 8,
+            "statusMessage": "Gabriel guardando o que aprendeu…"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 20,
+            "statusMessage": "Gabriel tirando uma foto da memória antes de compactar…"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "ConfigChange": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "InstructionsLoaded": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/hook.py"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
