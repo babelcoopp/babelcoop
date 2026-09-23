@@ -1,0 +1,33 @@
+{
+  "name": "babel-coop",
+  "productName": "Babel Coop",
+  "version": "0.1.0",
+  "description": "Estação do Babel Coop: cada computador é um servidor na rede local",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "servidor": "node servidor/servidor.js",
+    "postinstall": "electron-rebuild -f -w node-pty",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win"
+  },
+  "dependencies": {
+    "node-pty": "^1.0.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^3.6.0",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.babel.coop",
+    "productName": "Babel Coop",
+    "files": ["main.js", "preload.js", "ponte.js", "servidor/**", "../prototipo/**"],
+    "extraResources": [{ "from": "../prototipo", "to": "prototipo" }],
+    "mac": { "target": ["dmg"], "category": "public.app-category.productivity" },
+    "win": { "target": ["nsis"] },
+    "npmRebuild": true
+  }
+}

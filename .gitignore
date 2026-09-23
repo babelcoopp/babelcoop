@@ -1,0 +1,18 @@
+# segredos — nunca subir
+.env
+*.env
+replicate.env
+*.pem
+*.key
+credentials*
+
+# build e dependências
+node_modules/
+dist/
+out/
+build/
+
+# sistema
+.DS_Store
+Thumbs.db
+~$*

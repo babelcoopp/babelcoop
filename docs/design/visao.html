@@ -1,0 +1,427 @@
+<title>Sala Conversacional</title>
+<meta name="description" content="A ideia inédita do Babel Coop para liderar até 2027: uma sala conversacional de equipe, com presenças em vez de terminal e contexto compartilhado, demonstrada com vídeo, imagem e 3D gerados de verdade.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --s0:#060b16;--s1:#0b1320;--s2:#161e2d;--s3:#212a3b;
+  --linha:#4d5564;--linha-fraca:rgba(215,228,251,.09);
+  --texto:#d7e4fb;--texto-90:#c3cfe5;--apagado:#a8b8d5;--fraco:#6c7b96;--latte:rgba(255,248,231,.88);
+  --t0:#2ad5e5;--t1:#7ba4f0;--t2:#a376e9;--ok:#7fd6a6;--atencao:#f0b35a;--alarme:#ff6b6b;--ouro:#f5c76a;
+  --p-carla:#f69a9a;--p-davi:#57cebe;--p-rita:#d0a3ea;--p-theus:#7dbdfa;
+  --ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fala:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --ease:cubic-bezier(.2,0,0,1);
+}
+:root[data-theme="light"],:root.claro{
+  color-scheme:light;
+  --s0:#fff8e7;--s1:#ffffff;--s2:#f3ecd9;--s3:#e9e0c9;--linha:#b9b09a;--linha-fraca:rgba(6,11,22,.10);
+  --texto:#060b16;--texto-90:#1c2331;--apagado:#4a5568;--fraco:#7b8494;--latte:rgba(6,11,22,.88);
+  --t0:#0e8fa0;--t1:#3a63c2;--t2:#6d3fb8;--ok:#1f8a58;--atencao:#b06a00;--alarme:#c8323a;--ouro:#9a6b00;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--s0);color:var(--texto);font:400 15px/1.55 var(--ui);padding-block:0 56px;-webkit-font-smoothing:antialiased}
+a{color:var(--t0)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.rot{font:500 11px/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco)}
+.fala{font-family:var(--fala);font-weight:500;color:var(--latte)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:1.5px solid var(--t0);outline-offset:2px}
+.pg{max-width:1180px;margin:0 auto;padding-inline:16px}
+kbd{font:500 11px/1 var(--mono);background:var(--s2);border:1px solid var(--linha);border-bottom-width:2px;border-radius:4px;padding:2px 5px;color:var(--texto-90)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid var(--linha);border-radius:4px;font:500 11px/1 var(--mono);color:var(--texto-90);white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--t0);color:var(--t0)}
+
+/* topo */
+.topo{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;padding:16px 0;border-bottom:1px solid var(--linha);flex-wrap:wrap;min-width:0}
+.topo .b{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+.topo .b svg{width:18px;height:18px}
+.topo h1{font:500 15px/1 var(--ui);margin:0}
+.topo .meta{font:400 12px/1 var(--mono);color:var(--fraco)}
+.topo .ctl{display:flex;gap:8px;flex-wrap:wrap}
+
+/* abertura */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;align-items:center;padding:40px 0 24px}
+.hero .video{position:relative;aspect-ratio:1;max-width:520px;width:100%;justify-self:center;border-radius:10px;overflow:hidden;background:#060b16}
+.hero video,.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero .rever{position:absolute;right:10px;bottom:10px;height:24px;padding:0 10px;border:1px solid var(--linha);border-radius:4px;font:500 11px/1 var(--mono);color:var(--texto-90);background:rgba(6,11,22,.6)}
+.hero .cat{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--t0);margin-bottom:14px}
+.hero h2{font-family:var(--fala);font-weight:500;font-size:clamp(30px,4.2vw,50px);line-height:1.08;margin:0 0 18px;color:var(--latte);text-wrap:balance}
+.hero p{margin:0 0 12px;color:var(--texto-90);max-width:56ch}
+.hero .prova{font:400 12px/1.5 var(--mono);color:var(--fraco);margin-top:14px}
+
+/* seções */
+.sec{padding:32px 0 8px;margin-top:24px;border-top:1px solid var(--linha-fraca)}
+.sec h3{font:600 20px/1.25 var(--ui);margin:0 0 6px;text-wrap:balance}
+.sec .sub{color:var(--apagado);margin:0 0 20px;max-width:78ch}
+.grade{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.cartao{background:var(--s1);border:1px solid var(--linha-fraca);border-radius:8px;padding:16px;min-width:0}
+.cartao h4{font:500 14px/1.3 var(--ui);margin:0 0 8px}
+.cartao p{margin:6px 0 0;font-size:13.5px;color:var(--apagado)}
+.cartao .n{font:500 11px/1 var(--mono);color:var(--t0);margin-bottom:8px;display:block}
+.midia{border-radius:6px;overflow:hidden;background:#060b16;margin-bottom:12px;position:relative}
+.midia video,.midia img{display:block;width:100%;height:auto}
+.midia .leg{position:absolute;left:8px;bottom:8px;font:500 10px/1 var(--mono);color:var(--texto-90);background:rgba(6,11,22,.7);padding:4px 6px;border-radius:3px}
+.ficha{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font:400 11.5px/1.5 var(--mono);color:var(--apagado);margin-top:10px}
+.ficha b{font-weight:500;color:var(--fraco)}
+.ficha span{color:var(--texto-90)}
+
+/* galeria: como eu imagino */
+.galeria{display:flex;flex-direction:column;gap:28px}
+.fig{margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.fig img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid var(--linha-fraca);background:#060b16}
+.fig figcaption{font-size:14px;line-height:1.55;color:var(--apagado);max-width:80ch}
+.fig figcaption b{color:var(--texto);font-weight:500}
+.fig-p{grid-template-columns:minmax(0,320px) minmax(0,1fr);align-items:center}
+@media (max-width:820px){.fig-p{grid-template-columns:1fr}}
+
+/* os 5 minutos */
+.passos{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));counter-reset:p}
+.passo{background:var(--s1);border:1px solid var(--linha-fraca);border-radius:8px;padding:14px;position:relative}
+.passo .t{font:500 11px/1 var(--mono);color:var(--t0);margin-bottom:8px}
+.passo h4{font:500 14px/1.3 var(--ui);margin:0 0 6px}
+.passo p{margin:0;font-size:13px;color:var(--apagado)}
+
+/* sala (TV) */
+.sala{aspect-ratio:16/9;border:1px solid var(--linha);border-radius:10px;position:relative;overflow:hidden;background:#060b16;color:#d7e4fb}
+.sala video,.sala img.chao{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.sala .conteudo{position:absolute;inset:0;display:grid;grid-template-columns:1.3fr 1fr;gap:16px;padding:clamp(12px,3vw,32px)}
+.sala .rel{font:500 clamp(28px,6vw,64px)/1 var(--mono);font-variant-numeric:tabular-nums;color:#d7e4fb}
+.sala .perg{font-family:var(--fala);font-weight:500;font-size:clamp(18px,3vw,34px);line-height:1.2;color:rgba(255,248,231,.9);text-wrap:balance;margin:8px 0}
+.sala .col{display:flex;flex-direction:column;gap:12px;font:400 12px/1.4 var(--mono);color:#a8b8d5}
+.sala .pres{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.sala .pres i{width:clamp(14px,2vw,22px);height:clamp(14px,2vw,22px);border-radius:50%;border:1.5px solid #a8b8d5;display:inline-block}
+.sala .pres i.on{background:#a8b8d5}
+.sala .pres i.ag{border-radius:3px;border-color:var(--p-davi)}
+.sala .ok{display:flex;align-items:center;gap:8px;color:#d7e4fb}
+.sala .ok i{width:14px;height:14px;border-radius:50%;border:1.5px solid #c3cfe5;display:inline-block;font:600 7px/11px var(--mono);text-align:center;font-style:normal}
+.sala .rotl{font:500 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#6c7b96}
+.sala .planta{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.sala .salap{border:1px solid rgba(215,228,251,.22);border-radius:4px;padding:6px 8px;display:flex;flex-direction:column;gap:4px}
+.sala .salap .rotl{color:#a8b8d5}
+.sala .pecas{display:flex;flex-wrap:wrap;gap:6px}
+.sala .ficha{display:inline-flex;align-items:center;gap:4px;margin:0;font:400 10.5px/1 var(--mono);color:#d7e4fb;background:rgba(22,30,45,.85);border:1px solid rgba(215,228,251,.15);border-radius:3px;padding:4px 6px}
+.sala .ficha.aberto{border-color:var(--atencao)}
+.sala .ficha.aberto b{font-weight:500;color:var(--atencao)}
+.sala .ficha i{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--c);color:var(--c);font:600 7px/9px var(--mono);text-align:center;font-style:normal;flex:none}
+.sala .ficha i.ag{border-radius:2px}
+.sala .orbes{display:flex;gap:10px;align-items:center}
+.sala .orbe{width:clamp(40px,7vw,84px);height:clamp(40px,7vw,84px);border-radius:50%;overflow:hidden;position:relative;flex:none}
+.sala .orbe video,.sala .orbe img{position:static;width:100%;height:100%;object-fit:cover;opacity:1}
+.sala .orbe span{position:absolute;left:0;right:0;bottom:0;text-align:center;font:500 9px/1 var(--mono);color:#d7e4fb;background:rgba(6,11,22,.55);padding:3px 0}
+
+/* presença */
+.presenca{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.pres-card{background:var(--s1);border:1px solid var(--linha-fraca);border-radius:8px;padding:14px;display:flex;gap:14px;align-items:center}
+.pres-card .o{width:96px;height:96px;border-radius:50%;overflow:hidden;flex:none;background:#060b16;position:relative}
+.pres-card .o video,.pres-card .o img{width:100%;height:100%;object-fit:cover;display:block}
+.pres-card .o.parado{filter:saturate(.6) brightness(.85)}
+.pres-card .o.espera::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--atencao)}
+.pres-card .o.ret{border-radius:8px;border:1.5px solid var(--dona,var(--t0));background:var(--s2);width:104px;height:104px;display:flex;align-items:center;justify-content:center;padding:6px}
+.pres-card .o.ret img{width:100%;height:100%;object-fit:contain}
+.pres-card .o.ret.espera::after{border-radius:8px;inset:-4px;border-color:var(--atencao)}
+.pres-card h4{font:500 14px/1.3 var(--ui);margin:0 0 4px}
+.pres-card p{margin:0;font:400 12px/1.5 var(--mono);color:var(--apagado)}
+
+/* limites */
+.limite{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.limite img{width:100%;display:block;border-radius:6px;border:1px solid var(--linha-fraca)}
+.limite .leg{font:400 11px/1.4 var(--mono);color:var(--fraco);margin-top:6px}
+.icones{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.icones .ic{width:56px;height:56px;border-radius:6px;overflow:hidden;background:#000;border:1px solid var(--linha-fraca)}
+.icones .ic img{width:100%;height:100%;display:block}
+
+/* tabela */
+table{width:100%;border-collapse:collapse;font:400 12.5px/1.45 var(--ui)}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--linha-fraca);vertical-align:top}
+th{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--fraco)}
+td .mono{font-size:11.5px;color:var(--apagado)}
+.tabela{overflow-x:auto}
+.sim{color:var(--ok)}.nao{color:var(--alarme)}.meio{color:var(--atencao)}
+
+/* líder */
+.lider{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.lider .it{background:var(--s1);border:1px solid var(--linha-fraca);border-radius:8px;padding:14px;border-left:3px solid var(--t0)}
+.lider .it .k{font:500 11px/1 var(--mono);color:var(--t0);margin-bottom:6px}
+.lider .it h4{font:500 14px/1.3 var(--ui);margin:0 0 6px}
+.lider .it p{margin:0;font-size:13px;color:var(--apagado)}
+.lider .it .v{margin-top:8px;font:400 11px/1.4 var(--mono);color:var(--fraco)}
+
+.rodape{margin-top:40px;padding-top:12px;border-top:1px solid var(--linha-fraca);font:400 12px/1.6 var(--mono);color:var(--fraco)}
+.rodape b{color:var(--apagado);font-weight:500}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr}
+  .limite{grid-template-columns:1fr}
+  .sala .conteudo{grid-template-columns:1fr}
+  .sala .col{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  video[autoplay]{display:none}
+  .poster-rm{display:block!important}
+}
+.poster-rm{display:none!important}
+</style>
+
+<div class="pg">
+  <header class="topo">
+    <div class="b">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2v16M5 9c1.2-1.4 2.6-2.2 4.4-2.2 3 0 5.1 2.3 5.1 5.6S12.4 18 9.4 18C7.6 18 6.2 17.2 5 15.8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <h1>Sala Conversacional</h1>
+      <span class="meta">Babel Coop · visão 2027 · 23/09/2026</span>
+    </div>
+    <div class="ctl">
+      <button class="chip" id="tema" aria-pressed="false">tema claro</button>
+      <a class="chip" href="https://claude.ai/artifact/KruF3NjV9EddMRm69367P3">painel anterior (v2)</a>
+    </div>
+  </header>
+
+  <!-- ===== ABERTURA ===== -->
+  <section class="hero">
+    <div class="video">
+      <video id="v-b" autoplay muted playsinline preload="auto" poster="visao/b-inicio.jpg" aria-label="O b da Babel se desenhando em um traço de luz">
+        <source src="visao/b-entrada.mp4" type="video/mp4">
+      </video>
+      <img class="poster-rm" src="visao/b-marca.jpg" alt="A marca b da Babel, uma fita de luz do violeta ao ciano">
+      <button class="rever" id="rever">ver de novo</button>
+    </div>
+    <div>
+      <div class="cat">uma categoria nova · sistema com corpo · trabalho à vista</div>
+      <h2>A equipe não usa um app. Ela habita uma sala que trabalha junto, com tudo à vista.</h2>
+      <p style="font-family:var(--fala);font-size:19px;line-height:1.3;color:var(--latte)">Sua equipe, seus agentes e sua sala no mesmo lugar. Tudo o que um agente faz fica à vista, com prova, e só entra com o seu OK, assinado com nome e hora. À vista também no outro sentido: sem dívida, sem surpresa.</p>
+      <p>Os agentes não são janelas de terminal: são <b>colegas com dono</b>, com nome, retrato-objeto e estado escrito, que você chama pela conversa. Tudo tem <b>endereço</b>: sala, bancada, peça; presença vira posição e o histórico vira rastro com Selo. A memória da equipe tem <b>nome</b> e cresce com cada pessoa que entra. A parede da sala é a planta. Toda ação deixa <b>nome e hora</b>.</p>
+      <p>Esta página não descreve: ela mostra. Tudo o que se move aqui foi gerado hoje por modelos de vídeo, imagem e 3D pela API da Replicate, a partir da identidade da Babel, em 19 predições e cerca de US$ 3. E o que <b>não</b> dá para gerar também está aqui, provado.</p>
+      <div class="prova mono">o "b" acima: keyframes no google/nano-banana-2 (13 s cada) → vídeo no wan-video/wan-2.7-i2v, 720p, 4 s, seed fixa, 42 s de geração, US$ 0,40</div>
+    </div>
+  </section>
+
+  <!-- ===== COMO EU IMAGINO (imagens geradas) ===== -->
+  <section class="sec" id="imagino">
+    <h3>Como eu imagino o app: imagens, não descrição</h3>
+    <p class="sub">Seis imagens geradas hoje no google/nano-banana-2 (2K), com a mistura pedida: reino (o selo de ouro no OK), empresário (instrumento sério, sem enfeite), futurismo (precisão, luz como estado) e ufologia (o observatório que escuta um sinal). O texto dentro das imagens é aproximado: modelo de imagem ainda erra letra; na interface real, todo texto é código.</p>
+    <div class="galeria">
+      <figure class="fig">
+        <img src="visao/imag-estacao.jpg" alt="A Estação imaginada: arquivos à esquerda, trabalho no meio, a presença conversacional à direita">
+        <figcaption><b>1 · A Estação: o terminal que não tem cara de terminal</b><br>Esquerda: arquivos e pessoas com anéis de presença. Meio: o site sendo montado ao vivo, um bloco selado em ouro. Direita: no lugar do prompt, uma <b>presença</b>: uma coluna de luz dentro de um anel-instrumento (o mostrador do observatório), que escreve "pensando há 4 s", "terminou · 14:32", "OK · Carla · 14:32". Você fala com ela; ela comanda o terminal inteiro por baixo.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="visao/imag-campanha.jpg" alt="A IA gerando a campanha e trocando as telas do meio">
+        <figcaption><b>2 · "Gera a campanha da Clínica Vida"</b><br>A pessoa pede em português; a presença trabalha e o meio se transforma na frente dela: landing, três anúncios, o roteiro do WhatsApp e o calendário de posts, cada um com um anel de progresso; um já selado. O plano aparece à direita em linhas numeradas com anéis (feito · pensando). A IA troca as telas, gera as peças e pede o OK. Detalhe honesto: o modelo pôs rostos humanos nos agentes da esquerda; na regra do produto agente não tem rosto (é presença), e o texto miúdo é inventado.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="visao/imag-parede.jpg" alt="A parede da sala com o mapa vivo da equipe">
+        <figcaption><b>3 · A parede da sala</b><br>A TV sem botão mostra a sala: as 11 presenças, as áreas de projeto ligadas por fios de luz, as miniaturas reais do trabalho, o selo de ouro fechando sobre um cartão, uma faixa de luz que só deriva enquanto a sala trabalha. Quem entra no escritório vê a empresa trabalhando.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="visao/imag-maquina3d.jpg" alt="A Máquina em 3D com todas as peças do Supabase">
+        <figcaption><b>4 · A Máquina em 3D: todas as peças do Supabase com corpo</b><br>Gavetas (tabelas), Portaria (login), Cofre (segredos), Depósito (arquivos), Robôs (gatilhos e horários), Canos com pulsos de luz (realtime e filas), Carteiro (e-mail), Casa de Máquinas (compute e backups), Armário (schema), Ferramentas (extensões) e as Telas flutuando ligadas por fios. As 16 peças do <span class="mono">SUPABASE_PECAS.md</span>, cada uma gerada uma vez pelo mesmo pipeline do cofre (imagem → recorte → Trellis) e materializada na casa. A parede mostra isso; o pulso do teste anda por dentro dos canos.</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="visao/imag-mapa.jpg" alt="O mapa mental 2D que vira máquina">
+        <figcaption><b>5 · O mapa mental (2D) que vira máquina</b><br>A Máquina em 2D é de nós, como o n8n; o mapa é o MindMeister sobre o chão da Babel. O incrível é a ligação: cada galho do mapa pode ser <b>materializado</b> pela presença: "Landing" vira uma Tela, "Instagram" vira três anúncios, "Agenda" vira uma Gaveta na Máquina. O mapa continua sendo o plano vivo, com um selo em cada galho fechado, e a luz anda pelos galhos conforme o trabalho acontece, na Estação e na parede. A moldura de observatório ("FEED · SINAL · FREQUÊNCIA") é a ufologia contida: o mapa é um sinal que a equipe escuta. (Os dois cartões saíram com rótulo em inglês: erro do modelo, não decisão.)</figcaption>
+      </figure>
+      <figure class="fig fig-p">
+        <div class="midia" style="margin:0"><video autoplay muted loop playsinline preload="metadata" poster="visao/selo-b-aberto.jpg" aria-label="O carimbo da Babel: o anel se fecha e o b carimba"><source src="visao/selo-carimba.mp4" type="video/mp4"></video><img class="poster-rm" src="visao/selo-b-fechado.jpg" alt="O carimbo da Babel: anel de ouro com o b em relevo"><span class="leg">nano-banana-2 → wan-2.7-i2v · 2 s · US$ 0,34</span></div>
+        <figcaption><b>6 · O reino: o carimbo é o próprio "b"</b><br>Todo OK é um carimbo com nome e hora: o anel tracejado espera; ao aprovar, o anel de ouro se fecha e o "b" da Babel carimba o objeto ("OK · Carla · 14:32"). Uma vez, só quando quem pediu aprova. É a única cerimônia do app, e é o que um empresário compra: quem consentiu o quê, gravado no objeto. (O selo "C" com brasão saiu, por ordem do Theus.)</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== A IDEIA ===== -->
+  <section class="sec">
+    <h3>A ideia em cinco frases</h3>
+    <p class="sub">Parte do Babel Coop já desenhado (Arquivos · Trabalho · Agentes, as quatro leis, tudo do FUNCOES.md continua) e dá o salto que ninguém deu.</p>
+    <div class="grade">
+      <div class="cartao"><span class="n">1 · o terminal some (sem perder um comando)</span><h4>Você fala com quem está no objeto, não com um prompt</h4><p>O campo ❯ já vem endereçado ao agente que está na coisa que você tem na frente ("→ landing.html · Aurora · pensando há 4 s"). O shell é real e fica dobrado: cada comando vira um bloco com título humano ("Lia listou a pasta Clínicas · 12 arquivos") e "ver o comando" a um clique. Quem quiser abre o terminal inteiro com <kbd>Ctrl</kbd><kbd>J</kbd>. Ninguém precisa.</p></div>
+      <div class="cartao"><span class="n">2 · colega com dono, não janela</span><h4>Cada agente é um membro: nome humano, dono, retrato-objeto</h4><p>"Lia · agente da Carla". O retrato é um <b>instrumento</b> gerado uma vez (a lupa, o fone, a chave abaixo), nunca um rosto, dentro do quadrado de 14 px na cor da dona. O estado é escrito, sempre: pensando há 4 s · terminou · 14:32 · espera o seu OK.</p></div>
+      <div class="cartao"><span class="n">3 · contexto compartilhado com autoria</span><h4>Tudo tem endereço, e a memória tem nome</h4><p>Sala (projeto) → bancada → peça: presença vira <b>posição</b> ("Carla está na landing.html"), o histórico do agente vira <b>rastro</b> com um Selo em cada parada. Quando o agente consulta, cita: "Aprendizado · Davi · reembolso · usado 7×", e o Davi vê a luz acender. Todo agente novo nasce sabendo ("já li 76 coisas que a equipe aprendeu"). Sem servidor: o diário é replicado no HD de cada computador.</p></div>
+      <div class="cartao"><span class="n">4 · gestão com prova</span><h4>A parede é a planta: quem está com o quê, agora</h4><p>O gestor anda pelo chão como na Toyota (gemba walk), numa TV sem botão: sala → quem está → peça → Selo, cronômetro, versão. A prova é o objeto, não o relato. Nunca ranking, nunca mapa de calor; rastro de pessoa é privado.</p></div>
+      <div class="cartao"><span class="n">5 · o sistema tem corpo, e a sala tem cara própria</span><h4>O backend real do projeto na parede, em 3D</h4><p>As peças da Máquina ganham corpo gerado uma vez (o cofre abaixo) e só mudam quando a equipe publica com Selo. E o que custou US$ 3 hoje para a Babel custa o mesmo para qualquer equipe: a marca dela se desenhando, os retratos dos agentes dela, o chão dela. É o rito de entrada e é o fosso: ninguém copia por template.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== OS PRIMEIROS 5 MINUTOS ===== -->
+  <section class="sec">
+    <h3>Os primeiros cinco minutos</h3>
+    <p class="sub">O momento em que a pessoa entende sem ninguém explicar: "a sala inteira viu, e ninguém precisou avisar ninguém".</p>
+    <div class="passos">
+      <div class="passo"><div class="t">0:00</div><h4>Cola o token</h4><p>Instala, cola o convite, entra. Sem cadastro. O "b" se desenha uma vez (o vídeo acima); qualquer tecla pula. "Davi, a equipe já está aqui." em Cormorant.</p></div>
+      <div class="passo"><div class="t">0:05</div><h4>Cai na sala onde a equipe está</h4><p>Não cai numa tela vazia: cai em Clínicas › landing.html, "com Carla, Aurora e Rita aqui". Uma demanda já espera na caixa dele, com o Selo aberto de quem pediu.</p></div>
+      <div class="passo"><div class="t">0:40</div><h4>Fala com quem está no objeto</h4><p>O ❯ já vem endereçado à Aurora, que está na landing. "O que mudou aqui hoje?" → bloco consulta com nome ("Aprendizado · Carla · reembolso"), resultado com prova, e "por onde passou".</p></div>
+      <div class="passo"><div class="t">1:30</div><h4>Pede e vê pousar, no meio e na parede</h4><p>"Cria uma tabela de pacientes": a gaveta aparece tracejada no palco da Máquina e na TV da sala. Ele arrasta um bloco da tela: vira código na hora. Quem é do projeto vê a linha acender.</p></div>
+      <div class="passo"><div class="t">3:00</div><h4>Carla dá o OK de outra mesa</h4><p>Sem ninguém pedir: "OK · Carla · 14:32" aparece na ficha, no cabeçalho e no bloco do agente. O selo fecha em 400 ms. Na TV, o anel fecha sobre a peça. Aha: a sala inteira viu.</p></div>
+      <div class="passo"><div class="t">4:30</div><h4>"Onde estão?" e a sala aprendeu</h4><p><kbd>Ctrl</kbd><kbd>K</kbd> → "Onde estão": 11 linhas, uma por pessoa e agente, cada uma com o objeto e o cronômetro. "Salvar como preset": o que funcionou fica com o nome de quem fez. O agente seguinte já nasce sabendo.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== PRESENÇA ===== -->
+  <section class="sec">
+    <h3>Presença: o que testamos para o corpo do agente</h3>
+    <p class="sub">A direção do Theus: o agente não é um objeto de escritório; é uma <b>presença</b> (a coluna de luz dentro do anel-instrumento das imagens acima), com nome humano e dono. Abaixo, o que foi gerado e testado hoje no caminho: os retratos-objeto (que os juízes "sóbrios" pediram e o Theus recusou: "um agente ser um telefone antigo?"), a chegada em vídeo e o orbe. Ficam como registro do portão, não como decisão. O estado nunca depende só da imagem: o cabeçalho escreve "pensando há 4 s", "terminou · 14:32", "espera o seu OK".</p>
+    <div class="presenca">
+      <div class="pres-card"><div class="o ret" style="--dona:var(--p-davi)"><img src="visao/retrato-lupa.png" alt="lupa isométrica, retrato da agente Aurora"></div><div><h4>Aurora · agente do Davi</h4><p>pesquisa e explica · pensando há 4 s · anel em laço</p></div></div>
+      <div class="pres-card"><div class="o ret" style="--dona:var(--p-carla)"><img src="visao/retrato-fone.png" alt="telefone isométrico, retrato da agente Lia"></div><div><h4>Lia · agente da Carla</h4><p>responde clientes no WhatsApp · terminou · 14:32</p></div></div>
+      <div class="pres-card"><div class="o ret espera" style="--dona:var(--p-theus)"><img src="visao/retrato-chave.png" alt="chave inglesa isométrica, retrato do agente Otto"></div><div><h4>Otto · agente do Theus</h4><p>monta backends na Máquina · espera o seu OK · aro âmbar</p></div></div>
+    </div>
+    <div class="grade" style="margin-top:16px">
+      <div class="cartao"><div class="midia" style="max-width:320px"><video autoplay muted loop playsinline preload="metadata" poster="visao/chegada-lupa-poster.jpg"><source src="visao/chegada-lupa.mp4" type="video/mp4"></video><img class="poster-rm" src="visao/retrato-lupa.png" alt="lupa"><span class="leg">wan-2.7-i2v · cubo → lupa · 4 s · 42 s · US$ 0,47</span></div><h4>A chegada: o único vídeo gerado dentro do app</h4><p>Quando a pessoa cria um agente e aprova o retrato, o cubo de ardósia vira o instrumento, uma vez, em 4 s (first frame = cubo, last frame = retrato aprovado). É o "nasceu" do colega; nunca se repete, e a versão a custo zero (crossfade de 400 ms) fica atrás como reserva. Foi o pedido do segundo juiz: um só vídeo generativo no app, preso a um evento real.</p></div>
+      <div class="cartao"><div class="midia" style="max-width:180px"><video autoplay muted loop playsinline preload="metadata" poster="visao/orbe.jpg"><source src="visao/orbe-pensando.mp4" type="video/mp4"></video><img class="poster-rm" src="visao/orbe.jpg" alt="orbe de luz"><span class="leg">wan-2.7-i2v · 4 s · US$ 0,47</span></div><h4>O que perdeu no portão: o orbe</h4><p>Bonito, e por isso perigoso: luz que gira sem dado é o sinal nº 1 de "AI slop". Um instrumento parado diz mais sobre o que o agente faz do que uma nebulosa em movimento. Fica aqui como prova de que o portão funciona.</p></div>
+      <div class="cartao"><h4>A memória com nome</h4><p style="font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--texto-90);background:var(--s2);border-radius:6px;padding:10px 12px;margin-top:6px"><span style="color:var(--fraco)">CONSULTA</span><br>o que consultei: README.md · <span style="color:var(--t0)">Aprendizado · Davi · reembolso · usado 7×</span> · Preset · Login com empresa · Davi · 7 usos · Ata · 12/09 · decisão 3</p><p>O autor recebe a luz ("Lia usou o seu aprendizado"); ninguém mais vê quem consultou o quê. Todo agente novo nasce com a memória da equipe carregada e diz o número na primeira linha: com 11 pessoas, o décimo primeiro agente nasce tão bom quanto os dez anteriores tornaram a memória. É o efeito de rede que só existe quando o trabalho fica dentro.</p></div>
+      <div class="cartao"><h4>Por onde passou</h4><p style="font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--texto-90);background:var(--s2);border-radius:6px;padding:10px 12px;margin-top:6px">Aurora · hoje<br>14:02 Máquina · Clínicas <span style="color:var(--ok)">● OK · Davi</span><br>14:05 landing.html <span style="color:var(--ok)">● OK · Carla</span><br>14:06 Acervo · 2 aprendizados lidos<br>14:09 → landing.html · pensando há 4 s</p><p>O rastro do agente substitui o scrollback: cada parada com o que deixou (versão, peça, Selo, prova). Rastro de pessoa é privado, só no Perfil dela.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== A SALA (TV) ===== -->
+  <section class="sec">
+    <h3>A parede da sala: o chão vivo</h3>
+    <p class="sub">A TV sem botão mostra a sala. O chão abaixo é um vídeo gerado (keyframe 16:9 no nano-banana-2, deriva de 4 s no wan-2.7-i2v, US$ 0,50), a 90 % de opacidade, nunca atrás de texto pequeno. Regra: ele só deriva enquanto há evento na sala (demanda, OK, agente trabalhando) e <b>para</b> quando a sala para; numa ferramenta de 8 horas, laço sem dado cansa. A versão forte, para a fase seguinte: o chão da parede é <b>o backend real do projeto em 3D</b>, as peças da Máquina geradas uma vez (como o cofre abaixo), com câmera e luz fixas, que só muda quando o backend muda. Ninguém pôs o sistema de verdade na parede da sala. <button class="chip" id="btn-parar">parar a sala</button></p>
+    <div class="sala" id="sala">
+      <video id="v-chao" autoplay muted loop playsinline preload="metadata" poster="visao/chao.jpg" aria-hidden="true"><source src="visao/chao-vivo.mp4" type="video/mp4"></video>
+      <img class="chao poster-rm" src="visao/chao.jpg" alt="">
+      <div class="conteudo">
+        <div>
+          <div class="rotl">quarta · 23 de setembro</div>
+          <div class="rel" id="rel">09:41:07</div>
+          <p class="perg">O que a gente mais perde é paciente que esquece?</p>
+          <div class="ok"><i>C</i>OK · Carla · 14:32 · landing da Clínica Vida</div>
+          <div class="ok" style="margin-top:6px"><i>D</i>Preset "Agendamento" · Davi · usado 3×</div>
+        </div>
+        <div class="col">
+          <div><div class="rotl">a planta · quem está com o quê, agora</div>
+            <div class="planta">
+              <div class="salap"><span class="rotl">Clínicas</span><div class="pecas"><span class="ficha"><i class="pe" style="--c:var(--p-carla)">C</i><i class="ag" style="--c:var(--p-davi)">A</i>landing.html</span><span class="ficha"><i class="pe" style="--c:var(--p-davi)">D</i>agenda.maquina</span></div></div>
+              <div class="salap"><span class="rotl">Sorriso</span><div class="pecas"><span class="ficha"><i class="pe" style="--c:var(--p-rita)">R</i>proposta.md</span><span class="ficha aberto">precos.csv <b>espera OK · T</b></span></div></div>
+              <div class="salap"><span class="rotl">Reunião</span><div class="pecas"><span class="ficha"><i class="pe" style="--c:var(--p-theus)">T</i><i class="pe" style="--c:var(--p-davi)">M</i>ouvindo · 4 min</span></div></div>
+            </div>
+          </div>
+          <div><div class="rotl">agora</div><span class="mono" style="color:#d7e4fb">Carla → landing.html · 00:12:40</span><br>Lia (Carla) → WhatsApp Clínica Vida · 3 sugestões esperando OK<br>Otto (Theus) → Máquina Clínicas · pensando há 4 s</div>
+          <div><div class="rotl">presenças · 11 pessoas</div><div class="pres"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== A MÁQUINA EM 3D ===== -->
+  <section class="sec">
+    <h3>A Máquina: a peça de backend que vira objeto</h3>
+    <p class="sub">O cofre da Máquina (variáveis e segredos) nasceu como imagem isométrica no nano-banana-2 (9 s), foi recortado no bria/remove-background (2 s) e virou modelo 3D no firtoz/trellis. Uma peça de backend que a equipe pega com a mão no modo 3D da Tela. O material é trocado pelo da casa; a IA entrega a forma, a casa entrega a luz.</p>
+    <div class="grade">
+      <div class="cartao"><div class="midia"><img src="visao/cofre.jpg" alt="cofre isométrico gerado"><span class="leg">nano-banana-2 · 1K · 9 s · US$ 0,07</span></div><h4>Keyframe isométrico</h4><p>Bloco-base de prompt: vista ortográfica a 35°/45°, uma luz alto-esquerda, aresta ciano de 1 px, corpo em ardósia fosca, fundo #060b16.</p></div>
+      <div class="cartao" id="cartao-3d"><div class="midia"><video autoplay muted loop playsinline preload="metadata" poster="visao/cofre.jpg"><source src="visao/cofre-3d.mp4" type="video/mp4"></video><span class="leg">firtoz/trellis · glb + giro · US$ 0,035</span></div><h4>Imagem → 3D em segundos</h4><p>O GLB entra no modo 3D da Tela pelo three.js já carregado; o giro acima é o vídeo que o próprio Trellis devolve. O albedo é descartado (sombra assada), o material é o nosso.</p></div>
+      <div class="cartao"><h4>Por que isso importa para o produto</h4><p>Cada recurso do Supabase é uma peça (16 peças cobrem os 79 recursos, `SUPABASE_PECAS.md`). Decisão do Theus: <b>no 3D, todas as 16 peças ganham corpo</b> pelo mesmo pipeline do cofre (imagem isométrica → recorte → Trellis, ≈ US$ 0,12 por peça, ≈ US$ 2 o conjunto), na mesma folha de estilo para terem a mesma escala e o mesmo material. A Máquina de trabalho, na Estação, continua em <b>2D com nós e fios</b> (como o n8n), e o 3D é a parede e o modo "ver de dentro".</p><p>O pulso verde/vermelho que anda pelos fios continua código, não vídeo: ele carrega dado de verdade ("Maria Souza · amanhã 14:30"). Ao publicar, a parede mostra o antes e o depois com os dois renders reais em crossfade; sem vídeo gerado inventando objeto.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== O QUE NÃO DÁ (PROVADO) ===== -->
+  <section class="sec">
+    <h3>O que um modelo de vídeo não faz por um sistema (provado hoje)</h3>
+    <p class="sub">Duas experiências que valeram mais pelo limite do que pelo resultado.</p>
+    <div class="grade">
+      <div class="cartao" style="grid-column:1/-1">
+        <h4>1 · A interface real animada por vídeo destrói o texto</h4>
+        <p>Mandei o print do painel v2 para o wan-2.7-i2v pedindo "mantenha todo o texto exatamente como está; só uma luz corre pela linha das abas". O modelo obedeceu ao movimento e ao layout, mas o texto pequeno virou massa já no <b>primeiro quadro</b> (o próprio processo de vídeo reamostra e comprime). Títulos sobrevivem; corpo de 13 px, não.</p>
+        <div class="limite" style="margin-top:12px">
+          <div><img src="visao/ui-primeiro.jpg" alt="primeiro quadro do vídeo: texto pequeno ilegível"><div class="leg">quadro 0 do vídeo gerado (recorte a 100 %)</div></div>
+          <div><img src="visao/ui-ultimo.jpg" alt="último quadro do vídeo: texto pequeno ilegível, luz no painel"><div class="leg">último quadro: o brilho pedido apareceu, o texto não voltou</div></div>
+        </div>
+        <p><b>Conclusão de produto:</b> a interface é código (HTML, CSS, SVG) e continua sendo. Vídeo gerado entra como <b>material</b>: chão, presença, marca, transição de estado, celebração. Nunca atrás de texto de trabalho. Esta é a regra que separa uma sala viva de "AI slop".</p>
+        <div class="midia" style="max-width:640px;margin-top:12px"><video muted loop playsinline preload="metadata" controls poster="visao/ui-viva-poster.jpg"><source src="visao/ui-viva.mp4" type="video/mp4"></video><span class="leg">wan-2.7-i2v · 5 s · 720p · US$ 0,50 · o vídeo inteiro, para conferir</span></div>
+      </div>
+      <div class="cartao">
+        <h4>2 · Ícones "em traço" saem preenchidos</h4>
+        <p>O recraft-v4-svg devolveu SVG vetorial de verdade (bom), mas como formas <b>preenchidas</b> em fundo preto, viewBox de 2048, com metadados C2PA: não há <code class="mono">stroke</code>, então <code class="mono">currentColor</code> no traço e o traço de 1,5 px não existem. O portão de 3 ícones (US$ 0,24) decidiu: os 61 ícones do sistema são desenhados à mão.</p>
+        <div class="icones" style="margin-top:10px"><div class="ic"><img src="visao/icone-reuniao.svg" alt="ícone reunião gerado, preenchido"></div><div class="ic"><img src="visao/icone-maquina.svg" alt="ícone máquina gerado, preenchido"></div><div class="ic"><img src="visao/icone-gaveta.svg" alt="ícone gaveta gerado, preenchido"></div><span class="mono" style="font-size:11px;color:var(--fraco)">3 dos 8 gerados · US$ 0,08 cada · ~20 s cada</span></div>
+      </div>
+      <div class="cartao">
+        <h4>3 · O que mais fica fora, por regra</h4>
+        <p><b>Rostos humanos</b> para agentes: nunca (a presença é um corpo de luz, não uma pessoa falsa). <b>Texto dentro de vídeo</b>: nunca. <b>Loop que "respira" sem dado</b>: nunca na Estação; na parede só enquanto a sala trabalha. <b>Som</b>: um só evento ("espera"), desligado por padrão. <b>Fundo gerado atrás de trabalho</b>: nunca.</p>
+        <p>Custo real desta demonstração inteira: 19 predições, ≈ US$ 3. A conta tem menos de US$ 5 de crédito, o que limita a 1 pedido por vez: a geração foi em série, priorizando valor.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== O QUE DÁ PARA GERAR ===== -->
+  <section class="sec">
+    <h3>O que dá para gerar para um sistema hoje (setembro de 2026)</h3>
+    <p class="sub">Confirmado por schema na API da Replicate e, nas linhas marcadas, gerado e medido nesta sessão.</p>
+    <div class="tabela"><table>
+      <thead><tr><th>Elemento do sistema</th><th>Modelo</th><th>Entrada → saída</th><th>Tempo · custo</th><th>Hoje</th></tr></thead>
+      <tbody>
+        <tr><td>Marca que se desenha (rito de entrada)</td><td class="mono">nano-banana-2 → wan-2.7-i2v</td><td>logo PNG → 2 keyframes 2K → vídeo 4 s 720p</td><td class="mono">13 s + 42 s · US$ 0,60</td><td class="sim">gerado ✓</td></tr>
+        <tr><td>Retrato-objeto do agente (instrumento, nunca rosto)</td><td class="mono">nano-banana-2 → bria/remove-background</td><td>prompt no bloco-base da casa → 1K → recorte com alfa</td><td class="mono">9 s + 1,5 s · US$ 0,085</td><td class="sim">gerado ✓ (3 retratos)</td></tr>
+        <tr><td>Chegada do agente (cubo → instrumento, uma vez, ao criar)</td><td class="mono">nano-banana-2 → wan-2.7-i2v (first + last frame)</td><td>keyframe do cubo + retrato aprovado → 4 s 720p</td><td class="mono">10 s + 42 s · US$ 0,47</td><td class="sim">gerado ✓</td></tr>
+        <tr><td>Corpo do agente como luz (orbe) em 3 estados</td><td class="mono">nano-banana-2 → wan-2.7-i2v</td><td>prompt → keyframe 1K → vídeo 4 s por estado</td><td class="mono">10 s + 26 s · US$ 0,47/estado</td><td class="nao">gerado e reprovado no portão (luz sem dado)</td></tr>
+        <tr><td>Ata da mudança (antes → depois de "Publicar vN" na parede)</td><td class="mono">dois renders reais + crossfade CSS 400 ms</td><td>custo 0; o vídeo gerado (wan, US$ 0,40 por publicação) foi cortado pelo juiz: o filme inventa objetos e custa US$ 10/mês por evento</td><td class="mono">0</td><td class="nao">vídeo cortado: crossfade real</td></tr>
+        <tr><td>Luz do lugar (expediente aberto · fechado · visita) e materiais das peças</td><td class="mono">flux-2-max (seed) · nano-banana-2</td><td>prompt → panoramas/folha de materiais, gerados uma vez, presos ao dado</td><td class="mono">≈ US$ 0,50</td><td class="meio">receita pronta</td></tr>
+        <tr><td>Chão vivo da parede (TV)</td><td class="mono">nano-banana-2 → wan-2.7-i2v</td><td>prompt → keyframe 16:9 2K → deriva 4 s</td><td class="mono">15 s + 27 s · US$ 0,50</td><td class="sim">gerado ✓</td></tr>
+        <tr><td>Peça de backend em 3D</td><td class="mono">nano-banana-2 → bria/remove-background → firtoz/trellis</td><td>prompt → isométrico → recorte → GLB + giro</td><td class="mono">9 s + 2 s + ~30 s · US$ 0,12</td><td class="sim">gerado ✓</td></tr>
+        <tr><td>Ícones monoline do sistema</td><td class="mono">recraft-v4-svg</td><td>prompt → SVG</td><td class="mono">~20 s · US$ 0,08</td><td class="nao">sai preenchido: à mão</td></tr>
+        <tr><td>Interface inteira animada</td><td class="mono">wan-2.7-i2v</td><td>print → vídeo</td><td class="mono">26 s · US$ 0,50</td><td class="nao">destrói texto: UI é código</td></tr>
+        <tr><td>Marca de cada cliente se desenhando (a Loja vende salas)</td><td class="mono">nano-banana-2 → wan-2.7-i2v</td><td>logo do cliente → mesma receita</td><td class="mono">≈ 1 min · US$ 0,60</td><td class="meio">receita pronta</td></tr>
+        <tr><td>Materiais das peças (folha de estilo)</td><td class="mono">nano-banana-2 → flux-2-max (seed + referências)</td><td>3 peças na mesma folha → keyframes coerentes</td><td class="mono">≈ US$ 0,5–0,9</td><td class="meio">receita pronta</td></tr>
+        <tr><td>Transição de estado / celebração (meta a 100 %)</td><td class="mono">wan-2.7-i2v (first + last frame)</td><td>2 keyframes → 2–4 s</td><td class="mono">US$ 0,20–0,40</td><td class="meio">receita pronta</td></tr>
+        <tr><td>Som do evento "espera"</td><td class="mono">stable-audio-2.5 (duration 3!)</td><td>prompt → wav ≤ 300 ms</td><td class="mono">US$ 0,20</td><td class="meio">oscilador primeiro</td></tr>
+        <tr><td>Filme de marca (site, abertura) com áudio nativo</td><td class="mono">google/veo-3.1 · kling-v3 (multi-shot) · seedance-2.0</td><td>keyframes das peças reais → 8–15 s, até 6 planos</td><td class="mono">US$ 0,17–0,40/s; áudio dobra</td><td class="meio">filme de marca, nunca a interface</td></tr>
+        <tr><td>Imagem com texto legível para a parede (pergunta da semana, cartaz da meta)</td><td class="mono">Nano Banana Pro · Ideogram 3 · FLUX.2</td><td>prompt + referência → png 2K/4K</td><td class="mono">US$ 0,03–0,30</td><td class="meio">receita pronta (texto real continua em SVG)</td></tr>
+        <tr><td>Voz da presença (ler o Registro, "espera o seu OK")</td><td class="mono">ElevenLabs Flash v2.5 (~75 ms) · Agents</td><td>texto → áudio em streaming</td><td class="mono">por caractere</td><td class="meio">só após gesto; nunca na TV</td></tr>
+        <tr><td>Sala de reunião transformada ao vivo (cenário do projeto na Visita)</td><td class="mono">Decart Lucy 2.5 Realtime</td><td>stream WebRTC + prompt → 720p 30 fps</td><td class="mono">US$ 0,02/s por stream (72/h)</td><td class="meio">um stream, um momento; nunca 11 câmeras</td></tr>
+        <tr><td>Peça efêmera gerada sob pedido (painel do mês, simulação da fila, formulário) que pousa como aba com Selo e preset</td><td class="mono">LLM + tokens.css + dados da equipe (a receita da UI generativa)</td><td>pedido → HTML/SVG revisável</td><td class="mono">≈ 1 min, com erros ocasionais</td><td class="sim">peça, nunca a casca (que é &lt; 100 ms)</td></tr>
+        <tr><td>Mundo interativo da equipe (Genie 3, Odyssey)</td><td class="mono">sem API vendável</td><td>—</td><td class="mono">—</td><td class="nao">demo, não produto, em 2026</td></tr>
+        <tr><td>Rosto humano de agente</td><td class="mono">qualquer</td><td>—</td><td class="mono">—</td><td class="nao">nunca, por regra</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===== ESTRUTURA DE LÍDER ===== -->
+  <section class="sec">
+    <h3>Estrutura de líder até 2027: sete pontos verificáveis</h3>
+    <p class="sub">Não é promessa: cada ponto tem um teste que diz se está de pé.</p>
+    <div class="lider">
+      <div class="it"><div class="k">01 · categoria</div><h4>Um nome, uma linha: "Trabalho à vista"</h4><p>"Sua equipe, seus agentes e sua sala no mesmo lugar; tudo o que um agente faz fica à vista, com prova, e só entra com o seu OK, assinado com nome e hora." A venda para o empresário é chão de fábrica e gemba walk (Toyota): a prova é o objeto, não o relato. O mercado se chama "command center" (Cursor 3, Antigravity), "ADE" (Warp), "workspace com agentes" (Notion, Linear), "escritório virtual" (Gather, Roam). Nenhum tem a sala física como tela nem o sistema com corpo na parede. Palavras que nunca entram, nem no site: organismo, órgão, pele, respiração.</p><div class="v">teste: 3 empresários de fora repetem nome e linha no dia seguinte sem reler</div></div>
+      <div class="it"><div class="k">02 · o filme de 60 s</div><h4>A demo que viraliza é captura real da sala</h4><p>O "b" se desenha (gerado), depois captura de tela de verdade: a presença acorda, a tela aparece na parede, Carla dá OK de outra mesa. Mídia gerada abre e fecha o filme; o meio é o produto funcionando. Cursor, Lovable e Warp cresceram com número público semanal e demo real, nunca com vídeo de marca no lugar do produto.</p><div class="v">teste: vídeo de 60 s sem narração entendido por quem nunca viu; número público toda semana</div></div>
+      <div class="it"><div class="k">03 · o gesto que paga em segundos</div><h4>"A sala inteira viu"</h4><p>Token → cai na sala onde a equipe está → pedido em português a quem está no objeto → tela na parede → OK de outra pessoa com nome e hora. Sem cadastro, sem tutorial, sem terminal. Padrão: Cursor (Tab), Superhuman (&lt; 100 ms), Slack (2.000 mensagens).</p><div class="v">teste: até o primeiro Selo de outra pessoa no meu objeto em &lt; 5 min, 5 de 5 novatos, sem ajuda</div></div>
+      <div class="it"><div class="k">04 · o trabalho fica dentro</div><h4>Efeito de rede só existe se o trabalho mora aqui</h4><p>Dentro: memória com autoria, presets, aprendizados, endereço de tudo. Fora: a Loja troca presets, agentes e <b>salas inteiras</b> (identidade gerada por US$ 3) entre equipes. Padrão: Figma, Notion, Linear (95 % dos workspaces com agentes).</p><div class="v">teste: ≥ 80 % das demandas nascem, rodam e fecham com Selo no app em 30 dias; ≥ 50 % das ações de agentes citam a memória da equipe</div></div>
+      <div class="it"><div class="k">05 · criação pública por padrão</div><h4>A parede vende a sala</h4><p>Toda visita à empresa vê a TV; o modo Visita existe como link; o convite é um token que instala em um minuto. Padrão: Midjourney (a cachoeira no Discord), Lovable (apps mostrados no X).</p><div class="v">teste: TV com ≥ 20 itens selados por dia; ≥ 1 pedido de acesso por semana vindo de quem viu a parede ou o link</div></div>
+      <div class="it"><div class="k">06 · rito escasso, com gente</div><h4>Token + 30 minutos com alguém da Babel</h4><p>Para os 11 e os primeiros 50 clientes; depois o rito é o próprio produto (o b que se desenha + o primeiro Selo). Padrão: Superhuman (7 anos de onboarding 1:1 até US$ 35 mi), Slack (preview com convite).</p><div class="v">teste: após 4 semanas, ≥ 40 % respondem "muito desapontado" se perdessem o Babel</div></div>
+      <div class="it"><div class="k">07 · um número público por semana, e o imposto da novidade sob controle</div><h4>Toda segunda, um número; toda semana, o % de uso de cada novidade</h4><p>"Selos fechados" ou "memória da equipe" na TV e no site, 12 semanas seguidas (Cursor: 1 bi de caracteres/dia; Lovable: 100 mil projetos/dia). E cada lei, cada elemento gerado (retrato, planta, corpo 3D, voz) com % de pessoas que usaram nesta semana.</p><div class="v">teste: 12 números seguidos; qualquer novidade &lt; 20 % de uso em 30 dias entra no plano de retirada por peça (retrato → inicial; planta → grafo; chão 3D → estático)</div></div>
+    </div>
+  </section>
+
+  <!-- ===== O QUE FICA / RISCOS ===== -->
+  <section class="sec">
+    <h3>O que fica igual, e os riscos</h3>
+    <div class="grade">
+      <div class="cartao"><h4>Fica igual</h4><p>Tudo do FUNCOES.md. O layout Arquivos · Trabalho · Agentes. As quatro leis do painel v2 (o painel diz onde está apontado; Selo com nome e hora; Meia-vida; Puxar). Tokens, tipografia, motion, a Máquina, a Tela, o Supabase como peças. O protótipo v22 e o app em <code class="mono">app/</code>.</p></div>
+      <div class="cartao"><h4>O que este artefato acrescenta (e o que custou)</h4><p>Endereço, posição e rastro; a planta na parede (gemba walk); o retrato-objeto e o Perfil do agente com dono; a memória com nome; o corpo do sistema em 3D na parede; o rito de entrada em vídeo; a receita de "sala com a sua marca" e a estrutura de líder. Kit único de mídia gerada, depois dos cortes do juiz: ≈ US$ 5–7 por equipe (2 matcaps 0,3 · 3 peças 1,2 · retratos a pedido ≈ 1 · Entrada ≤ 1,8 · glifos 0,24 · som 0–0,4). Ícones (US$ 6,8 no Recraft), ata em vídeo, filme do projeto e filme de marca com Veo: cortados até existir a demo real.</p></div>
+      <div class="cartao"><h4>Riscos, com retirada</h4><p><b>Parecer enfeite</b>: a regra "material, nunca atrás de texto" e o teste com 3 pessoas; se o chão vivo distrair, vira estático. <b>Antropomorfismo</b>: agente é quadrado, pessoa é círculo; retrato é instrumento, nunca rosto; o agente nunca diz "eu sinto". <b>Efeito Buddy</b> (tirar o delight depois dói: 2.092 reações no Claude Code): o retrato pertence à pessoa, é dado dela, não se remove em versão futura. <b>Reputação vira ranking</b>: aceites só para dono e gestão, nunca na TV. <b>Parecer escritório virtual</b> (Gather): a planta é diagrama, sem avatar, sem mesa; se com 3 pessoas parecer joguinho, cai para o grafo radial. <b>Sem dado é maquete</b>: o corpo 3D e a ata só valem com a Máquina lendo o Supabase de verdade. <b>Imposto da novidade</b> (Arc: 5,5 % usavam a novidade central): % de uso medido por semana e retirada por peça. <b>Vigilância</b>: luz só para o que me toca, nunca mapa de calor de pessoas, "Conversa particular", nunca ranking. <b>Ser lido como "terminal com IA"</b>: essa categoria será dos labs; a Babel se vende como a sala e o contexto, nunca como terminal. <b>Custo de geração</b>: teto por equipe (US$ 5) e cache; nada regenera em uso. <b>Crédito da Replicate</b>: hoje < US$ 5 e 1 pedido por vez. <b>Token</b>: trocar, passou pelo chat.</p></div>
+    </div>
+  </section>
+
+  <p class="rodape"><b>Pesquisa por trás</b> (23/09/2026, 4 frentes com URL lida por achado, em <span class="mono">.deus/missao-design/pesquisa/visao-*.md</span>): o que os modelos de vídeo, imagem, 3D e áudio geram para um sistema; 25 produtos do mercado conversacional (Warp, Cursor, Claude Code, Codex, Devin, Zed, Manus, Notion, Linear, Slack…); 13 casos de liderança em 12 meses (Cursor, Lovable, Linear, Warp, Superhuman, Arc, Midjourney, Figma, Slack…); mídia gerada como DNA sem slop (Vercel Ship, Apple, Nothing, Linear, Genie 3, Odyssey). "Não vi" não é "não existe".<br><b>Gerado hoje</b> (23/09/2026, conta theusveyra, seed 19770815): b-A1, b-A2, b-N, orbe-kf, chao-kf, cofre-iso (google/nano-banana-2) · b-entrada, orbe-pensando, chao-vivo, ui-viva (wan-video/wan-2.7-i2v) · retrato-lupa, retrato-fone, retrato-chave (google/nano-banana-2) · cofre-recorte e os 3 recortes de retrato (bria/remove-background) · cubo-kf (google/nano-banana-2) · chegada-lupa (wan-video/wan-2.7-i2v, cubo → lupa, 42 s) · cofre-3d (firtoz/trellis) · 8 ícones (recraft-ai/recraft-v4-svg). 28 predições, ≈ US$ 3,8. Brutos e MANIFESTO.jsonl em <span class="mono">docs/design/assets/raw/</span>. Documentos: CONCEITO.md · tokens.css · MAQUINA_PECAS.md · SUPABASE_PECAS.md · TELA_CONSTRUTOR.md · GERACAO_REPLICATE.md · ESTUDO_DESIGN_2030.md. Missão DEUS em <span class="mono">.deus/missao-design/</span>.</p>
+</div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  const root=document.documentElement, tema=$('#tema');
+  function lerLS(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function gravLS(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function aplicar(on){root.classList.toggle('claro',on);root.setAttribute('data-theme',on?'light':'dark');tema.setAttribute('aria-pressed',on)}
+  aplicar(lerLS('bc-visao-tema')==='claro');
+  tema.addEventListener('click',()=>{const on=root.getAttribute('data-theme')!=='light';aplicar(on);gravLS('bc-visao-tema',on?'claro':'noite')});
+  const vb=$('#v-b'); $('#rever').addEventListener('click',()=>{vb.currentTime=0;vb.play().catch(()=>{})});
+  const chao=$('#v-chao'), btn=$('#btn-parar'); let parado=false;
+  btn.addEventListener('click',()=>{parado=!parado; if(parado){chao.pause();btn.textContent='a sala voltou a trabalhar';} else {chao.play().catch(()=>{});btn.textContent='parar a sala';}});
+  const rel=$('#rel'); let s=9*3600+41*60+7; setInterval(()=>{s++;const h=String(Math.floor(s/3600)%24).padStart(2,'0'),m=String(Math.floor(s%3600/60)).padStart(2,'0'),x=String(s%60).padStart(2,'0');rel.textContent=h+':'+m+':'+x},1000);
+  // vídeos que não existirem (ex.: 3D) escondem o cartão da mídia sem quebrar a página
+  document.querySelectorAll('video').forEach(v=>v.addEventListener('error',()=>{const m=v.closest('.midia'); if(m) m.style.display='none';},true));
+  // autoplay só na vista (e pausa fora dela): menos CPU, e o navegador não nega o play
+  const reduz=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduz && 'IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target; if(v===chao&&parado)return; if(e.isIntersecting){v.play().catch(()=>{});} else {v.pause();}}),{threshold:.2});
+    document.querySelectorAll('video[autoplay]').forEach(v=>io.observe(v));
+  }
+})();
+</script>

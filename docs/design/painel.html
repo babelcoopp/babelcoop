@@ -1,0 +1,966 @@
+<title>Babel Coop · Instrumento</title>
+<meta name="description" content="Painel do design novo do Babel Coop: Arquivos, Trabalho e Agentes como um instrumento calmo, com Selo, Meia-vida, Puxar, a Máquina e a Tela.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
+<style>
+/* ===== tokens (docs/design/tokens.css, resumidos) ===== */
+:root{
+  color-scheme:dark;
+  --s0:#060b16;--s1:#0b1320;--s2:#161e2d;--s3:#212a3b;--obsidiana:#0a0713;
+  --linha:#4d5564;--linha-fraca:rgba(215,228,251,.09);--pontos:rgba(255,255,255,.025);--hairline-peca:#506b94;
+  --texto:#d7e4fb;--texto-90:#c3cfe5;--apagado:#a8b8d5;--fraco:#6c7b96;--latte:#fff8e7;--latte-88:rgba(255,248,231,.88);
+  --t0:#2ad5e5;--t1:#7ba4f0;--t2:#a376e9;--ok:#7fd6a6;--atencao:#f0b35a;--alarme:#ff6b6b;--ouro:#f5c76a;
+  --p-carla:#f69a9a;--p-davi:#57cebe;--p-rita:#d0a3ea;--p-theus:#7dbdfa;--p-ana:#b1c16d;
+  --fonte-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fonte-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fonte-fala:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --ease-saida:cubic-bezier(.2,0,0,1);--ease-heroi:cubic-bezier(.16,1,.3,1);
+  --mov-toque:120ms;--mov-padrao:180ms;--mov-linha:240ms;
+  --mv-curta:6;
+  --tela-medida:#ffb1c8;
+}
+:root[data-theme="light"],:root.tema-claro{
+  color-scheme:light;
+  --s0:#fff8e7;--s1:#ffffff;--s2:#f3ecd9;--s3:#e9e0c9;--obsidiana:#2a2236;
+  --linha:#b9b09a;--linha-fraca:rgba(6,11,22,.10);--pontos:rgba(6,11,22,.06);--hairline-peca:#7d7a85;
+  --texto:#060b16;--texto-90:#1c2331;--apagado:#4a5568;--fraco:#7b8494;--latte:#060b16;--latte-88:rgba(6,11,22,.88);
+  --t0:#0e8fa0;--t1:#3a63c2;--t2:#6d3fb8;--ok:#1f8a58;--atencao:#b06a00;--alarme:#c8323a;--ouro:#9a6b00;--tela-medida:#b4004e;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--s0);color:var(--texto);font:400 15px/1.5 var(--fonte-ui);padding-block:0 48px;-webkit-font-smoothing:antialiased}
+a{color:var(--t0)}
+kbd{font:500 11px/1 var(--fonte-mono);background:var(--s2);border:1px solid var(--linha);border-bottom-width:2px;border-radius:4px;padding:2px 5px;color:var(--texto-90)}
+.mono{font-family:var(--fonte-mono);font-variant-numeric:tabular-nums}
+.rotulo{font:500 11px/1 var(--fonte-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco)}
+.fala{font-family:var(--fonte-fala);font-weight:500;color:var(--latte-88)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:1.5px solid var(--t0);outline-offset:2px}
+
+/* ===== página ===== */
+.pg{max-width:1280px;margin:0 auto;padding-inline:16px}
+.cabeca{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0 8px;border-bottom:1px solid var(--linha)}
+.cabeca .b{display:flex;align-items:center;gap:10px}
+.cabeca .b svg{width:18px;height:18px}
+.cabeca h1{font:500 15px/1 var(--fonte-ui);margin:0;letter-spacing:.01em}
+.cabeca .meta{font:400 12px/1 var(--fonte-mono);color:var(--fraco)}
+.controles{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid var(--linha);border-radius:4px;font:500 11px/1 var(--fonte-mono);color:var(--texto-90);white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--t0);color:var(--t0)}
+.chip:hover{background:var(--s2)}
+.intro{padding:20px 0 8px;max-width:72ch}
+.intro p{margin:0 0 8px;color:var(--texto-90)}
+.intro .tese{font-family:var(--fonte-fala);font-weight:500;font-size:28px;line-height:1.2;color:var(--latte-88);text-wrap:balance;margin:12px 0 16px}
+:root[data-theme="light"] .intro .tese,:root.tema-claro .intro .tese{color:var(--texto)}
+.sec{padding:28px 0 8px;border-top:1px solid var(--linha-fraca);margin-top:28px}
+.sec h2{font:600 17px/1.3 var(--fonte-ui);margin:0 0 4px}
+.sec .sub{color:var(--apagado);margin:0 0 16px;max-width:80ch;font-size:14px}
+.grade{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.cartao{background:var(--s1);border:1px solid var(--linha-fraca);border-radius:8px;padding:16px;min-width:0}
+.cartao h3{font:500 13px/1.3 var(--fonte-ui);margin:0 0 10px;color:var(--texto)}
+.cartao p{margin:8px 0 0;font-size:13px;color:var(--apagado)}
+
+/* ===== a Estação (escala para caber) ===== */
+.moldura{position:relative;width:100%;aspect-ratio:1440/860;overflow:hidden;border:1px solid var(--linha);border-radius:10px;background:var(--s0);margin-top:16px}
+.estacao{position:absolute;left:0;top:0;width:1440px;height:860px;transform-origin:0 0;display:grid;grid-template-rows:32px 1fr 24px;grid-template-columns:56px 264px 1fr 360px;background:var(--s0);color:var(--texto);font-size:13.5px}
+.topo{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--linha)}
+.topo .marca{display:flex;align-items:center;gap:8px}
+.topo .marca svg{width:16px;height:16px}
+.topo .dir{display:flex;align-items:center;gap:14px;color:var(--apagado)}
+.topo .dir .foto{width:22px;height:22px;border-radius:50%;background:var(--p-theus);color:var(--s0);font:600 10px/22px var(--fonte-mono);text-align:center}
+.ico{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linejoin:miter;stroke-linecap:butt}
+.ico16{width:16px;height:16px}
+/* barra de atividades */
+.barra{display:flex;flex-direction:column;align-items:stretch;border-right:1px solid var(--linha);padding-top:4px}
+.atv{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;color:var(--apagado);font:500 11px/1 var(--fonte-ui);border-left:2px solid transparent;position:relative}
+.atv svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5}
+.atv.ativa{color:var(--texto);border-left-color:var(--t0)}
+.atv .n{position:absolute;right:6px;top:4px;font:500 11px/1 var(--fonte-mono);color:var(--t0)}
+.barra .pe{margin-top:auto;display:flex;justify-content:center;padding:10px 0}
+.barra .pe .foto{width:22px;height:22px;border-radius:50%;background:var(--p-theus);color:var(--s0);font:600 10px/22px var(--fonte-mono);text-align:center}
+/* lateral */
+.lateral{border-right:1px solid var(--linha);display:flex;flex-direction:column;min-width:0}
+.lat-topo{height:32px;display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid var(--linha-fraca);font:500 12px/1 var(--fonte-ui);color:var(--texto-90)}
+.lat-topo .sel{margin-left:auto;font:500 11px/1 var(--fonte-mono);color:var(--apagado)}
+.filtro{margin:8px 10px;height:28px;border:1px solid var(--linha-fraca);border-radius:4px;display:flex;align-items:center;padding:0 8px;color:var(--fraco);font-size:12.5px;gap:6px}
+.mudaram{padding:6px 10px 2px;display:flex;flex-direction:column;gap:4px}
+.mudaram .rotulo{margin-bottom:2px}
+.mud{display:flex;align-items:center;gap:8px;height:20px;font-size:12.5px;color:var(--texto-90)}
+.mud i{width:6px;height:6px;border-radius:50%;display:inline-block}
+.mud .h{margin-left:auto;font:400 11px/1 var(--fonte-mono);color:var(--fraco)}
+.grupo{padding:8px 0 0}
+.grupo .rotulo{padding:0 10px 4px}
+.linha{display:flex;align-items:center;gap:6px;height:24px;padding:0 10px 0 10px;font:500 13px/1 var(--fonte-ui);color:var(--texto-90);position:relative;border-left:2px solid transparent}
+.linha.rec{padding-left:26px}
+.linha svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5;flex:none;color:var(--apagado)}
+.linha .dir{margin-left:auto;display:flex;align-items:center;gap:6px}
+.linha .foto{width:14px;height:14px;border-radius:50%;font:600 8px/14px var(--fonte-mono);text-align:center;color:var(--s0)}
+.linha .pres{width:6px;height:6px;border-radius:50%;border:1px solid var(--p-davi)}
+.linha .pres.cheio{background:var(--p-davi)}
+.linha.ativa{background:var(--s2)}
+.linha.luz{color:color-mix(in oklch,var(--texto-90),var(--t0) calc(var(--luz,0)*100%));}
+.linha.tocada{color:color-mix(in oklch,var(--texto-90),var(--p-davi) calc(var(--luz,0)*100%))}
+.selo{width:16px;height:16px;border-radius:50%;border:1.5px solid currentColor;display:inline-block;flex:none;position:relative}
+.selo.s12{width:12px;height:12px}
+.selo.aberto{border-style:dashed;border-top-color:transparent}
+.selo.eu{color:var(--atencao)}
+.selo.selado{border-style:solid;color:var(--texto-90)}
+.selo.selado::after{content:attr(data-ini);position:absolute;inset:0;font:600 7px/13px var(--fonte-mono);text-align:center;color:var(--texto-90)}
+.selo.s12.selado::after{font-size:6px;line-height:9px}
+.selo.rompido{border-style:dashed;border-top-color:transparent}
+.selo.rompido::before{content:"";position:absolute;left:-7px;top:50%;width:3px;height:3px;margin-top:-1.5px;border-radius:50%;background:var(--p-davi)}
+.mais{margin-top:auto;padding:8px 10px;border-top:1px solid var(--linha-fraca);display:flex;align-items:center;gap:8px;color:var(--apagado);font-size:12.5px}
+.mais b{font:500 14px/1 var(--fonte-mono);color:var(--texto-90)}
+/* meio */
+.meio{display:flex;flex-direction:column;min-width:0;background:var(--s1);border-right:1px solid var(--linha);position:relative}
+.abas{height:32px;display:flex;align-items:stretch;border-bottom:1px solid var(--linha);position:relative;background:var(--s1)}
+.aba{display:flex;align-items:center;gap:6px;padding:0 12px;font:500 12.5px/1 var(--fonte-ui);color:var(--apagado);position:relative;border-right:1px solid var(--linha-fraca)}
+.aba svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5}
+.aba.ativa{color:var(--texto)}
+.aba.ativa::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--t0)}
+.aba.tocada::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:color-mix(in oklch,transparent,var(--p-davi) calc(var(--luz,0)*100%))}
+.abas .amb{margin-left:auto;display:flex;align-items:center;padding:0 12px;font:400 11px/1 var(--fonte-mono);color:var(--fraco);gap:8px}
+.abas .amb i{color:var(--t0);font-style:normal}
+/* linha do agente pelo trilho */
+.visada{position:absolute;bottom:-1px;height:1px;left:var(--x1,0);width:var(--w,0);background:repeating-linear-gradient(90deg,var(--p-davi) 0 2px,transparent 2px 5px);opacity:var(--luz,0);pointer-events:none}
+.visada::after{content:"";position:absolute;right:0;bottom:0;width:1px;height:4px;background:var(--p-davi)}
+.cab-obj{height:40px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--linha-fraca)}
+.cab-obj .nome{font:500 14px/1 var(--fonte-ui);color:var(--texto)}
+.cab-obj .com{display:flex;margin-left:2px}
+.cab-obj .com .a{width:14px;height:14px;border-radius:50%;border:1.5px solid;margin-left:-4px;font:600 7px/11px var(--fonte-mono);text-align:center;background:var(--s1)}
+.cab-obj .com .a:first-child{margin-left:0}
+.cab-obj .verbos{margin-left:auto;display:flex;gap:2px}
+.cab-obj .verbos button{height:24px;padding:0 8px;border-radius:4px;font:500 12px/1 var(--fonte-ui);color:var(--apagado);white-space:nowrap}
+.cab-obj .okt{font:400 11px/1 var(--fonte-mono);color:var(--apagado);white-space:nowrap}
+.cab-obj .verbos button:hover{background:var(--s2);color:var(--texto)}
+.cab-obj .verbos .alt{display:inline-flex;border:1px solid var(--linha-fraca);border-radius:4px;margin-left:6px}
+.cab-obj .verbos .alt button{border-radius:0}
+.cab-obj .verbos .alt button.on{color:var(--texto);background:var(--s2)}
+.conteudo{flex:1;min-height:0;position:relative;overflow:hidden}
+.vista{position:absolute;inset:0;padding:0;display:none}
+.vista.on{display:block}
+/* vista: Máquina */
+.palco{position:absolute;inset:0;background:var(--s1);background-image:radial-gradient(var(--pontos) 1px,transparent 1px);background-size:8px 8px;perspective:1400px}
+.bandeja{position:absolute;left:184px;top:120px;width:560px;height:250px;background:var(--s0);border:1px solid var(--hairline-peca);border-radius:10px}
+.bandeja .etq{position:absolute;left:12px;top:8px;font:500 11px/1 var(--fonte-mono);letter-spacing:.08em;color:var(--apagado);display:flex;align-items:center;gap:8px}
+.bandeja .etq i{width:3px;height:12px;background:var(--p-rita);display:inline-block}
+.peca{position:absolute;background:var(--s2);border:1px solid var(--hairline-peca);border-bottom:2px solid var(--s0);border-left:3px solid var(--pessoa,var(--p-davi));border-radius:8px;box-shadow:inset 0 1px 0 rgb(255 255 255/.06);color:var(--texto);font-size:12.5px;transition:transform 120ms var(--ease-saida),background 120ms;overflow:visible}
+.peca .cab{display:flex;align-items:center;gap:6px;padding:6px 8px;font:500 13px/1 var(--fonte-ui)}
+.peca .cab svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;color:var(--apagado)}
+.peca .cab .ini{margin-left:auto;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--pessoa,var(--p-davi));font:600 7px/13px var(--fonte-mono);text-align:center;color:var(--pessoa,var(--p-davi))}
+.peca .tec{padding:2px 8px 6px;font:500 10px/1.2 var(--fonte-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco)}
+.peca .frase{padding:0 8px 8px;font-size:11.5px;color:var(--apagado)}
+.peca.ativa{transform:translateY(-1px);background:var(--s3);border-color:var(--ok)}
+.peca.barrada{border-color:var(--alarme)}
+.peca .pino{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--s3);border:1px solid var(--hairline-peca)}
+.peca .pino.e{left:-4px;top:50%;margin-top:-3px}.peca .pino.d{right:-4px;top:50%;margin-top:-3px}.peca .pino.b{bottom:-4px;left:50%;margin-left:-3px}
+.peca.construindo{border-style:dashed;border-bottom-width:1px;box-shadow:none;background:color-mix(in oklch,var(--s1),var(--s2) 50%)}
+.peca.construindo .pino{display:none}
+.gaveta{width:176px}
+.gaveta .frente{height:24px;background:linear-gradient(180deg,var(--s3),var(--s2));border-radius:6px 6px 0 0;display:flex;align-items:center;gap:6px;padding:0 8px;transform-style:preserve-3d;transform-origin:top;transition:transform 180ms var(--ease-saida)}
+.gaveta.ativa .frente{transform:rotateX(-4deg)}
+.gaveta .frente .pux{width:16px;height:2px;background:var(--apagado);margin:0 auto}
+.gaveta .frente .cad{width:14px;height:14px;stroke:var(--texto-90);fill:var(--texto-90);stroke-width:1.5;transition:transform 120ms}
+.gaveta .frente .cad.aberto{fill:none;stroke:var(--alarme)}
+.gaveta.treme .frente .cad{animation:treme 120ms 2}
+@keyframes treme{0%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}100%{transform:translateX(0)}}
+.gaveta .campo{display:flex;align-items:center;gap:6px;height:24px;padding:0 8px 0 10px;border-left:2px solid var(--linha-fraca);font-size:12.5px;color:var(--texto-90)}
+.gaveta .campo .t{margin-left:auto;font:400 10px/1 var(--fonte-mono);color:var(--fraco)}
+.gaveta .campo.nova{opacity:0;transition:opacity 180ms var(--ease-saida)}
+.gaveta .campo.nova.on{opacity:1}
+.gaveta .campo .glifo{width:14px;height:14px;font:500 10px/14px var(--fonte-mono);color:var(--fraco);text-align:center}
+.robo{width:96px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.robo .eng{width:20px;height:20px;stroke:var(--texto-90);fill:none;stroke-width:1.5;transition:transform 180ms var(--ease-saida)}
+.robo.ativa .eng{transform:rotate(60deg)}
+.robo .led{position:absolute;right:6px;top:6px;width:6px;height:6px;border-radius:50%;background:var(--s3)}
+.robo.ativa .led{background:var(--atencao)}
+.robo .tec{padding:0;text-align:center}
+.cano{width:128px;height:24px;border:1px solid var(--hairline-peca);border-radius:12px;background:var(--s1);position:absolute;overflow:hidden}
+.cano .etq{position:absolute;left:10px;top:6px;font:500 10px/1 var(--fonte-mono);letter-spacing:.08em;color:var(--fraco)}
+.cano .bola{position:absolute;top:9px;left:-6px;width:4px;height:4px;border-radius:50%;background:var(--t0);opacity:0}
+.cano.ativa .bola{animation:cano 600ms linear forwards}
+.cano.ativa .bola:nth-child(3){animation-delay:120ms}.cano.ativa .bola:nth-child(4){animation-delay:240ms}
+@keyframes cano{0%{opacity:1;transform:translateX(0)}100%{opacity:1;transform:translateX(130px)}}
+.telap{width:176px;height:112px}
+.telap .mini{margin:8px;height:64px;background:#e9edf5;border:1px solid var(--linha-fraca);border-radius:3px;position:relative;overflow:hidden;transition:opacity 180ms}
+.telap .mini::before{content:"";position:absolute;left:8px;top:8px;width:60%;height:6px;background:#0b1320;border-radius:1px}
+.telap .mini::after{content:"";position:absolute;left:8px;top:22px;width:80%;height:3px;background:#8a93a6;box-shadow:0 8px 0 #8a93a6,0 16px 0 #b9c0cf}
+.telap.ativa .mini{opacity:.7}
+.portaria{width:152px}
+.portaria .fresta{height:4px;background:var(--s0);margin:0 8px 6px;border-radius:1px;transition:background 180ms}
+.portaria.ativa .fresta{background:var(--ok)}
+.portaria.barrada .fresta{background:var(--alarme)}
+.portaria .chips{display:flex;gap:4px;padding:0 8px 8px}
+.portaria .chips span{border:1px solid var(--linha);border-radius:4px;font:500 10px/1 var(--fonte-mono);padding:3px 5px;color:var(--apagado)}
+.porta{width:152px}
+.porta .conector{position:absolute;left:-6px;top:50%;margin-top:-5px;width:10px;height:10px;border-radius:50%;background:var(--s3);border:1px solid var(--hairline-peca)}
+.porta.ativa .conector{background:var(--ok);border-color:var(--ok)}
+.porta.barrada .conector{background:var(--alarme);border-color:var(--alarme)}
+.fios{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.fio{fill:none;stroke:var(--hairline-peca);stroke-width:2;transition:stroke 180ms}
+.fio.rel{stroke-width:1.5}
+.fio.ref{stroke-dasharray:2 3}
+.fio.dado{stroke-width:3}
+.fio.passou{stroke:var(--ok)}.fio.barrou{stroke:var(--alarme)}
+.pulso{fill:var(--ok);r:3px;opacity:0}
+.pulso.barrou{fill:var(--alarme)}
+.bolha{position:absolute;font:500 10px/1 var(--fonte-mono);color:var(--texto-90);background:var(--s2);border:1px solid var(--hairline-peca);border-radius:4px;padding:3px 6px;opacity:0;transition:opacity 180ms}
+.bolha.on{opacity:1}
+.bolha.b{color:var(--alarme)}
+.mq-barra{position:absolute;left:16px;top:12px;display:flex;gap:6px;align-items:center}
+.mq-barra .caps{height:28px;padding:0 14px;border-radius:999px;background:var(--t0);color:var(--s0);font:500 12.5px/1 var(--fonte-ui)}
+.mq-barra .caps.sec{background:transparent;color:var(--texto-90);border:1px solid var(--linha)}
+.mq-barra .ferr{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border:1px solid var(--linha-fraca);border-radius:4px;font:500 11px/1 var(--fonte-mono);color:var(--apagado)}
+.mq-barra .ferr svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.5}
+.casa-mq{position:absolute;left:0;right:0;bottom:0;height:24px;border-top:1px solid var(--linha-fraca);display:flex;align-items:center;gap:16px;padding:0 16px;font:500 11px/1 var(--fonte-mono);color:var(--apagado);background:var(--s1)}
+.casa-mq b{font-weight:500;color:var(--texto-90)}
+.narra{position:absolute;right:16px;top:12px;font:400 12px/1.4 var(--fonte-mono);color:var(--apagado);max-width:280px;text-align:right}
+.narra b{color:var(--texto-90);font-weight:500}
+/* vista: Tela */
+.tela-vista{position:absolute;inset:0;display:flex;flex-direction:column}
+.regua{height:12px;position:relative;margin:6px 16px 0;border-bottom:1px solid var(--linha)}
+.regua i{position:absolute;bottom:-1px;width:1px;height:6px;background:var(--apagado)}
+.regua i::after{content:attr(data-q);position:absolute;left:-7px;top:-14px;width:14px;height:14px;border-radius:50%;font:600 7px/12px var(--fonte-mono);text-align:center;color:var(--s0);background:var(--c)}
+.regua i.ag::after{border-radius:2px}
+.regua .cabo{position:absolute;right:0;bottom:-4px;width:8px;height:8px;border-radius:2px;background:var(--t0)}
+.prev{flex:1;margin:12px 16px 12px;background:#f6f7fb;color:#0b1320;border-radius:6px;position:relative;overflow:hidden;font-family:var(--fonte-ui)}
+.site{padding:28px 32px;display:flex;flex-direction:column;gap:14px}
+.bloco{position:relative;padding:12px 14px;border-radius:4px;border-left:3px solid transparent;transition:border-color 180ms,opacity 180ms,transform 160ms cubic-bezier(0,0,.25,1),box-shadow 80ms}
+.bloco h4{margin:0 0 4px;font:600 22px/1.15 var(--fonte-ui);color:#0b1320}
+.bloco p{margin:0;font-size:13px;color:#4a5568;max-width:52ch}
+.bloco .cta{display:inline-block;margin-top:8px;background:#0b1320;color:#fff;font:500 12px/1 var(--fonte-ui);padding:8px 12px;border-radius:4px}
+.bloco.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.bloco.cards div{background:#fff;border:1px solid #e3e6ee;border-radius:4px;padding:10px;font-size:12px;color:#4a5568}
+.bloco.cards div b{display:block;color:#0b1320;font-weight:600;margin-bottom:2px}
+.prev.porpessoa .bloco{border-left-color:var(--quem)}
+.prev.porpessoa .bloco::before{content:attr(data-nome);position:absolute;left:-3px;top:-16px;font:500 10px/1 var(--fonte-mono);color:var(--quem)}
+.prev.porpessoa .bloco[data-idade="30"]{border-left-color:color-mix(in srgb,var(--quem) 30%,transparent)}
+.bloco.hover{outline:1px solid var(--t0);outline-offset:0}
+.bloco.sel{outline:2px solid var(--t0);outline-offset:0}
+.bloco.levantado{transform:scale(1.01);opacity:.9;box-shadow:0 6px 16px rgb(0 0 0/.25);z-index:2}
+.alca{position:absolute;width:8px;height:8px;background:#fff;border:1.5px solid var(--t0);display:none;z-index:3}
+.bloco.sel .alca{display:block}
+.alca.nw{left:-4px;top:-4px}.alca.n{left:50%;margin-left:-4px;top:-4px}.alca.ne{right:-4px;top:-4px}.alca.w{left:-4px;top:50%;margin-top:-4px}.alca.e{right:-4px;top:50%;margin-top:-4px}.alca.sw{left:-4px;bottom:-4px}.alca.s{left:50%;margin-left:-4px;bottom:-4px}.alca.se{right:-4px;bottom:-4px}
+.barra-bloco{position:absolute;display:none;gap:2px;background:var(--s2);border:1px solid var(--linha);border-radius:4px;padding:2px;z-index:4;color:var(--texto-90)}
+.barra-bloco.on{display:flex}
+.barra-bloco button{height:24px;padding:0 8px;font:500 11px/1 var(--fonte-ui);border-radius:2px;color:var(--texto-90)}
+.barra-bloco button:hover{background:var(--s3)}
+.barra-bloco .ag{color:var(--t0)}
+.insercao{position:absolute;left:32px;right:32px;height:3px;background:var(--t0);border-radius:2px;display:none;z-index:3}
+.insercao.on{display:block}
+.medida{position:absolute;left:0;right:0;display:none;align-items:center;justify-content:center;pointer-events:none;z-index:3}
+.medida.on{display:flex}
+.medida::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--tela-medida)}
+.medida span{font:500 10px/1 var(--fonte-mono);color:var(--tela-medida);background:#f6f7fb;padding:1px 4px;position:relative}
+.cursor-ag{position:absolute;display:none;z-index:5;pointer-events:none;transition:left 320ms var(--ease-saida),top 320ms var(--ease-saida)}
+.cursor-ag.on{display:block}
+.cursor-ag svg{width:14px;height:14px}
+.cursor-ag .et{position:absolute;left:14px;top:12px;display:flex;align-items:center;gap:4px;font:500 11px/1 var(--fonte-mono);color:var(--s0);background:var(--p-davi);padding:2px 6px;border-radius:2px;white-space:nowrap;transition:opacity 180ms}
+.cursor-ag .et i{width:12px;height:12px;border-radius:2px;border:1.5px solid var(--s0);font:600 7px/9px var(--fonte-mono);text-align:center;font-style:normal}
+.tela-ctl{display:flex;gap:8px;align-items:center;padding:0 16px 6px;font:400 11px/1 var(--fonte-mono);color:var(--fraco)}
+.tela-ctl .chip{height:22px}
+.latencia{margin-left:auto}
+/* vista: nota */
+.nota{padding:24px 32px;max-width:60ch}
+.nota h4{font:600 17px/1.3 var(--fonte-ui);margin:0 0 10px}
+.nota p{margin:0 0 10px;color:var(--texto-90);font-size:14px}
+.nota .fala{font-size:24px;line-height:1.25;margin:16px 0}
+.vazio{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--fraco);font-size:13px}
+/* direita: agentes */
+.agentes{display:flex;flex-direction:column;min-width:0;background:var(--s0)}
+.ag-abas{height:32px;display:flex;align-items:stretch;border-bottom:1px solid var(--linha);position:relative}
+.ag-aba{display:flex;align-items:center;gap:6px;padding:0 10px;font:500 12px/1 var(--fonte-mono);color:var(--apagado);border-right:1px solid var(--linha-fraca)}
+.ag-aba.ativa{color:var(--texto)}
+.ag-aba .q{width:14px;height:14px;border-radius:2px;border:1.5px solid var(--pc,var(--p-davi));font:600 8px/11px var(--fonte-mono);text-align:center;color:var(--pc,var(--p-davi))}
+.ag-aba .anel{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--texto-90)}
+.ag-aba .anel.laco{border-color:var(--pc,var(--p-davi));border-top-color:transparent;animation:laco 1.2s linear infinite}
+.ag-aba .anel.aberto{border-top-color:transparent}
+@keyframes laco{to{transform:rotate(360deg)}}
+.ag-abas .vivo{margin-left:auto;display:flex;align-items:center;gap:6px;padding:0 10px;font:400 11px/1 var(--fonte-mono);color:var(--t0)}
+.ag-abas .vivo i{width:6px;height:6px;border-radius:50%;background:var(--t0)}
+.mostrador{height:56px;background:var(--s2);border-bottom:1px solid color-mix(in oklch,var(--linha),var(--p-davi) 12%);padding:8px 12px;display:flex;flex-direction:column;justify-content:center;gap:5px;position:relative}
+.mostrador .l1{display:flex;align-items:center;gap:8px;font:500 12px/1 var(--fonte-mono);color:var(--texto)}
+.mostrador .l1 .tipo{color:var(--fraco);font-weight:400}
+.mostrador .l2{display:flex;align-items:center;gap:8px;font:400 11px/1 var(--fonte-mono);color:var(--apagado)}
+.mostrador .com{display:flex}
+.mostrador .com i{width:14px;height:14px;border-radius:50%;border:1.5px solid;font:600 7px/11px var(--fonte-mono);text-align:center;background:var(--s2);margin-left:-4px;font-style:normal}
+.mostrador .com i:first-child{margin-left:0}
+.mostrador .estado{display:flex;align-items:center;gap:6px}
+.mostrador .estado .anel{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--texto-90);transition:border-color 180ms}
+.mostrador .estado .anel.laco{border-color:var(--p-davi);border-top-color:transparent;animation:laco 1.2s linear infinite}
+.mostrador .estado .anel.aberto{border-top-color:transparent;border-color:var(--alarme)}
+.mostrador .seguir{margin-left:auto;height:24px;padding:0 8px;border:1px solid var(--linha);border-radius:4px;font:500 11px/1 var(--fonte-mono);color:var(--texto-90)}
+.mostrador .seguir:hover{background:var(--s3)}
+.registro{flex:1;min-height:0;overflow:auto;padding:8px 12px;display:flex;flex-direction:column;gap:6px;font:400 12.5px/1.5 var(--fonte-mono);color:var(--texto-90)}
+.bloco-r{border-left:2px solid var(--linha-fraca);padding:4px 10px;position:relative}
+.bloco-r .tipo{font:500 10px/1 var(--fonte-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco);display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.bloco-r .tipo .h{margin-left:auto;letter-spacing:0;text-transform:none}
+.bloco-r.pedido{border-left-color:var(--linha)}
+.bloco-r.consulta{color:var(--apagado)}
+.bloco-r.acao{border-left-color:var(--ok)}
+.bloco-r.resultado .prova{margin-top:6px;display:flex;gap:8px;align-items:center;background:var(--s1);border:1px solid var(--linha-fraca);border-radius:4px;padding:6px}
+.bloco-r.resultado .prova .mini{width:96px;height:54px;background:#e9edf5;border-radius:2px;flex:none;position:relative}
+.bloco-r.resultado .prova .mini::before{content:"";position:absolute;left:6px;top:6px;width:50%;height:5px;background:#0b1320}
+.bloco-r.resultado .prova .mini::after{content:"";position:absolute;left:6px;top:18px;width:70%;height:3px;background:#8a93a6;box-shadow:0 7px 0 #8a93a6}
+.bloco-r.resultado .prova .selo{margin-left:auto}
+.bloco-r.espera{border-left-color:var(--atencao)}
+.bloco-r.espera .btns{display:flex;gap:6px;margin-top:6px;align-items:center}
+.bloco-r.espera .btns button{height:24px;padding:0 10px;border:1px solid var(--linha);border-radius:4px;font:500 12px/1 var(--fonte-ui);color:var(--texto);display:inline-flex;align-items:center;gap:6px}
+.bloco-r.espera .btns button.prim{border-color:var(--atencao)}
+.bloco-r.espera .btns kbd{margin-left:2px}
+.bloco-r .desfazer{position:absolute;right:6px;top:4px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--fraco);border-radius:4px}
+.bloco-r .desfazer:hover{background:var(--s2);color:var(--texto)}
+.bloco-r .desfazer svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5}
+.bloco-r.falha{border-left-color:var(--alarme)}
+.bloco-r.selado-msg{color:var(--apagado)}
+.bloco-r .luz{color:color-mix(in oklch,var(--texto-90),var(--t0) calc(var(--luz,0)*100%))}
+.comando{border-top:1px solid var(--linha);padding:6px 12px 8px;display:flex;flex-direction:column;gap:6px}
+.receitas{height:28px;display:flex;gap:6px;align-items:center}
+.receitas .chip{height:22px;border-color:var(--linha-fraca);color:var(--apagado);transition:opacity 120ms}
+.campo-c{height:36px;display:flex;align-items:center;gap:8px;border:1px solid var(--linha);border-radius:6px;padding:0 10px;font:400 12.5px/1 var(--fonte-mono);color:var(--texto)}
+.campo-c .pr{color:var(--t0)}
+.campo-c .chipp{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 6px;border:1px solid var(--linha);border-radius:4px;font:500 11px/1 var(--fonte-mono);color:var(--texto-90)}
+.campo-c .chipp svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5}
+.campo-c .verbo{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.campo-c .obj{text-decoration:underline dotted;text-underline-offset:3px;color:var(--apagado)}
+.campo-c .parar{margin-left:auto;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--fraco)}
+.campo-c .parar i{width:10px;height:10px;background:currentColor;display:block}
+/* rodapé */
+.rodape{grid-column:1/-1;border-top:1px solid var(--linha);display:flex;align-items:center;padding:0 12px;gap:0;font:500 11px/1 var(--fonte-mono);color:var(--texto-90)}
+.casa{min-width:96px;padding-right:16px;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.casa.apagada{color:transparent}
+.casa .pt{width:6px;height:6px;border-radius:50%;background:var(--p-theus)}
+.casa .rec{width:6px;height:6px;border-radius:50%;background:var(--alarme);animation:bate 1.6s ease-in-out infinite}
+@keyframes bate{50%{opacity:.25}}
+.casa.pausado{color:var(--apagado)}
+.casa.trans{margin-left:auto;min-width:0;color:color-mix(in oklch,var(--texto-90),var(--t0) calc(var(--luz,0)*100%));opacity:calc(.35 + var(--luz,0)*.65)}
+
+/* ===== demos isoladas ===== */
+.demo{display:flex;flex-direction:column;gap:12px}
+.demo .fila{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.selo-demo{display:flex;align-items:center;gap:8px;font:400 12px/1 var(--fonte-mono);color:var(--texto-90)}
+.selo-demo button{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid var(--linha);border-radius:4px;font:500 12px/1 var(--fonte-ui);color:var(--texto)}
+.selo-demo button.prim{border-color:var(--atencao)}
+.selo-demo .ok{color:var(--apagado)}
+.mv-demo .fila span{font:500 12.5px/1 var(--fonte-ui)}
+.mv-demo .lz{color:color-mix(in oklch,var(--texto-90),var(--t0) calc(var(--luz,0)*100%))}
+.mv-demo .barra-mv{height:6px;border-radius:3px;background:var(--s2);position:relative;overflow:hidden;width:100%}
+.mv-demo .barra-mv i{position:absolute;left:0;top:0;bottom:0;width:calc(var(--luz,0)*100%);background:var(--t0);transition:none}
+.mv-demo .num{font:500 12px/1 var(--fonte-mono);color:var(--apagado);min-width:70px}
+.escala{display:flex;gap:2px;height:16px;align-items:center}
+.escala i{flex:1;height:100%;border-radius:2px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.sw{border:1px solid var(--linha-fraca);border-radius:6px;overflow:hidden;font:400 11px/1.4 var(--fonte-mono);color:var(--apagado)}
+.sw i{display:block;height:36px}
+.sw span{display:block;padding:6px 8px}
+.sw b{display:block;color:var(--texto-90);font-weight:500}
+.tipo-demo{display:flex;flex-direction:column;gap:8px}
+.tipo-demo .l{display:flex;align-items:baseline;gap:12px}
+.tipo-demo .l small{font:400 11px/1 var(--fonte-mono);color:var(--fraco);min-width:120px}
+.tv{aspect-ratio:16/9;background:var(--s0);border:1px solid var(--linha);border-radius:10px;position:relative;overflow:hidden;display:grid;grid-template-columns:1.4fr 1fr;gap:16px;padding:20px;color:var(--texto)}
+.tv .proj{position:absolute;inset:0;border:3px solid var(--t0);border-radius:10px;pointer-events:none;opacity:0;transition:opacity 180ms}
+.tv.projetando .proj{opacity:1}
+.tv .proj span{position:absolute;right:14px;top:10px;font:500 12px/1 var(--fonte-mono);color:var(--t0)}
+.tv .placar{display:flex;flex-direction:column;gap:10px}
+.tv .rel{font:500 clamp(28px,6vw,64px)/1 var(--fonte-mono);font-variant-numeric:tabular-nums}
+.tv .pergunta{font-family:var(--fonte-fala);font-weight:500;font-size:clamp(20px,3.2vw,36px);line-height:1.2;color:var(--latte-88);text-wrap:balance}
+.tv .col{display:flex;flex-direction:column;gap:12px;font:400 12px/1.4 var(--fonte-mono);color:var(--apagado)}
+.tv .meta{display:flex;align-items:center;gap:10px}
+.tv .meta .an{width:28px;height:28px;border-radius:50%;border:2px solid var(--linha);position:relative;flex:none}
+.tv .meta .an::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--ouro);border-right-color:transparent;border-bottom-color:transparent;transform:rotate(45deg)}
+.tv .intens{display:flex;align-items:flex-end;gap:2px;height:10px}
+.tv .intens i{width:1px;background:var(--apagado)}
+.tv .pres{display:flex;gap:4px}
+.tv .pres i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--apagado)}
+.tv .pres i.on{background:var(--apagado)}
+.tv .evol{display:flex;flex-direction:column;gap:3px}
+.tv .evol i{height:3px;border-radius:1px;background:var(--t2)}
+.aviso-rm{font:400 12px/1.4 var(--fonte-mono);color:var(--fraco);margin-top:8px}
+.rodape-pg{margin-top:36px;padding-top:12px;border-top:1px solid var(--linha-fraca);font:400 12px/1.5 var(--fonte-mono);color:var(--fraco)}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:0ms!important}
+  .ag-aba .anel.laco,.mostrador .estado .anel.laco{animation:none}
+  .casa .rec{animation:none}
+  .cano.ativa .bola{animation:none;opacity:1;transform:translateX(60px)}
+  .gaveta.ativa .frente{transform:none}
+  .robo.ativa .eng{transform:none}
+  .gaveta.treme .frente .cad{animation:none}
+  .bloco.levantado{transform:none}
+  .cursor-ag{transition:none}
+}
+@media (max-width:760px){
+  .cabeca{flex-direction:column;align-items:flex-start}
+  .intro .tese{font-size:22px}
+}
+</style>
+
+<div class="pg">
+  <header class="cabeca">
+    <div class="b">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2v16M5 9c1.2-1.4 2.6-2.2 4.4-2.2 3 0 5.1 2.3 5.1 5.6S12.4 18 9.4 18C7.6 18 6.2 17.2 5 15.8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <h1>Babel Coop · Instrumento</h1>
+      <span class="meta">design 2030 · v2 · 23/09/2026</span>
+    </div>
+    <div class="controles">
+      <button class="chip" id="tema" aria-pressed="false">tema claro</button>
+      <button class="chip" id="densidade" aria-pressed="false">densidade compacta</button>
+      <button class="chip" id="rm" aria-pressed="false">menos movimento</button>
+    </div>
+  </header>
+
+  <section class="intro">
+    <p class="tese">Um instrumento calmo que diz sobre o que o agente age, quem consentiu o quê e o que acabou de mudar, e esfria quando nada acontece.</p>
+    <p>Esquerda: <b>Arquivos</b> (o que existe). Meio: <b>Trabalho</b> (o que está sob as mãos). Direita: <b>Agentes</b> (quem lê o objeto e age). Quatro leis e só quatro: o painel de agentes diz sempre onde está apontado; todo OK deixa nome e hora no objeto; nada tem luz fixa; o que está na frente pode ser levado ao agente. A identidade fica (o chão <span class="mono">#060b16</span>, o degradê, o b, as três famílias), mas muda de gramática: o degradê vira escala de tempo, o neon vira medidor, a serifa vira voz humana.</p>
+    <p>Tudo abaixo roda: clique em <b>Testar</b> na Máquina, arraste um bloco na Tela, dê o OK na demanda, dispare um evento e veja a luz esfriar.</p>
+  </section>
+
+  <!-- ===================== A ESTAÇÃO ===================== -->
+  <section class="sec">
+    <h2>A Estação</h2>
+    <p class="sub">Três colunas, um trilho. As abas do meio e as abas de agentes têm a mesma hairline a 32 px: é por ela que corre a linha do agente quando ele toca outro objeto. Nada anima sem dado. Aperte <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> para trocar a vista do meio (Máquina · Tela · Nota).</p>
+    <div class="moldura" id="moldura">
+      <div class="estacao" id="estacao">
+        <!-- topo -->
+        <div class="topo">
+          <div class="marca" aria-label="Babel">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2v16M5 9c1.2-1.4 2.6-2.2 4.4-2.2 3 0 5.1 2.3 5.1 5.6S12.4 18 9.4 18C7.6 18 6.2 17.2 5 15.8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </div>
+          <div class="dir">
+            <svg class="ico" viewBox="0 0 20 20" aria-label="novidades"><path d="M4 14h12l-1.5-2V8a4.5 4.5 0 0 0-9 0v4L4 14zM8.5 16.5h3"/></svg>
+            <svg class="ico" viewBox="0 0 20 20" aria-label="Tela da TV"><path d="M2 4h16v10H2zM7 17h6M10 14v3"/></svg>
+            <span class="foto" aria-label="Theus">MT</span>
+          </div>
+        </div>
+
+        <!-- barra de atividades -->
+        <nav class="barra" aria-label="atividades">
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M3 13h14M6 13a4 4 0 0 1 8 0"/></svg>Meu dia</a>
+          <a class="atv ativa"><svg viewBox="0 0 20 20"><path d="M4 2h8l4 4v12H4zM12 2v4h4"/></svg>Criar</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M3 4h14v10H3zM6 17h8"/></svg>Trabalho<span class="n">3</span></a>
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M2 3h11v8H2zM7 8h11v8H7"/></svg>Chat</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M2 3h16v11H6l-4 3zM7 7l1.5 3 3 1.5"/></svg>WhatsApp</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2"/></svg>Reunião</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M2 3h16v14H2zM5 8l3 2-3 2M10 12h4"/></svg>Terminais</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M2 6h10v10H2zM5 4h10v10M8 2h10v10"/></svg>Projetos</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M2 4c3-1 5-1 8 1 3-2 5-2 8-1v12c-3-1-5-1-8 1-3-2-5-2-8-1zM10 5v12"/></svg>Acervo</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><circle cx="5" cy="9" r="2.5"/><circle cx="10" cy="9" r="2.5"/><circle cx="15" cy="9" r="2.5"/><path d="M2 16h16"/></svg>Equipe</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M3 7h14v10H3zM3 7l2-4h10l2 4M8 10h4"/></svg>Loja</a>
+          <a class="atv"><svg viewBox="0 0 20 20"><path d="M4 16l6-6M13 4a3 3 0 0 0-4 4l-6 6 2 2 6-6a3 3 0 0 0 4-4l-2 2-2-2z"/></svg>Oficina</a>
+          <div class="pe"><span class="foto">MT</span></div>
+        </nav>
+
+        <!-- lateral: Arquivos -->
+        <aside class="lateral" aria-label="Arquivos">
+          <div class="lat-topo">Projeto · Clínicas <span class="sel">3 pessoas com você</span></div>
+          <div class="filtro"><svg class="ico16" viewBox="0 0 20 20" style="stroke:currentColor;fill:none;stroke-width:1.5"><circle cx="8.5" cy="8.5" r="5"/><path d="M12.5 12.5L17 17"/></svg>filtrar</div>
+          <div class="mudaram">
+            <span class="rotulo">mudaram por último</span>
+            <div class="mud"><i style="background:var(--t0)"></i>landing.html <span class="h">agora</span></div>
+            <div class="mud"><i style="background:var(--t1)"></i>agenda.maquina <span class="h">hoje 09:12</span></div>
+            <div class="mud"><i style="background:var(--t2)"></i>ata-22-09.md <span class="h">ontem</span></div>
+          </div>
+          <div class="grupo">
+            <span class="rotulo">Davi · você</span>
+            <div class="linha"><svg viewBox="0 0 20 20"><path d="M2 4h6l2 2h8v10H2z"/></svg>Projetos<div class="dir"><span class="pres cheio"></span></div></div>
+            <div class="linha rec ativa" id="lin-landing"><svg viewBox="0 0 20 20"><path d="M2 4h16v12H2zM2 7h16"/></svg>landing.html<div class="dir"><span class="selo s12 selado" data-ini="C"></span><span class="foto" style="background:var(--p-davi)">D</span></div></div>
+            <div class="linha rec tocada" id="lin-agenda" data-t=""><svg viewBox="0 0 20 20"><path d="M2 6h5v8H2zM8 6h5v8H8zM14 6h4v8h-4z"/></svg>agenda.maquina<div class="dir"><span class="selo s12 aberto eu"></span><span class="foto" style="background:var(--p-davi)">D</span></div></div>
+            <div class="linha rec"><svg viewBox="0 0 20 20"><path d="M4 2h12v16H4zM7 7h6M7 10h6"/></svg>proposta.md<div class="dir"><span class="foto" style="background:var(--p-davi)">D</span></div></div>
+          </div>
+          <div class="grupo">
+            <span class="rotulo">Carla</span>
+            <div class="linha rec"><svg viewBox="0 0 20 20"><path d="M4 2h12v16H4zM7 7h6M7 10h6"/></svg>ata-22-09.md<div class="dir"><span class="pres"></span><span class="foto" style="background:var(--p-carla)">C</span></div></div>
+            <div class="linha rec"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/><path d="M10 7V3M10 17v-4M13 10h4M3 10h4"/></svg>lancamento.mapa<div class="dir"><span class="selo s12 rompido"></span><span class="foto" style="background:var(--p-carla)">C</span></div></div>
+          </div>
+          <div class="grupo">
+            <span class="rotulo">Rita</span>
+            <div class="linha rec"><svg viewBox="0 0 20 20"><path d="M2 3h16v14H2zM5 6h10M5 10h6"/></svg>precos.csv<div class="dir"><span class="foto" style="background:var(--p-rita)">R</span></div></div>
+          </div>
+          <div class="mais"><b>+</b> Nota · Mapa · Quadro · Tela · Máquina · Pesquisa</div>
+        </aside>
+
+        <!-- meio: Trabalho -->
+        <main class="meio" aria-label="Trabalho">
+          <div class="abas" id="abas">
+            <div class="aba" data-v="nota"><svg viewBox="0 0 20 20"><path d="M4 2h12v16H4zM7 7h6M7 10h6"/></svg>proposta.md</div>
+            <div class="aba ativa" id="aba-landing" data-v="tela"><svg viewBox="0 0 20 20"><path d="M2 4h16v12H2zM2 7h16"/></svg>landing.html</div>
+            <div class="aba tocada" id="aba-agenda" data-v="maquina"><svg viewBox="0 0 20 20"><path d="M2 6h5v8H2zM8 6h5v8H8zM14 6h4v8h-4z"/></svg>agenda.maquina</div>
+            <div class="amb"><i>●</i> local <span>·</span> ramo <span>·</span> produção</div>
+            <div class="visada" id="visada" aria-hidden="true"></div>
+          </div>
+          <div class="cab-obj">
+            <span class="nome" id="cab-nome">landing.html</span>
+            <span class="com"><i class="a" style="border-color:var(--p-davi);color:var(--p-davi)">D</i><i class="a" style="border-color:var(--p-rita);color:var(--p-rita)">R</i></span>
+            <span class="selo s12 selado" data-ini="C" title="OK · Carla · 14:32"></span>
+            <span class="okt">OK · Carla · 14:32</span>
+            <div class="verbos">
+              <button>Projetar</button><button>Levar para a reunião</button><button>Pedir ajuda</button><button>Chamar para cá</button><button>Versões (7)</button>
+              <span class="alt" id="alt-tela"><button class="on">Site</button><button>Código</button><button>3D</button></span>
+            </div>
+          </div>
+          <div class="conteudo">
+            <!-- VISTA: MÁQUINA -->
+            <div class="vista" id="v-maquina">
+              <div class="palco">
+                <div class="mq-barra">
+                  <button class="caps" id="btn-testar">Testar</button>
+                  <button class="caps sec" id="btn-outra">como a outra empresa</button>
+                  <button class="caps sec" id="btn-preset" style="display:none">Funcionou · Salvar como preset</button>
+                  <span class="ferr" title="Ferramentas: extensões do Postgres"><svg viewBox="0 0 20 20"><path d="M4 16l6-6M13 4a3 3 0 0 0-4 4l-6 6 2 2 6-6a3 3 0 0 0 4-4l-2 2-2-2z"/></svg>vector · pg_cron · pg_net</span>
+                </div>
+                <div class="narra" id="narra">clique em <b>Testar</b>: o pedido anda pela Portaria → Porta → Gaveta → Robô → Cano → Tela</div>
+                <svg class="fios" viewBox="0 0 1024 660" preserveAspectRatio="none" id="svg-fios">
+                  <path id="f-ref" class="fio ref" d="M172 250 C 190 250, 190 200, 200 200"/>
+                  <path id="f1" class="fio" d="M172 220 C 220 220, 250 236, 300 236"/>
+                  <path id="f2" class="fio" d="M452 236 C 470 236, 470 236, 488 236"/>
+                  <path id="f3" class="fio" d="M576 300 C 576 330, 620 344, 648 344"/>
+                  <path id="f4" class="fio dado" d="M664 258 C 664 200, 700 200, 720 200"/>
+                  <path id="f5" class="fio dado" d="M848 200 C 870 200, 870 130, 890 130"/>
+                  <path id="f-rel" class="fio rel" d="M664 236 C 700 236, 700 470, 720 470"/>
+                  <circle id="pulso" class="pulso" r="3"/>
+                </svg>
+                <div class="peca portaria" id="p-portaria" style="left:20px;top:180px;--pessoa:var(--p-theus)">
+                  <div class="cab"><svg viewBox="0 0 20 20"><path d="M3 17V6h8v11M3 10h8M11 13h6"/></svg>Portaria<span class="ini">T</span></div>
+                  <div class="fresta"></div>
+                  <div class="chips"><span>dono</span><span>atendente</span></div>
+                  <div class="tec">AUTH · e-mail e senha</div>
+                  <span class="pino d"></span>
+                </div>
+                <div class="bandeja"><span class="etq"><i></i>EMPRESA · cada uma vê só o seu</span></div>
+                <div class="peca porta" id="p-porta" style="left:300px;top:200px;--pessoa:var(--p-davi)">
+                  <span class="conector"></span>
+                  <div class="cab"><svg viewBox="0 0 20 20"><path d="M6 3h10v14H6zM2 10h6M6 8l2 2-2 2"/></svg>Porta<span class="ini">D</span></div>
+                  <div class="tec">RECEBE novo agendamento</div>
+                  <div class="frase">grava em Agendamentos</div>
+                  <span class="pino d"></span>
+                </div>
+                <div class="peca gaveta" id="p-gaveta" style="left:488px;top:196px;--pessoa:var(--p-rita)">
+                  <div class="frente">
+                    <svg class="ico16" viewBox="0 0 20 20" style="stroke:var(--apagado);fill:none;stroke-width:1.5"><path d="M2 4h16v12H2zM2 10h16M8 7h4M8 13h4"/></svg>
+                    <span class="pux"></span>
+                    <svg class="cad" id="cad" viewBox="0 0 20 20"><rect x="4" y="9" width="12" height="9"/><path d="M7 9V6a3 3 0 0 1 6 0v3" fill="none"/></svg>
+                    <span class="ini" style="margin-left:4px;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--p-rita);font:600 7px/13px var(--fonte-mono);text-align:center;color:var(--p-rita)">R</span>
+                  </div>
+                  <div class="campo"><span class="glifo">¶</span>paciente<span class="t">ligação</span></div>
+                  <div class="campo"><span class="glifo">▭</span>quando<span class="t">data e hora</span></div>
+                  <div class="campo"><span class="glifo">#</span>empresa<span class="t">etiqueta</span></div>
+                  <div class="campo nova" id="campo-novo"><span class="glifo">→</span>Maria Souza · amanhã 14:30<span class="t">+1</span></div>
+                  <div class="tec" id="gav-rodape">TABELA · agendamentos · 50 linhas</div>
+                  <span class="pino e"></span><span class="pino d"></span><span class="pino b"></span>
+                </div>
+                <div class="peca robo" id="p-robo" style="left:648px;top:300px;--pessoa:var(--p-davi)">
+                  <span class="led"></span>
+                  <svg class="eng" viewBox="0 0 20 20"><path d="M10 3v2M10 15v2M3 10h2M15 10h2M5 5l1.5 1.5M13.5 13.5L15 15M15 5l-1.5 1.5M6.5 13.5L5 15"/><circle cx="10" cy="10" r="3.5"/></svg>
+                  <div class="tec">quando entra<br>manda WhatsApp</div>
+                  <span class="pino e"></span>
+                </div>
+                <div class="cano" id="p-cano" style="left:720px;top:188px"><span class="etq">AO VIVO · agendamentos</span><span class="bola"></span><span class="bola"></span><span class="bola"></span></div>
+                <div class="peca telap" id="p-tela" style="left:890px;top:80px;--pessoa:var(--p-davi)">
+                  <div class="mini"></div>
+                  <div class="cab" style="padding-top:0"><svg viewBox="0 0 20 20"><path d="M2 4h16v12H2zM2 7h16"/></svg>Agenda<span class="ini">D</span></div>
+                  <span class="pino b"></span>
+                </div>
+                <div class="peca gaveta construindo" id="p-nova" style="left:720px;top:430px;--pessoa:var(--p-davi);width:176px">
+                  <div class="frente"><svg class="ico16" viewBox="0 0 20 20" style="stroke:var(--apagado);fill:none;stroke-width:1.5"><path d="M2 4h16v12H2zM2 10h16"/></svg><span class="pux"></span></div>
+                  <div class="campo"><span class="glifo">¶</span>nome<span class="t">texto</span></div>
+                  <div class="campo"><span class="glifo">#</span>telefone<span class="t">texto</span></div>
+                  <div class="tec">em construção · migração pendente</div>
+                </div>
+                <div class="peca" id="p-cofre" style="left:20px;top:420px;width:200px;--pessoa:var(--p-theus);background:var(--obsidiana);box-shadow:inset 0 1px 0 rgb(255 255 255/.10)">
+                  <div class="cab"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14"/><circle cx="10" cy="10" r="3"/></svg>Cofre<span class="ini">T</span></div>
+                  <div class="campo" style="border:0;padding-left:8px"><i style="width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block"></i>SUPABASE_URL</div>
+                  <div class="campo" style="border:0;padding-left:8px"><i style="width:6px;height:6px;border-radius:50%;border:1px solid var(--alarme);display:inline-block"></i>ZAPI_TOKEN <span class="t" style="color:var(--alarme)">pedir ao Theus</span></div>
+                </div>
+                <div class="bolha" id="bolha-gaveta" style="left:540px;top:172px">+1 linha</div>
+                <div class="bolha" id="bolha-robo" style="left:660px;top:276px">WhatsApp enviado</div>
+                <div class="bolha b" id="bolha-barrou" style="left:470px;top:172px">0 passaram · 1 barrado pela chave: cada empresa vê só o seu</div>
+                <div class="casa-mq"><span>CASA DE MÁQUINAS</span><b>Small · 2 GB</b><span>São Paulo</span><span>backup diário · 7 dias</span><span>sem PITR</span><b>90 conexões</b><span style="margin-left:auto;color:var(--atencao)">Carteiro de teste: 2/h, só para a equipe</span></div>
+              </div>
+            </div>
+
+            <!-- VISTA: TELA -->
+            <div class="vista on" id="v-tela">
+              <div class="tela-vista">
+                <div class="regua" aria-label="versões">
+                  <i style="left:8%;--c:var(--p-davi)" data-q="D"></i><i style="left:23%;--c:var(--p-davi)" data-q="D" class="ag"></i><i style="left:41%;--c:var(--p-rita)" data-q="R"></i><i style="left:58%;--c:var(--p-carla)" data-q="C"></i><i style="left:77%;--c:var(--p-davi)" data-q="D" class="ag"></i><i style="left:92%;--c:var(--p-davi)" data-q="D" id="marca-nova"></i>
+                  <span class="cabo" title="arraste: scrubbing em corte seco"></span>
+                </div>
+                <div class="tela-ctl">
+                  <button class="chip" id="btn-porpessoa" aria-pressed="false">Ver por pessoa</button>
+                  <button class="chip" id="btn-agente-edita">Agente edita ao vivo</button>
+                  <span>arraste um bloco · duplo clique edita o texto · Alt mede</span>
+                  <span class="latencia" id="latencia"></span>
+                </div>
+                <div class="prev" id="prev">
+                  <div class="site" id="site">
+                    <div class="bloco" data-nome="Davi" data-idade="0" style="--quem:var(--p-davi)" draggable="false"><h4 contenteditable="false">Sua agenda cheia, sem telefone tocando.</h4><p>A Clínica Vida marca, confirma e lembra pelo WhatsApp. Você só atende.</p><span class="cta">Marcar horário</span><i class="alca nw"></i><i class="alca n"></i><i class="alca ne"></i><i class="alca w"></i><i class="alca e"></i><i class="alca sw"></i><i class="alca s"></i><i class="alca se"></i></div>
+                    <div class="bloco cards" data-nome="Rita" data-idade="0" style="--quem:var(--p-rita)"><div><b>Agenda</b>horários livres em tempo real</div><div><b>Lembretes</b>confirmação automática</div><div><b>Prontuário</b>tudo num lugar só</div><i class="alca nw"></i><i class="alca n"></i><i class="alca ne"></i><i class="alca w"></i><i class="alca e"></i><i class="alca sw"></i><i class="alca s"></i><i class="alca se"></i></div>
+                    <div class="bloco" data-nome="Carla" data-idade="30" style="--quem:var(--p-carla)"><h4 contenteditable="false">"Nunca mais perdi um paciente por esquecimento."</h4><p>Dra. Ana Lima · Clínica Vida</p><i class="alca nw"></i><i class="alca n"></i><i class="alca ne"></i><i class="alca w"></i><i class="alca e"></i><i class="alca sw"></i><i class="alca s"></i><i class="alca se"></i></div>
+                  </div>
+                  <div class="insercao" id="insercao"></div>
+                  <div class="medida" id="medida"><span>14 px</span></div>
+                  <div class="barra-bloco" id="barra-bloco"><button>Texto</button><button data-cmd="subir">↑</button><button data-cmd="descer">↓</button><button>Duplicar</button><button>Apagar</button><button>Cor</button><button class="ag" data-cmd="pedir">Pedir ao agente</button></div>
+                  <div class="cursor-ag" id="cursor-ag"><svg viewBox="0 0 14 14"><path d="M1 1l4.5 12 1.8-5 5-1.8z" fill="var(--p-davi)" stroke="var(--s0)" stroke-width="1"/></svg><span class="et"><i>A</i>Aurora</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VISTA: NOTA -->
+            <div class="vista" id="v-nota">
+              <div class="nota">
+                <h4>Proposta · Clínica Vida</h4>
+                <p>Agenda com confirmação automática pelo WhatsApp, lembretes 24 h antes e prontuário simples. Entrega em três semanas, em duas fases.</p>
+                <p class="fala">"O que a gente mais perde é paciente que esquece. Se resolver isso, já pagou."</p>
+                <p><span class="mono" style="font-size:11px;color:var(--fraco)">ideia falada · Reunião de 22/09 · salva por Carla</span></p>
+                <p>Fase 1: agenda e lembretes. Fase 2: prontuário e relatórios. Preço fechado por fase; primeira fase com garantia de 30 dias.</p>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- direita: Agentes -->
+        <aside class="agentes" aria-label="Agentes">
+          <div class="ag-abas">
+            <div class="ag-aba ativa" style="--pc:var(--p-davi)"><span class="q">A</span>Aurora<span class="anel laco" id="anel-aba"></span></div>
+            <div class="ag-aba" style="--pc:var(--p-davi)"><span class="q">B</span>Bento<span class="anel"></span></div>
+            <div class="ag-aba" style="--pc:var(--p-theus)"><span class="q">C</span>Clara<span class="anel aberto" style="border-color:var(--alarme)"></span></div>
+            <div class="vivo"><i></i>ao vivo</div>
+          </div>
+          <div class="mostrador" id="mostrador">
+            <div class="l1">→ <span id="most-obj">landing.html</span><span class="tipo">· tela</span></div>
+            <div class="l2">
+              <span class="com"><i style="border-color:var(--p-davi);color:var(--p-davi)">D</i><i style="border-color:var(--p-rita);color:var(--p-rita)">R</i></span>
+              <span class="estado"><span class="anel laco" id="anel-most"></span><span id="estado-txt">pensando há <span id="seg">4</span> s</span></span>
+              <button class="seguir" id="btn-seguir" style="display:none">Seguir</button>
+            </div>
+          </div>
+          <div class="registro" id="registro">
+            <div class="bloco-r pedido"><div class="tipo">pedido <span class="h">14:29</span></div>cria a landing da clínica com agenda e depoimentos</div>
+            <div class="bloco-r consulta"><div class="tipo">consulta</div>o que consultei: proposta.md · precos.csv · preset "Login com empresa"</div>
+            <div class="bloco-r"><div class="tipo">plano</div>1. herói com chamada · 2. três cartões · 3. depoimento · 4. formulário → Porta "novo agendamento"</div>
+            <div class="bloco-r acao"><div class="tipo">ação <span class="h">14:31</span></div>escrevi landing.html (86 linhas) e liguei o formulário à Porta<button class="desfazer" title="desfazer = rompe com nome e hora"><svg viewBox="0 0 20 20"><path d="M8 5L4 9l4 4M4 9h8a4 4 0 0 1 0 8h-2"/></svg></button></div>
+            <div class="bloco-r resultado"><div class="tipo">resultado</div><div class="prova"><span class="mini"></span><span style="font-size:11.5px">prévia da landing · 3 blocos · toque → código 38 ms</span><span class="selo s12 selado" data-ini="C"></span></div></div>
+            <div class="bloco-r espera" id="bloco-espera"><div class="tipo">espera <span class="h">agora</span></div>Publicar a landing em produção?<div class="btns"><button class="prim" id="btn-ok"><span class="selo aberto eu" id="selo-espera"></span>OK <kbd>s</kbd></button><button>Agora não <kbd>N</kbd></button></div></div>
+            <div class="bloco-r acao luz" id="bloco-luz" data-t="" style="display:none"><div class="tipo">ação <span class="h">agora</span></div>encaixei a gaveta Pacientes na Máquina (tracejada até a migração aplicar)</div>
+          </div>
+          <div class="comando">
+            <div class="receitas" id="receitas"><span class="chip">Explicar</span><span class="chip">Projetar</span><span class="chip">Pedir ajuda</span></div>
+            <div class="campo-c"><span class="pr">❯</span><span class="chipp" id="chip-puxado" style="display:none"><svg viewBox="0 0 20 20"><path d="M2 4h16v12H2zM2 7h16"/></svg>herói</span><span class="verbo">explica</span>&nbsp;<span class="obj">o formulário</span><span class="parar" title="parar (Esc)"><i></i></span></div>
+          </div>
+        </aside>
+
+        <!-- rodapé -->
+        <div class="rodape">
+          <div class="casa"><span class="pt"></span>disponível</div>
+          <div class="casa">3 esperando meu OK</div>
+          <div class="casa" id="casa-cron">00:12:40</div>
+          <div class="casa"><span class="rec"></span>gravando · 4 min</div>
+          <div class="casa apagada">projeção</div>
+          <div class="casa apagada">controle</div>
+          <div class="casa">⬆ v23</div>
+          <div class="casa apagada">agentes</div>
+          <div class="casa trans" id="casa-salvo" data-t="">Salvo na equipe</div>
+        </div>
+      </div>
+    </div>
+    <p class="aviso-rm">Com <span class="mono">prefers-reduced-motion</span>: o anel do agente fica aberto e parado, a luz vira três degraus, o pulso da Máquina aparece direto no destino, o cursor do agente teleporta e a etiqueta fica 3 s. Nada de informação some.</p>
+  </section>
+
+  <!-- ===================== AS QUATRO LEIS ===================== -->
+  <section class="sec">
+    <h2>As quatro leis, isoladas</h2>
+    <p class="sub">Cada uma é uma lei, não um efeito. Se confundir no teste com três pessoas, sai e o app continua inteiro: cabeçalho + três luzes no lugar da linha; os botões de hoje com "por · hora" no lugar do Selo; três degraus fixos no lugar da meia-vida; só Ctrl+Enter no lugar de arrastar.</p>
+    <div class="grade">
+      <div class="cartao demo">
+        <h3>2 · O Selo: nome e hora em todo consentimento</h3>
+        <div class="fila selo-demo" id="selo-demo">
+          <button class="prim" id="selo-btn"><span class="selo aberto eu" id="selo-anel"></span>OK <kbd>s</kbd></button>
+          <span class="ok" id="selo-txt">espera o seu OK</span>
+        </div>
+        <div class="fila selo-demo">
+          <span class="selo aberto" style="color:var(--p-carla)"></span><span>aberto · espera o OK de Carla</span>
+        </div>
+        <div class="fila selo-demo">
+          <span class="selo selado" data-ini="C"></span><span>OK · Carla · 14:32</span>
+        </div>
+        <div class="fila selo-demo">
+          <span class="selo rompido"></span><span>Rompido por Davi · 15:10 · voltou como estava</span>
+        </div>
+        <p>Um só objeto nas três colunas: a linha do arquivo, o cabeçalho do objeto, o bloco do agente. O botão é sempre texto; o anel é o ícone. Sem segurar, sem modal.</p>
+      </div>
+      <div class="cartao demo mv-demo">
+        <h3>3 · Meia-vida: a luz é a idade do evento</h3>
+        <div class="fila"><button class="chip" id="mv-btn">disparar evento</button><span class="num" id="mv-num">luz 0 %</span></div>
+        <div class="fila"><span class="lz" id="mv-nome" data-t="">agenda.maquina</span><span class="lz" id="mv-aba" data-t="">aba</span><span class="lz" id="mv-bloco" data-t="">bloco do agente</span></div>
+        <div class="barra-mv"><i id="mv-barra"></i></div>
+        <p>luz = 2^(−idade / 6 s). Um evento acende os três lugares que tocou e os três esfriam juntos. Só o que é meu, do meu projeto ou dirigido a mim acende. Substitui badge, toast e ponto pulsante.</p>
+        <div class="escala" aria-label="escala de tempo"><i style="background:var(--t0)" title="agora"></i><i style="background:var(--t1)" title="hoje"></i><i style="background:var(--t2)" title="antes"></i></div>
+        <p>O degradê da marca sobrevive só aqui: agora · hoje · antes, numa marca de 6 px, nunca em texto.</p>
+      </div>
+      <div class="cartao demo">
+        <h3>1 · O painel diz onde está apontado</h3>
+        <p>Cabeçalho de 56 px: "→ landing.html", quem está com o objeto, e o estado do agente em palavras medidas: <span class="mono">pensando há 4 s</span> · <span class="mono">terminou · 14:32</span> · <span class="mono">espera o seu OK</span>. O anel de 14 px é a única metáfora de sinal: aberto e girando = pensando; fechado = parado; aberto e parado = falhou, com o próximo passo ao lado.</p>
+        <p>Quando o agente toca outro objeto, a aba, a linha da árvore e o bloco acendem juntos; a linha tracejada corre só pela hairline das abas. O meio da pessoa nunca se move. <b>Seguir</b> é opcional e se desfaz ao abrir outra aba.</p>
+      </div>
+      <div class="cartao demo">
+        <h3>4 · Levar para o agente (Puxar)</h3>
+        <p>Arrastar qualquer seleção do meio ou linha da árvore até o ❯, ou <kbd>Ctrl</kbd> <kbd>Enter</kbd> com foco, vira um chip de contorno no campo e as receitas trocam para os verbos daquela peça (≤ 3). O campo e o cursor não mudam de lugar.</p>
+        <p>A volta: a peça do agente pousa no meio, mas se a pessoa está digitando ela espera no cabeçalho ("O agente terminou uma tabela · Enter abre") e só pousa depois de 2 s sem tecla. Sem quarta coluna, sem morph.</p>
+        <p><button class="chip" id="btn-puxar">simular: puxar o herói da landing</button></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TOKENS ===================== -->
+  <section class="sec">
+    <h2>Tokens</h2>
+    <p class="sub">A escada de superfície é a única elevação. O degradê da marca é escala de tempo. Os 11 matizes de pessoa têm a mesma luminância e só aparecem em anel, inicial, fita e luz. Contrastes calculados em APCA e WCAG; conferir num verificador antes de fixar.</p>
+    <div class="swatches">
+      <div class="sw"><i style="background:var(--s0)"></i><span><b>--s0</b>chão</span></div>
+      <div class="sw"><i style="background:var(--s1)"></i><span><b>--s1</b>meio · palco</span></div>
+      <div class="sw"><i style="background:var(--s2)"></i><span><b>--s2</b>elevado · peça</span></div>
+      <div class="sw"><i style="background:var(--s3)"></i><span><b>--s3</b>hover · frente</span></div>
+      <div class="sw"><i style="background:var(--linha)"></i><span><b>--linha</b>divisória Lc 16</span></div>
+      <div class="sw"><i style="background:var(--texto)"></i><span><b>--texto</b>Lc 89</span></div>
+      <div class="sw"><i style="background:var(--texto-90)"></i><span><b>--texto-90</b>repouso Lc 77</span></div>
+      <div class="sw"><i style="background:var(--apagado)"></i><span><b>--apagado</b>piso Lc 63</span></div>
+      <div class="sw"><i style="background:var(--fraco)"></i><span><b>--fraco</b>placeholder</span></div>
+      <div class="sw"><i style="background:var(--t0)"></i><span><b>--t0</b>agora · ao vivo</span></div>
+      <div class="sw"><i style="background:var(--t1)"></i><span><b>--t1</b>hoje</span></div>
+      <div class="sw"><i style="background:var(--t2)"></i><span><b>--t2</b>antes</span></div>
+      <div class="sw"><i style="background:var(--ok)"></i><span><b>--ok</b>passou</span></div>
+      <div class="sw"><i style="background:var(--atencao)"></i><span><b>--atencao</b>espera · disparou</span></div>
+      <div class="sw"><i style="background:var(--alarme)"></i><span><b>--alarme</b>barrou (+ ícone)</span></div>
+      <div class="sw"><i style="background:var(--ouro)"></i><span><b>--ouro</b>meta 100 % · OK</span></div>
+      <div class="sw"><i style="background:linear-gradient(90deg,#f69a9a,#efa374,#d8b260,#b1c16d,#82cb92,#57cebe,#54c9e3,#7dbdfa,#a9b0fd,#d0a3ea,#ea9bc7)"></i><span><b>pessoa 1–11</b>oklch(.78 .11 H)</span></div>
+      <div class="sw"><i style="background:var(--latte)"></i><span><b>--latte</b>fala humana · Visita</span></div>
+    </div>
+    <div class="grade" style="margin-top:16px">
+      <div class="cartao tipo-demo">
+        <h3>Três famílias, e só</h3>
+        <div class="l"><small>Plex 14 / 450 · corpo</small><span style="font:400 14px/1.45 var(--fonte-ui)">A equipe marca, confirma e lembra. Você só atende.</span></div>
+        <div class="l"><small>Plex 13,5 / 500 · nome</small><span style="font:500 13.5px/1 var(--fonte-ui)">agenda.maquina</span></div>
+        <div class="l"><small>Mono 12,5 · registro</small><span class="mono" style="font-size:12.5px">escrevi landing.html (86 linhas) · 14:31</span></div>
+        <div class="l"><small>Mono 11 / 500 · rodapé</small><span class="mono" style="font:500 11px/1 var(--fonte-mono)">00:12:40 · 3 esperando meu OK</span></div>
+        <div class="l"><small>Cormorant 24 / 500 · fala</small><span class="fala" style="font-size:24px">"Se resolver isso, já pagou."</span></div>
+        <div class="l"><small>rótulo 11 · caixa-alta</small><span class="rotulo">mudaram por último</span></div>
+      </div>
+      <div class="cartao">
+        <h3>Forma, motion, luz</h3>
+        <p>Raios concêntricos 10 → 8 → 6 → 4 → 2. Traço 1,5 px em ícones, anéis e Selo; cantos vivos, terminais retos, sem preenchimento. Alvo ≥ 24 px (48 no toque).</p>
+        <p><span class="mono">--mov-toque</span> 120 ms · <span class="mono">--mov-padrao</span> 180 ms · linha do agente 240 ms · quatro heróis (b 1,2 s · meta 800 ms · selo 400 ms · ideia 400 ms) e só. <span class="mono">cubic-bezier(.2, 0, 0, 1)</span>, nunca overshoot. Zero animação em pasta, aba, filtro, atividade, hover e ícone.</p>
+        <p>Elevação só pela escada; a paleta Ctrl K é a única sombra e o único vidro. Sem halo, sem neon permanente, sem grão, sem partículas. Som: um só ("espera"), desligado por padrão.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TV ===================== -->
+  <section class="sec">
+    <h2>A TV</h2>
+    <p class="sub">Sem botão, sem som, sem fundo que respira. A zona que gira só troca em mudança de dado. Fala humana em Cormorant ≥ 48 px. Projeção = hairline ciano nas bordas e "Projeção · Davi", estáticos. <button class="chip" id="btn-proj">projetar / encerrar</button></p>
+    <div class="tv" id="tv">
+      <div class="proj"><span>Projeção · Davi</span></div>
+      <div class="placar">
+        <span class="rotulo">quinta · 23 de setembro</span>
+        <div class="rel">09:41:07</div>
+        <p class="pergunta">O que a gente mais perde é paciente que esquece?</p>
+        <div class="meta"><span class="an"></span><span class="mono" style="color:var(--texto-90)">Clínica Vida · 7/10 · lançamento sexta</span></div>
+      </div>
+      <div class="col">
+        <div><span class="rotulo">na sala · 4 min</span><div class="intens" aria-label="memória da sala">
+          <i style="height:2px"></i><i style="height:5px"></i><i style="height:8px"></i><i style="height:6px"></i><i style="height:1px"></i><i style="height:0"></i><i style="height:3px"></i><i style="height:7px"></i><i style="height:8px"></i><i style="height:4px"></i><i style="height:2px"></i><i style="height:0"></i><i style="height:0"></i><i style="height:5px"></i><i style="height:6px"></i><i style="height:3px"></i><i style="height:8px"></i><i style="height:7px"></i><i style="height:2px"></i><i style="height:1px"></i><i style="height:4px"></i><i style="height:6px"></i><i style="height:0"></i><i style="height:2px"></i><i style="height:5px"></i>
+        </div></div>
+        <div><span class="rotulo">presença</span><div class="pres"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i></div></div>
+        <div><span class="rotulo">evolução da semana · 31 demandas</span><div class="evol"><i style="width:40%;background:var(--t2)"></i><i style="width:55%;background:var(--t2)"></i><i style="width:35%;background:var(--t1)"></i><i style="width:70%;background:var(--t1)"></i><i style="width:60%;background:var(--t1)"></i><i style="width:85%;background:var(--t0)"></i><i style="width:45%;background:var(--t0)"></i></div></div>
+        <div><span class="rotulo">tarefas livres</span>Revisar proposta da Clínica Vida · Testar Porta "novo agendamento"</div>
+      </div>
+    </div>
+  </section>
+
+  <p class="rodape-pg">docs/design/CONCEITO.md · tokens.css · MAQUINA_PECAS.md · SUPABASE_PECAS.md · TELA_CONSTRUTOR.md · GERACAO_REPLICATE.md · estudo: docs/ESTUDO_DESIGN_2030.md · missão DEUS: .deus/missao-design/</p>
+</div>
+
+<script>
+(function(){
+  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const reduz=()=>document.documentElement.classList.contains('rm')||matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- escala da Estação ---- */
+  const moldura=$('#moldura'), estacao=$('#estacao');
+  function escala(){ const w=moldura.clientWidth; estacao.style.transform='scale('+(w/1440)+')'; }
+  new ResizeObserver(escala).observe(moldura); escala();
+
+  /* ---- controles ---- */
+  const root=document.documentElement;
+  function lerLS(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function gravLS(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  const tema=$('#tema');
+  function aplicarTema(on){ root.classList.toggle('tema-claro',on); root.setAttribute('data-theme',on?'light':'dark'); tema.setAttribute('aria-pressed',on); }
+  aplicarTema(lerLS('bc-tema')==='claro');
+  tema.addEventListener('click',()=>{ const on=root.getAttribute('data-theme')!=='light'; aplicarTema(on); gravLS('bc-tema',on?'claro':'noite'); });
+  const dens=$('#densidade');
+  dens.addEventListener('click',()=>{ const on=dens.getAttribute('aria-pressed')!=='true'; dens.setAttribute('aria-pressed',on); estacao.style.fontSize=on?'13px':'13.5px'; $$('.linha',estacao).forEach(l=>l.style.height=on?'20px':'24px'); });
+  const rm=$('#rm');
+  rm.addEventListener('click',()=>{ const on=rm.getAttribute('aria-pressed')!=='true'; rm.setAttribute('aria-pressed',on); root.classList.toggle('rm',on); $$('.anel.laco').forEach(a=>a.style.animation=on?'none':''); });
+
+  /* ---- meia-vida: um rAF a 4 Hz ---- */
+  const MV=6000; const vivos=new Set();
+  function acender(el){ el.dataset.t=String(performance.now()); vivos.add(el); el.style.setProperty('--luz','1'); }
+  function passo(){
+    const agora=performance.now();
+    vivos.forEach(el=>{
+      const t=+el.dataset.t||0; let luz=Math.pow(2,-(agora-t)/MV);
+      if(reduz()) luz=luz>.6?1:luz>.2?.35:0;
+      el.style.setProperty('--luz',luz.toFixed(3));
+      if(luz<.02){ el.style.setProperty('--luz','0'); vivos.delete(el); }
+    });
+    const mvb=$('#mv-barra'); if(mvb){ const l=+getComputedStyle($('#mv-nome')).getPropertyValue('--luz')||0; mvb.style.width=(l*100)+'%'; $('#mv-num').textContent='luz '+Math.round(l*100)+' %'; }
+  }
+  setInterval(passo,250);
+  $('#mv-btn').addEventListener('click',()=>{ ['#mv-nome','#mv-aba','#mv-bloco'].forEach(s=>acender($(s))); });
+
+  /* ---- estado do agente: pensando há N s ---- */
+  let seg=4; setInterval(()=>{ if($('#anel-most').classList.contains('laco')){ seg++; $('#seg').textContent=seg; } },1000);
+
+  /* ---- vistas do meio ---- */
+  const vistas={maquina:$('#v-maquina'),tela:$('#v-tela'),nota:$('#v-nota')};
+  const nomes={maquina:'agenda.maquina',tela:'landing.html',nota:'proposta.md'};
+  const tipos={maquina:'· máquina',tela:'· tela',nota:'· nota'};
+  const receitas={maquina:['Testar','Publicar','Ver montando'],tela:['Explicar','Projetar','Pedir ajuda'],nota:['Resumir','Levar para a reunião','Pedir ajuda']};
+  function abrir(v){
+    Object.keys(vistas).forEach(k=>vistas[k].classList.toggle('on',k===v));
+    $$('.aba').forEach(a=>a.classList.toggle('ativa',a.dataset.v===v));
+    $('#cab-nome').textContent=nomes[v]; $('#most-obj').textContent=nomes[v]; $('.mostrador .tipo').textContent=tipos[v];
+    $('#alt-tela').style.display=v==='tela'?'':'none';
+    const r=$('#receitas'); r.style.opacity=0; setTimeout(()=>{ r.innerHTML=receitas[v].map(x=>'<span class="chip">'+x+'</span>').join(''); r.style.opacity=1; },120);
+  }
+  $$('.aba').forEach(a=>a.addEventListener('click',()=>abrir(a.dataset.v)));
+  document.addEventListener('keydown',e=>{ if(e.target.isContentEditable)return; if(e.key==='1')abrir('maquina'); if(e.key==='2')abrir('tela'); if(e.key==='3')abrir('nota'); });
+
+  /* ---- a linha do agente pelo trilho (o agente toca agenda.maquina) ---- */
+  const visada=$('#visada'), abaAg=$('#aba-agenda'), abas=$('#abas');
+  function agenteToca(){
+    const r=abaAg.getBoundingClientRect(), ra=abas.getBoundingClientRect(); const esc=moldura.clientWidth/1440;
+    const x1=(r.left-ra.left)/esc, w=(ra.right-r.left)/esc;  // do fim da aba até a borda direita (o cabeçalho do painel)
+    visada.style.setProperty('--x1',x1+'px'); visada.style.setProperty('--w',w+'px');
+    acender(visada); acender(abaAg); acender($('#lin-agenda'));
+    const b=$('#bloco-luz'); b.style.display=''; acender(b); $('#registro').scrollTop=1e5;
+    $('#btn-seguir').style.display=''; setTimeout(()=>$('#btn-seguir').style.display='none',7000);
+    const nova=$('#p-nova'); nova.style.display='';
+  }
+  $('#btn-seguir').addEventListener('click',()=>{ abrir('maquina'); $('#btn-seguir').style.display='none'; });
+  setTimeout(agenteToca,2500);
+
+  /* ---- Selo ---- */
+  function selar(anel,txt,ini,hora){ anel.classList.remove('aberto','eu'); anel.classList.add('selado'); anel.dataset.ini=ini; if(txt)txt.textContent='OK · '+ini+' · '+hora; }
+  $('#selo-btn').addEventListener('click',()=>{ selar($('#selo-anel'),$('#selo-txt'),'D','09:41'); $('#selo-btn').style.borderColor='var(--linha)'; });
+  $('#btn-ok').addEventListener('click',()=>{
+    selar($('#selo-espera'),null,'D','09:41'); const b=$('#bloco-espera'); b.classList.remove('espera'); b.classList.add('acao');
+    b.querySelector('.tipo').innerHTML='ação <span class="h">09:41</span>'; b.querySelector('.btns').innerHTML='<span class="selo selado" data-ini="D" id="selo-espera"></span><span class="mono" style="font-size:11px;color:var(--apagado)">OK · Davi · 09:41 · publicado v24</span>';
+    $('#anel-most').classList.remove('laco'); $('#anel-aba').classList.remove('laco'); $('#estado-txt').textContent='terminou · 09:41';
+    acender($('#casa-salvo'));
+  });
+  document.addEventListener('keydown',e=>{ if(e.key==='s'&&!e.target.isContentEditable&&$('#bloco-espera').classList.contains('espera')) $('#btn-ok').click(); });
+
+  /* ---- Puxar ---- */
+  $('#btn-puxar').addEventListener('click',()=>{ abrir('tela'); $('#chip-puxado').style.display=''; const r=$('#receitas'); r.style.opacity=0; setTimeout(()=>{ r.innerHTML=['Explicar','Projetar','Pedir ajuda'].map(x=>'<span class="chip">'+x+'</span>').join(''); r.style.opacity=1; },120); acender($('#aba-landing')); });
+
+  /* ---- Máquina: Testar ---- */
+  const fios=['f1','f2','f3','f4','f5'];
+  const pecas=['p-porta','p-gaveta','p-robo','p-cano','p-tela'];
+  let testando=false;
+  function limpar(){ fios.forEach(id=>$('#'+id).classList.remove('passou','barrou')); pecas.concat(['p-portaria']).forEach(id=>$('#'+id).classList.remove('ativa','barrada','treme')); $$('.bolha').forEach(b=>b.classList.remove('on')); $('#campo-novo').classList.remove('on'); $('#gav-rodape').textContent='TABELA · agendamentos · 50 linhas'; $('#cad').classList.remove('aberto'); }
+  function andar(fioId,cb,barrar){
+    const fio=$('#'+fioId), p=$('#pulso'); const L=fio.getTotalLength(); const dur=reduz()?0:800+L*0.5;
+    p.classList.toggle('barrou',!!barrar); p.style.opacity=1; fio.classList.add(barrar?'barrou':'passou');
+    const t0=performance.now();
+    function q(){ const k=Math.min(1,(performance.now()-t0)/(dur||1)); const pt=fio.getPointAtLength(k*L); p.setAttribute('cx',pt.x); p.setAttribute('cy',pt.y); if(k<1) requestAnimationFrame(q); else cb(); }
+    q();
+  }
+  function testar(outra){
+    if(testando)return; testando=true; limpar(); $('#btn-preset').style.display='none';
+    const n=$('#narra');
+    const port=$('#p-portaria'); port.classList.add(outra?'barrada':'ativa'); n.innerHTML=outra?'entrou como <b>Beto, da Clínica Sorriso</b>':'entrou como <b>Ana, da Clínica Vida</b>';
+    andar('f1',()=>{ $('#p-porta').classList.add(outra?'barrada':'ativa'); n.innerHTML='a Porta recebeu <b>Maria Souza · amanhã 14:30</b>';
+      andar('f2',()=>{
+        if(outra){ $('#p-gaveta').classList.add('barrada','treme'); $('#cad').classList.add('aberto'); setTimeout(()=>$('#cad').classList.remove('aberto'),400); const p=$('#pulso'); p.style.opacity=0; $('#bolha-barrou').classList.add('on'); n.innerHTML='<b>barrado pela chave</b>: cada empresa vê só o seu'; testando=false; return; }
+        $('#p-gaveta').classList.add('ativa'); $('#campo-novo').classList.add('on'); $('#gav-rodape').textContent='TABELA · agendamentos · 50 → 51 linhas'; $('#bolha-gaveta').classList.add('on'); n.innerHTML='a linha <b>entrou na gaveta</b> Agendamentos';
+        andar('f3',()=>{ $('#p-robo').classList.add('ativa'); $('#bolha-robo').classList.add('on'); n.innerHTML='o Robô <b>disparou</b>: WhatsApp enviado';
+          andar('f4',()=>{ $('#p-cano').classList.add('ativa'); n.innerHTML='o Cano <b>avisou</b> a tela na hora';
+            andar('f5',()=>{ $('#p-tela').classList.add('ativa'); $('#pulso').style.opacity=0; n.innerHTML='<b>tudo verde</b> · a tela Agenda atualizou'; $('#btn-preset').style.display=''; testando=false;
+              setTimeout(()=>{ $('#p-cano').classList.remove('ativa'); },1200);
+            });
+          });
+        });
+      });
+    },outra);
+  }
+  $('#btn-testar').addEventListener('click',()=>testar(false));
+  $('#btn-outra').addEventListener('click',()=>testar(true));
+  $('#btn-preset').addEventListener('click',()=>{ $('#btn-preset').textContent='✓ preset "Agendamento" · OK · Davi · 09:42'; acender($('#casa-salvo')); });
+
+  /* ---- Tela: seleção, arraste, texto, medida, agente ---- */
+  const prev=$('#prev'), site=$('#site'), barra=$('#barra-bloco'), ins=$('#insercao'), med=$('#medida'), lat=$('#latencia');
+  let sel=null, arr=null;
+  function blocos(){ return $$('.bloco',site); }
+  function posBarra(b){ const r=b.getBoundingClientRect(), rp=prev.getBoundingClientRect(); const esc=moldura.clientWidth/1440; barra.style.left=((r.left-rp.left)/esc)+'px'; barra.style.top=((r.top-rp.top)/esc-32)+'px'; }
+  function selecionar(b){ blocos().forEach(x=>x.classList.remove('sel')); sel=b; if(b){ b.classList.add('sel'); barra.classList.add('on'); posBarra(b);} else barra.classList.remove('on'); }
+  blocos().forEach(b=>{
+    b.addEventListener('pointerenter',()=>{ if(!arr) b.classList.add('hover'); });
+    b.addEventListener('pointerleave',()=>b.classList.remove('hover'));
+    b.addEventListener('pointerdown',e=>{
+      if(e.target.isContentEditable||e.target.closest('.barra-bloco'))return;
+      const t0=performance.now(); const sx=e.clientX, sy=e.clientY; const esc=moldura.clientWidth/1440;
+      const lim=e.pointerType==='touch'?6:4; let levantado=false;
+      b.setPointerCapture(e.pointerId);
+      function mv(ev){
+        const dx=(ev.clientX-sx)/esc, dy=(ev.clientY-sy)/esc;
+        if(!levantado && Math.hypot(dx,dy)>=lim){ levantado=true; b.classList.add('levantado'); barra.classList.remove('on'); arr=b; }
+        if(levantado){ b.style.transform='translate('+dx+'px,'+dy+'px) scale(1.01)'; alvoIns(ev.clientY); }
+      }
+      function up(ev){
+        b.removeEventListener('pointermove',mv); b.removeEventListener('pointerup',up);
+        if(levantado){ const alvo=alvoIns(ev.clientY,true); b.style.transform=''; b.classList.remove('levantado'); ins.classList.remove('on');
+          if(alvo&&alvo.ref!==b){ flip(()=>{ if(alvo.antes) site.insertBefore(b,alvo.ref); else site.insertBefore(b,alvo.ref.nextSibling); }); const m=$('#marca-nova'); m.style.left='96%'; b.dataset.nome='Davi'; b.style.setProperty('--quem','var(--p-davi)'); b.dataset.idade='0'; }
+          arr=null; const ms=Math.round(performance.now()-t0-0); lat.textContent=''; }
+        else { selecionar(b); }
+      }
+      b.addEventListener('pointermove',mv); b.addEventListener('pointerup',up);
+    });
+    b.querySelector('h4')?.addEventListener('dblclick',e=>{ const h=e.currentTarget; h.contentEditable='plaintext-only'; h.focus(); b.style.outlineColor='var(--ok)'; h.addEventListener('blur',()=>{ h.contentEditable='false'; b.style.outlineColor=''; b.dataset.nome='Davi'; b.style.setProperty('--quem','var(--p-davi)'); },{once:true}); });
+  });
+  function alvoIns(y,soCalc){
+    const esc=moldura.clientWidth/1440; const rp=prev.getBoundingClientRect(); let melhor=null;
+    blocos().forEach(x=>{ if(x===arr)return; const r=x.getBoundingClientRect(); const meio=r.top+r.height/2; const antes=y<meio; const d=Math.abs(y-(antes?r.top:r.bottom)); if(!melhor||d<melhor.d) melhor={ref:x,antes,d,y:(antes?r.top:r.bottom)}; });
+    if(melhor&&!soCalc){ ins.style.top=((melhor.y-rp.top)/esc-8)+'px'; ins.classList.add('on'); }
+    return melhor;
+  }
+  function flip(mudar){
+    const antes=new Map(blocos().map(x=>[x,x.getBoundingClientRect().top])); mudar();
+    if(reduz()) return; const esc=moldura.clientWidth/1440;
+    blocos().forEach(x=>{ const d=(antes.get(x)-x.getBoundingClientRect().top)/esc; if(!d)return; x.style.transition='none'; x.style.transform='translateY('+d+'px)'; requestAnimationFrame(()=>{ x.style.transition='transform 200ms cubic-bezier(0,0,.25,1)'; x.style.transform=''; setTimeout(()=>x.style.transition='',220); }); });
+  }
+  prev.addEventListener('pointerdown',e=>{ if(e.target===prev||e.target===site) selecionar(null); });
+  barra.addEventListener('click',e=>{ const c=e.target.dataset.cmd; if(!sel||!c)return; if(c==='subir'&&sel.previousElementSibling) flip(()=>site.insertBefore(sel,sel.previousElementSibling)); if(c==='descer'&&sel.nextElementSibling) flip(()=>site.insertBefore(sel.nextElementSibling,sel)); if(c==='pedir'){ $('#chip-puxado').style.display=''; $('#chip-puxado').lastChild.textContent=' '+(sel.querySelector('h4')?.textContent.slice(0,18)||'cartões')+'…'; acender($('#aba-landing')); } posBarra(sel); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Alt'&&sel){ const r=sel.getBoundingClientRect(), rp=prev.getBoundingClientRect(); const esc=moldura.clientWidth/1440; med.style.top=((r.bottom-rp.top)/esc)+'px'; med.style.height='14px'; med.classList.add('on'); } if(e.key==='Escape'){ selecionar(null); } });
+  document.addEventListener('keyup',e=>{ if(e.key==='Alt') med.classList.remove('on'); });
+  $('#btn-porpessoa').addEventListener('click',e=>{ const on=e.currentTarget.getAttribute('aria-pressed')!=='true'; e.currentTarget.setAttribute('aria-pressed',on); prev.classList.toggle('porpessoa',on); });
+  /* agente edita ao vivo com a física da mão */
+  $('#btn-agente-edita').addEventListener('click',()=>{
+    abrir('tela'); const cur=$('#cursor-ag'), et=cur.querySelector('.et'); const alvo=blocos()[1]; if(!alvo)return;
+    const esc=moldura.clientWidth/1440; const rp=prev.getBoundingClientRect();
+    cur.classList.add('on'); et.style.opacity=1; cur.style.left='40px'; cur.style.top='40px';
+    const r=alvo.getBoundingClientRect(); const x=(r.left-rp.left)/esc+24, y=(r.top-rp.top)/esc+16;
+    requestAnimationFrame(()=>{ cur.style.left=x+'px'; cur.style.top=y+'px'; });
+    setTimeout(()=>{ alvo.classList.add('levantado'); alvo.style.outline='2px solid var(--p-davi)'; },reduz()?0:360);
+    setTimeout(()=>{ alvo.classList.remove('levantado'); flip(()=>site.insertBefore(alvo,site.firstElementChild)); const r2=alvo.getBoundingClientRect(); cur.style.top=((r2.top-rp.top)/esc+16)+'px'; alvo.dataset.nome='Aurora'; alvo.style.setProperty('--quem','var(--p-davi)'); },reduz()?100:560);
+    setTimeout(()=>{ alvo.style.outline=''; },1400);
+    setTimeout(()=>{ et.style.opacity=0; },3000+560);
+    const b=$('#bloco-luz'); b.style.display=''; b.lastChild.textContent='troquei o herói pelos três cartões em landing.html (Ver antes/depois · Espaço)'; acender(b); $('#registro').scrollTop=1e5; acender($('#aba-landing'));
+  });
+
+  /* ---- TV ---- */
+  $('#btn-proj').addEventListener('click',()=>$('#tv').classList.toggle('projetando'));
+
+  /* ---- cronômetro do rodapé ---- */
+  let cs=12*60+40; setInterval(()=>{ cs++; const h=String(Math.floor(cs/3600)).padStart(2,'0'), m=String(Math.floor(cs%3600/60)).padStart(2,'0'), s=String(cs%60).padStart(2,'0'); $('#casa-cron').textContent=h+':'+m+':'+s; },1000);
+})();
+</script>

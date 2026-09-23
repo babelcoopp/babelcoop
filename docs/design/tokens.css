@@ -1,0 +1,191 @@
+/* =====================================================================
+   Babel Coop · tokens de design (v2 · 23/09/2026)
+   Fonte: docs/design/CONCEITO.md §4 · MAQUINA_PECAS.md §9 · TELA_CONSTRUTOR.md §2
+   Regra: nenhum componente usa cor literal; tudo passa por estes tokens.
+   Um chão só para Estação, TV, celular e iPad (mesma física, outra escala).
+   ===================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- 1. Superfícies: a escada é a única elevação (sem box-shadow) ---- */
+  --s0: #060b16;   /* chão: laterais, topo, rodapé, TV, bandeja Empresa */
+  --s1: #0b1320;   /* meio (Trabalho), palco da Máquina */
+  --s2: #161e2d;   /* elevado: cabeçalho do painel de agentes, paleta, cartões, peças */
+  --s3: #212a3b;   /* hover, seleção, frente/pino da peça, peça ativa */
+  --obsidiana: #0a0713; /* só o Cofre */
+
+  /* ---- 2. Linhas ---- */
+  --linha: #4d5564;                       /* divisórias entre colunas · Lc 15,8 sobre --s0 */
+  --linha-fraca: rgba(215, 228, 251, .09); /* separadores internos, de propósito abaixo do limiar */
+  --pontos: rgba(255, 255, 255, .025);     /* grade de 8 px: só palco da Máquina, quadro, iPad */
+  --hairline-peca: #506b94;               /* peças e fios da Máquina · ≥ 3:1 (WCAG 1.4.11) */
+  --hairline-forte: #8fa3c8;              /* prefers-contrast: more */
+
+  /* ---- 3. Texto (APCA sobre --s0/--s1; conferir em apcacontrast.com antes de fixar) ---- */
+  --texto: #d7e4fb;      /* corpo do meio · Lc 89 */
+  --texto-90: #c3cfe5;   /* laterais, Registro, repouso da meia-vida · Lc 77 */
+  --apagado: #a8b8d5;    /* rótulos, blocos consulta/plano, piso do repouso · Lc 63 */
+  --fraco: #6c7b96;      /* placeholder, desabilitado, "Nada aberto" · Lc 32 */
+  --latte: #fff8e7;      /* fala humana em Cormorant (a 88 %) · fundo do tema Visita */
+  --latte-88: rgba(255, 248, 231, .88);
+
+  /* ---- 4. Escala de tempo: o degradê da marca vira eixo do tempo e só ---- */
+  --t0: #2ad5e5;   /* agora · ao vivo · aba ativa · foco · Lc 70 */
+  --t1: #7ba4f0;   /* hoje · "não publicado" · chip "pode mudar" · nunca texto < 18 px */
+  --t2: #a376e9;   /* antes · nunca texto < 18 px · nunca fundo/botão */
+
+  /* ---- 5. Estados ---- */
+  --ok: #7fd6a6;        /* passou · ação concluída · Lc 71 */
+  --atencao: #f0b35a;   /* espera o meu OK · disparou · sujo · Lc 68 */
+  --alarme: #ff6b6b;    /* barrou · alerta · sempre com ícone ou trilho, nunca texto sozinho */
+  --sem-dado: #5d6b78;
+  --ouro: #f5c76a;      /* chapado, só meta a 100 % e OK de quem pediu · Lc 76 */
+
+  /* ---- 6. Pessoas: 11 matizes oklch(0.78 0.11 H), escolhidas uma vez, nunca reatribuídas ---- */
+  --pessoa-1: #f69a9a;  --pessoa-2: #efa374;  --pessoa-3: #d8b260;  --pessoa-4: #b1c16d;
+  --pessoa-5: #82cb92;  --pessoa-6: #57cebe;  --pessoa-7: #54c9e3;  --pessoa-8: #7dbdfa;
+  --pessoa-9: #a9b0fd;  --pessoa-10: #d0a3ea; --pessoa-11: #ea9bc7;
+  /* uso: anel, inicial, fita de 3 px, luz de evento, borda de aba de outra pessoa, cursor do agente.
+     nunca chip cheio; sempre acompanhada de iniciais ou foto (daltonismo). */
+
+  /* ---- 7. Meia-vida (lei 3): luz = 2^(-idade/mv) · cor = color-mix(texto-90 → t0) ---- */
+  --mv-curta: 6s;     /* tecla ecoada, bloco do agente, "salvo", "recebido de X", luz de evento */
+  --mv-media: 300s;   /* presença, memória da sala, "X está no seu terminal" */
+  --mv-longa: 28800s; /* um expediente (Equipe → Regras redefine): "mudaram por último", evolução da TV */
+  --luz: 0;           /* 0..1, escrita pelo rAF a 4 Hz; ≤ 200 elementos por tela */
+
+  /* ---- 8. Tipografia: três famílias, e só ---- */
+  --fonte-ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fonte-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fonte-fala: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --peso-corpo: 450;   /* Plex Text (self-host); fallback 400 */
+  --t-11: 11px; --t-125: 12.5px; --t-13: 13px; --t-14: 14px; --t-15: 15px; --t-20: 20px; --t-34: 34px;
+  --tv-27: 27px; --tv-32: 32px; --tv-43: 43px; --tv-54: 54px; --tv-76: 76px;
+  --corpo: var(--t-14);         /* densidade confortável (padrão); compacta = 13px */
+  --linha-alt: 24px;            /* linha da árvore; compacta = 20px */
+  --entrelinha: 1.45;
+  --rotulo-tracking: .08em;     /* rótulos 11 px caixa-alta */
+
+  /* ---- 9. Forma ---- */
+  --r-janela: 10px; --r-painel: 8px; --r-cartao: 6px; --r-chip: 4px; --r-2: 2px; --r-pino: 999px;
+  --traco: 1.5px;               /* ícones, anéis, Selo */
+  --anel: 14px;                 /* estado do agente, foco, meta, ideia salva */
+  --selo: 16px;                 /* consentimento */
+  --icone-barra: 20px; --icone-arvore: 16px;
+  --alvo: 24px; --alvo-toque: 48px;
+  --esp-1: 4px; --esp-2: 8px; --esp-3: 12px; --esp-4: 16px; --esp-6: 24px; --esp-8: 32px;
+
+  /* ---- 10. Geometria da casca ---- */
+  --barra-atividades: 56px;     /* ícone 20 + rótulo 11 */
+  --lateral: 264px;             /* 208–424, passo 8 */
+  --painel-agentes: 360px;      /* 312–520, passo 8 */
+  --topo: 32px; --rodape: 24px;
+  --abas: 32px; --trilho-y: 32px;   /* a mesma hairline sob as abas do meio e da direita */
+  --cabecalho-agentes: 56px;
+  --cabecalho-objeto: 40px;
+  --receitas: 28px; --campo-comando: 36px;
+
+  /* ---- 11. Motion ---- */
+  --ease-saida: cubic-bezier(.2, 0, 0, 1);    /* sem overshoot */
+  --ease-heroi: cubic-bezier(.16, 1, .3, 1);
+  --mov-toque: 120ms;    /* hover/foco: só cor e opacidade */
+  --mov-padrao: 180ms;   /* entrada por opacidade, Selo fecha, chip aparece, crossfade na mesma aba */
+  --mov-linha: 240ms;    /* a linha do agente nasce, uma vez */
+  --mov-heroi-selo: 400ms; --mov-heroi-meta: 800ms; --mov-heroi-b: 1200ms;
+  --laco-agente: 1.2s;   /* anel em laço enquanto pensa */
+  --batida-gravando: 1.6s;
+  --espera-peca: 2s;     /* peça pousa após 2 s sem tecla */
+
+  /* ---- 12. Máquina (MAQUINA_PECAS.md §9) ---- */
+  --mq-palco: var(--s1); --mq-bandeja: var(--s0); --mq-peca: var(--s2); --mq-frente: var(--s3);
+  --mq-hairline: var(--hairline-peca); --mq-fio: var(--hairline-peca); --mq-papel: var(--linha-fraca);
+  --mq-especular: inset 0 1px 0 rgb(255 255 255 / .06);
+  --mq-especular-polido: inset 0 1px 0 rgb(255 255 255 / .10);
+  --mq-espessura: 2px;
+  --mq-passou: var(--ok); --mq-barrou: var(--alarme); --mq-disparou: var(--atencao);
+  --mq-nao-publicado: var(--t1); --mq-ao-vivo: var(--t0); --mq-selecao: var(--t0);
+  --mq-grade: 8px;
+  --mq-raio-bandeja: 10px; --mq-raio-peca: 8px; --mq-raio-frente: 6px; --mq-raio-chip: 4px;
+  --mq-pino: 6px; --mq-pino-alvo: 10px;
+  --mq-fio-fluxo: 2px; --mq-fio-relacao: 1.5px; --mq-fio-dado: 3px;
+  --mq-pulso: 6px; --mq-pulso-rastro: 24px;
+  --mq-perspectiva: 1400px;
+
+  /* ---- 13. Tela (TELA_CONSTRUTOR.md §2: números da edição visual) ---- */
+  --tela-arranque-mouse: 4px; --tela-arranque-toque: 6px; --tela-arranque-barra: 25px;
+  --tela-alca: 8px; --tela-alca-hit: 12px; --tela-alca-hit-toque: 20px;
+  --tela-hover: 1px; --tela-selecao: 2px;
+  --tela-barra-offset: 8px;
+  --tela-snap: 8px; --tela-snap-rot: 5deg;
+  --tela-duplo-clique: 450ms; --tela-toque-longo: 500ms;
+  --tela-levantar: 80ms; --tela-assentar: 160ms; --tela-irmaos: 200ms; --tela-cancelar: 200ms;
+  --tela-ease: cubic-bezier(0, 0, .25, 1);
+  --tela-levantar-escala: 1.01; --tela-levantar-opacidade: .9;
+  --tela-sombra-repouso: 0 1px 2px rgb(0 0 0 / .35); --tela-sombra-levantado: 0 6px 16px rgb(0 0 0 / .45);
+  --tela-etiqueta-agente: 3000ms; --tela-cursor-agente: 60000ms;
+  --tela-medida: #ffb1c8;        /* cor de medida (Alt), Lc ≥ 60 sobre --s0 */
+  --tela-guia: var(--t0);
+  --tela-regua-marca: 1px 6px;
+}
+
+/* ---------------------------------------------------------------------
+   Tema claro (Latte): a mesma fórmula, três variáveis (base, acento, contraste)
+   --------------------------------------------------------------------- */
+:root[data-theme="light"],
+:root.tema-claro {
+  color-scheme: light;
+  --s0: #fff8e7; --s1: #ffffff; --s2: #f3ecd9; --s3: #e9e0c9; --obsidiana: #2a2236;
+  --linha: #b9b09a; --linha-fraca: rgba(6, 11, 22, .10); --pontos: rgba(6, 11, 22, .06);
+  --hairline-peca: #7d7a85; --hairline-forte: #4a4650;
+  --texto: #060b16; --texto-90: #1c2331; --apagado: #4a5568; --fraco: #7b8494;
+  --latte: #060b16; --latte-88: rgba(6, 11, 22, .88);
+  --t0: #0e8fa0; --t1: #3a63c2; --t2: #6d3fb8;
+  --ok: #1f8a58; --atencao: #b06a00; --alarme: #c8323a; --ouro: #9a6b00;
+  --tela-medida: #b4004e;
+}
+
+/* ---------------------------------------------------------------------
+   Tema Ametista (TV, opcional): derivado, não paleta à parte
+   --------------------------------------------------------------------- */
+:root.tema-ametista {
+  --s0: #0b0716; --s1: #110c20; --s2: #1c162d; --s3: #27203b;
+}
+
+/* ---------------------------------------------------------------------
+   Preferências do sistema
+   --------------------------------------------------------------------- */
+@media (prefers-contrast: more) {
+  :root { --hairline-peca: var(--hairline-forte); --linha: #8fa3c8; --fraco: #9aa8bf; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root { --vidro: var(--s2); }
+}
+
+/* Meia-vida em três degraus, sem transição (substitui o 0,01 ms global) */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mov-toque: 0ms; --mov-padrao: 0ms; --mov-linha: 0ms;
+    --mov-heroi-selo: 0ms; --mov-heroi-meta: 0ms; --mov-heroi-b: 0ms;
+    --tela-levantar: 0ms; --tela-assentar: 0ms; --tela-irmaos: 0ms; --tela-cancelar: 0ms;
+  }
+  [data-t] { --luz: 0; }
+  [data-t].aceso { --luz: 1; }
+  [data-t].morno { --luz: .35; }
+}
+
+/* ---------------------------------------------------------------------
+   Utilitários mínimos (o resto é dos componentes)
+   --------------------------------------------------------------------- */
+.luz { color: color-mix(in oklch, var(--texto-90), var(--t0) calc(var(--luz) * 100%)); }
+.mono { font-family: var(--fonte-mono); font-variant-numeric: tabular-nums; }
+.fala { font-family: var(--fonte-fala); font-weight: 500; font-size: max(24px, 1em); color: var(--latte-88); }
+.rotulo { font: 500 var(--t-11)/1 var(--fonte-ui); letter-spacing: var(--rotulo-tracking); text-transform: uppercase; color: var(--fraco); }
+.anel { width: var(--anel); height: var(--anel); border-radius: 50%; border: var(--traco) solid currentColor; }
+.selo { width: var(--selo); height: var(--selo); border-radius: 50%; border: var(--traco) solid currentColor; }
+.selo.aberto { border-style: dashed; border-top-color: transparent; }        /* folga de 60° às 2 h (aproximação CSS) */
+.selo.esperando-eu { color: var(--atencao); }
+.selo.rompido { border-style: dashed; border-top-color: transparent; position: relative; }
+.selo.rompido::before { content: ""; position: absolute; left: -7px; top: 50%; width: 3px; height: 3px; margin-top: -1.5px; border-radius: 50%; background: var(--pessoa, currentColor); }
+:focus-visible { outline: var(--traco) solid var(--t0); outline-offset: 2px; }

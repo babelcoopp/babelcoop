@@ -1,0 +1,131 @@
+<title>Babel Coop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="estacao.css">
+<link rel="stylesheet" href="pecas.css">
+<link rel="stylesheet" href="tv.css">
+<link rel="stylesheet" href="ipad.css">
+<link rel="stylesheet" href="v3.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+
+<div class="app" id="app">
+
+  <!-- ===================== ESTAÇÃO (tela de cada pessoa) ===================== -->
+  <div class="estacao" id="vista-estacao" hidden>
+    <header class="e-topo">
+      <div class="e-janela" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="e-marca">
+        <img src="babel-logo.png" alt="" class="e-logo">
+        <strong>Babel Coop</strong>
+        <span class="e-marca-sub">Estação · protótipo</span>
+      </div>
+      <button class="e-comando" id="abrir-paleta" type="button">
+        <span>Buscar arquivo, comando ou acervo</span>
+        <kbd>Ctrl</kbd><kbd>K</kbd>
+      </button>
+      <div class="e-topo-dir">
+        <label class="e-vercomo" for="ver-como"><span>ver como</span><select id="ver-como"></select></label>
+        <button class="botao" id="ir-tv" type="button" title="Abre a tela da TV numa janela própria, para espelhar na TV">Tela da TV</button>
+        <button class="e-sino" id="abrir-coluna" type="button" aria-label="Novidades">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+          <span class="e-contador" id="contador" hidden>0</span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="e-atividades" id="e-atividades" aria-label="Atividades"></nav>
+    <aside class="e-lateral" id="e-lateral" aria-label="Painel lateral"></aside>
+    <div class="e-borda" data-borda="lat" role="separator" aria-orientation="vertical" aria-label="Largura da lateral" tabindex="0"></div>
+
+    <main class="e-editor">
+      <div class="e-abas" id="e-abas" role="tablist"></div>
+      <div class="e-conteudo" id="e-conteudo"></div>
+    </main>
+
+    <div class="e-borda" data-borda="term" role="separator" aria-orientation="vertical" aria-label="Largura do terminal" tabindex="0"></div>
+    <section class="e-painel" id="e-painel" aria-label="Terminal"></section>
+
+    <aside class="e-coluna" id="e-coluna" hidden aria-label="Novidades"></aside>
+    <section class="cronometro" id="cronometro" hidden aria-label="Cronômetro da demanda"></section>
+    <div class="e-toast" id="e-toast" role="status" aria-live="polite" hidden></div>
+    <footer class="e-status" id="e-status"></footer>
+    <nav class="e-abas-celular" id="e-abas-celular" aria-label="Seções"></nav>
+    <div class="e-sobre" id="e-sobre" hidden></div>
+    <input type="file" id="arq-upload" multiple hidden>
+    <input type="file" id="foto-arquivo" accept="image/*" hidden>
+  </div>
+
+  <!-- ===================== TV (tela principal) ===================== -->
+  <div class="tv" id="vista-tv" hidden>
+    <canvas class="tv-mapa" id="tv-mapa" aria-hidden="true"></canvas>
+    <div class="tv-palco">
+      <header class="tv-topo">
+        <div class="tv-marca"><img src="babel-logo.png" alt="" class="tv-logo"><span>Babel Coop</span></div>
+        <div class="tv-cronometro" id="tv-cronometro"></div>
+        <div class="tv-relogio"><span class="tv-selos" id="tv-selos"></span><span class="num" id="tv-hora">--:--</span><span id="tv-data"></span></div>
+      </header>
+      <div class="tv-corpo" id="tv-corpo"></div>
+      <footer class="tv-evento" id="tv-evento" aria-live="polite"></footer>
+      <div class="tv-rodape" id="tv-rodape"></div>
+    </div>
+    <div class="tv-projecao" id="tv-projecao" hidden></div>
+    <div class="tv-visita" id="tv-visita" hidden>
+      <img src="babel-logo.png" alt="" class="tv-visita-logo">
+      <p class="tv-visita-texto">Bem-vindos à Babel</p>
+      <p class="tv-visita-hora num" id="tv-visita-hora"></p>
+    </div>
+    <div class="tv-comemora" id="tv-comemora" hidden><canvas id="tv-confete"></canvas><p id="tv-comemora-texto"></p></div>
+    <div class="tv-sugestao" id="tv-sugestao" hidden></div>
+  </div>
+
+  <!-- ===================== iPAD (quadro no estilo Freeform) ===================== -->
+  <div class="ipad" id="vista-ipad" hidden>
+    <header class="ip-topo" id="ip-topo"></header>
+    <div class="ip-palco" id="ip-palco"></div>
+  </div>
+
+  <!-- ===================== PALETA DE COMANDOS ===================== -->
+  <div class="paleta" id="paleta" hidden>
+    <div class="paleta-caixa" role="dialog" aria-label="Paleta de comandos">
+      <input id="paleta-entrada" type="text" autocomplete="off" spellcheck="false" placeholder="Digite um comando…">
+      <div class="paleta-dica" id="paleta-dica">Enter executa · Esc fecha</div>
+      <ul class="paleta-lista" id="paleta-lista" role="listbox"></ul>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script src="util.js"></script>
+<script src="conteudos.js"></script>
+<script src="dados.js"></script>
+<script src="acervo.js"></script>
+<script src="loja.js"></script>
+<script src="acoes.js"></script>
+<script src="simulador.js"></script>
+<script src="mapa.js"></script>
+<script src="mapamental.js"></script>
+<script src="quadro.js"></script>
+<script src="editor.js"></script>
+<script src="explorador.js"></script>
+<script src="chat.js"></script>
+<script src="terminal.js"></script>
+<script src="demandas.js"></script>
+<script src="vistas-a.js"></script>
+<script src="vistas-c.js"></script>
+<script src="vistas-d.js"></script>
+<script src="vistas-b.js"></script>
+<script src="navegador.js"></script>
+<script src="maquina.js"></script>
+<script src="visual3d.js"></script>
+<script src="oficina.js"></script>
+<script src="estacao.js"></script>
+<script src="tv.js"></script>
+<script src="ipad.js"></script>
+<script src="cronometro.js"></script>
+<script src="app.js"></script>

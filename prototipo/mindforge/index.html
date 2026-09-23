@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#060b16" />
+    <title>Mapa mental · Babel Coop</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar glass" aria-label="Barra principal">
+        <button class="brand" id="homeBtn" aria-label="Início">
+          <span class="brand-mark" aria-hidden="true">M</span>
+        </button>
+        <span class="divider"></span>
+        <button class="icon-btn" id="menuBtn" aria-label="Menu do mapa" title="Menu">•••</button>
+        <span class="divider"></span>
+        <input id="mapTitle" class="map-title" value="REINO" aria-label="Título do mapa" />
+        <button class="icon-btn colorful" id="themeBtn" aria-label="Tema" title="Tema">✣</button>
+        <button class="icon-btn" id="searchBtn" aria-label="Buscar" title="Buscar (Ctrl+F)">⌕</button>
+      </header>
+
+      <header class="actions glass" aria-label="Ações do mapa">
+        <button class="icon-btn" id="undoBtn" title="Desfazer (Ctrl+Z)">↶</button>
+        <button class="icon-btn" id="redoBtn" title="Refazer (Ctrl+Shift+Z)">↷</button>
+        <span class="divider"></span>
+        <button class="icon-btn" id="historyBtn" title="Centralizar mapa">◴</button>
+        <span class="divider"></span>
+        <button class="icon-btn" id="exportBtn" title="Exportar">⇩</button>
+        <button class="icon-btn" id="presentBtn" title="Apresentar">▻</button>
+        <button class="primary-btn" id="shareBtn">Compartilhar <span>⌄</span></button>
+        <div class="avatar" title="Você">TS</div>
+      </header>
+
+      <div class="search-panel glass" id="searchPanel" hidden>
+        <span>⌕</span>
+        <input id="searchInput" placeholder="Buscar no mapa…" autocomplete="off" />
+        <small id="searchCount"></small>
+        <button class="icon-btn small" id="closeSearch" aria-label="Fechar">×</button>
+      </div>
+
+      <aside class="toolbox glass" id="toolbox" aria-label="Ferramentas">
+        <button class="tool active" data-tool="select" title="Selecionar (V)">↖</button>
+        <button class="tool" id="addChildBtn" title="Adicionar filho (Tab)">＋</button>
+        <button class="tool" id="addSiblingBtn" title="Adicionar irmão (Enter)">⇥</button>
+        <span class="divider horizontal"></span>
+        <button class="tool" id="foldBtn" title="Recolher/expandir ramo">⊟</button>
+        <button class="tool danger" id="deleteBtn" title="Excluir (Delete)">⌫</button>
+      </aside>
+
+      <main id="viewport" tabindex="0" aria-label="Editor de mapa mental">
+        <div id="world">
+          <svg id="connections" aria-hidden="true"></svg>
+          <div id="nodes"></div>
+        </div>
+        <div class="empty-hint" id="emptyHint" hidden>
+          <strong>Comece uma ideia</strong>
+          <span>Duplo clique para criar um tópico</span>
+        </div>
+      </main>
+
+      <aside class="inspector glass" id="inspector" hidden>
+        <div class="inspector-head">
+          <strong>Estilo do tópico</strong>
+          <button class="icon-btn small" id="closeInspector">×</button>
+        </div>
+        <label>Cor</label>
+        <div class="swatches" id="swatches"></div>
+        <label>Forma</label>
+        <div class="segmented">
+          <button data-shape="pill" class="active">Pílula</button>
+          <button data-shape="round">Suave</button>
+          <button data-shape="underline">Linha</button>
+        </div>
+        <label>Tamanho</label>
+        <input type="range" id="fontSize" min="11" max="24" value="14" />
+        <label class="check-row"><input type="checkbox" id="boldToggle" /> Negrito</label>
+        <label>Nota</label>
+        <textarea id="noteInput" rows="4" placeholder="Adicione contexto a este tópico…"></textarea>
+      </aside>
+
+      <section class="minimap glass" id="minimapWrap" aria-label="Minimapa">
+        <canvas id="minimap" width="155" height="92"></canvas>
+      </section>
+
+      <footer class="viewbar glass">
+        <button id="mapViewBtn">⌘ <span>Vista do mapa</span>⌄</button>
+        <span class="divider"></span>
+        <button class="icon-btn small" id="zoomOut">−</button>
+        <span id="zoomLabel">20%</span>
+        <button class="icon-btn small" id="zoomIn">＋</button>
+        <span class="divider"></span>
+        <button class="icon-btn small" id="toggleMini" title="Minimapa">◫</button>
+      </footer>
+
+      <div class="context-menu glass" id="contextMenu" hidden>
+        <button data-action="edit">✎ Editar tópico</button>
+        <button data-action="child">＋ Adicionar filho</button>
+        <button data-action="sibling">⇥ Adicionar irmão</button>
+        <button data-action="duplicate">⧉ Duplicar ramo</button>
+        <button data-action="style">◉ Formatar</button>
+        <span></span>
+        <button data-action="delete" class="danger-text">⌫ Excluir</button>
+      </div>
+
+      <dialog id="shareDialog">
+        <form method="dialog" class="modal-card">
+          <div class="modal-head">
+            <div>
+              <span class="eyebrow">COLABORAÇÃO</span>
+              <h2>Compartilhe este mapa</h2>
+            </div>
+            <button class="icon-btn" value="cancel">×</button>
+          </div>
+          <p>O link abaixo preserva o mapa no navegador atual. Para colaboração em tempo real, conecte seu próprio backend.</p>
+          <div class="link-row">
+            <input id="shareLink" readonly />
+            <button type="button" class="primary-btn" id="copyLink">Copiar link</button>
+          </div>
+          <div class="permission-row">
+            <span>🔗 Qualquer pessoa com o link</span>
+            <select aria-label="Permissão"><option>Pode visualizar</option><option>Pode editar</option></select>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog id="exportDialog">
+        <form method="dialog" class="modal-card export-card">
+          <div class="modal-head">
+            <div><span class="eyebrow">PORTABILIDADE</span><h2>Leve suas ideias com você</h2></div>
+            <button class="icon-btn" value="cancel">×</button>
+          </div>
+          <div class="export-grid">
+            <button type="button" data-export="json"><b>{ }</b><span>JSON<small>Editável e completo</small></span></button>
+            <button type="button" data-export="svg"><b>◇</b><span>SVG<small>Imagem vetorial</small></span></button>
+            <button type="button" data-export="outline"><b>≡</b><span>Texto<small>Estrutura hierárquica</small></span></button>
+            <label class="import-label"><b>↑</b><span>Importar JSON<small>Restaurar um mapa</small></span><input type="file" id="importFile" accept="application/json" hidden /></label>
+          </div>
+        </form>
+      </dialog>
+
+      <div id="toast" role="status"></div>
+      <input id="hiddenImport" type="file" accept="application/json" hidden />
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

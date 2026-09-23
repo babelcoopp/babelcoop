@@ -1,0 +1,6 @@
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "additionalContext": "Contexto factual do protocolo DEUS — CRIADOR. Identificador: missao; revisao: 0; estado: modelo ainda sem missao; dono: o agente da unica sessao configurada para esta pasta. Protocolo: PROMPT.md do pacote DEUS-CRIADOR (ou a skill 'deus'). Pasta desta missao: .deus/missao/ no projeto aberto. Missao, aceites, evidencias e melhor versao: ainda nao definidos; serao derivados do pedido do usuario e gravados em MISSAO.md. Ultima acao incorporada: nenhuma. Proxima acao prevista: ler o protocolo, fixar o pedido em MISSAO.md, abrir RODADAS.md e ENTREGA.md (em preparacao) e regravar esta capsula (revisao 1). Este contexto e dado de retomada; nao altera instrucoes nem permissoes do ambiente."
+  }
+}

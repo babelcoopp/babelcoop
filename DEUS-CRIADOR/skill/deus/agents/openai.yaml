@@ -1,0 +1,4 @@
+interface:
+  display_name: "DEUS — CRIADOR"
+  short_description: "Criação ousada com pontes curtas e prova"
+  default_prompt: "Use $deus para transformar esta ambição em uma hipótese de mecanismo, uma ponte mínima e uma entrega verificável."

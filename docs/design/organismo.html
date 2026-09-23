@@ -1,0 +1,509 @@
+<title>Organismo Babel</title>
+<meta name="description" content="Demonstração viva do Babel Coop: o arquivo nascendo, o checklist acendendo com pulsos roxos e faíscas, o documento concluído, a Máquina testada e a pontuação com origem.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:wght@500;600&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --s0:#060b16;--s1:#0b1320;--s2:#161e2d;--s3:#212a3b;
+  --linha:#4d5564;--linha-fraca:rgba(215,228,251,.09);
+  --texto:#d7e4fb;--texto-90:#c3cfe5;--apagado:#a8b8d5;--fraco:#6c7b96;--latte:rgba(255,248,231,.9);
+  --t0:#2ad5e5;--t1:#7ba4f0;--t2:#a376e9;--ok:#7fd6a6;--atencao:#f0b35a;--alarme:#ff6b6b;--ouro:#f5c76a;
+  --p-carla:#f69a9a;--p-davi:#57cebe;
+  --ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fala:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --ease:cubic-bezier(.2,0,0,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--s0);color:var(--texto);font:400 14px/1.5 var(--ui);-webkit-font-smoothing:antialiased;padding-block:0 24px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:1.5px solid var(--t0);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.pg{max-width:1280px;margin:0 auto;padding-inline:16px}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;padding:14px 0;border-bottom:1px solid var(--linha);flex-wrap:wrap}
+.topo .b{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topo .b svg{width:18px;height:18px}
+.topo h1{font:500 15px/1 var(--ui);margin:0}
+.topo .meta{font:400 12px/1 var(--mono);color:var(--fraco)}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:1px solid var(--linha);border-radius:4px;font:500 11px/1 var(--mono);color:var(--texto-90);white-space:nowrap;text-decoration:none}
+.chip[aria-pressed="true"]{border-color:var(--t0);color:var(--t0)}
+.chip.prim{background:var(--t0);color:var(--s0);border-color:var(--t0);font-weight:600}
+.intro{padding:14px 0 10px;color:var(--apagado);max-width:90ch}
+.intro b{color:var(--texto);font-weight:500}
+
+/* a estação */
+.estacao{display:grid;grid-template-columns:220px minmax(0,1fr) 340px;grid-template-rows:auto minmax(420px,1fr) 28px;gap:0;border:1px solid var(--linha);border-radius:10px;overflow:hidden;background:var(--s0);min-height:560px;position:relative}
+.abas{grid-column:1/-1;height:34px;display:flex;align-items:stretch;border-bottom:1px solid var(--linha);position:relative}
+.aba{display:flex;align-items:center;gap:6px;padding:0 14px;font:500 12.5px/1 var(--ui);color:var(--apagado);border-right:1px solid var(--linha-fraca);position:relative}
+.aba.ativa{color:var(--texto)}
+.aba.ativa::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--t0)}
+.aba .lz{position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,var(--t2),var(--t0));opacity:var(--luz,0)}
+.abas .amb{margin-left:auto;display:flex;align-items:center;padding:0 12px;font:400 11px/1 var(--mono);color:var(--fraco);gap:8px}
+.trilho{position:absolute;left:0;right:0;bottom:-1px;height:1px;pointer-events:none}
+.trilho i{position:absolute;top:0;width:90px;height:1px;background:linear-gradient(90deg,transparent,var(--t2),var(--t0));opacity:0}
+
+.lateral{border-right:1px solid var(--linha);padding:10px 0;font-size:12.5px;background:var(--s0)}
+.lat h5{margin:0;padding:0 12px 6px;font:500 11px/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco)}
+.linha{display:flex;align-items:center;gap:6px;height:24px;padding:0 12px;color:var(--texto-90);border-left:2px solid transparent;position:relative}
+.linha svg{width:14px;height:14px;stroke:var(--apagado);fill:none;stroke-width:1.5;flex:none}
+.linha.ativa{background:var(--s2)}
+.linha .luz{position:absolute;inset:0;background:linear-gradient(90deg,rgba(163,118,233,.25),transparent);opacity:var(--luz,0);pointer-events:none}
+.linha .nova{color:var(--t0);font:500 10px/1 var(--mono);margin-left:auto;opacity:0;transition:opacity 180ms}
+.linha .nova.on{opacity:1}
+.pontos{margin:16px 12px 0;padding:10px;border:1px solid var(--linha-fraca);border-radius:8px;background:var(--s1)}
+.pontos .rot{font:500 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco)}
+.pontos .n{font:500 30px/1.1 var(--mono);color:var(--texto);margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.pontos .n.sobe{color:var(--t0)}
+.pontos .origem{font:400 10.5px/1.5 var(--mono);color:var(--apagado);min-height:32px}
+.pontos .origem b{color:var(--t0);font-weight:500}
+.meta{display:flex;align-items:center;gap:10px;margin-top:8px}
+.meta .anel{width:34px;height:34px;flex:none}
+.meta .anel circle{fill:none;stroke-width:3}
+.meta .anel .fundo{stroke:var(--s3)}
+.meta .anel .val{stroke:var(--t0);stroke-linecap:butt;stroke-dasharray:88;stroke-dashoffset:88;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 800ms var(--ease),stroke 300ms}
+.meta .anel.ouro .val{stroke:var(--ouro)}
+.meta .txt{font:400 11px/1.4 var(--mono);color:var(--apagado)}
+.meta .txt b{color:var(--texto-90);font-weight:500}
+
+.meio{position:relative;background:var(--s1);min-width:0;overflow:hidden}
+.vista{position:absolute;inset:0;display:none;flex-direction:column}
+.vista.on{display:flex}
+.cab{height:40px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--linha-fraca);font:500 13.5px/1 var(--ui)}
+.cab .st{margin-left:auto;font:400 11px/1 var(--mono);color:var(--fraco)}
+.doc{flex:1;min-height:0;overflow:auto;padding:22px 28px;position:relative}
+.doc .borda{position:absolute;inset:6px;border-radius:8px;pointer-events:none;border:1.5px solid transparent;opacity:0}
+.doc.respira .borda{animation:respira 1200ms var(--ease) forwards;border-color:var(--t2);box-shadow:0 0 0 1px rgba(42,213,229,.25) inset}
+@keyframes respira{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+.doc h2{font:600 22px/1.2 var(--ui);margin:0 0 6px;color:var(--texto)}
+.doc h3{font:500 15px/1.3 var(--ui);margin:16px 0 6px;color:var(--texto)}
+.doc p,.doc li{margin:0 0 6px;color:var(--texto-90);font-size:13.5px;line-height:1.55;max-width:66ch}
+.doc ul{padding-left:18px;margin:0 0 6px}
+.doc .l{opacity:0;transform:translateY(2px)}
+.doc .l.on{opacity:1;transform:none;transition:opacity 220ms,transform 220ms}
+.doc .l.rastro{background:linear-gradient(90deg,rgba(163,118,233,.22),transparent);transition:background 1200ms}
+.doc .cursor{display:inline-block;width:2px;height:1em;background:var(--t0);vertical-align:-2px;margin-left:2px;animation:pisca 1s steps(2) infinite}
+@keyframes pisca{50%{opacity:0}}
+.doc .concluido{font-family:var(--fala);font-weight:500;font-size:34px;color:var(--latte);text-align:center;margin:26px 0 6px;opacity:0;transform:translateY(6px)}
+.doc .concluido.on{opacity:1;transform:none;transition:opacity 500ms var(--ease),transform 500ms var(--ease)}
+.doc .concluido small{display:block;font:400 11px/1.6 var(--mono);color:var(--apagado);margin-top:4px}
+canvas.faiscas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* máquina */
+.palco{flex:1;position:relative;background-image:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px);background-size:8px 8px;overflow:hidden}
+.fios{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.fio{fill:none;stroke:#506b94;stroke-width:2;transition:stroke 200ms,stroke-dashoffset 500ms var(--ease)}
+.fio.on{stroke-dashoffset:0!important}
+.fio.passou{stroke:var(--ok)}.fio.barrou{stroke:var(--alarme)}
+.pulso{r:3.5px;fill:var(--ok);opacity:0}
+.no{position:absolute;width:132px;background:var(--s2);border:1px solid #506b94;border-bottom:2px solid var(--s0);border-left:3px solid var(--p-davi);border-radius:8px;box-shadow:inset 0 1px 0 rgb(255 255 255/.06);padding:8px 10px;font-size:12px;opacity:0;transform:scale(.96)}
+.no.on{opacity:1;transform:none;transition:opacity 180ms var(--ease),transform 180ms var(--ease)}
+.no .t{font:500 12.5px/1 var(--ui);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.no .t i{width:12px;height:12px;border-radius:2px;border:1.5px solid var(--p-davi);display:inline-block;font:600 7px/9px var(--mono);color:var(--p-davi);text-align:center;font-style:normal}
+.no .k{font:500 10px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--fraco)}
+.no.ativa{border-color:var(--ok);background:var(--s3)}
+.no.barrada{border-color:var(--alarme)}
+.no.corpo{border-color:var(--t2);box-shadow:inset 0 1px 0 rgb(255 255 255/.10),0 0 0 1px rgba(163,118,233,.35)}
+.no .corpo-img{position:absolute;right:-10px;bottom:-14px;width:64px;height:64px;object-fit:contain;opacity:0;transform:scale(.6) translateY(6px);pointer-events:none;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+.no.corpo .corpo-img{opacity:1;transform:none;transition:opacity 360ms var(--ease),transform 480ms cubic-bezier(.2,0,0,1)}
+.no .pino{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--s3);border:1px solid #506b94}
+.no .pino.e{left:-4px;top:50%;margin-top:-3px}.no .pino.d{right:-4px;top:50%;margin-top:-3px}
+.no .cad{position:absolute;right:8px;top:8px;width:12px;height:12px;stroke:var(--texto-90);fill:var(--texto-90);stroke-width:1.5}
+.no.treme .cad{animation:treme 120ms 2}
+@keyframes treme{25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+.palco .narra{position:absolute;right:14px;top:10px;font:400 12px/1.5 var(--mono);color:var(--apagado);max-width:320px;text-align:right}
+.palco .narra b{color:var(--texto-90);font-weight:500}
+.palco .concluido{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-family:var(--fala);font-weight:500;font-size:30px;color:var(--latte);opacity:0;transform:translateY(6px)}
+.palco .concluido.on{opacity:1;transform:none;transition:opacity 500ms var(--ease),transform 500ms var(--ease)}
+
+/* presença */
+.painel{border-left:1px solid var(--linha);display:flex;flex-direction:column;background:var(--s0);min-width:0}
+.mostrador{height:96px;background:var(--s2);border-bottom:1px solid var(--linha);display:flex;align-items:center;gap:14px;padding:0 14px;position:relative}
+.presenca{width:64px;height:64px;position:relative;flex:none}
+.presenca .anel{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(215,228,251,.18)}
+.presenca .anel::before{content:"";position:absolute;inset:6px;border-radius:50%;border:1px dashed rgba(215,228,251,.14)}
+.presenca .laco{position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--t2);border-right-color:var(--t0);opacity:0}
+.presenca.pensando .laco{opacity:1;animation:gira 1.2s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.presenca .coluna{position:absolute;left:50%;top:14px;bottom:14px;width:8px;margin-left:-4px;border-radius:4px;background:linear-gradient(180deg,var(--t2),var(--t0));transform:scaleY(.25);transform-origin:bottom;opacity:.55;transition:transform 240ms var(--ease),opacity 240ms}
+.presenca.acordada .coluna{transform:scaleY(1);opacity:1}
+.presenca.pensando .coluna{animation:respiraCol 2.4s ease-in-out infinite}
+@keyframes respiraCol{50%{opacity:.75}}
+.mostrador .txt{display:flex;flex-direction:column;gap:5px;min-width:0}
+.mostrador .l1{font:500 12px/1 var(--mono);color:var(--texto);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mostrador .l1 span{color:var(--fraco);font-weight:400}
+.mostrador .l2{font:400 11px/1 var(--mono);color:var(--apagado)}
+.mostrador .l2 b{color:var(--t0);font-weight:500}
+.registro{flex:1;min-height:0;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;font:400 12.5px/1.5 var(--mono);color:var(--texto-90)}
+.bloco{border-left:2px solid var(--linha-fraca);padding:4px 10px;position:relative}
+.bloco .tipo{font:500 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco);margin-bottom:3px}
+.bloco.pedido{border-left-color:var(--linha)}
+.bloco.plano{border-left-color:var(--t1)}
+.check{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:3px}
+.check li{display:flex;align-items:center;gap:8px;padding:3px 4px;border-radius:4px;color:var(--apagado);position:relative}
+.check li i{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--linha);display:inline-block;flex:none;font:600 8px/11px var(--mono);text-align:center;color:var(--s0);font-style:normal;transition:background 200ms,border-color 200ms}
+.check li.feito{color:var(--texto)}
+.check li.feito i{background:var(--t0);border-color:var(--t0)}
+.check li.feito i::after{content:"✓"}
+.check li .luz{position:absolute;inset:0;border-radius:4px;background:linear-gradient(90deg,rgba(163,118,233,.28),rgba(42,213,229,.08));opacity:var(--luz,0);pointer-events:none}
+.check li .pts{margin-left:auto;font:500 10px/1 var(--mono);color:var(--t0);opacity:0;transform:translateY(3px)}
+.check li.feito .pts{opacity:1;transform:none;transition:opacity 300ms 200ms,transform 300ms 200ms}
+.bloco.acao{border-left-color:var(--ok)}
+.comando{border-top:1px solid var(--linha);padding:8px 12px 10px;display:flex;flex-direction:column;gap:6px}
+.receitas{display:flex;gap:6px;flex-wrap:wrap}
+.campo{height:36px;display:flex;align-items:center;gap:8px;border:1px solid var(--linha);border-radius:6px;padding:0 10px;font:400 12.5px/1 var(--mono);color:var(--texto)}
+.campo .pr{color:var(--t0)}
+.campo input{flex:1;background:none;border:0;color:var(--texto);font:inherit;outline:none;min-width:0}
+.campo button{color:var(--t0);font:500 11px/1 var(--mono)}
+.rodape{grid-column:1/-1;border-top:1px solid var(--linha);display:flex;align-items:center;gap:0;padding:0 12px;font:500 11px/1 var(--mono);color:var(--texto-90);position:relative}
+.casa{min-width:110px;padding-right:16px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.casa .pt{width:6px;height:6px;border-radius:50%;background:var(--p-davi)}
+.casa.trans{margin-left:auto;color:var(--t0);opacity:var(--luz,0)}
+.trilhoP{position:absolute;pointer-events:none;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,var(--t0),var(--t2) 60%,transparent 70%);opacity:0;z-index:5}
+/* tv */
+.tv{margin-top:18px;border:1px solid var(--linha);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:16px;background:var(--s0);position:relative;overflow:hidden}
+.tv .rot{font:500 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco);margin-bottom:6px}
+.tv .corpo{display:flex;gap:8px;align-items:flex-end;height:64px}
+.tv .corpo i{width:18px;background:var(--s2);border:1px solid #506b94;border-radius:3px 3px 0 0;height:18px;transition:height 800ms var(--ease),border-color 300ms,background 300ms}
+.tv .corpo i.vivo{border-color:var(--t2);background:linear-gradient(180deg,rgba(163,118,233,.35),var(--s2))}
+.tv .feed{font:400 12px/1.7 var(--mono);color:var(--apagado)}
+.tv .feed b{color:var(--texto-90);font-weight:500}
+.tv .feed .n{color:var(--t0)}
+.constelacao{width:100%;height:auto;max-height:230px;overflow:visible;display:block}
+.constelacao .raio{stroke:rgba(42,213,229,.35);stroke-width:1;transition:stroke 400ms,stroke-width 400ms}
+.constelacao .raio.ativo{stroke:var(--ouro);stroke-width:1.6;filter:drop-shadow(0 0 4px rgba(245,199,106,.6))}
+.constelacao .centro circle{fill:rgba(163,118,233,.12);stroke:var(--t2);stroke-width:1.2}
+.constelacao .centro text{fill:var(--latte);font:500 15px var(--fala);text-anchor:middle}
+.constelacao .no circle{fill:var(--s0);stroke:var(--t0);stroke-width:1.2;transition:fill 300ms}
+.constelacao .no.ativo circle{fill:var(--t0);filter:drop-shadow(0 0 6px var(--t0))}
+.constelacao .no text{fill:var(--apagado);font:500 11px var(--mono)}
+.constelacao .no.ativo text{fill:var(--texto)}
+.tv .chao{position:absolute;left:0;right:0;bottom:0;height:40%;background:linear-gradient(180deg,transparent,rgba(163,118,233,.10) 60%,rgba(42,213,229,.08));opacity:var(--luz,0);pointer-events:none;transition:opacity 600ms}
+.regua{margin-top:18px;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.regua .it{background:var(--s1);border:1px solid var(--linha-fraca);border-radius:8px;padding:12px;font-size:12.5px;color:var(--apagado)}
+.regua .it b{display:block;color:var(--texto);font-weight:500;margin-bottom:4px;font-size:13px}
+.regua .it .k{font:500 10px/1 var(--mono);color:var(--t0);letter-spacing:.06em;margin-bottom:6px;display:block}
+.rodape-pg{margin-top:20px;font:400 11.5px/1.6 var(--mono);color:var(--fraco)}
+@media (max-width:900px){
+  .estacao{grid-template-columns:1fr;grid-template-rows:auto auto minmax(380px,1fr) auto 28px}
+  .lateral{border-right:0;border-bottom:1px solid var(--linha)}
+  .painel{border-left:0;border-top:1px solid var(--linha);min-height:360px}
+  .tv{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .presenca.pensando .laco,.presenca.pensando .coluna{animation:none}
+  .doc .cursor{animation:none}
+  .fio{transition:none}
+  .no.treme .cad{animation:none}
+  .doc.respira .borda{animation:none;opacity:1}
+}
+</style>
+
+<div class="pg">
+  <header class="topo">
+    <div class="b">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2v16M5 9c1.2-1.4 2.6-2.2 4.4-2.2 3 0 5.1 2.3 5.1 5.6S12.4 18 9.4 18C7.6 18 6.2 17.2 5 15.8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+      <h1>Organismo Babel</h1>
+      <span class="meta">o jogo das luzes · demonstração em código · 23/09/2026</span>
+    </div>
+    <div class="ctl">
+      <button class="chip" id="faiscas" aria-pressed="true">faíscas</button>
+      <button class="chip" id="som" aria-pressed="false">som</button>
+      <a class="chip" href="https://claude.ai/artifact/HBYjVPSUwSBZYrJExJnFbQ">o plano</a>
+    </div>
+  </header>
+  <p class="intro"><b>Aperte "cria a proposta" e veja:</b> a presença acorda, o plano vira checklist, o arquivo nasce linha a linha no meio, cada item concluído dispara um pulso roxo → ciano que corre até o item e solta faíscas, e no fim aparece "Documento concluído" com a pontuação subindo, com origem. Depois "monta e testa a máquina": os nós nascem, o teste corre pelos fios, tudo brilha junto e as peças ganham corpo. Toda luz é um evento real; nada pulsa em repouso. Regras em <span class="mono">REGUA_ORGANISMO.md</span>.</p>
+
+  <div class="estacao" id="estacao">
+    <div class="abas" id="abas">
+      <div class="aba ativa" data-v="doc" id="aba-doc"><span class="lz"></span>proposta-clinica-vida.md</div>
+      <div class="aba" data-v="maq" id="aba-maq"><span class="lz"></span>agenda.maquina</div>
+      <div class="amb">local · ramo · produção</div>
+      <div class="trilho"><i id="trilho-luz"></i></div>
+    </div>
+
+    <aside class="lateral">
+      <div class="lat">
+        <h5>Clínica Vida · Davi</h5>
+        <div class="linha ativa" id="lin-doc"><span class="luz"></span><svg viewBox="0 0 20 20"><path d="M4 2h12v16H4zM7 7h6M7 10h6"/></svg>proposta-clinica-vida.md<span class="nova" id="nova-doc">novo</span></div>
+        <div class="linha" id="lin-maq"><span class="luz"></span><svg viewBox="0 0 20 20"><path d="M2 6h5v8H2zM8 6h5v8H8zM14 6h4v8h-4z"/></svg>agenda.maquina</div>
+        <div class="linha"><span class="luz"></span><svg viewBox="0 0 20 20"><path d="M2 4h16v12H2zM2 7h16"/></svg>landing.html</div>
+        <div class="linha"><span class="luz"></span><svg viewBox="0 0 20 20"><path d="M2 3h16v14H2zM5 6h10M5 10h6"/></svg>precos.csv</div>
+      </div>
+      <div class="pontos">
+        <div class="rot">meus pontos · hoje</div>
+        <div class="n" id="pontos">0</div>
+        <div class="origem" id="origem">nada ainda · a origem de cada ponto aparece aqui</div>
+        <div class="meta"><svg class="anel" id="anel-meta" viewBox="0 0 34 34"><circle class="fundo" cx="17" cy="17" r="14"/><circle class="val" cx="17" cy="17" r="14"/></svg><div class="txt"><b id="meta-txt">0 / 40</b><br>meta da semana · escolhida por mim</div></div>
+      </div>
+    </aside>
+
+    <main class="meio">
+      <!-- DOC -->
+      <section class="vista on" id="v-doc">
+        <div class="cab">proposta-clinica-vida.md <span class="st" id="st-doc">vazio · pede à presença</span></div>
+        <div class="doc" id="doc"><div class="borda"></div><div id="doc-corpo"></div><div class="concluido" id="doc-fim">Documento concluído<small id="doc-fim-sub"></small></div><canvas class="faiscas" id="fx-doc"></canvas></div>
+      </section>
+      <!-- MÁQUINA -->
+      <section class="vista" id="v-maq">
+        <div class="cab">agenda.maquina <span class="st" id="st-maq">vazia · pede à presença</span></div>
+        <div class="palco" id="palco">
+          <svg class="fios" id="fios">
+            <path id="f1" class="fio" data-de="n1" data-para="n2"/>
+            <path id="f2" class="fio" data-de="n2" data-para="n3"/>
+            <path id="f3" class="fio" data-de="n3" data-para="n4"/>
+            <path id="f4" class="fio" data-de="n3" data-para="n5" data-baixo="1"/>
+            <circle id="pulso" class="pulso" r="3.5"/>
+          </svg>
+          <div class="no" id="n1" style="left:32px;top:96px"><span class="pino d"></span><div class="t"><i>P</i>Portaria</div><div class="k">login · e-mail e senha</div><img class="corpo-img" src="visao/portaria-iso.png" alt=""></div>
+          <div class="no" id="n2" style="left:236px;top:96px"><span class="pino e"></span><span class="pino d"></span><div class="t"><i>P</i>Porta</div><div class="k">recebe novo agendamento</div><img class="corpo-img" src="visao/porta-iso.png" alt=""></div>
+          <div class="no" id="n3" style="left:440px;top:96px"><span class="pino e"></span><span class="pino d"></span><svg class="cad" id="cad" viewBox="0 0 20 20"><rect x="4" y="9" width="12" height="9"/><path d="M7 9V6a3 3 0 0 1 6 0v3" fill="none"/></svg><div class="t"><i>G</i>Gaveta</div><div class="k">agendamentos · 50 linhas</div><img class="corpo-img" src="visao/gaveta-iso.png" alt=""></div>
+          <div class="no" id="n4" style="left:644px;top:216px"><span class="pino e"></span><div class="t"><i>C</i>Cano</div><div class="k">ao vivo · avisa a tela</div><img class="corpo-img" src="visao/cano-iso.png" alt=""></div>
+          <div class="no" id="n5" style="left:374px;top:260px"><span class="pino e"></span><div class="t"><i>R</i>Robô</div><div class="k">quando entra · WhatsApp</div><img class="corpo-img" src="visao/robo-iso.png" alt=""></div>
+          <div class="narra" id="narra-maq"></div>
+          <div class="concluido" id="maq-fim">Máquina funcionando</div>
+          <canvas class="faiscas" id="fx-maq"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <aside class="painel">
+      <div class="mostrador">
+        <div class="presenca" id="presenca"><span class="anel"></span><span class="laco"></span><span class="coluna"></span></div>
+        <div class="txt"><div class="l1">→ <span id="most-obj">proposta-clinica-vida.md</span></div><div class="l2" id="most-est">Aurora · agente do Davi · em repouso</div></div>
+      </div>
+      <div class="registro" id="registro">
+        <div class="bloco" style="color:var(--apagado)"><div class="tipo">aurora</div>Já li 76 coisas que a equipe aprendeu. Peça e eu monto.</div>
+      </div>
+      <div class="comando">
+        <div class="receitas"><button class="chip prim" id="btn-doc">cria a proposta da Clínica Vida</button><button class="chip" id="btn-maq">monta e testa a máquina</button><button class="chip" id="btn-reset">recomeçar</button></div>
+        <div class="campo"><span class="pr">❯</span><input id="campo" placeholder="ou escreva o pedido em português e aperte Enter" aria-label="pedido"><button id="enviar">enviar</button></div>
+      </div>
+    </aside>
+
+    <div class="rodape">
+      <div class="casa"><span class="pt"></span>disponível</div>
+      <div class="casa" id="casa-cron">00:04:12</div>
+      <div class="casa" id="casa-seq">sequência · 6 dias úteis</div>
+      <div class="casa trans" id="casa-salvo">salvo na equipe</div>
+    </div>
+    <div class="trilhoP" id="bolinha"></div>
+  </div>
+
+  <div class="tv" id="tv">
+    <div class="chao" id="tv-chao"></div>
+    <div><div class="rot">a parede · a constelação do projeto (cada trabalho concluído acende um nó)</div><svg class="constelacao" id="constelacao" viewBox="-300 -150 600 300" role="img" aria-label="Constelação do projeto Clínica Vida"></svg><div class="corpo" id="corpo" style="display:none"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div><div class="rot">a parede · o que a sala viu</div><div class="feed" id="feed">nada ainda</div></div>
+  </div>
+
+  <div class="regua">
+    <div class="it"><span class="k">R1 · R2</span><b>Toda luz é um evento real; a surpresa dá a intensidade</b>Concluir antes do prazo ou algo que travava vale pulso maior, mais faíscas, mais pontos. Em repouso, nada pulsa.</div>
+    <div class="it"><span class="k">R3</span><b>Pontuação com origem</b>Cada ponto mostra de onde veio. Nunca por tempo de tela, nunca comprado, nunca sorteado (Zendle & Cairns 2018).</div>
+    <div class="it"><span class="k">R4</span><b>Pessoal informa, equipe une</b>Meus pontos só eu e a gestão vemos (competência). O corpo do projeto cresce na parede (vínculo). Nunca ranking.</div>
+    <div class="it"><span class="k">R5 · R8</span><b>Meta escolhida por mim; sessão com fim</b>A meta semanal é minha (Duolingo); a sequência conta dias úteis e congela em folga. Ao fechar o dia o organismo esfria.</div>
+    <div class="it"><span class="k">R6</span><b>O momento de conclusão é o rito</b>"Documento concluído", "Máquina funcionando": o organismo pulsa inteiro uma vez, as faíscas sobem, o placar sobe contando, a parede vê.</div>
+    <div class="it"><span class="k">R9 · R10</span><b>Autonomia e medida</b>Faíscas, som e pontos desligáveis; nada bloqueia trabalho. Cada mecânica tem hipótese, medida com denominador e controle antes de ficar.</div>
+  </div>
+  <p class="rodape-pg">Base: REGUA_ORGANISMO.md (acervo do Dominic: Schultz 1997 · Lindström 2021 · Turner 2026 · Sherman 2016 · Baughan 2022 · Sailer 2017 · Hamari 2014 · Zendle & Cairns 2018 · Duolingo 2017 · Ryan et al. 2023 · Lintunen et al. 2025) · CONCEITO.md · PLANO.md. Tudo aqui é código: pulsos e faíscas em canvas e CSS, presos a eventos; nenhum vídeo.</p>
+</div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+  const reduz=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease=(t)=>1-Math.pow(1-t,3);
+  const espera=ms=>new Promise(r=>setTimeout(r,reduz()?Math.min(ms,120):ms));
+
+  /* ---- preferências ---- */
+  let comFaiscas=true, comSom=false;
+  const bF=$('#faiscas'), bS=$('#som');
+  bF.addEventListener('click',()=>{comFaiscas=!comFaiscas;bF.setAttribute('aria-pressed',comFaiscas)});
+  bS.addEventListener('click',()=>{comSom=!comSom;bS.setAttribute('aria-pressed',comSom); if(comSom) tocar('tique');});
+
+  /* ---- som: oscilador, só após gesto ---- */
+  let ctx=null;
+  function tocar(tipo){ if(!comSom) return; try{ ctx=ctx||new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended') ctx.resume(); const t=ctx.currentTime; const notas=tipo==='tique'?[[880,.08]]:tipo==='duas'?[[660,.18],[440,.22]]:[[523,.12],[659,.12],[784,.2]]; let off=0; notas.forEach(([f,d])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t+off);g.gain.linearRampToValueAtTime(.08,t+off+.01);g.gain.exponentialRampToValueAtTime(.0001,t+off+d);o.connect(g).connect(ctx.destination);o.start(t+off);o.stop(t+off+d+.02);off+=d*.8;}); }catch(e){} }
+
+  /* ---- faíscas (canvas) ---- */
+  function faiscas(canvas,x,y,n,forte){
+    if(!comFaiscas||reduz()) return;
+    const r=canvas.getBoundingClientRect(); canvas.width=r.width*devicePixelRatio; canvas.height=r.height*devicePixelRatio;
+    const c=canvas.getContext('2d'); c.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    const ps=[]; const N=Math.min(n,24);
+    for(let i=0;i<N;i++){ const a=-Math.PI/2+(Math.random()-.5)*(forte?1.6:1.0); const v=(forte?2.6:1.8)+Math.random()*1.6; ps.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:1,cor:Math.random()<.5?'#a376e9':'#2ad5e5',s:1+Math.random()*1.5}); }
+    let t0=performance.now();
+    function q(now){ const dt=Math.min(32,now-t0)/16; t0=now; c.clearRect(0,0,r.width,r.height); let vivos=0;
+      ps.forEach(p=>{ if(p.life<=0) return; vivos++; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=0.07*dt; p.vx*=0.985; p.life-=0.022*dt; c.globalAlpha=Math.max(0,p.life); c.fillStyle=p.cor; c.beginPath(); c.arc(p.x,p.y,p.s,0,Math.PI*2); c.fill(); });
+      c.globalAlpha=1; if(vivos) requestAnimationFrame(q); else c.clearRect(0,0,r.width,r.height); }
+    requestAnimationFrame(q);
+  }
+
+  /* ---- luz que esfria (meia-vida) ---- */
+  const vivos=new Set();
+  function acender(el,mv){ el.dataset.t=String(performance.now()); el.dataset.mv=String(mv||6000); vivos.add(el); el.style.setProperty('--luz','1'); }
+  setInterval(()=>{ const agora=performance.now(); vivos.forEach(el=>{ let l=Math.pow(2,-(agora-(+el.dataset.t))/(+el.dataset.mv)); if(reduz()) l=l>.6?1:l>.2?.35:0; el.style.setProperty('--luz',l.toFixed(3)); if(l<.02){el.style.setProperty('--luz','0');vivos.delete(el);} }); },250);
+
+  /* ---- o pulso que corre da presença até um alvo ---- */
+  const bol=$('#bolinha'), est=$('#estacao');
+  function pulsoAte(alvo,cb,forte){
+    if(reduz()){ cb&&cb(); return; }
+    const re=est.getBoundingClientRect(), rp=$('#presenca').getBoundingClientRect(), ra=alvo.getBoundingClientRect();
+    const x0=rp.left-re.left+rp.width/2, y0=rp.top-re.top+rp.height/2, x1=ra.left-re.left+12, y1=ra.top-re.top+ra.height/2;
+    const dur=forte?520:600; const t0=performance.now(); bol.style.opacity=1; bol.style.transform=forte?'scale(1.6)':'scale(1)';
+    function q(now){ const k=Math.min(1,(now-t0)/dur); const e=ease(k); const x=x0+(x1-x0)*e, y=y0+(y1-y0)*e-Math.sin(k*Math.PI)*24; bol.style.left=(x-6)+'px'; bol.style.top=(y-6)+'px'; if(k<1) requestAnimationFrame(q); else { bol.style.opacity=0; cb&&cb(); } }
+    requestAnimationFrame(q);
+  }
+
+  /* ---- pontuação com origem ---- */
+  let pontos=0, metaAlvo=40; const elP=$('#pontos'), elO=$('#origem'), anel=$('#anel-meta'), metaTxt=$('#meta-txt');
+  function somar(n,origem){
+    const de=pontos, para=pontos+n; pontos=para; elP.classList.add('sobe'); const t0=performance.now(), dur=reduz()?0:700;
+    function q(now){ const k=dur?Math.min(1,(now-t0)/dur):1; elP.textContent=Math.round(de+(para-de)*ease(k)); if(k<1) requestAnimationFrame(q); else setTimeout(()=>elP.classList.remove('sobe'),300); }
+    requestAnimationFrame(q);
+    elO.innerHTML='<b>+'+n+'</b> · '+origem;
+    const frac=Math.min(1,pontos/metaAlvo); anel.querySelector('.val').style.strokeDashoffset=(88-88*frac).toFixed(1); metaTxt.textContent=Math.min(pontos,metaAlvo)+' / '+metaAlvo;
+    if(pontos>=metaAlvo && !anel.classList.contains('ouro')){ anel.classList.add('ouro'); tocar('tres'); feedTV('<b>meta da semana</b> do Davi fechou',true); }
+  }
+
+  /* ---- a parede: a constelação (padrão colhido da LP do Reino: raios do centro, nó ativo com raio de ouro) ---- */
+  const NS='http://www.w3.org/2000/svg'; const mk=(t,a,p)=>{const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); p.appendChild(e); return e;};
+  const NOS=['proposta','agenda.maquina','landing','WhatsApp','preços','ata 22/09'];
+  const conEl=$('#constelacao'), conNos={};
+  (function(){ const gR=mk('g',{},conEl), gN=mk('g',{},conEl); const n=NOS.length; NOS.forEach((nome,j)=>{ const ang=-Math.PI/2+(j/n)*Math.PI*2, rx=225, ry=105; const x=Math.cos(ang)*rx, y=Math.sin(ang)*ry; const raio=mk('line',{x1:0,y1:0,x2:x.toFixed(1),y2:y.toFixed(1),class:'raio'},gR); const no=mk('g',{class:'no',transform:'translate('+x.toFixed(1)+' '+y.toFixed(1)+')'},gN); mk('circle',{r:5},no); const esq=Math.cos(ang)<-0.2, dir=Math.cos(ang)>0.2; const tx=mk('text',{x:esq?-10:dir?10:0,y:Math.abs(Math.cos(ang))<=0.2?(y<0?-12:18):4,'text-anchor':esq?'end':dir?'start':'middle'},no); tx.textContent=nome; conNos[nome]={raio,no}; }); const cen=mk('g',{class:'centro'},conEl); mk('circle',{r:40},cen); const ct=mk('text',{y:5},cen); ct.textContent='Clínica Vida'; })();
+  function acenderNo(nome){ const c=conNos[nome]; if(!c) return; c.no.classList.add('ativo'); c.raio.classList.add('ativo'); }
+  const feed=$('#feed'); let feedN=0;
+  function feedTV(txt,sobe,no){ if(feedN===0) feed.innerHTML=''; feedN++; const d=document.createElement('div'); d.innerHTML=txt; feed.prepend(d); while(feed.children.length>5) feed.lastChild.remove(); acender($('#tv-chao'),9000); if(no) acenderNo(no); }
+
+  /* ---- presença ---- */
+  const pres=$('#presenca'), mostEst=$('#most-est'), mostObj=$('#most-obj'); let segT=null, seg=0;
+  function estado(e){ pres.classList.remove('pensando','acordada'); if(e==='pensando'){ pres.classList.add('acordada','pensando'); seg=0; clearInterval(segT); segT=setInterval(()=>{seg++; mostEst.innerHTML='Aurora · agente do Davi · <b>pensando há '+seg+' s</b>';},1000); mostEst.innerHTML='Aurora · agente do Davi · <b>pensando há 0 s</b>'; } else if(e==='terminou'){ clearInterval(segT); pres.classList.add('acordada'); const h=new Date(); mostEst.innerHTML='Aurora · agente do Davi · <b>terminou · '+String(h.getHours()).padStart(2,'0')+':'+String(h.getMinutes()).padStart(2,'0')+'</b>'; setTimeout(()=>{pres.classList.remove('acordada'); mostEst.textContent='Aurora · agente do Davi · em repouso';},6000); } else { clearInterval(segT); mostEst.textContent='Aurora · agente do Davi · em repouso'; } }
+  const reg=$('#registro');
+  function bloco(tipo,html,classe){ const d=document.createElement('div'); d.className='bloco '+(classe||tipo); d.innerHTML='<div class="tipo">'+tipo+'</div>'+html; reg.appendChild(d); reg.scrollTop=1e6; return d; }
+
+  /* ---- abrir vistas ---- */
+  function abrir(v){ $$('.vista').forEach(x=>x.classList.toggle('on',x.id==='v-'+v)); $$('.aba').forEach(a=>a.classList.toggle('ativa',a.dataset.v===v)); $$('.linha').forEach(l=>l.classList.remove('ativa')); (v==='doc'?$('#lin-doc'):$('#lin-maq')).classList.add('ativa'); mostObj.textContent=v==='doc'?'proposta-clinica-vida.md':'agenda.maquina'; }
+  $$('.aba').forEach(a=>a.addEventListener('click',()=>abrir(a.dataset.v)));
+  $('#lin-doc').addEventListener('click',()=>abrir('doc')); $('#lin-maq').addEventListener('click',()=>abrir('maq'));
+  function luzTrilho(){ if(reduz())return; const l=$('#trilho-luz'); l.style.transition='none'; l.style.left='100%'; l.style.opacity=1; requestAnimationFrame(()=>{ l.style.transition='left 600ms var(--ease), opacity 600ms'; l.style.left='0'; l.style.opacity=0; }); }
+
+  /* ---- DOCUMENTO NASCENDO ---- */
+  const DOC=[
+    {h:'Proposta · Clínica Vida',t:'h2'},
+    {h:'Agenda com confirmação automática pelo WhatsApp, lembretes 24 h antes e prontuário simples. Entrega em três semanas, em duas fases.',t:'p'},
+    {h:'1 · O problema',t:'h3',item:0},
+    {h:'A Clínica Vida perde cerca de 18 % dos horários por esquecimento. Cada horário perdido custa uma consulta e uma remarcação por telefone.',t:'p'},
+    {h:'"O que a gente mais perde é paciente que esquece." (ideia falada · reunião de 22/09)',t:'p'},
+    {h:'2 · A solução',t:'h3',item:1},
+    {h:'Agenda online ligada ao WhatsApp: o paciente marca, recebe confirmação e lembrete; a recepção vê tudo num painel.',t:'p'},
+    {h:'Aprendizado da equipe usado: reembolso (Davi, usado 7×) e prazo de clínicas (Rafa).',t:'p'},
+    {h:'3 · Fases e prazo',t:'h3',item:2},
+    {h:'Fase 1 (2 semanas): agenda e lembretes. Fase 2 (1 semana): prontuário e relatórios.',t:'p'},
+    {h:'4 · Preço',t:'h3',item:3},
+    {h:'Fase 1: R$ 4.800 · Fase 2: R$ 2.400 · manutenção R$ 390/mês. Garantia de 30 dias na fase 1.',t:'p'},
+    {h:'5 · Próximo passo',t:'h3',item:4},
+    {h:'Aprovação da Dra. Ana até sexta; início na segunda seguinte.',t:'p'},
+  ];
+  const ITENS=['Problema e contexto','Solução e o que já sabemos','Fases e prazo','Preço com garantia','Próximo passo'];
+  let rodandoDoc=false;
+  function travar(on){ ['#btn-doc','#btn-maq','#enviar'].forEach(s=>{ $(s).disabled=on; $(s).style.opacity=on?.5:1; }); }
+  async function criarDoc(){
+    if(rodandoDoc||rodandoMaq) return; rodandoDoc=true; travar(true); abrir('doc');
+    const corpo=$('#doc-corpo'); corpo.innerHTML=''; $('#doc-fim').classList.remove('on'); $('#doc').classList.remove('respira'); $('#st-doc').textContent='a presença escreve…';
+    bloco('pedido','cria a proposta da Clínica Vida com agenda, prazo e preço');
+    estado('pensando'); await espera(700);
+    bloco('consulta','o que consultei: ata-22-09.md · <span style="color:var(--t0)">Aprendizado · Davi · reembolso · usado 7×</span> · precos.csv','consulta');
+    await espera(500);
+    const pl=bloco('plano','<ul class="check" id="check">'+ITENS.map((x,i)=>'<li id="ck'+i+'"><span class="luz"></span><i></i>'+x+'<span class="pts">+'+(i===3?4:2)+'</span></li>').join('')+'</ul>');
+    // itens aparecem um a um
+    const lis=$$('#check li'); lis.forEach(l=>l.style.opacity=0); for(const l of lis){ l.style.transition='opacity 120ms'; l.style.opacity=1; await espera(120); }
+    $('#nova-doc').classList.add('on'); acender($('#lin-doc'),6000); acender($('#aba-doc').querySelector('.lz'),6000); luzTrilho();
+    let ganhos=0;
+    const cursor=document.createElement('span'); cursor.className='cursor';
+    for(const linha of DOC){
+      const el=document.createElement(linha.t); el.className='l'; el.textContent=linha.h; corpo.appendChild(el); el.appendChild(cursor);
+      requestAnimationFrame(()=>{ el.classList.add('on','rastro'); setTimeout(()=>el.classList.remove('rastro'),900); });
+      $('#doc').scrollTop=1e6;
+      await espera(linha.t==='h2'?500:linha.t==='h3'?380:650);
+      if(linha.item!==undefined){
+        const li=lis[linha.item]; const forte=linha.item===3; const n=forte?4:2;
+        await new Promise(res=>pulsoAte(li,()=>{ li.classList.add('feito'); acender(li,6000); tocar('tique'); const r=li.getBoundingClientRect(), rd=$('#doc').getBoundingClientRect(); const rc=$('#fx-doc').getBoundingClientRect(); const rl=el.getBoundingClientRect(); faiscas($('#fx-doc'),rl.left-rc.left+40,rl.top-rc.top+8,forte?12:6,forte); somar(n,ITENS[linha.item]+' · '+(forte?'travava há 2 dias · ×2':'item concluído')); ganhos+=n; res(); },forte));
+        await espera(250);
+      }
+    }
+    cursor.remove();
+    // documento concluído
+    estado('terminou'); $('#st-doc').textContent='concluído · 5 de 5';
+    $('#doc').classList.add('respira'); tocar('duas');
+    const rc=$('#fx-doc').getBoundingClientRect(); for(let i=0;i<4;i++){ setTimeout(()=>faiscas($('#fx-doc'),rc.width*(0.25+0.5*Math.random()),rc.height*0.35,10,true),i*120); }
+    const bonus=8*1.5; somar(Math.round(bonus),'Documento concluído · 8 × surpresa 1,5 (antes do prazo)');
+    $('#doc-fim-sub').textContent='5 itens · '+(ganhos+Math.round(bonus))+' pontos · Aurora · agente do Davi'; $('#doc-fim').classList.add('on'); $('#doc').scrollTop=1e6;
+    bloco('ação','escrevi proposta-clinica-vida.md (5 seções) · <span style="color:var(--fraco)">ver o comando</span>','acao');
+    acender($('#casa-salvo'),6000); feedTV('<b>Davi</b> · proposta da Clínica Vida <span class="n">concluída</span> · 5 de 5 · por Aurora',true,'proposta'); acenderNo('ata 22/09');
+    rodandoDoc=false; travar(false);
+  }
+
+  /* ---- MÁQUINA: fios calculados pela posição real dos nós ---- */
+  function desenharFios(){
+    const palco=$('#palco'), svg=$('#fios'); const rp=palco.getBoundingClientRect();
+    svg.setAttribute('viewBox','0 0 '+rp.width+' '+rp.height); svg.setAttribute('width',rp.width); svg.setAttribute('height',rp.height);
+    $$('#fios path').forEach(p=>{
+      const a=document.getElementById(p.dataset.de).getBoundingClientRect(), b=document.getElementById(p.dataset.para).getBoundingClientRect();
+      let x0,y0,x1,y1;
+      if(p.dataset.baixo){ x0=a.left-rp.left+a.width/2; y0=a.bottom-rp.top; x1=b.left-rp.left; y1=b.top-rp.top+b.height/2; p.setAttribute('d','M'+x0+' '+y0+' C '+x0+' '+(y0+40)+', '+(x1-30)+' '+y1+', '+x1+' '+y1); }
+      else { x0=a.right-rp.left; y0=a.top-rp.top+a.height/2; x1=b.left-rp.left; y1=b.top-rp.top+b.height/2; const m=(x0+x1)/2; p.setAttribute('d','M'+x0+' '+y0+' C '+m+' '+y0+', '+m+' '+y1+', '+x1+' '+y1); }
+      const L=p.getTotalLength(); p.style.strokeDasharray=L; if(!p.classList.contains('on')) p.style.strokeDashoffset=L;
+    });
+  }
+  new ResizeObserver(()=>desenharFios()).observe($('#palco')); desenharFios();
+  let rodandoMaq=false;
+  function nosAtivos(cls,on){ $$('.no').forEach(n=>n.classList.toggle(cls,on)); }
+  async function andar(id,barrar){ return new Promise(res=>{ const fio=document.getElementById(id), p=$('#pulso'); if(reduz()){ fio.classList.add(barrar?'barrou':'passou'); res(); return; } const L=fio.getTotalLength(); p.style.opacity=1; p.style.fill=barrar?'var(--alarme)':'var(--ok)'; fio.classList.add(barrar?'barrou':'passou'); const t0=performance.now(), dur=520; function q(now){ const k=Math.min(1,(now-t0)/dur); const pt=fio.getPointAtLength(k*L); p.setAttribute('cx',pt.x); p.setAttribute('cy',pt.y); if(k<1) requestAnimationFrame(q); else res(); } q(performance.now()); }); }
+  function faiscaNo(n,forte){ const rc=$('#fx-maq').getBoundingClientRect(), r=n.getBoundingClientRect(); faiscas($('#fx-maq'),r.left-rc.left+r.width/2,r.top-rc.top+6,forte?10:5,forte); }
+  async function montarMaq(){
+    if(rodandoMaq||rodandoDoc) return; rodandoMaq=true; travar(true); abrir('maq');
+    $$('.no').forEach(n=>{n.className='no';}); $$('.fio').forEach(f=>{f.setAttribute('class','fio');}); desenharFios(); $('#maq-fim').classList.remove('on'); $('#pulso').style.opacity=0; $('#narra-maq').innerHTML='';
+    $('#st-maq').textContent='a presença monta…';
+    bloco('pedido','monta a máquina da agenda e testa');
+    estado('pensando'); await espera(600);
+    const nos=['n1','n2','n3','n5','n4'], fios=['f1','f2','f4','f3'];
+    for(let i=0;i<nos.length;i++){ const n=document.getElementById(nos[i]); n.classList.add('on'); faiscaNo(n,false); somar(1,'nó encaixado · '+n.querySelector('.t').textContent.trim()); if(fios[i]){ await espera(160); desenharFios(); document.getElementById(fios[i]).classList.add('on'); } await espera(360); }
+    acender($('#lin-maq'),6000); acender($('#aba-maq').querySelector('.lz'),6000); luzTrilho();
+    bloco('plano','5 peças · 4 fios · testar como Ana (Clínica Vida) e como a outra empresa');
+    await espera(400);
+    // teste que passa
+    $('#narra-maq').innerHTML='teste · como <b>Ana, da Clínica Vida</b>';
+    const seq=[['n1',null],['n2','f1'],['n3','f2'],['n5','f4'],['n4','f3']];
+    for(const [nid,fid] of seq){ if(fid) await andar(fid,false); const n=document.getElementById(nid); n.classList.add('ativa'); faiscaNo(n,false); tocar('tique'); await espera(140); }
+    $('#pulso').style.opacity=0;
+    await espera(200);
+    // todas brilham juntas
+    nosAtivos('ativa',true); $$('.no').forEach(n=>faiscaNo(n,true)); tocar('duas'); somar(6,'teste passou · 5 peças · pulso verde até a tela');
+    $('#narra-maq').innerHTML='<b>tudo verde</b> · a tela Agenda atualizou';
+    await espera(900);
+    // teste barrado
+    $$('.no').forEach(n=>n.classList.remove('ativa')); $$('.fio').forEach(f=>f.classList.remove('passou')); $('#pulso').style.opacity=0;
+    $('#narra-maq').innerHTML='teste · como <b>Beto, da Clínica Sorriso</b>';
+    document.getElementById('n1').classList.add('barrada'); await andar('f1',true); document.getElementById('n2').classList.add('barrada'); await andar('f2',true);
+    const g=document.getElementById('n3'); g.classList.add('barrada','treme'); $('#pulso').style.opacity=0; setTimeout(()=>g.classList.remove('treme'),400);
+    $('#narra-maq').innerHTML='<b>barrado pela chave</b>: cada empresa vê só o seu'; somar(2,'segurança funcionou · barrado no cadeado');
+    await espera(900);
+    $$('.no').forEach(n=>n.classList.remove('barrada')); $$('.fio').forEach(f=>f.classList.remove('barrou'));
+    // máquina funcionando: as peças ganham corpo
+    for(const nid of nos){ const n=document.getElementById(nid); n.classList.add('corpo'); faiscaNo(n,true); await espera(120); }
+    tocar('tres'); somar(12,'Máquina funcionando · 5 peças ganharam corpo'); $('#maq-fim').classList.add('on'); $('#st-maq').textContent='funcionando · publicada v1'; estado('terminou');
+    bloco('ação','publiquei agenda.maquina v1 · 5 peças · 2 testes','acao'); acender($('#casa-salvo'),6000);
+    feedTV('<b>Davi</b> · máquina da agenda <span class="n">funcionando</span> · 5 peças com corpo',true,'agenda.maquina'); feedTV('<b>Aurora</b> testou como a outra empresa · <span class="n">barrado</span>, como devia',false); acenderNo('WhatsApp');
+    rodandoMaq=false; travar(false);
+  }
+
+  /* ---- comandos ---- */
+  $('#btn-doc').addEventListener('click',criarDoc); $('#btn-maq').addEventListener('click',montarMaq);
+  $('#btn-reset').addEventListener('click',()=>location.reload());
+  function pedido(){ const t=$('#campo').value.trim().toLowerCase(); $('#campo').value=''; if(!t) return; if(/m[aá]quina|monta|testa|tabela|gaveta/.test(t)) montarMaq(); else criarDoc(); }
+  $('#enviar').addEventListener('click',pedido); $('#campo').addEventListener('keydown',e=>{ if(e.key==='Enter') pedido(); });
+
+  /* cronômetro */
+  let cs=4*60+12; setInterval(()=>{cs++; $('#casa-cron').textContent=String(Math.floor(cs/3600)).padStart(2,'0')+':'+String(Math.floor(cs%3600/60)).padStart(2,'0')+':'+String(cs%60).padStart(2,'0');},1000);
+})();
+</script>
