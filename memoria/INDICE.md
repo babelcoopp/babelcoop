@@ -1,4 +1,4 @@
-# Índice vivo do Ryan — v0.1.0 · geração 1 · 6 memórias ativas · 1 projeto aberto · 4 pendências
+# Índice vivo do Ryan — v0.1.0 · geração 1 · 7 memórias ativas · 1 projeto aberto · 4 pendências
 Estado: ativo
 
 <!-- Mantido à mão pelo Ryan; contrato em .claude/rules/memoria.md; até 150 linhas. Entra no contexto só em sessão nova, /clear ou /compact. -->
@@ -21,6 +21,7 @@ Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente
 - 2026-09-23 · Arquivos do babel-os soltos em agente/ e o Gabriel vira Dominic (2026-09-23-babel-os-solto-em-agente-e-gabriel-vira-dominic)
 
 ## Memórias recentes
+- [reference 0.9] O babel-coop está no GitHub, privado: theusveyra/babel-coop (2026-09-23-repositorio-privado-no-github)
 - [reference 0.9] O material de origem do Ryan está solto em agente/ (2026-09-23-origem-do-ryan-solta-em-agente)
 
 ## Conhecimento

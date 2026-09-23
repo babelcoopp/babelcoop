@@ -26,3 +26,4 @@ v0.1.0 montado em 23/09/2026 a partir de `agente/DEUS-CRIADOR` e do antigo `agen
 - 2026-09-23 — v0.1.0 verificado em duas rodadas (16 correções); Python de agente/babel-os apagado
 - 2026-09-23 — correção: as "16 correções" vieram de um resultado falso; os achados reais (14 + 10) foram aplicados às 14:56; ver diário
 - 2026-09-23 — arquivos do babel-os soltos em agente/ e Gabriel renomeado Dominic (ordem do Theus)
+- 2026-09-23 — repositório privado no GitHub: theusveyra/babel-coop
