@@ -1,0 +1,101 @@
+# Babel Coop · CHECKLIST §0 e §1: node-pty dentro do Electron, com binário pronto (sem compilar), no Windows e no Mac.
+# Evidência: o `claude --version` roda num pty aberto pelo processo do Electron; no Windows o shell é o PowerShell.
+# A29 · instaladores: o .exe do Windows (NSIS, sem assinatura) e o .dmg do Mac (hdiutil; nada de Python) saem como artifacts.
+name: terminal · node-pty no Electron e instaladores
+
+on:
+  push:
+    paths: ['app/**', 'prototipo/**', '.github/workflows/terminal-pty.yml']
+  workflow_dispatch:
+
+jobs:
+  pty:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Instalar (sem compilar nada; o postinstall baixa o Electron e ajusta o spawn-helper)
+        run: npm ci --no-audit --no-fund
+      - name: Instalar o Claude Code (só para o --version)
+        run: npm install -g @anthropic-ai/claude-code
+      - name: node-pty no Node
+        run: node -e "const p=require('node-pty');const w=process.platform==='win32';const t=p.spawn(w?'powershell.exe':'/bin/zsh',w?['-NoLogo','-Command','echo pty-ok']:['-c','echo pty-ok'],{cols:80,rows:10});let s='';t.onData(d=>s+=d);t.onExit(e=>{console.log(s.trim(),JSON.stringify(e));process.exit(/pty-ok/.test(s)?0:1)})"
+      - name: node-pty dentro do Electron + claude no pty
+        run: npx electron testes/electron-pty.js
+
+  instaladores:
+    needs: pty
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            nome: windows
+          - os: macos-latest
+            nome: mac
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: app
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Instalar (sem compilar nada)
+        run: npm ci --no-audit --no-fund
+
+      - name: Windows · instalador .exe (electron-builder --win nsis --x64, sem assinatura)
+        if: runner.os == 'Windows'
+        run: npm run dist:win
+      - name: Windows · conferir o que o instalador leva
+        if: runner.os == 'Windows'
+        run: node -e "const fs=require('fs');const r='dist/win-unpacked/resources';const p=r+'/app.asar.unpacked/node_modules/node-pty/prebuilds/win32-x64/';const precisa=[r+'/app.asar',p+'pty.node',p+'conpty.node',r+'/app.asar.unpacked/interface/midia/b-entrada.mp4',r+'/prototipo/index.html','dist/win-unpacked/locales/pt-BR.pak','dist/win-unpacked/locales/en-US.pak'];const faltam=precisa.filter((f)=>!fs.existsSync(f));const exe=fs.readdirSync('dist').filter((n)=>n.endsWith('.exe'));console.log(JSON.stringify({faltam:faltam,instalador:exe.map((n)=>n+' '+(fs.statSync('dist/'+n).size/1048576).toFixed(1)+' MB')}));process.exit(faltam.length||!exe.length?1:0)"
+      - name: Windows · subir o instalador
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: babel-coop-windows
+          path: app/dist/*.exe
+          if-no-files-found: error
+          retention-days: 30
+      - name: Windows · o .exe empacotado abre, serve a Estação e tem terminal real
+        if: runner.os == 'Windows'
+        run: node --test testes/e2e/instalar.test.js
+
+      - name: Mac · .app + .dmg (electron-builder dir + hdiutil; confere conteúdo e o fuse RunAsNode)
+        if: runner.os == 'macOS'
+        run: npm run empacotar
+      - name: Mac · subir o .dmg
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: babel-coop-mac
+          path: app/dist/*.dmg
+          if-no-files-found: error
+          retention-days: 30
+      - name: Mac · convite de verdade com o app empacotado (Theus funda, Rita entra com o token, parede ao vivo)
+        if: runner.os == 'macOS'
+        run: node --test testes/e2e/instalar.test.js
+        env:
+          BABEL_TESTE_EVIDENCIAS: ${{ runner.temp }}/evidencias
+      - name: Mac · subir as evidências do convite
+        if: runner.os == 'macOS' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-instalar-mac
+          path: ${{ runner.temp }}/evidencias
+          if-no-files-found: ignore
+          retention-days: 14

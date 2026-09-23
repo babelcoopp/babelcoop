@@ -68,8 +68,14 @@ class Arquivos {
   }
 
   vigiar(fn) {
-    try { fs.watch(this.pasta, { recursive: true }, (tipo, nome) => { if (nome && !IGNORADOS.test(path.basename(nome))) fn(nome.replace(/\\/g, '/')); }); } catch (e) { /* sem recursivo nesta plataforma: sem aviso ao vivo */ }
+    this._aviso = fn;
+    try { if (this._vigia) this._vigia.close(); } catch (e) { /* já fechado */ }
+    this._vigia = null;
+    try { this._vigia = fs.watch(this.pasta, { recursive: true }, (tipo, nome) => { if (nome && !IGNORADOS.test(path.basename(nome))) fn(nome.replace(/\\/g, '/')); }); } catch (e) { /* sem recursivo nesta plataforma: sem aviso ao vivo */ }
   }
+
+  /* a pasta mudou (fundar a equipe ou entrar com o token trocam o id): o vigia passa para a pasta nova */
+  revigiar() { if (this._aviso) this.vigiar(this._aviso); }
 }
 
 module.exports = { Arquivos };

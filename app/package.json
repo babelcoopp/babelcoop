@@ -1,33 +1,164 @@
 {
   "name": "babel-coop",
-  "productName": "Babel Coop",
+  "productName": "babel-coop",
   "version": "0.1.0",
   "description": "Estação do Babel Coop: cada computador é um servidor na rede local",
   "main": "main.js",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/preparar.js",
     "start": "electron .",
     "servidor": "node servidor/servidor.js",
-    "postinstall": "electron-rebuild -f -w node-pty",
-    "dist:mac": "electron-builder --mac",
-    "dist:win": "electron-builder --win"
+    "teste": "node --test testes/servidor/",
+    "teste:e2e": "node --test --test-concurrency=1 \"testes/e2e/*.test.js\"",
+    "dist:mac": "node scripts/empacotar.js",
+    "dist:win": "node scripts/icone.js && electron-builder --win nsis --x64 --publish never",
+    "icone": "node scripts/icone.js --forcar",
+    "empacotar": "node scripts/empacotar.js",
+    "empacotar:dir": "node scripts/empacotar.js --sem-dmg",
+    "teste:pacote": "node --test testes/e2e/pacote.test.js",
+    "teste:instalar": "node --test testes/e2e/instalar.test.js"
   },
   "dependencies": {
-    "node-pty": "^1.0.0",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/addon-serialize": "0.14.0",
+    "@xterm/headless": "6.0.0",
+    "@xterm/xterm": "6.0.0",
+    "node-pty": "1.1.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {
-    "@electron/rebuild": "^3.6.0",
-    "electron": "^33.0.0",
-    "electron-builder": "^25.0.0"
+    "electron": "44.4.5",
+    "electron-builder": "^26.0.0",
+    "playwright": "1.63.0"
   },
   "build": {
     "appId": "com.babel.coop",
-    "productName": "Babel Coop",
-    "files": ["main.js", "preload.js", "ponte.js", "servidor/**", "../prototipo/**"],
-    "extraResources": [{ "from": "../prototipo", "to": "prototipo" }],
-    "mac": { "target": ["dmg"], "category": "public.app-category.productivity" },
-    "win": { "target": ["nsis"] },
-    "npmRebuild": true
+    "productName": "babel-coop",
+    "copyright": "© 2026 babel-coop",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "npmRebuild": false,
+    "nodeGypRebuild": false,
+    "buildDependenciesFromSource": false,
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/node-pty/prebuilds/**",
+      "interface/midia/**"
+    ],
+    "files": [
+      "main.js",
+      "preload.js",
+      "ponte.js",
+      "package.json",
+      "interface/**/*",
+      "navegador/**/*",
+      "servidor/**/*",
+      "!**/*.map",
+      "!**/*.pdb",
+      "!**/.DS_Store",
+      "!node_modules/node-pty/{src,deps,third_party,scripts,typings}/**",
+      "!node_modules/node-pty/binding.gyp",
+      "!node_modules/node-addon-api/**",
+      "!node_modules/@xterm/*/{src,typings}/**",
+      "!node_modules/**/*.test.js"
+    ],
+    "extraResources": [
+      {
+        "from": "../prototipo",
+        "to": "prototipo",
+        "filter": [
+          "**/*",
+          "!**/.DS_Store"
+        ]
+      }
+    ],
+    "electronLanguages": [
+      "en",
+      "en_FEMININE",
+      "en_MASCULINE",
+      "en_NEUTER",
+      "pt_BR_FEMININE",
+      "pt_BR_MASCULINE",
+      "pt_BR_NEUTER"
+    ],
+    "mac": {
+      "target": [
+        "dir"
+      ],
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.icns",
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "darkModeSupport": true,
+      "minimumSystemVersion": "12.0",
+      "extendInfo": {
+        "NSLocalNetworkUsageDescription": "O babel-coop conversa com as outras Estações da equipe na rede local (terminais, parede e arquivos compartilhados).",
+        "CFBundleDevelopmentRegion": "pt-BR"
+      },
+      "files": [
+        "main.js",
+        "preload.js",
+        "ponte.js",
+        "package.json",
+        "interface/**/*",
+        "navegador/**/*",
+        "servidor/**/*",
+        "!**/*.map",
+        "!**/*.pdb",
+        "!**/.DS_Store",
+        "!node_modules/node-pty/{src,deps,third_party,scripts,typings}/**",
+        "!node_modules/node-pty/binding.gyp",
+        "!node_modules/node-addon-api/**",
+        "!node_modules/@xterm/*/{src,typings}/**",
+        "!node_modules/**/*.test.js",
+        "!node_modules/node-pty/prebuilds/!(darwin-${arch})/**"
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "electronLanguages": [
+        "en-US",
+        "pt-BR"
+      ],
+      "files": [
+        "main.js",
+        "preload.js",
+        "ponte.js",
+        "package.json",
+        "interface/**/*",
+        "navegador/**/*",
+        "servidor/**/*",
+        "!**/*.map",
+        "!**/*.pdb",
+        "!**/.DS_Store",
+        "!node_modules/node-pty/{src,deps,third_party,scripts,typings}/**",
+        "!node_modules/node-pty/binding.gyp",
+        "!node_modules/node-addon-api/**",
+        "!node_modules/@xterm/*/{src,typings}/**",
+        "!node_modules/**/*.test.js",
+        "!node_modules/node-pty/prebuilds/!(win32-${arch})/**"
+      ]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "babel-coop",
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "babel-coop-${version}-windows-x64.${ext}"
+    }
   }
 }
