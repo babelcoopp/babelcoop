@@ -93,6 +93,12 @@ window.BC = window.BC || {};
       docs.push({ id: 'fala:' + m.id, tipo: 'fala', titulo: 'Momento falado guardado por ' + L.nome(m.por), pessoa: m.por, ts: m.ts,
         texto: m.trechos.map(function (x) { return L.nome(x.quem) + ': ' + x.texto; }).join('\n'), abrir: { tipo: 'momento', ref: m.id } });
     });
+    /* presets: o que a equipe construiu e funcionou também é memória com nome (quem fez, quantas vezes foi usado) */
+    (e.presets || []).forEach(function (p) {
+      docs.push({ id: 'pre:' + p.id, tipo: 'preset', titulo: 'Preset ' + p.nome, pessoa: p.por, ts: p.testadoEm || p.ts,
+        texto: p.nome + '. ' + (p.descricao || '') + ' ' + (p.pecas || []).map(function (x) { return x.nome + ' ' + (x.frase || ''); }).join(' ') + (p.projeto ? ' (' + p.projeto + ')' : ''),
+        abrir: { tipo: 'preset', ref: p.id } });
+    });
     Object.keys(e.terminais).forEach(function (p) {
       var linhas = e.terminais[p];
       if (!linhas.length) return;
@@ -163,6 +169,27 @@ window.BC = window.BC || {};
     }
     res.sort(function (x, y) { return y.pontos - x.pontos; });
     return res.slice(0, opcoes.limite || 12).map(function (r) { return { doc: r.doc, pontos: r.pontos, trecho: A.trecho(r.doc.texto, q) }; });
+  };
+
+  /* um documento do acervo pelo id ("ap:ap3", "pre:pre2", "arq:f12"…); null se não existe */
+  A.doc = function (e, id) {
+    var ix = indice(e);
+    for (var i = 0; i < ix.docs.length; i++) if (ix.docs[i].id === id) return ix.docs[i];
+    return null;
+  };
+
+  /* as palavras da consulta que aparecem no documento, na forma em que a pessoa escreveu (o "tema" da citação) */
+  A.termosEm = function (consulta, doc, n) {
+    if (!doc) return [];
+    var tf = doc.tf || {};
+    if (!doc.tf) tokens(doc.titulo + ' ' + doc.texto).map(raiz).forEach(function (w) { tf[w] = 1; });
+    var vistos = {};
+    return String(consulta || '').split(/\s+/).filter(function (p) {
+      var t = tokens(p).map(raiz)[0];
+      if (!t || vistos[t] || !tf[t]) return false;
+      vistos[t] = true;
+      return true;
+    }).map(function (p) { return p.replace(/^[^\wÀ-ú]+|[^\wÀ-ú]+$/g, '').toLowerCase(); }).slice(0, n || 2);
   };
 
   A.estatisticas = function (e) {

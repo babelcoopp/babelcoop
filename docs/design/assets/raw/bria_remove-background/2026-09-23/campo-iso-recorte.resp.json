@@ -1,0 +1,29 @@
+{
+ "id": "xhdvjd0ev1rmt0d0t0xv7hfqp4",
+ "model": "bria/remove-background",
+ "version": "hidden",
+ "input": {
+  "preserve_alpha": true,
+  "image": "arquivo:docs/design/assets/raw/google_nano-banana-2/2026-09-23/campo-iso.png"
+ },
+ "logs": "Downloading 1017321 bytes\nDownloaded 0.97MB in 0.14sec\n",
+ "output": "https://replicate.delivery/xezq/1TdXunhPYu4dA9UvtZqGeoIVw4NHrUysfRP4dxR4kvp4pfguA/tmpuj69h6qt.png",
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:45:26.488Z",
+ "started_at": "2026-09-23T21:45:26.499327434Z",
+ "completed_at": "2026-09-23T21:45:28.286928772Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/xhdvjd0ev1rmt0d0t0xv7hfqp4/cancel",
+  "get": "https://api.replicate.com/v1/predictions/xhdvjd0ev1rmt0d0t0xv7hfqp4",
+  "stream": "https://stream.replicate.com/v1/files/jbxs-i3qrtcimyocudp744n55lnllffxyzdmp54i36b2allqmrtdbn2za",
+  "web": "https://replicate.com/p/xhdvjd0ev1rmt0d0t0xv7hfqp4"
+ },
+ "metrics": {
+  "image_output_count": 1,
+  "predict_time": 1.787601338,
+  "total_time": 1.798928772
+ }
+}

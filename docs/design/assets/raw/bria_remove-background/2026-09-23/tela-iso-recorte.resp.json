@@ -1,0 +1,29 @@
+{
+ "id": "fe6ge3w1qsrmy0d0t0ya62y9t8",
+ "model": "bria/remove-background",
+ "version": "hidden",
+ "input": {
+  "preserve_alpha": true,
+  "image": "arquivo:docs/design/assets/raw/google_nano-banana-2/2026-09-23/tela-iso.png"
+ },
+ "logs": "Downloading 671191 bytes\nDownloaded 0.64MB in 0.06sec\n",
+ "output": "https://replicate.delivery/xezq/sC6jbAeOQGxVf0uU62wlwYCEUtzGiM6WG7yS2qim6SUXrfguA/tmpzjz89k8f.png",
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:47:01.438Z",
+ "started_at": "2026-09-23T21:47:01.450272828Z",
+ "completed_at": "2026-09-23T21:47:03.450203203Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/fe6ge3w1qsrmy0d0t0ya62y9t8/cancel",
+  "get": "https://api.replicate.com/v1/predictions/fe6ge3w1qsrmy0d0t0ya62y9t8",
+  "stream": "https://stream.replicate.com/v1/files/jbxs-tzmrqgyfxq37yivstf2mr6ylxbmgdqav4boycw76gcdkxwoy552a",
+  "web": "https://replicate.com/p/fe6ge3w1qsrmy0d0t0ya62y9t8"
+ },
+ "metrics": {
+  "image_output_count": 1,
+  "predict_time": 1.9999303849999999,
+  "total_time": 2.012203203
+ }
+}

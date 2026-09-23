@@ -1,0 +1,955 @@
+/* =====================================================================
+   Babel Coop · casca 2030 (23/09/2026)
+   A Estação inteira no design 2030: docs/design/CONCEITO.md §3 (layout) e §4 (linguagem visual),
+   tokens em tokens.css (cópia de docs/design/tokens.css), régua em docs/design/REGUA_ORGANISMO.md.
+
+   Como funciona: esta camada vem por último. Ela (1) mapeia as variáveis antigas do protótipo
+   (--e-fundo, --e-casco, --e-acento…) para os tokens e (2) ajusta os componentes da casca.
+   Só CSS: nenhum HTML ou JS muda. Retirada: tirar as duas linhas <link> de index.html (tokens.css
+   e casca-2030.css) devolve o visual anterior inteiro.
+
+   Régua da luz (R1 · lei 3): nada tem luz fixa. Ciano (--t0) = agora, aba ativa, foco.
+   O brilho aparece só com evento real e esfria sozinho:
+   · aviso novo (#e-toast visível) → o "b" do topo acende em neon e o aviso nasce com a borda
+     ciano, que esfria em 6 s; quando o aviso some, o "b" esfria em 2,4 s;
+   · agente pensando (.term-estado.pensando, ou html[data-agente="pensando"|"rodando"]) → o "b"
+     respira em neon no ritmo do anel (1,2 s), e o topo do painel ganha a linha tingida;
+     html[data-agente="espera"] → luz âmbar parada; html[data-agente="terminou"] → um pulso só;
+   · ao vivo, gravando, pedido de entrar, alguém no meu terminal → cor de estado, sem halo fixo.
+
+   Gancho para o motor do organismo (app/interface/organismo.js, BC.organismo):
+   escreva --luz (0..1) no style de .e-aba, .arv-linha, .lat-item, .e-atividades button,
+   .st-item, .term-aba ou .parede-term e a casca pinta a luz (roxo → ciano); 0 = repouso.
+   Ex.: el.style.setProperty('--luz', 2 ** (-idade / 6)) a 4 Hz = meia-vida curta de 6 s.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. As variáveis antigas passam a ser os tokens (um chão só)
+   --------------------------------------------------------------------- */
+:root {
+  --e-fundo: var(--s0);
+  --e-casco: var(--s2);          /* cartões, itens, campos elevados */
+  --e-casco-2: var(--s0);        /* faixas de cromo: abas, barras, rodapé */
+  --e-elevado: var(--s2);
+  --e-linha: var(--linha-fraca); /* separadores internos */
+  --e-linha-2: var(--linha);     /* contornos de botão, campo, chip */
+  --e-borda: var(--hairline-peca);
+  --e-texto: var(--texto);
+  --e-apagado: var(--apagado);
+  --e-fraco: var(--casca-fraco);
+  /* --fraco (Lc 32) dá 4,35:1 sobre --s1 e 3,9:1 sobre --s2: abaixo de 4,5 para texto de 11–13 px.
+     Para TEXTO a casca usa este meio-termo entre --fraco e --apagado (≈ 5,7:1 em --s1, 5,2:1 em --s2);
+     --fraco puro fica para contornos e marcas. */
+  --casca-fraco: color-mix(in oklch, var(--fraco) 65%, var(--apagado));
+  --e-acento: var(--t0);         /* o roxo deixa de ser acento: foco e seleção são ciano */
+  --e-violeta: var(--t2);
+  --e-ciano: var(--t0);
+  --e-ciano-claro: color-mix(in oklch, var(--t0) 55%, var(--texto));
+  --e-hover: var(--s3);
+  --e-sel-a: var(--s3);          /* os degradês de seleção viram a escada plana */
+  --e-sel-b: var(--s3);
+  --e-topo-a: var(--s0);
+  --e-topo-b: var(--s0);
+  --pagina: var(--s0);
+
+  /* luz de evento (a mesma receita da demonstração organismo.html) */
+  --casca-neon-1: color-mix(in srgb, var(--t0) 70%, transparent);
+  --casca-neon-2: color-mix(in srgb, var(--t2) 45%, transparent);
+}
+
+::selection { background: color-mix(in oklch, var(--t0) 30%, transparent); color: var(--texto); }
+::-webkit-scrollbar-thumb { background: var(--s3); }
+::-webkit-scrollbar-thumb:hover { background: var(--linha); }
+mark { background: color-mix(in oklch, var(--t0) 22%, transparent); color: var(--texto); }
+
+/* ---------------------------------------------------------------------
+   2. Página e janela: a Estação ocupa a janela inteira, sem moldura nem sombra
+   --------------------------------------------------------------------- */
+html[data-vista="estacao"],
+html[data-vista="estacao"] body { background: var(--s0); }
+html[data-vista="estacao"] body {
+  padding: 0;
+  font: 400 var(--corpo)/var(--entrelinha) var(--fonte-ui);
+  color: var(--texto);
+  font-kerning: normal;
+}
+
+.estacao {
+  background: var(--s0);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.estacao.soltando::after {
+  inset: var(--topo) 0 var(--rodape) var(--barra-atividades);
+  border: 1.5px dashed var(--t0);
+  background: color-mix(in srgb, var(--s0) 82%, transparent);
+  color: var(--texto);
+  font: 500 var(--t-15) var(--fonte-ui);
+}
+
+@media (min-width: 761px) {
+  .estacao {
+    grid-template-columns: var(--barra-atividades) var(--lat) var(--r1) minmax(0, 1fr) var(--r2) var(--term);
+    grid-template-rows: var(--topo) minmax(0, 1fr) var(--rodape);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   3. Topo 32 px: o "b" à esquerda, estático; acende só com evento
+   --------------------------------------------------------------------- */
+.e-topo {
+  background: var(--s0);
+  border-bottom: 1px solid var(--linha);
+}
+/* no Electron (titleBarStyle hiddenInset) o topo é a barra de título: arrasta a janela;
+   o que se clica fica fora da região de arrastar. No navegador estas regras não fazem nada. */
+.e-topo { -webkit-app-region: drag; }
+.e-topo button, .e-topo select, .e-topo input, .e-topo label, .e-topo a, .e-topo kbd,
+.paleta, .e-sobre, .e-coluna, .e-toast, .cronometro { -webkit-app-region: no-drag; }  /* o que pode ficar por cima do topo */
+@media (min-width: 761px) {
+  .e-topo { gap: var(--esp-3); padding-inline: var(--esp-3) var(--esp-2); }
+  /* as bolinhas de janela eram imitação; o lugar fica reservado (no Mac, o Electron desenha as de verdade aqui) */
+  .e-janela { visibility: hidden; flex: none; width: calc(var(--barra-atividades) - var(--esp-3)); }
+}
+.e-marca { gap: var(--esp-2); }
+.e-logo {
+  height: 24px;
+  opacity: 1;
+  /* ordem do Theus: "a logo brilhosa, que brilha, que pulsa" — o "b" em neon respira sempre (roxo → ciano, 3,4 s);
+     os eventos abaixo (aviso, agente pensando, espera, terminou) trocam a respiração pelo efeito deles */
+  animation: casca-b-vivo 3.4s ease-in-out infinite alternate;
+  transition: filter 2400ms var(--ease-saida), opacity 2400ms var(--ease-saida);
+}
+@keyframes casca-b-vivo {
+  from { filter: drop-shadow(0 0 2px rgba(163, 118, 233, .85)) drop-shadow(0 0 6px rgba(145, 96, 236, .55)) drop-shadow(0 0 14px rgba(145, 96, 236, .25)); transform: scale(1); }
+  to   { filter: drop-shadow(0 0 2px rgba(42, 213, 229, .95)) drop-shadow(0 0 9px rgba(41, 204, 236, .6)) drop-shadow(0 0 22px rgba(41, 204, 236, .35)); transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .e-logo { animation: none; filter: drop-shadow(0 0 2px rgba(163, 118, 233, .85)) drop-shadow(0 0 8px rgba(41, 204, 236, .45)); }
+}
+.e-marca strong { font: 500 var(--t-13)/1 var(--fonte-ui); color: var(--texto); letter-spacing: 0; }
+.e-marca-sub { font: 400 var(--t-11)/1 var(--fonte-mono); letter-spacing: 0; text-transform: none; color: var(--casca-fraco); }
+
+/* foco na marca: luz leve e só enquanto o ponteiro está lá */
+.e-marca:hover .e-logo {
+  opacity: 1;
+  filter: drop-shadow(0 0 3px var(--casca-neon-1));
+  transition-duration: var(--mov-toque);
+}
+/* evento: um aviso novo acende o "b" em neon; quando o aviso some, esfria em 2,4 s */
+.estacao:has(#e-toast:not([hidden])) .e-logo {
+  opacity: 1;
+  filter: drop-shadow(0 0 1.5px var(--t0)) drop-shadow(0 0 5px var(--casca-neon-1)) drop-shadow(0 0 12px var(--casca-neon-2));
+  transition-duration: var(--mov-toque);
+}
+/* evento: o agente está pensando ou rodando → o "b" respira no ritmo do anel (1,2 s), só enquanto age.
+   Fontes: a aba do agente com .term-estado.pensando (protótipo) ou html[data-agente] escrito pelo
+   painel real a partir de term-atividade (pensando · rodando · espera · terminou). */
+.estacao:has(.term-estado.pensando) .e-logo,
+html[data-agente="pensando"] .e-logo,
+html[data-agente="rodando"] .e-logo {
+  opacity: 1;
+  animation: casca-b-pensa var(--laco-agente) ease-in-out infinite alternate;
+}
+@keyframes casca-b-pensa {
+  from { filter: drop-shadow(0 0 1px var(--casca-neon-1)) drop-shadow(0 0 3px var(--casca-neon-1)) drop-shadow(0 0 7px var(--casca-neon-2)); }
+  to   { filter: drop-shadow(0 0 2px var(--t0)) drop-shadow(0 0 6px var(--casca-neon-1)) drop-shadow(0 0 16px var(--casca-neon-2)); }
+}
+/* espera o seu OK: luz âmbar parada (a mesma cor do bloco "espera") */
+html[data-agente="espera"] .e-logo {
+  opacity: 1;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--atencao) 75%, transparent));
+  transition-duration: var(--mov-toque);
+}
+/* terminou: um pulso só, roxo → ciano, e esfria (1,2 s, momento-herói do "b") */
+html[data-agente="terminou"] .e-logo { animation: casca-b-terminou var(--mov-heroi-b) var(--ease-heroi) 1 both; }
+@keyframes casca-b-terminou {
+  0%   { opacity: 1; filter: drop-shadow(0 0 2px var(--casca-neon-2)) drop-shadow(0 0 4px var(--casca-neon-2)); }
+  35%  { opacity: 1; filter: drop-shadow(0 0 5px var(--t0)) drop-shadow(0 0 16px var(--casca-neon-2)); }
+  100% { opacity: .92; filter: drop-shadow(0 0 0 transparent) drop-shadow(0 0 0 transparent); }
+}
+
+.e-comando {
+  border: 1px solid var(--linha-fraca);
+  border-radius: var(--r-chip);
+  background: var(--s1);
+  color: var(--casca-fraco);
+  font: 400 var(--t-125)/1 var(--fonte-ui);
+  transition: border-color var(--mov-toque) var(--ease-saida), color var(--mov-toque) var(--ease-saida);
+}
+@media (min-width: 761px) { .e-comando { height: 24px; max-width: 460px; padding-inline: var(--esp-2); } }
+.e-comando:hover { border-color: var(--linha); color: var(--apagado); }
+.e-comando kbd { padding: 1px 4px; }
+.e-topo-dir { gap: var(--esp-1); }
+.e-vercomo { font: 400 var(--t-11)/1 var(--fonte-mono); letter-spacing: 0; text-transform: none; color: var(--casca-fraco); }
+.e-vercomo select { height: 22px; padding: 0 6px; font: 400 var(--t-125) var(--fonte-ui); border-color: var(--linha-fraca); background: var(--s0); }
+#ir-tv.botao { padding: 3px 8px; border-color: transparent; color: var(--apagado); font-size: var(--t-125); }
+#ir-tv.botao:hover { color: var(--texto); background: var(--s3); }
+.e-sino { width: var(--alvo); height: var(--alvo); border-radius: var(--r-chip); color: var(--apagado); }
+.e-sino svg { width: 16px; height: 16px; stroke-width: 1.5; }
+.e-sino:hover, .e-sino[aria-expanded="true"] { color: var(--texto); background: var(--s3); }
+.e-contador {
+  top: -3px; right: -6px; min-width: 0; height: auto; padding: 0;
+  background: none; color: var(--t0);
+  font: 500 var(--t-11)/1 var(--fonte-mono); font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------
+   4. Barra de atividades 56 px: ícone 20 + rótulo 11 px permanente
+   --------------------------------------------------------------------- */
+.e-atividades {
+  background: var(--s0);
+  border-right: 1px solid var(--linha-fraca);
+  padding-block: var(--esp-1) var(--esp-2);
+  gap: 0;
+}
+.estacao[data-lat="nao"] .e-atividades { border-right-color: var(--linha); }
+.e-atividades button {
+  position: relative;
+  width: var(--barra-atividades);
+  height: auto;
+  min-height: 42px;
+  padding: 6px 2px 5px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  row-gap: 3px;
+  border-left: 2px solid transparent;
+  color: var(--casca-fraco);
+  transition: color var(--mov-toque) var(--ease-saida);
+}
+.e-atividades button > svg { width: var(--icone-barra); height: var(--icone-barra); stroke-width: 1.5; }
+.e-atividades button::after {
+  display: block;
+  max-width: calc(var(--barra-atividades) - 4px);
+  overflow: hidden;
+  font: 500 var(--t-11)/1.1 var(--fonte-ui);
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  text-align: center;
+  color: inherit;
+}
+.e-atividades button:hover { color: var(--texto-90); }
+.e-atividades button[aria-current="page"] {
+  color: var(--texto);
+  border-left-color: var(--t0);
+  background: none;
+}
+.estacao[data-lat="nao"] .e-atividades button[aria-current="page"] { border-left-color: var(--linha); }
+/* rótulos (CONCEITO §3.1: ligados por padrão, 11 px Plex Medium) */
+.e-atividades button[data-id="explorador"]::after   { content: "Criar"; }
+.e-atividades button[data-id="dia"]::after          { content: "Meu dia"; }
+.e-atividades button[data-id="demandas"]::after     { content: "Demandas"; }
+.e-atividades button[data-id="chat"]::after         { content: "Chat"; }
+.e-atividades button[data-id="reuniao"]::after      { content: "Reunião"; }
+.e-atividades button[data-id="acervo"]::after       { content: "Acervo"; }
+.e-atividades button[data-id="inteligencia"]::after { content: "Inteligên-\A cia"; white-space: pre; }
+.e-atividades button[data-id="terminais"]::after    { content: "Terminais"; }
+.e-atividades button[data-id="tarefas"]::after      { content: "Tarefas"; }
+.e-atividades button[data-id="metas"]::after        { content: "Metas"; }
+.e-atividades button[data-id="equipe"]::after       { content: "Equipe"; }
+.e-atividades button[data-id="mapa"]::after         { content: "Mapa"; }
+.e-atividades button[data-id="projetos"]::after     { content: "Projetos"; }
+.e-atividades button[data-id="whatsapp"]::after     { content: "WhatsApp"; }
+.e-atividades button[data-id="loja"]::after         { content: "Loja"; }
+.e-atividades button[data-id="oficina"]::after      { content: "Oficina"; }
+.e-atividades button[data-acao="ir-tv"]::after      { content: "TV"; }
+/* barra do plano: 12 atividades com o rótulo em texto de verdade (span), grupos Trabalho · Acervo · Equipe */
+.e-atividades button[data-grupo]::after { content: none; display: none; }
+.e-atividades .ativ-rotulo {
+  display: block;
+  max-width: calc(var(--barra-atividades) - 4px);
+  overflow: hidden;
+  font: 500 var(--t-11)/1.1 var(--fonte-ui);
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  text-align: center;
+  color: inherit;
+}
+.e-atividades .ativ-perfil { min-height: 40px; }
+.e-atividades .ativ-perfil .avatar { --tam: 22px; }
+/* alternador do grupo no topo da lateral: sem fundo colorido, ativo = texto + traço 2 px --t0 embaixo */
+.ativ-grupo { display: flex; gap: 2px; padding: 8px 10px 0; border-bottom: 1px solid var(--linha-fraca); }
+.ativ-grupo button {
+  flex: 1 1 0; min-width: 0; height: 28px; padding: 0 6px;
+  border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none;
+  color: var(--fraco); font: 500 var(--t-125)/1 var(--fonte-ui); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+}
+.ativ-grupo button:hover { color: var(--texto-90); }
+.ativ-grupo button[aria-selected="true"] { color: var(--texto); border-bottom-color: var(--t0); }
+.ativ-grupo button:focus-visible { outline: 2px solid var(--t0); outline-offset: -2px; }
+/* número só quando > 0: mono 11 px, sem pílula */
+.e-atividades .marca-num {
+  top: 4px; right: 8px;
+  min-width: 0; height: auto; padding: 0;
+  background: none; border-radius: 0;
+  color: var(--t0);
+  font: 500 var(--t-11)/1 var(--fonte-mono); font-variant-numeric: tabular-nums;
+}
+.e-atividades .marca-num.vivo { color: var(--alarme); animation: pulsar var(--batida-gravando) ease-in-out infinite; }
+
+/* ---------------------------------------------------------------------
+   5. Lateral (Arquivos): chão --s0, linhas de 24 px, rótulos 11 px caixa-alta
+   --------------------------------------------------------------------- */
+.e-lateral { background: var(--s0); }
+.lat-titulo { min-height: 34px; padding: 12px 14px 6px; }
+.lat-lista { padding: 0 var(--esp-2); }
+.lat-item {
+  position: relative;
+  min-height: var(--linha-alt);
+  padding: 4px 8px;
+  border-radius: var(--r-chip);
+  color: var(--texto-90);
+  font: 400 var(--t-13)/1.3 var(--fonte-ui);
+  transition: background-color var(--mov-toque) var(--ease-saida), color var(--mov-toque) var(--ease-saida);
+}
+button.lat-item:hover { background: var(--s3); color: var(--texto); }
+.lat-item[aria-current="true"] { background: var(--s3); color: var(--texto); box-shadow: inset 2px 0 var(--t0); }
+.lat-item .conta { font: 500 var(--t-11)/1 var(--fonte-mono); font-variant-numeric: tabular-nums; color: var(--casca-fraco); }
+.lat-nota { color: var(--apagado); font-size: var(--t-125); line-height: 1.5; }
+.lat-nota code { color: var(--texto-90); font: 400 var(--t-11) var(--fonte-mono); }
+
+/* árvore */
+.arv-linha {
+  min-height: var(--linha-alt);
+  border-radius: var(--r-chip);
+  color: var(--texto-90);
+  font: 400 var(--t-13)/1.2 var(--fonte-ui);
+  transition: background-color var(--mov-toque) var(--ease-saida), color var(--mov-toque) var(--ease-saida);
+}
+.arv-linha:hover { background: var(--s3); color: var(--texto); }
+.arv-linha:focus-visible { outline: var(--traco) solid var(--t0); outline-offset: -1px; }
+.arv-linha.aberto { background: var(--s3); color: var(--texto); box-shadow: inset 2px 0 var(--t0); }
+.arv-pasta.raiz { color: var(--apagado); font: 500 var(--t-11)/1 var(--fonte-ui); letter-spacing: var(--rotulo-tracking); text-transform: uppercase; }
+.arv-pasta .arv-nome small { color: var(--casca-fraco); font: 400 var(--t-11) var(--fonte-mono); letter-spacing: 0; text-transform: none; }
+.arv-seta { color: var(--casca-fraco); }
+.arv-equipe { color: var(--apagado); }
+/* ícone de tipo: glifo mono em contorno, sem chapa colorida (ícones estáticos, currentColor) */
+.arv-ic,
+.ic-md, .ic-txt, .ic-csv, .ic-js, .ic-ts, .ic-py, .ic-sh, .ic-css, .ic-json, .ic-html, .ic-pdf, .ic-imagem, .ic-video, .ic-mapa, .ic-quadro, .ic-binario {
+  min-width: 24px;
+  height: 14px;
+  border: 1px solid var(--linha);
+  border-radius: var(--r-2);
+  background: transparent;
+  color: var(--apagado);
+  font: 500 8px/1 var(--fonte-mono);
+  letter-spacing: .02em;
+}
+.arv-linha.aberto .arv-ic, .e-aba[aria-selected="true"] .arv-ic { color: var(--texto-90); border-color: var(--hairline-peca); }
+.arv-ferr button { border-radius: var(--r-chip); color: var(--apagado); font-size: var(--t-11); }
+.arv-ferr button:hover { background: var(--s3); color: var(--texto); }
+.arv-acoes button:hover { background: var(--s3); color: var(--texto); }
+.arv-projeto { border: 1px solid var(--linha); border-radius: var(--r-chip); background: var(--s0); font-size: var(--t-125); }
+.arv-juntos { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s1); color: var(--texto-90); }
+.arv-juntos-av .avatar { box-shadow: 0 0 0 2px var(--s1); }
+.arv-vendo .avatar { box-shadow: 0 0 0 1px var(--s0); }
+.arv-alvo.sobre { background: var(--s3); outline: 1px dashed var(--t0); }
+.arv-arq.recebido { background: none; box-shadow: inset 2px 0 var(--ok); }
+.arv-selo { padding: 0 6px; border: 1px solid color-mix(in oklch, var(--ok) 55%, transparent); border-radius: var(--r-pino); background: transparent; color: var(--ok); font: 500 10px/1.5 var(--fonte-mono); }
+
+/* Criar: atalhos no topo da lateral */
+.criar-atalhos button { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s1); color: var(--apagado); font-size: var(--t-11); }
+.criar-atalhos button:hover { border-color: var(--linha); color: var(--texto); }
+
+/* ---------------------------------------------------------------------
+   6. Bordas que arrastam: a divisória é 1 px --linha; acende em ciano no foco
+   --------------------------------------------------------------------- */
+.e-borda,
+.e-borda:hover, .e-borda.arrastando, .e-borda:focus-visible { background: var(--s0); outline: none; }
+.e-borda::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: var(--linha);
+  transition: background-color var(--mov-toque) var(--ease-saida);
+}
+.e-borda:hover::before, .e-borda.arrastando::before, .e-borda:focus-visible::before { width: 2px; background: var(--t0); }
+
+/* ---------------------------------------------------------------------
+   7. Meio (Trabalho): abas de 32 px, conteúdo em --s1, aba ativa = traço ciano
+   --------------------------------------------------------------------- */
+.e-editor { background: var(--s1); }
+.e-abas { min-height: var(--abas); background: var(--s0); border-bottom: 1px solid var(--linha); }
+.e-aba {
+  position: relative;
+  height: var(--abas);
+  gap: 7px;
+  padding: 0 6px 0 12px;
+  border-right: 1px solid var(--linha-fraca);
+  color: var(--apagado);
+  font: 500 var(--t-125)/1 var(--fonte-ui);
+  transition: color var(--mov-toque) var(--ease-saida);
+}
+.e-aba:hover { color: var(--texto-90); }
+.e-aba[aria-selected="true"] { color: var(--texto); background: var(--s1); box-shadow: inset 0 -2px var(--t0); }
+.e-aba .aba-ic { color: var(--casca-fraco); }
+.e-aba[aria-selected="true"] .aba-ic { color: var(--texto-90); }
+.e-aba .fechar { border-radius: var(--r-chip); color: var(--casca-fraco); }
+.e-aba .fechar.sujo { color: var(--atencao); }
+.e-aba .fechar:hover { background: var(--s3); color: var(--texto); }
+.e-abas-fim { background: var(--s0); }
+.e-aba-botao { width: var(--alvo); height: var(--alvo); border-radius: var(--r-chip); color: var(--casca-fraco); }
+.e-aba-botao:hover { background: var(--s3); color: var(--texto); }
+.e-aba-botao[aria-pressed="true"] { color: var(--apagado); }
+.e-aba-fechar-todas { width: auto; font: 500 var(--t-11) var(--fonte-mono); }
+
+/* vazio = --s1 liso + "Nada aberto · Ctrl K" em --fraco; sem marca-d'água */
+.e-vazio { color: var(--casca-fraco); }
+.e-vazio-marca { display: none; }
+.e-vazio p { font-size: var(--t-13); }
+
+/* cabeçalho do objeto e editor */
+.ed-barra { min-height: var(--cabecalho-objeto); background: var(--s1); border-bottom: 1px solid var(--linha-fraca); }
+.ed-trilha { color: var(--casca-fraco); font: 400 var(--t-11)/1 var(--fonte-mono); }
+.ed-trilha .atual { color: var(--texto); font: 500 var(--t-13)/1 var(--fonte-ui); }
+.ed-trilha .sep { color: var(--casca-fraco); }
+.ed-sep { background: var(--linha-fraca); }
+.ed-salvo { color: var(--apagado); font: 400 var(--t-11) var(--fonte-mono); }
+.ed-aviso { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s2); color: var(--texto-90); box-shadow: inset 2px 0 var(--t0); }
+.ed-aviso.gestao { border-color: var(--linha-fraca); background: var(--s2); color: var(--texto-90); box-shadow: inset 2px 0 var(--atencao); }
+.ed-texto { border: 1px solid var(--linha); border-radius: var(--r-cartao); background: var(--s0); color: var(--texto); }
+.ed-vazio { border: 1px dashed var(--linha); border-radius: var(--r-painel); color: var(--apagado); }
+.ed-previa { border-color: var(--linha); border-radius: var(--r-painel); }
+.ed-previa-barra { background: var(--s0); color: var(--apagado); border-bottom-color: var(--linha-fraca); }
+.ed-previa-barra.visual { background: color-mix(in oklch, var(--t0) 8%, var(--s1)); color: var(--texto-90); border-bottom-color: color-mix(in oklch, var(--t0) 35%, transparent); }
+.ed-vsel { border-color: color-mix(in oklch, var(--t0) 45%, transparent); color: var(--texto-90); }
+.ed-vsel code { color: var(--t0); }
+.ed-video { background: var(--s2); color: var(--apagado); }
+.bv-logo { filter: none; }
+
+/* código e markdown */
+.codigo { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s0); }
+.codigo-nums { color: var(--casca-fraco); background: var(--s0); border-right-color: var(--linha-fraca); }
+.codigo-texto { color: var(--texto-90); }
+.md-corpo { color: var(--texto-90); font-size: var(--t-14); line-height: 1.65; }
+.md-corpo h1, .md-corpo h2, .md-corpo h3 { color: var(--texto); font-weight: 600; letter-spacing: -.005em; }
+.md-corpo h1 { font-size: 26px; }
+.md-corpo h2 { font-size: var(--t-20); border-bottom-color: var(--linha-fraca); }
+.md-corpo h3 { font-size: 17px; }
+.md-corpo a { color: var(--t0); }
+.md-corpo code { background: var(--s2); color: var(--texto); border-radius: var(--r-chip); font-size: var(--t-125); }
+.md-corpo pre { border-color: var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s0); }
+.md-corpo blockquote { border-left: 2px solid var(--linha); background: none; color: var(--texto-90); }
+.md-corpo th, .md-corpo td { border-color: var(--linha-fraca); }
+.md-corpo th { background: var(--s2); color: var(--texto); font-weight: 500; }
+.md-corpo input[type="checkbox"] { accent-color: var(--t0); }
+.tabela th { color: var(--casca-fraco); font: 500 var(--t-11)/1 var(--fonte-ui); letter-spacing: var(--rotulo-tracking); border-bottom-color: var(--linha); }
+.tabela td { border-bottom-color: var(--linha-fraca); }
+.tabela tbody tr:hover td { background: var(--s2); }
+
+/* ---------------------------------------------------------------------
+   8. Direita (Agentes) no protótipo: só a casca (o painel real é do agente painel)
+   --------------------------------------------------------------------- */
+.e-painel { background: var(--s0); }
+.term-topo { min-height: var(--abas); background: var(--s0); border-bottom: 1px solid var(--linha); }
+.term-aba { height: calc(var(--abas) - 1px); color: var(--apagado); font: 500 var(--t-125)/1 var(--fonte-ui); }
+.term-aba[aria-selected="true"] { color: var(--texto); box-shadow: inset 0 -2px var(--t0); }
+/* agente = quadrado (raio 2) com contorno na cor da pessoa dona; pessoa = círculo */
+.term-av { width: 16px; height: 16px; border-radius: var(--r-2); border-width: var(--traco); font: 700 7.5px/1 var(--fonte-mono); }
+.term-estado.pensando { background: var(--t0); box-shadow: 0 0 6px var(--casca-neon-1); }
+.term-estado.esperando { background: var(--atencao); }
+.term-mais { color: var(--apagado); }
+.term-toggle { border: 1px solid var(--linha); border-radius: var(--r-chip); color: var(--apagado); font: 500 var(--t-11) var(--fonte-mono); }
+.term-toggle:hover { color: var(--texto); border-color: var(--hairline-peca); }
+.term-toggle[aria-pressed="true"] { border-color: var(--t0); background: transparent; color: var(--t0); }
+/* "ao vivo" = ponto + palavra em --t0, só enquanto transmite; pausado esfria */
+.term-vivo { border: 0; background: transparent; color: var(--t0); font: 500 var(--t-11) var(--fonte-mono); padding-inline: 4px; }
+.term-vivo.pausado { color: var(--casca-fraco); }
+.term-receitas { background: var(--s0); border-top: 1px solid var(--linha); }
+.term-receitas .chip:hover { color: var(--texto); border-color: var(--hairline-peca); }
+.term-novo { background: var(--s2); border-bottom-color: var(--linha); }
+.term-chip-pessoa { background: transparent; }
+.term-cartao { border: 1px solid var(--linha-fraca); border-left: 2px solid var(--ok); border-radius: var(--r-cartao); background: var(--s2); color: var(--texto); }
+.term-cartao b { color: var(--texto); }
+.term-selo-controle, .term-olho { color: var(--t0); }
+/* agente agindo: o topo do painel ganha a linha tingida (CONCEITO §3.3, borda a 12 %) */
+.e-painel:has(.term-estado.pensando) .term-topo {
+  background: color-mix(in oklch, var(--s0), var(--t0) 6%);
+  box-shadow: inset 0 -1px color-mix(in oklch, var(--t0) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------
+   9. Rodapé 24 px: casas em mono 11 px, sem contorno; cor = estado
+   --------------------------------------------------------------------- */
+.e-status {
+  gap: var(--esp-4);
+  padding-inline: var(--esp-3);
+  background: var(--s0);
+  border-top: 1px solid var(--linha);
+  color: var(--texto-90);
+  font: 500 var(--t-11)/1 var(--fonte-mono);
+  font-variant-numeric: tabular-nums;
+}
+.st-item { gap: 6px; }
+button.st-item:hover { color: var(--texto); }
+.e-status .st-item[data-acao="abrir-demanda"] { color: var(--apagado); }  /* cronômetro parado */
+.e-status .st-rodando { color: var(--texto-90); }                         /* cronômetro rodando */
+.st-livres { color: var(--apagado); }
+.st-reuniao { color: var(--t0); }
+.st-gravando { color: var(--alarme); animation: pulsar var(--batida-gravando) ease-in-out infinite; }
+.st-proj { color: var(--t0); }
+.st-controle { color: var(--t0) !important; }
+.st-pedido { color: var(--atencao) !important; }
+.st-mini { border: 1px solid var(--linha); border-radius: var(--r-2); background: var(--s2); line-height: 14px; }
+.st-mini:hover { background: var(--s3); }
+.st-mini.ok { border-color: color-mix(in oklch, var(--ok) 55%, transparent); color: var(--ok); }
+.st-gravado { color: var(--apagado); }
+.st-atualizar { padding: 0 6px; border: 1px solid var(--t0); border-radius: var(--r-chip); background: transparent; color: var(--t0); font-weight: 500; }
+
+/* ---------------------------------------------------------------------
+   10. Aviso (evento passageiro): nasce aceso e esfria em 6 s (meia-vida curta)
+   --------------------------------------------------------------------- */
+.e-toast {
+  border: 1px solid var(--linha);
+  border-left: 2px solid var(--linha);
+  border-radius: var(--r-cartao);
+  background: var(--s2);
+  box-shadow: none;
+  color: var(--texto);
+  font: 400 var(--t-13)/1.4 var(--fonte-ui);
+  animation: casca-nasce var(--mov-padrao) var(--ease-saida), casca-esfria var(--mv-curta) linear;
+}
+@media (min-width: 761px) {
+  .e-toast { left: calc(var(--barra-atividades) + var(--lat) + var(--r1) + var(--esp-4)); bottom: calc(var(--rodape) + var(--esp-3)); }
+}
+@keyframes casca-nasce { from { opacity: 0; } }
+@keyframes casca-esfria {
+  from { border-left-color: var(--t0); box-shadow: -4px 0 16px -6px var(--casca-neon-1); }
+  to   { border-left-color: var(--linha); box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ---------------------------------------------------------------------
+   11. Peças comuns: botões, chips, alternar, kbd, campos, presença
+   --------------------------------------------------------------------- */
+.botao {
+  border: 1px solid var(--linha);
+  border-radius: var(--r-chip);
+  background: transparent;
+  color: var(--texto-90);
+  font-weight: 500;
+  transition: background-color var(--mov-toque) var(--ease-saida), border-color var(--mov-toque) var(--ease-saida), color var(--mov-toque) var(--ease-saida);
+}
+.botao:hover { background: var(--s3); border-color: var(--hairline-peca); color: var(--texto); }
+.botao.primario { border-color: var(--t0); background: var(--t0); color: var(--s0); font-weight: 600; }
+.botao.primario:hover { filter: none; border-color: color-mix(in oklch, var(--t0) 85%, white); background: color-mix(in oklch, var(--t0) 85%, white); color: var(--s0); }
+.botao[aria-pressed="true"] { border-color: var(--t0); background: transparent; color: var(--t0); }
+.botao.discreto { border-color: transparent; color: var(--apagado); }
+.botao.discreto:hover { background: var(--s3); color: var(--texto); }
+.botao.ativo-texto { color: var(--t0); }
+
+.chip {
+  border: 1px solid var(--linha);
+  border-radius: var(--r-chip);
+  background: transparent;
+  color: var(--apagado);
+  font: 500 var(--t-11)/1.6 var(--fonte-mono);
+}
+.chip.hoje { color: var(--texto-90); border-color: var(--t1); }
+.chip.atrasada, .chip.parada { color: var(--alarme); border-color: color-mix(in oklch, var(--alarme) 50%, transparent); box-shadow: inset 2px 0 var(--alarme); }
+.chip.ok { color: var(--ok); border-color: color-mix(in oklch, var(--ok) 45%, transparent); }
+.sugestoes .chip:hover, .pj-com .chip:hover, .pj-agentes .chip:hover { color: var(--texto); border-color: var(--hairline-peca); }
+.pj-com .chip.ativo { border-color: var(--t0); background: transparent; color: var(--texto); }
+
+.alternar { border: 1px solid var(--linha); border-radius: var(--r-cartao); background: var(--s0); }
+.alternar button { border-radius: var(--r-chip); color: var(--apagado); }
+.alternar button.ativo { background: var(--s3); color: var(--texto); box-shadow: inset 0 -2px var(--t0); }
+
+kbd { font: 500 var(--t-11)/1 var(--fonte-mono); color: var(--apagado); background: var(--s2); border: 1px solid var(--linha); border-bottom-width: 2px; border-radius: var(--r-chip); }
+
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+  border: 1px solid var(--linha);
+  border-radius: var(--r-chip);
+  background: var(--s0);
+  color: var(--texto);
+}
+input:focus, select:focus, textarea:focus { border-color: var(--t0); }
+::placeholder { color: var(--casca-fraco); opacity: 1; }
+.form-ajuda { color: var(--apagado); }
+.marcar input, .md-corpo input[type="checkbox"] { accent-color: var(--t0); }
+
+/* presença: ponto cheio = agora; contorno = ausente/desligado */
+.ponto { width: 7px; height: 7px; box-shadow: none; }
+.ponto.online { background: var(--ok); }
+.ponto.foco { background: var(--t0); }
+.ponto.ausente { background: transparent; border: var(--traco) solid var(--atencao); }
+.ponto.offline { background: transparent; border: var(--traco) solid var(--sem-dado); }
+.avatar .ponto { box-shadow: 0 0 0 2px var(--s0); }
+/* anel de presença: foto dentro do anel da cor da pessoa, com folga (imag-estacao.jpg) */
+.avatar { background: var(--s1); border-width: var(--traco); }
+.avatar.com-foto { background: var(--s0); padding: max(1.5px, calc(var(--tam) * .07)); }
+
+.rotulo { color: var(--casca-fraco); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------------
+   12. Páginas do meio: títulos, cartões (--s2, raio 6), fala humana em Cormorant
+   --------------------------------------------------------------------- */
+.pagina-titulo { color: var(--texto); font-weight: 600; letter-spacing: -.005em; }
+.pagina-sub { color: var(--apagado); font: 400 var(--t-125)/1.5 var(--fonte-mono); }
+.saudacao { font-family: var(--fonte-fala); font-weight: 500; color: var(--latte-88); }
+.pergunta-texto { color: var(--latte-88); }
+@media (min-width: 761px) {
+  .pagina-titulo { font-size: var(--t-20); }
+  .pergunta-texto { font-size: max(24px, 1em); }
+  .dem-relogio { font-size: var(--t-34); }
+}
+.dem-relogio { font-weight: 500; color: var(--texto); }
+.dem-desc { color: var(--texto-90); }
+.dem-pessoas { color: var(--apagado); }
+
+.cartao, .numero, .instrumento, .pessoa-cartao, .resultado, .prompt-cartao, .mq-preset, .oficina-pessoa, .mapa-carta {
+  border: 1px solid var(--linha-fraca);
+  border-radius: var(--r-cartao);
+  background: var(--s2);
+}
+.numero b { font-weight: 500; color: var(--texto); }
+.numero small, .instrumento small, .item-meta { color: var(--apagado); }
+.instrumento small b { color: var(--texto); }
+.vazio { border: 1px dashed var(--linha); border-radius: var(--r-cartao); color: var(--apagado); }
+.item { border: 1px solid var(--linha-fraca); border-left: 3px solid var(--cor); border-radius: var(--r-cartao); background: var(--s2); color: var(--texto); }
+button.item:hover { border-color: var(--linha); border-left-color: var(--cor); background: var(--s3); }
+.item.livre { background: var(--s2); }
+.item-titulo { font-weight: 500; }
+
+/* estado da demanda: carimbo reto de 1 px, sem rotação */
+.estado-pill { border-radius: var(--r-2); border-width: 1px; font: 500 var(--t-11)/1.6 var(--fonte-mono); letter-spacing: var(--rotulo-tracking); }
+.est-livre { color: var(--texto-90); }
+.est-enviada { color: var(--apagado); }
+.est-andamento { color: var(--ok); }
+.est-pausada { color: var(--atencao); }
+.est-pronta { color: var(--t0); }
+.est-concluida { color: var(--apagado); }
+.est-cancelada { color: var(--casca-fraco); }
+
+.barra { background: var(--s3); }
+.fita { background: var(--s3); }
+.linha-tempo time { color: var(--casca-fraco); }
+.linha-tempo .marco { background: var(--s1); }
+.linha-tempo p span { color: var(--apagado); }
+.aprender { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s2); box-shadow: inset 2px 0 var(--t1); }
+.destaque-acao { border-color: var(--linha-fraca); background: var(--s2); box-shadow: inset 2px 0 var(--t0); }
+.cuidado-meu { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s2); color: var(--texto-90); box-shadow: inset 2px 0 var(--atencao); }
+.cuidado-meu span { color: var(--apagado); }
+.cuidado-item { background: var(--s2); }
+.kanban .quadro-coluna { border: 1px solid var(--linha-fraca); border-radius: var(--r-painel); background: var(--s0); }
+.quadro-cartao { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s2); }
+.quadro-cartao:hover { border-color: var(--linha); }
+.trilha-bola { border-width: var(--traco); }
+.trilha-no.atual .trilha-bola { animation: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--t0) 30%, transparent); }
+.trilha-no small { color: var(--apagado); }
+
+/* Criar */
+.criar-cartao { border: 1px solid var(--linha-fraca); border-radius: var(--r-painel); background: var(--s2); transition: border-color var(--mov-toque) var(--ease-saida), background-color var(--mov-toque) var(--ease-saida); }
+.criar-cartao:hover { transform: none; border-color: var(--linha); background: var(--s3); }
+.criar-cartao.destaque { border-color: color-mix(in oklch, var(--ok) 35%, transparent); background: var(--s2); }
+.criar-cartao small { color: var(--apagado); }
+.criar-ic { border-radius: var(--r-cartao); }
+
+/* perfil: nível mono, insígnias com anel (a classe .selo do tokens é o anel de consentimento; aqui é a pílula do perfil) */
+.perfil-nome { color: var(--texto); }
+.perfil-nivel-num { border: 1px solid var(--linha); border-radius: var(--r-2); background: transparent; color: var(--texto); font: 500 var(--t-11) var(--fonte-mono); }
+.perfil-seq { color: var(--texto-90); font: 500 var(--t-125) var(--fonte-mono); }
+.perfil-fatia b { color: var(--texto); }
+.perfil-selos .selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  height: auto;
+  padding: 3px 10px 3px 6px;
+  border: 1px solid var(--linha);
+  border-radius: var(--r-pino);
+  background: transparent;
+  color: var(--texto-90);
+  font-size: var(--t-125);
+}
+.perfil-selos .selo::before { content: ""; width: 10px; height: 10px; border-radius: 50%; border: var(--traco) solid var(--ouro); flex: none; }
+.perfil-selos .selo.proximo { border-style: dashed; color: var(--apagado); }
+.perfil-selos .selo.proximo::before { border-color: var(--fraco); border-style: dashed; }
+
+/* reunião e sala */
+.mesa-item { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s2); }
+.mesa-item.destaque { border-color: var(--linha); background: var(--s3); }
+.sala { border: 1px solid var(--linha-fraca); border-radius: var(--r-painel); background: var(--s2); }
+.sala.gravando { border-color: color-mix(in oklch, var(--alarme) 45%, transparent); background: var(--s2); }
+.fala-linha { color: var(--texto-90); }
+.fala-linha b { color: var(--texto); }
+.sala-sugestao { border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s2); color: var(--texto-90); box-shadow: inset 2px 0 var(--atencao); }
+.sala-sugestao em { color: var(--latte-88); font-family: var(--fonte-fala); font-size: 17px; }
+.sala-cartao { border-color: var(--linha-fraca); background: var(--s2); }
+.gravar-grande { border: 1px solid color-mix(in oklch, var(--alarme) 45%, transparent); border-radius: var(--r-painel); background: var(--s2); color: var(--texto); }
+.gravar-bola { background: var(--alarme); }
+
+/* inteligência */
+.prompt-pos { background: transparent; border: var(--traco) solid var(--linha); color: var(--texto); font-weight: 500; }
+.prompt-texto { color: var(--texto); }
+.resultado-trecho, .passos-sonho { color: var(--texto-90); }
+
+/* chat da equipe (o WhatsApp de cliente continua com a cara dele) */
+.zap { background: var(--s1); }
+.zap-cab, .zap-compor, .zap-respondendo, .zap-emojis, .zap-anexar, .zap .form-ajuda { background: var(--s1); border-color: var(--linha-fraca); }
+.zap-conv:hover { background: var(--s3); }
+.zap-conv[aria-current="true"] { background: var(--s3); box-shadow: inset 2px 0 var(--t0); }
+.zap-dia span { background: var(--s2); color: var(--apagado); }
+.bolha { background: var(--s2); color: var(--texto); box-shadow: none; }
+.bolha.minha { background: var(--s3); }
+.bolha-meta { color: var(--casca-fraco); }
+.bolha-citacao { border-left-color: var(--t0); background: var(--s0); }
+.bolha-acoes { border-color: var(--linha); background: var(--s2); box-shadow: none; }
+.zap-badge { background: transparent; border: 1px solid var(--t0); color: var(--t0); }
+.zap-enviar { background: var(--t0); color: var(--s0); }
+.zap-digitando { color: var(--ok); }
+.mencao { color: var(--t0); background: color-mix(in oklch, var(--t0) 10%, transparent); }
+.arq-chip { border-color: var(--linha); border-radius: var(--r-chip); background: transparent; color: var(--texto-90); }
+.avatar.zap-grupo { --cor: var(--apagado); background: var(--s1); }
+
+/* quadro e mapa: grade de pontos de 8 px só onde há encaixe */
+.quadro, .q-palco { background-color: var(--s1); }
+.q-palco { background-image: radial-gradient(circle, rgb(255 255 255 / .05) 1px, transparent 1.2px); background-size: 16px 16px; }
+.q-barra, .mm-barra { background: var(--s0); border-bottom-color: var(--linha); }
+.q-ferr { border-radius: var(--r-chip); }
+.q-ferr[aria-pressed="true"] { border-color: var(--t0); background: var(--s3); color: var(--texto); }
+
+/* coluna de novidades (sino): chão, sem sombra */
+@media (min-width: 761px) { .e-coluna { top: var(--topo); bottom: var(--rodape); } }
+.e-coluna { background: var(--s1); border-left: 1px solid var(--linha); box-shadow: none; }
+.col-cartao { background: var(--s2); border-radius: 0 var(--r-cartao) var(--r-cartao) 0; }
+.col-cartao time { color: var(--casca-fraco); }
+.col-cartao.novo { background: var(--s3); }
+.col-dica { border: 1px dashed var(--linha); border-radius: var(--r-cartao); color: var(--apagado); }
+
+/* painéis por cima (falar ideia, perfil, mais) */
+.e-sobre { background: color-mix(in srgb, var(--s0) 70%, transparent); }
+.sobre-caixa { border: 1px solid var(--linha); border-radius: var(--r-janela); background: var(--s2); }
+.mais-grade button { border: 1px solid var(--linha-fraca); border-radius: var(--r-painel); background: var(--s1); color: var(--apagado); }
+.mais-grade button:hover { border-color: var(--linha); color: var(--texto); }
+
+/* ---------------------------------------------------------------------
+   13. Paleta Ctrl K: a única sombra e o único vidro da casca
+   --------------------------------------------------------------------- */
+.paleta { background: color-mix(in srgb, var(--s0) 55%, transparent); }
+.paleta-caixa {
+  border: 1px solid var(--linha);
+  border-radius: var(--r-janela);
+  background: color-mix(in srgb, var(--s2) 90%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px rgb(0 0 0 / .55);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .paleta-caixa { background: var(--s2); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+.paleta-caixa input,
+.paleta-caixa input[type="text"] {
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--linha);
+  border-radius: 0;
+  background: transparent;
+  color: var(--texto);
+  font: 400 var(--t-15) var(--fonte-ui);
+}
+.paleta-caixa input:focus { border-bottom-color: var(--t0); }
+.paleta-dica { color: var(--casca-fraco); font: 500 var(--t-11)/1.4 var(--fonte-mono); border-bottom-color: var(--linha-fraca); }
+.paleta-lista li { border-radius: var(--r-chip); color: var(--texto-90); }
+.paleta-lista li[aria-selected="true"] { background: var(--s3); color: var(--texto); box-shadow: inset 2px 0 var(--t0); }
+.paleta-lista li span:last-child { color: var(--casca-fraco); font: 500 var(--t-11) var(--fonte-mono); }
+
+/* ---------------------------------------------------------------------
+   14. Cronômetro que flutua: pílula mono, sem degradê nem disco
+   --------------------------------------------------------------------- */
+.cronometro {
+  border: 1px solid var(--hairline-peca);
+  border-radius: var(--r-painel);
+  background: var(--s2);
+  box-shadow: none;
+}
+@media (min-width: 761px) {
+  .cronometro { right: calc(var(--term) + var(--r2) + var(--esp-4)); bottom: calc(var(--rodape) + var(--esp-4)); }
+}
+.cronometro.arrastando { box-shadow: var(--tela-sombra-levantado); }
+.cron-titulo { color: var(--texto); font-weight: 500; }
+.cron-de, .cron-nota { color: var(--apagado); }
+.cron-nota strong { color: var(--texto-90); }
+.cron-min { border-radius: var(--r-chip); color: var(--apagado); }
+.cron-min:hover { background: var(--s3); color: var(--texto); }
+.cron-pega { color: var(--casca-fraco); }
+.cron-relogio,
+.cron-mini .cron-relogio {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: var(--texto);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.cron-estado { font: 500 var(--t-11)/1 var(--fonte-mono); letter-spacing: var(--rotulo-tracking); }
+.cron-estado .luz { box-shadow: none; animation: none; }
+.cron-estado.rodando { color: var(--texto-90); }
+.cron-estado.rodando .luz { background: var(--ok); }
+.cron-estado.pausado { color: var(--atencao); }
+.cron-estado.aguardando { color: var(--t0); }
+.cron-motivos button { border: 1px solid var(--linha); border-radius: var(--r-chip); background: var(--s0); }
+.cron-motivos button:hover { border-color: var(--t0); }
+.cron-mini { background: var(--s0); color: var(--texto); font-family: var(--fonte-ui); }
+.cron-mini-titulo, .cron-mini-vazio { color: var(--apagado); }
+
+/* ---------------------------------------------------------------------
+   15. Terminais ao vivo (a parede do protótipo) e controle
+   --------------------------------------------------------------------- */
+.parede-term { border: 1px solid var(--linha-fraca); border-radius: var(--r-painel); background: var(--s0); transition: border-color var(--mov-toque) var(--ease-saida); }
+.parede-term:hover { border-color: var(--linha); }
+.parede-term.meu { border-color: var(--linha); }
+.parede-term.atencao { border-color: color-mix(in oklch, var(--atencao) 70%, transparent); box-shadow: none; }
+.parede-cab { background: var(--s2); border-bottom-color: var(--linha-fraca); font-size: var(--t-13); }
+.parede-agente { color: var(--texto-90); font: 500 var(--t-11) var(--fonte-mono); }
+.selo-vivo { color: var(--t0); font: 500 var(--t-11) var(--fonte-mono); }
+.selo-pausa, .selo-off { color: var(--casca-fraco); font: 500 var(--t-11) var(--fonte-mono); }
+.selo-controle { color: var(--t0); font: 500 var(--t-11) var(--fonte-mono); }
+.parede-quando { color: var(--casca-fraco); font: 400 var(--t-11) var(--fonte-mono); }
+.parede-acoes { border-top-color: var(--linha-fraca); }
+.tl { color: var(--apagado); }
+.tl time { color: var(--casca-fraco); }
+.tl-cmd { color: var(--texto); }
+.tl-prompt { color: var(--apagado); }
+.tl-ia { color: var(--t0); }
+.tl-saida { color: var(--apagado); }
+.term-historico { border: 1px solid var(--linha-fraca); border-radius: var(--r-painel); background: var(--s0); }
+.term-controle { border: 1px solid color-mix(in oklch, var(--t0) 45%, transparent); border-radius: var(--r-cartao); background: var(--s0); }
+.tl-controle, .tl-por { color: var(--t0); }
+
+/* ---------------------------------------------------------------------
+   16. Máquina, navegador, loja, oficina: a escada e as hairlines
+   --------------------------------------------------------------------- */
+.mq-palco {
+  background-color: var(--s1);
+  background-image: radial-gradient(circle, rgb(255 255 255 / .05) 1px, transparent 1.2px);
+  background-size: var(--mq-grade) var(--mq-grade);
+}
+.mq-fio { stroke: var(--hairline-peca); }
+.mq-empresa { border: 1.5px dashed var(--linha); border-radius: var(--mq-raio-bandeja); background: color-mix(in oklch, var(--s0) 50%, transparent); }
+.mq-empresa span { background: var(--s1); color: var(--apagado); font: 500 var(--t-11) var(--fonte-mono); }
+.mq-empresa.sel { border-color: var(--t0); }
+.mq-peca,
+.mq-gaveta, .mq-porta, .mq-robo, .mq-cofre, .mq-tela, .mq-portaria {
+  background: var(--s2);
+  border-color: var(--hairline-peca);
+  border-bottom: var(--mq-espessura) solid var(--s0);
+  border-radius: var(--mq-raio-peca);
+  box-shadow: var(--mq-especular);
+  transition: border-color var(--mov-toque) var(--ease-saida), box-shadow var(--mov-padrao) var(--ease-saida);
+}
+.mq-peca { border-left: 3px solid var(--pessoa, var(--hairline-peca)); }
+.mq-peca:hover { transform: none; border-color: var(--hairline-forte); }
+.mq-peca.sel { border-color: var(--t0); box-shadow: var(--mq-especular-polido), 0 0 0 1px var(--t0); }
+/* evento: o pulso chegou na peça → ela brilha (e esfria ao sair do estado) */
+.mq-peca.ativa { border-color: var(--ok); background: var(--s3); box-shadow: var(--mq-especular-polido), 0 0 0 1px var(--ok), 0 0 18px -4px color-mix(in srgb, var(--ok) 55%, transparent); }
+.mq-palco.por-pessoa .mq-peca { box-shadow: var(--mq-especular), 0 0 0 2px color-mix(in srgb, var(--pessoa, transparent) 25%, transparent); }
+.mq-campos em { color: var(--texto-90); border-left-color: var(--linha); }
+.mq-campos small { color: var(--casca-fraco); }
+.mq-frase { color: var(--apagado); }
+.mq-ficha { background: var(--s1); border-left-color: var(--linha-fraca); }
+.mq-lista { color: var(--texto-90); }
+.mq-teste { border: 1px solid var(--linha); border-radius: var(--r-painel); background: var(--s2); box-shadow: none; }
+.mq-teste li.atual { color: var(--t0); }
+.mq-linha-nova { border-color: color-mix(in oklch, var(--ok) 45%, transparent); background: var(--s2); }
+.mq-funcionou { border-color: color-mix(in oklch, var(--ok) 45%, transparent); background: var(--s2); color: var(--texto); }
+.mq-rodape { color: var(--casca-fraco); }
+
+.nav-barra { background: var(--s0); border-bottom-color: var(--linha); }
+.nav-url { background: var(--s1); color: var(--apagado); }
+.nav-estado { color: var(--apagado); }
+.nav-cursor span { background: var(--t0); color: var(--s0); box-shadow: none; }
+.nav-raiox { background: var(--s1); border-left-color: var(--linha-fraca); }
+.raiox-linha code { color: var(--texto-90); }
+.raiox-regra b { color: var(--texto); }
+.raiox-regra span { color: var(--apagado); }
+.raiox-secao p { background: var(--s2); }
+.raiox-resp { background: var(--s0); color: var(--texto-90); }
+.nav-log { background: var(--s0); border-top-color: var(--linha); color: var(--apagado); }
+
+.lj-chave { border: 1px dashed var(--linha); border-radius: var(--r-cartao); }
+.lj-desc { color: var(--apagado); }
+.oficina-versao b, .oficina-v {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: var(--texto);
+  font-weight: 500;
+}
+.oficina-pessoa.pode { border-color: color-mix(in oklch, var(--t0) 40%, transparent); }
+.convite-token { background: var(--s0); color: var(--texto-90); border-radius: var(--r-chip); }
+
+/* ---------------------------------------------------------------------
+   17. Gancho da meia-vida: --luz (0..1) escrito pelo motor do organismo
+   --------------------------------------------------------------------- */
+.e-aba::after,
+.term-aba::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--t2), var(--t0));
+  opacity: var(--luz, 0);
+  pointer-events: none;
+}
+.term-aba { position: relative; }
+.arv-linha, .lat-item { isolation: isolate; }   /* a luz fica entre o fundo da linha e o texto */
+.arv-linha::before,
+.lat-item::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--t2) 30%, transparent), color-mix(in srgb, var(--t0) 8%, transparent) 60%, transparent);
+  opacity: var(--luz, 0);
+  pointer-events: none;
+}
+.e-atividades button::before {
+  content: "";
+  position: absolute;
+  left: -2px; top: 8px; bottom: 8px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--t2), var(--t0));
+  opacity: var(--luz, 0);
+  pointer-events: none;
+}
+.st-item[style*="--luz"] { color: color-mix(in oklch, var(--texto-90), var(--t0) calc(var(--luz) * 100%)); }
+.parede-term[style*="--luz"] { border-color: color-mix(in oklch, var(--linha), var(--t0) calc(var(--luz) * 100%)); }
+
+/* ---------------------------------------------------------------------
+   18. Celular (< 760 px): a mesma física, alvos de 48 px, abas embaixo
+   --------------------------------------------------------------------- */
+@media (max-width: 760px) {
+  .estacao { border-radius: 0; }
+  .e-topo { gap: var(--esp-2); padding-inline: var(--esp-3); }
+  .e-logo { height: 22px; }
+  .e-comando { height: 34px; padding-inline: var(--esp-3); font-size: var(--t-13); }
+  .e-lateral { border-bottom: 1px solid var(--linha); }
+  .e-lateral .lat-item { min-height: 32px; }
+  .e-abas-celular { background: var(--s0); border-top: 1px solid var(--linha); }
+  .e-abas-celular button { min-height: var(--alvo-toque); color: var(--casca-fraco); font: 500 var(--t-11)/1 var(--fonte-ui); }
+  .e-abas-celular button svg { stroke-width: 1.5; }
+  .e-abas-celular button[aria-current="page"] { color: var(--texto); box-shadow: inset 0 2px var(--t0); }
+  .marca-cel { top: 6px; background: none; color: var(--t0); font: 500 var(--t-11)/15px var(--fonte-mono); }
+  .e-conteudo { background: var(--s1); }
+  .cronometro { border-radius: var(--r-painel); }
+}
+
+/* ---------------------------------------------------------------------
+   19. Movimento reduzido: as luzes da casca viram estados fixos, sem laço
+   --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .estacao:has(.term-estado.pensando) .e-logo,
+  html[data-agente="pensando"] .e-logo,
+  html[data-agente="rodando"] .e-logo { animation: none; filter: drop-shadow(0 0 3px var(--casca-neon-1)); }
+  html[data-agente="terminou"] .e-logo { animation: none; }
+  .e-toast { animation: none; border-left-color: var(--t0); }
+  .e-logo { transition: none; }
+  .st-gravando, .e-atividades .marca-num.vivo { animation: none; }
+}

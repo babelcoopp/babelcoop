@@ -1,0 +1,423 @@
+/* babel-coop — protótipo · TV 2030 (a parede da sala)
+   Carregado depois de tv.css e de tokens.css: troca o visual antigo (roxo, fundo que respira) pela linguagem 2030.
+   Fonte: docs/design/CONCEITO.md §3.5 e §4 · PLANO.md §3 "I · TV" · REGUA_ORGANISMO.md.
+   Chão --s0 (tema Noite) · grade de 12 colunas · hairlines de 1 px · números em JetBrains Mono tabular · fala humana em
+   Cormorant ≥ 48 px (na TV de 1080p) em --latte · luz só com evento real (--luz, meia-vida) · sem som · sem fundo que respira.
+   1u = 1 % da altura numa tela 16:9 (10,8 px em 1080p). Escala da TV: 27 · 32 · 43 · 54 · 76 px = 2,5u · 3u · 4u · 5u · 7u. */
+
+html[data-vista="tv"] body { padding: 0; background: var(--s0); }
+html[data-vista="tv"] .app { height: 100%; }
+
+.tv,
+.tv[data-tema="azul"],
+.tv[data-tema="roxo"] {
+  --tv-fundo: var(--s0);
+  --tv-painel: transparent;
+  --tv-sulco: var(--s3);
+  --tv-assin: var(--t0);
+  --tv-texto: var(--texto);
+  --tv-claro: var(--texto);
+  --tv-apagado: var(--apagado);
+  --tv-linha: var(--linha);
+  --tv-hud: rgba(63, 227, 255, .22);          /* contexto Gabriel: borda da superfície viva */
+  --chao: 0;
+  border-radius: 0;
+  background: var(--s0);
+  color: var(--texto);
+  font-family: var(--fonte-ui);
+  font-weight: var(--peso-corpo, 450);
+}
+/* Ametista: o mesmo chão com a base deslocada para ~300° (derivado, nunca paleta à parte) */
+.tv[data-tema2030="ametista"] { --s0: #0b0716; --s1: #110c20; --s2: #1c162d; --s3: #27203b; background: var(--s0); }
+
+/* sem fundo que respira, sem o grafo de fundo: o chão é liso (luz só com evento) */
+.tv::before { content: none; animation: none; }
+.tv-mapa { display: none; }
+
+.tv-palco {
+  gap: calc(var(--u) * 1.2);
+  padding: calc(var(--u) * 2.4) calc(var(--u) * 4) calc(var(--u) * 1.2);
+}
+.tv .num, .tv .tv-cron, .tv .tv-cron-valor, .tv #tv-hora { font-family: var(--fonte-mono); font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1, "zero" 0; }
+
+.tv-rotulo {
+  font: 500 calc(var(--u) * 1.9) / 1.15 var(--fonte-mono);
+  letter-spacing: var(--rotulo-tracking, .08em);
+  text-transform: uppercase;
+  color: var(--apagado);
+}
+.tv-dica { font-size: calc(var(--u) * 2.1); color: var(--apagado); }
+.tv-dica b { color: var(--texto-90); }
+
+/* ---------- topo: o b estático, o cronômetro, o relógio e as luzes da sala ---------- */
+.tv-topo { grid-template-columns: 1fr auto 1fr; align-items: end; padding-bottom: calc(var(--u) * 1.1); border-bottom: 1px solid var(--linha); }
+.tv-marca { gap: calc(var(--u) * 1.2); font: 500 calc(var(--u) * 2.6) / 1 var(--fonte-mono); letter-spacing: .02em; text-transform: none; color: var(--texto-90); align-self: center; }
+.tv-marca .tv-logo { display: none; }
+.tv-b { width: calc(var(--u) * 4.2); height: calc(var(--u) * 4.2); color: var(--texto); flex: none; }
+.tv-cronometro { gap: calc(var(--u) * .4); }
+.tv-cron-valor { font: 500 calc(var(--u) * 6) / 1 var(--fonte-mono); color: var(--texto); letter-spacing: -.01em; }
+.tv-cronometro.reuniao .tv-cron-valor { color: var(--t0); }
+.tv-relogio { gap: calc(var(--u) * .3); }
+#tv-hora { font: 500 calc(var(--u) * 7) / .95 var(--fonte-mono); color: var(--texto); letter-spacing: -.02em; }
+#tv-data { font: 500 calc(var(--u) * 2.1) / 1 var(--fonte-mono); color: var(--apagado); }
+.tv-selos { align-items: center; gap: calc(var(--u) * 1.4); min-height: calc(var(--u) * 2.2); }
+.tv-selo { display: inline-flex; align-items: center; gap: calc(var(--u) * .6); padding: 0; border: 0; border-radius: 0; background: none; font: 500 calc(var(--u) * 1.8) / 1 var(--fonte-mono); letter-spacing: .04em; text-transform: none; color: var(--apagado); }
+.tv .tv-selo, .tv .tv-selo.gravando, .tv .tv-selo.controle, .tv .tv-selo.reuniao, .tv .tv-selo.apagado, .tv .tv-selo.memoria { background: none; border: 0; padding: 0; opacity: 1; box-shadow: none; }
+.tv .tv-selo::before { content: none !important; animation: none !important; }
+.tv .tv-selo.controle { color: var(--atencao); }
+.tv-selo.gravando { color: var(--texto-90); animation: none; }
+.tv-rec { width: calc(var(--u) * 1.2); height: calc(var(--u) * 1.2); border-radius: 50%; background: var(--alarme); animation: tv-bate var(--batida-gravando, 1.6s) ease-in-out infinite; }
+@keyframes tv-bate { 50% { opacity: .35; } }
+.tv-selo.reuniao { color: var(--t0); }
+.tv-selo.apagado { color: var(--fraco); }
+/* memória da sala: 25 traços de 1 px, altura = quanto se falou (um a cada 12 s, sem letras) */
+.tv-tracos { display: inline-flex; align-items: flex-end; gap: calc(var(--u) * .28); height: calc(var(--u) * 1.8); }
+.tv-tracos i { display: block; width: 1px; height: calc(var(--u) * .2 * var(--h, 1)); background: var(--linha); }
+.tv-tracos i.on { background: var(--texto-90); }
+
+/* ---------- o painel: grade de 12 colunas, hairlines, sem painel dentro de painel ---------- */
+.tv-painel.tv-painel-2030 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto minmax(0, 1fr) calc(var(--u) * 19);
+  column-gap: calc(var(--u) * 2.2);
+  row-gap: calc(var(--u) * 1.3);
+  min-height: 0;
+}
+.tv-painel-2030 .tv-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * .9);
+  min-height: 0;
+  padding: calc(var(--u) * .9) 0 0;
+  border: 0;
+  border-top: 1px solid var(--linha);
+  border-radius: 0;
+  background: none;
+  overflow: hidden;
+}
+.tv-bloco-cab { display: flex; align-items: baseline; justify-content: space-between; gap: calc(var(--u) * 1.4); min-height: calc(var(--u) * 2.2); }
+.tv-bloco-cab .tv-rotulo { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* faixa: o ritmo do dia numa linha */
+.tv-painel-2030 .tv-faixa {
+  grid-column: 1 / -1;
+  display: flex; align-items: baseline; flex-wrap: nowrap; gap: calc(var(--u) * 3);
+  padding: calc(var(--u) * .7) 0 0; border: 0; border-radius: 0; background: none; overflow: hidden; white-space: nowrap;
+}
+.tv-faixa-palavra { font: 500 calc(var(--u) * 2.3) / 1 var(--fonte-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ok); }
+.tv-faixa.atencao .tv-faixa-palavra { color: var(--atencao); }
+.tv-faixa-n { font-size: calc(var(--u) * 2.3); color: var(--apagado); }
+.tv-faixa-n b { font-weight: 500; font-size: calc(var(--u) * 2.6); color: var(--texto); margin-right: calc(var(--u) * .4); }
+.tv-faixa-n.fora b { color: var(--atencao); }
+
+/* ---------- MAPA DA SALA: a planta (gemba walk) e a constelação ---------- */
+.tv-mapa-sala { grid-column: 1 / span 8; grid-row: 2; }
+.tv-sinal { font: 500 calc(var(--u) * 1.8) / 1 var(--fonte-mono); letter-spacing: .06em; color: var(--fraco); white-space: nowrap; }
+.tv[data-chao="toca"] .tv-sinal { color: var(--t0); }
+.tv-mapa-corpo { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr); gap: calc(var(--u) * 2); }
+.tv-planta { min-height: 0; display: flex; flex-direction: column; gap: calc(var(--u) * .9); }
+.tv-salas { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: calc(var(--u) * 1.2); }
+.tv-planta[data-salas="1"] .tv-salas { grid-template-columns: minmax(0, 1fr); }
+.tv-sala.projeto { border-style: solid; border-color: color-mix(in oklch, var(--linha-fraca), var(--t0) calc(var(--luz, 0) * 100%)); }
+/* a sala é desenhada como parede de planta: contorno fino tracejado; acende quando algo acontece dentro dela */
+.tv-sala {
+  position: relative; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column; gap: calc(var(--u) * .5);
+  padding: calc(var(--u) * .9) calc(var(--u) * 1.2);
+  border: 1px dashed color-mix(in oklch, var(--linha), var(--t0) calc(var(--luz, 0) * 100%));
+  border-radius: var(--r-cartao, 6px);
+  box-shadow: 0 0 calc(var(--u) * 2.2) color-mix(in srgb, var(--t0) calc(var(--luz, 0) * 22%), transparent);
+}
+.tv-sala header { display: flex; align-items: baseline; justify-content: space-between; gap: calc(var(--u) * 1); }
+.tv-sala header .tv-rotulo { font-size: calc(var(--u) * 1.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: color-mix(in oklch, var(--apagado), var(--t0) calc(var(--luz, 0) * 100%)); }
+.tv-sala-n { font-size: calc(var(--u) * 1.8); color: var(--fraco); }
+.tv-sala ul { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(var(--u) * .45); min-height: 0; }
+.tv-sala-vazia { margin: 0; font: 500 calc(var(--u) * 1.9) / 1.2 var(--fonte-mono); color: var(--fraco); }
+.tv-pos {
+  display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto auto; align-items: center; gap: calc(var(--u) * .8);
+  min-height: calc(var(--u) * 3.4);
+}
+.tv-pos.mais { display: block; font: 500 calc(var(--u) * 1.8) var(--fonte-mono); color: var(--fraco); min-height: 0; }
+/* presença = anel com meia-vida média: cheio = agora · metade = 5 min · só o contorno = hoje */
+.tv-pres {
+  display: grid; place-items: center; width: calc(var(--u) * 3.2); height: calc(var(--u) * 3.2); border-radius: 50%;
+  border: calc(var(--u) * .2) solid var(--cor);
+  background: color-mix(in srgb, var(--cor) calc(var(--luz, 0) * 26%), transparent);
+}
+.tv-pres b { font: 500 calc(var(--u) * 1.35) / 1 var(--fonte-mono); color: var(--cor); letter-spacing: .02em; }
+.st-ausente .tv-pres { border-style: dashed; }
+.tv-quem { font-size: calc(var(--u) * 2.5); line-height: 1.1; color: color-mix(in oklch, var(--texto), var(--t0) calc(var(--luz, 0) * 100%)); white-space: nowrap; }
+.tv-onde { font: 500 calc(var(--u) * 1.9) / 1.2 var(--fonte-mono); color: var(--apagado); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.tv-onde em { font-style: normal; color: var(--fraco); }
+.tv-cron { font-size: calc(var(--u) * 2.2); color: var(--texto-90); font-family: var(--fonte-mono); color: color-mix(in oklch, var(--texto-90), var(--t0) calc(var(--luz, 0) * 100%)); }
+.tv-cron.tv-cron-nada { width: 0; }
+/* o carimbo: OK de quem pediu, com nome e hora (o anel em ouro só nesse momento) */
+.tv-carimbo {
+  margin: auto 0 0; display: flex; align-items: center; gap: calc(var(--u) * .7);
+  padding-top: calc(var(--u) * .5); border-top: 1px solid var(--linha-fraca);
+  font: 500 calc(var(--u) * 1.9) / 1.2 var(--fonte-mono); color: color-mix(in oklch, var(--texto-90), var(--ouro) calc(var(--luz, 0) * 100%));
+  white-space: nowrap; overflow: hidden;
+}
+.tv-carimbo small { font-size: 1em; color: var(--apagado); }
+.tv-selo-ok { flex: none; width: calc(var(--u) * 1.8); height: calc(var(--u) * 1.8); border-radius: 50%; border: calc(var(--u) * .16) solid var(--ouro); background: color-mix(in srgb, var(--ouro) calc(var(--luz, 0) * 60%), transparent); }
+.tv-fora { flex: none; margin: 0; font: 500 calc(var(--u) * 1.9) / 1.2 var(--fonte-mono); color: var(--fraco); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv-fora .tv-rotulo { color: var(--fraco); margin-right: calc(var(--u) * .8); }
+.tv-sep { margin: 0 calc(var(--u) * 1); color: var(--linha); }
+.tv-pos.agente .tv-quem { font-size: calc(var(--u) * 2.2); color: color-mix(in oklch, var(--texto-90), var(--t0) calc(var(--luz, 0) * 100%)); }
+.tv-pos.agente .tv-mini-ag { width: calc(var(--u) * 3.2); height: calc(var(--u) * 3.2); }
+
+/* a constelação sobre o chão vivo (superfície viva: HUD discreto, o chão só com a sala trabalhando) */
+.tv-constelacao { position: relative; min-height: 0; display: grid; place-items: center; overflow: hidden; border-radius: var(--r-painel, 8px); }
+.tv-const-svg { position: relative; z-index: 1; width: 100%; height: 100%; display: grid; place-items: center; }
+.tv-const-svg svg { width: 100%; height: 100%; max-height: 100%; overflow: visible; }
+.tv-chao {
+  position: absolute; left: -10%; right: -10%; bottom: -6%; width: 120%; height: 62%; object-fit: cover; pointer-events: none; z-index: 0;
+  opacity: 0; transition: opacity 1.2s var(--ease-saida, ease);
+  -webkit-mask-image: linear-gradient(to top, #000 35%, transparent 100%); mask-image: linear-gradient(to top, #000 35%, transparent 100%);
+}
+.tv[data-chao="toca"] .tv-chao { opacity: var(--chao, .6); }
+
+/* desenho da constelação na escala da TV (serve para a do organismo e para a própria) */
+#vista-tv .bc-constelacao { width: 100%; height: 100%; overflow: visible; }
+#vista-tv .bc-c-raio { stroke: rgba(42, 213, 229, .2); stroke-width: 1.2; opacity: calc(.6 + var(--luz, 0) * .4); }
+#vista-tv .bc-c-raio.aceso { stroke: var(--t0); stroke-width: calc(1.2px + var(--luz, 0) * 1.4px); }
+#vista-tv .bc-c-laco { fill: none; stroke-width: 2; stroke-dasharray: 6 4; opacity: calc(.35 + var(--luz, 0) * .65); }
+#vista-tv .bc-c-centro circle { fill: var(--s0); stroke: var(--t2); stroke-width: 1.4; }
+#vista-tv .bc-c-centro text { fill: var(--latte-88); font: 500 30px var(--fonte-fala); text-anchor: middle; dominant-baseline: middle; }
+#vista-tv .bc-c-no .anel { fill: none; stroke: var(--bc-cor, var(--t0)); stroke-width: 2.2; opacity: calc(.5 + var(--luz, 0) * .5); }
+#vista-tv .bc-c-no .miolo { fill: var(--s0); stroke: var(--bc-cor, var(--t0)); stroke-width: 1.6; }
+#vista-tv .bc-c-no .brilho { fill: var(--bc-cor, var(--t0)); opacity: calc(var(--luz, 0) * .9); filter: drop-shadow(0 0 6px var(--bc-cor, var(--t0))); }
+#vista-tv .bc-c-no circle.anel { r: 13px; }
+#vista-tv .bc-c-no circle.brilho { r: 12px; }
+#vista-tv .bc-c-no circle.miolo { r: 6px; }
+#vista-tv .bc-c-no text { fill: var(--texto-90); font: 500 23px var(--fonte-mono); paint-order: stroke; stroke: var(--s0); stroke-width: 5px; stroke-linejoin: round; }
+#vista-tv .bc-c-no[data-estado="rodando"] .anel { stroke-dasharray: 7 5; animation: tv-gira 2.4s linear infinite; transform-box: fill-box; transform-origin: 50% 50%; }
+#vista-tv .bc-c-no[data-estado="espera"] .anel { stroke: var(--atencao); opacity: 1; }
+#vista-tv .bc-c-no[data-estado="pausado"] .anel, #vista-tv .bc-c-no[data-estado="pausado"] .miolo { stroke: var(--sem-dado); }
+#vista-tv .bc-c-no[data-estado="desligado"] .anel, #vista-tv .bc-c-no[data-estado="desligado"] .miolo { stroke: var(--sem-dado); stroke-dasharray: 2 3; }
+#vista-tv .bc-c-no[data-estado="desligado"] text, #vista-tv .bc-c-no[data-estado="pausado"] text { fill: var(--fraco); }
+#vista-tv .bc-c-pulso { fill: var(--t0); filter: drop-shadow(0 0 6px var(--t0)); }
+@keyframes tv-gira { to { transform: rotate(360deg); } }
+
+/* ---------- CORPO DO PROJETO (3D) e AGENTES TRABALHANDO ---------- */
+.tv-corpo-bloco { grid-column: 9 / -1; grid-row: 2; }
+.tv-corpo-nome { font: 500 calc(var(--u) * 1.8) / 1 var(--fonte-mono); letter-spacing: .06em; color: var(--texto-90); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* superfície viva (contexto Gabriel): vidro, borda 1 px ciano a 22 %, brilho só com evento, scanlines a 4 % */
+.tv-corpo3d {
+  position: relative; flex: 1; min-height: 0; overflow: hidden;
+  border: 1px solid var(--tv-hud); border-radius: var(--r-painel, 8px);
+  background: radial-gradient(120% 90% at 50% 100%, color-mix(in srgb, var(--s2) 70%, transparent), transparent 70%), color-mix(in srgb, var(--s1) 55%, transparent);
+  -webkit-backdrop-filter: blur(8px) saturate(1.1); backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 0 calc(var(--u) * 2.4) color-mix(in srgb, var(--t0) calc(var(--luz, 0) * 30%), transparent), inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+.tv-corpo3d::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, .04) 0 1px, transparent 1px 3px);
+}
+.v3c-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.v3c-rotulos { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.v3c-rotulo {
+  position: absolute; transform: translate(-50%, -110%); white-space: nowrap;
+  font: 500 calc(var(--u) * 1.6) / 1 var(--fonte-mono); letter-spacing: .02em; color: var(--texto);
+  padding: calc(var(--u) * .3) calc(var(--u) * .6); border-radius: var(--r-chip, 4px); background: color-mix(in srgb, var(--s0) 82%, transparent); border: 1px solid var(--linha-fraca);
+}
+.v3c-rotulo.tracejada { color: var(--t1); border-style: dashed; border-color: color-mix(in srgb, var(--t1) 60%, transparent); }
+.v3c-rotulo.ganhou { color: var(--t0); border-color: color-mix(in srgb, var(--t0) 55%, transparent); }
+.v3c-aviso { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: calc(var(--u) * 1); font: 500 calc(var(--u) * 1.8) / 1.3 var(--fonte-mono); color: var(--fraco); text-align: center; }
+.tv-corpo-legenda { margin: 0; font: 500 calc(var(--u) * 1.9) / 1.25 var(--fonte-mono); color: var(--apagado); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv-corpo-legenda b { font-weight: 500; color: var(--texto); }
+.tv-corpo-legenda b.tracejada { color: var(--t1); }
+.tv-pub { color: color-mix(in oklch, var(--apagado), var(--t0) calc(var(--luz, 0) * 100%)); }
+
+.tv-agentes { flex: none; display: flex; flex-direction: column; gap: calc(var(--u) * .6); padding-top: calc(var(--u) * .8); border-top: 1px solid var(--linha-fraca); }
+.tv-agentes ul { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(var(--u) * .5); }
+.tv-ag { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: calc(var(--u) * .9); min-height: calc(var(--u) * 3.2); }
+.tv-ag-nome { font-size: calc(var(--u) * 2.3); color: var(--texto); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv-ag-nome small { font-size: .82em; color: var(--apagado); }
+.tv-ag-estado { font: 500 calc(var(--u) * 1.9) / 1 var(--fonte-mono); color: color-mix(in oklch, var(--apagado), var(--t0) calc(var(--luz, 0) * 100%)); white-space: nowrap; }
+.tv-ag.est-espera .tv-ag-estado { color: var(--atencao); }
+.tv-ag.est-falhou .tv-ag-estado { color: var(--alarme); }
+.tv-ag-vazio { margin: 0; font: 500 calc(var(--u) * 1.9) / 1.2 var(--fonte-mono); color: var(--fraco); }
+
+/* a mini presença: anel + coluna de luz (o do organismo quando existe; sem ele, este desenho em CSS) */
+.tv-mini-ag { position: relative; display: inline-block; flex: none; width: calc(var(--u) * 2.2); height: calc(var(--u) * 2.2); line-height: 0; }
+.tv-mini-ag.grande { width: calc(var(--u) * 3); height: calc(var(--u) * 3); }
+.tv-mini-ag .bc-presenca { --bc-tam: 100%; width: 100%; height: 100%; }
+.tv-mini-ag > i.aro { position: absolute; inset: 0; border-radius: 50%; border: calc(var(--u) * .18) solid color-mix(in srgb, var(--texto-90) 40%, transparent); }
+.tv-mini-ag > i.col { position: absolute; left: 50%; top: 18%; bottom: 18%; width: 24%; margin-left: -12%; border-radius: 999px; background: linear-gradient(180deg, var(--t2), var(--t1) 55%, var(--t0)); transform: scaleY(.35); transform-origin: 50% 100%; opacity: .6; transition: transform 240ms var(--ease-saida), opacity 240ms; }
+.tv-mini-ag[data-estado="rodando"] > i.col { transform: scaleY(1); opacity: 1; }
+.tv-mini-ag[data-estado="rodando"] > i.aro { border-color: transparent; border-top-color: var(--t2); border-right-color: var(--t0); animation: tv-gira var(--laco-agente, 1.2s) linear infinite; }
+.tv-mini-ag[data-estado="espera"] > i.aro { border-color: var(--atencao); border-top-color: transparent; }
+.tv-mini-ag[data-estado="espera"] > i.col { background: var(--atencao); transform: scaleY(.72); opacity: 1; }
+.tv-mini-ag[data-estado="terminou"] > i.aro { border-color: var(--t0); }
+.tv-mini-ag[data-estado="falhou"] > i.aro { border-color: var(--alarme); border-top-color: transparent; }
+.tv-mini-ag[data-estado="falhou"] > i.col { background: var(--alarme); }
+
+/* ---------- metas (anel que fecha) · campanha (placar que sobe contando) ---------- */
+.tv-painel-2030 .tv-metas { grid-column: 1 / span 5; grid-row: 3; }
+.tv-painel-2030 .tv-campanha-bloco { grid-column: 6 / span 2; grid-row: 3; }
+.tv-painel-2030 .tv-instrumentos { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: calc(var(--u) * 1); align-items: center; }
+.tv-inst { display: grid; justify-items: center; gap: calc(var(--u) * .6); min-width: 0; }
+.tv-inst-anel { position: relative; width: calc(var(--u) * 10.5); aspect-ratio: 1; display: grid; place-items: center; }
+.tv-anel-svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.tv-anel-svg circle { fill: none; stroke-width: 4; }
+.tv-anel-svg .trilho { stroke: var(--s3); }
+.tv-anel-svg .valor { stroke: var(--t0); stroke-dasharray: 100; stroke-dashoffset: 100; stroke-linecap: butt; transition: stroke-dashoffset 400ms var(--ease-saida), stroke 300ms; }
+.tv-inst.fecha .valor, .tv-campanha-bloco.fecha .valor, .tv-comemora.fecha .valor { transition: stroke-dashoffset var(--mov-heroi-meta, 800ms) var(--ease-heroi), stroke 300ms; }
+.tv-inst.ouro .valor, .tv-campanha-bloco.ouro .valor { stroke: var(--ouro); }
+.tv-inst b { position: relative; font: 500 calc(var(--u) * 3) / 1 var(--fonte-mono); color: var(--texto); margin: 0; }
+.tv-inst span { font-size: calc(var(--u) * 2.1); color: var(--apagado); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0; }
+.tv-inst.sem-dado .trilho { stroke: var(--sem-dado); stroke-dasharray: 2 3; }
+.tv-inst.sem-dado b { font-size: calc(var(--u) * 1.5); color: var(--fraco); }
+
+.tv-camp { flex: 1; min-height: 0; display: grid; justify-items: center; align-content: center; gap: calc(var(--u) * .6); text-align: center; }
+.tv-camp-anel { position: relative; width: calc(var(--u) * 12); aspect-ratio: 1; display: grid; place-items: center; }
+.tv-camp-anel .tv-anel-svg circle { stroke-width: 3.4; }
+.tv-camp-centro { position: relative; display: grid; justify-items: center; gap: calc(var(--u) * .2); }
+.tv-camp-centro b { font: 500 calc(var(--u) * 4) / 1 var(--fonte-mono); color: var(--texto); }
+.tv-camp-centro b small { font-size: .5em; color: var(--apagado); }
+.tv-camp-centro span { font: 500 calc(var(--u) * 1.8) / 1 var(--fonte-mono); color: var(--apagado); }
+.tv-camp p { margin: 0; font-size: calc(var(--u) * 1.9); color: var(--apagado); white-space: nowrap; }
+.tv-campanha-bloco { box-shadow: none; }
+.tv-campanha-bloco .tv-camp-centro b { color: color-mix(in oklch, var(--texto), var(--t0) calc(var(--luz, 0) * 100%)); }
+
+/* ---------- a zona que gira: troca só quando o dado muda (crossfade 400 ms) ---------- */
+.tv-painel-2030 .tv-gira { grid-column: 8 / -1; grid-row: 3; }
+.tv-pontos { display: flex; gap: calc(var(--u) * .6); }
+.tv-pontos i { width: calc(var(--u) * .7); height: calc(var(--u) * .7); border-radius: 50%; background: var(--s3); box-shadow: none; }
+.tv-pontos i.on { background: var(--t0); box-shadow: none; }
+.tv-gira-palco { position: relative; flex: 1; min-height: 0; }
+.tv-gira-carta { position: absolute; inset: 0; display: flex; flex-direction: column; gap: calc(var(--u) * .7); opacity: 0; transition: opacity 400ms var(--ease-saida); animation: none; overflow: hidden; }
+.tv-gira-carta.on { opacity: 1; }
+.tv-gira-carta.sai { opacity: 0; }
+/* fala humana: Cormorant 500, ≥ 48 px na TV de 1080p, em --latte (nunca na mesma linha que Plex) */
+.tv-fala { margin: 0; font: 500 calc(var(--u) * 4.5) / 1.08 var(--fonte-fala); color: var(--latte-88); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tv-fala.pequena { font-size: calc(var(--u) * 3); -webkit-line-clamp: 3; }
+.tv-quem-fala { margin: 0; font: 500 calc(var(--u) * 1.9) / 1.2 var(--fonte-mono); color: var(--apagado); }
+.tv-avisos { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(var(--u) * .4); }
+.tv-avisos li { font-size: calc(var(--u) * 2.3); line-height: 1.2; color: var(--texto-90); -webkit-line-clamp: 1; }
+.tv-avisos li::before { content: "·"; margin-right: calc(var(--u) * .8); color: var(--t0); }
+.tv-avisos + .tv-fala { font-size: calc(var(--u) * 4.5); -webkit-line-clamp: 1; }
+.tv-top li { font-size: calc(var(--u) * 2.2); color: var(--texto-90); }
+.tv-top li::marker { color: var(--t0); }
+.tv-top small, .tv-livres small, .tv-cuidados small { font: 500 calc(var(--u) * 1.7) var(--fonte-mono); color: var(--apagado); }
+.tv-livres li, .tv-cuidados li { font-size: calc(var(--u) * 2.3); color: var(--texto-90); }
+.tv-cuidados li b { color: var(--texto); font-weight: 500; }
+.tv-trilha { grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr) auto; gap: calc(var(--u) * 1.4); }
+.tv-trilha-titulo { font-size: calc(var(--u) * 2.2); color: var(--texto-90); }
+.tv-trilha-titulo small { font: 500 calc(var(--u) * 1.6) var(--fonte-mono); color: var(--atencao); }
+.tv-elo { width: calc(var(--u) * 3.4); height: calc(var(--u) * 3.4); border-width: calc(var(--u) * .2); font: 500 calc(var(--u) * 1.3) var(--fonte-mono); }
+.tv-elo.feito { background: color-mix(in srgb, var(--cor) 26%, transparent); color: var(--cor); border-style: solid; }
+.tv-elo.atual { box-shadow: 0 0 0 calc(var(--u) * .4) color-mix(in srgb, var(--cor) 22%, transparent); }
+.tv-fio { height: 1px; background: var(--linha); }
+.tv-fio.feito { background: linear-gradient(90deg, var(--t2), var(--t0)); }
+.tv-fio.pulso::after { width: calc(var(--u) * 1); height: calc(var(--u) * 1); background: var(--t0); box-shadow: 0 0 calc(var(--u) * 1.4) var(--t0); }
+.tv-pct { font: 500 calc(var(--u) * 2.6) var(--fonte-mono); color: var(--texto); }
+
+/* anel de pessoa (iniciais, cor da pessoa; nunca chip cheio) */
+.tv-p { display: inline-grid; place-items: center; flex: none; width: calc(var(--u) * 3.4); height: calc(var(--u) * 3.4); border-radius: 50%; border: calc(var(--u) * .2) solid var(--cor); color: var(--cor); font: 500 calc(var(--u) * 1.3) / 1 var(--fonte-mono); overflow: hidden; }
+.tv-p img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- o acontecimento do momento (Plex; a luz esfria em 6 s) ---------- */
+.tv-evento { gap: calc(var(--u) * 1.3); min-height: calc(var(--u) * 5); padding: calc(var(--u) * .6) 0 0; border-top: 1px solid var(--linha); }
+.tv-evento .estrela { display: none; }
+.tv-evento-luz { flex: none; width: calc(var(--u) * .8); height: calc(var(--u) * .8); border-radius: 50%; background: color-mix(in srgb, var(--t0) calc(var(--luz, 0) * 100%), var(--s3)); box-shadow: 0 0 calc(var(--u) * 1.4) color-mix(in srgb, var(--t0) calc(var(--luz, 0) * 70%), transparent); }
+.tv-evento p { font: 500 calc(var(--u) * 2.9) / 1.15 var(--fonte-ui); color: var(--texto); animation: none; -webkit-line-clamp: 1; }
+.tv-evento p.entra { animation: tv-entra var(--mov-padrao, 180ms) var(--ease-saida); }
+@keyframes tv-entra { from { opacity: 0; } }
+.tv-evento time, .tv-evento .fila { font: 500 calc(var(--u) * 1.9) var(--fonte-mono); color: var(--apagado); }
+.tv-rodape { font: 500 calc(var(--u) * 1.3) var(--fonte-mono); color: var(--fraco); opacity: 1; }
+
+/* ---------- sugestão de ideia: faixa fina que esfria em 30 s ---------- */
+/* fica no lugar do acontecimento do momento (rodapé), nunca por cima do trabalho */
+.tv-sugestao {
+  position: absolute; left: calc(var(--u) * 4); right: calc(var(--u) * 4); bottom: calc(var(--u) * .8); top: auto; z-index: 4; transform: none; max-width: none;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: calc(var(--u) * .3); min-height: calc(var(--u) * 6.8); padding: calc(var(--u) * .6) calc(var(--u) * 1.4);
+  font: inherit; color: var(--texto);
+  border: 1px solid color-mix(in srgb, var(--t0) calc(20% + var(--luz, 0) * 40%), transparent); border-radius: var(--r-painel, 8px);
+  background: var(--s0); box-shadow: none; animation: none; opacity: 1;
+}
+.tv-sugestao q { opacity: calc(.55 + var(--luz, 0) * .45); }
+.tv-sugestao q { font: 500 calc(var(--u) * 3.4) / 1.05 var(--fonte-fala); color: var(--latte-88); quotes: "“" "”"; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv-sugestao .tv-rotulo { font-size: calc(var(--u) * 1.6); }
+
+/* ---------- modo reunião ---------- */
+.tv-reu-cab { padding-bottom: calc(var(--u) * .6); }
+.tv-reu-cab h2 { font: 600 calc(var(--u) * 4.4) / 1.05 var(--fonte-fala); color: var(--latte-88); }
+.tv-reu-tempo { font: 500 calc(var(--u) * 5) / 1 var(--fonte-mono); color: var(--t0); }
+.tv-reu-pessoas { gap: calc(var(--u) * .3); }
+.tv-reu-pessoas .tv-p { margin-left: calc(var(--u) * -.6); background: var(--s0); }
+.tv-reu-grade { gap: calc(var(--u) * 2.2); }
+.tv-reu .tv-bloco { border: 0; border-top: 1px solid var(--linha); border-radius: 0; background: none; padding: calc(var(--u) * 1) 0 0; }
+.tv-reu-mesa-cab b { font-size: calc(var(--u) * 2.5); color: var(--texto); }
+.tv-mat { border-color: var(--linha); border-radius: var(--r-chip, 4px); font: 500 calc(var(--u) * 1.8) var(--fonte-mono); color: var(--apagado); background: none; gap: calc(var(--u) * .6); }
+.tv-mat .tv-p { width: calc(var(--u) * 2.6); height: calc(var(--u) * 2.6); font-size: calc(var(--u) * 1); }
+.tv-mat.on { border-color: var(--t0); color: var(--texto); }
+.tv-pauta { font-size: calc(var(--u) * 2.2); color: var(--texto-90); }
+.tv-pauta li.feito { color: var(--fraco); }
+.tv-pauta li.decisao::before { color: var(--ok); }
+.tv-reu-lado section { gap: calc(var(--u) * .5); }
+
+/* ---------- arquivo na TV (mesa e projeção): texto na escala da TV ---------- */
+.tv .tv-md { max-width: 92ch; font-size: calc(var(--u) * 2.5); line-height: 1.45; }
+.tv .tv-md p, .tv .tv-md li, .tv .tv-md td, .tv .tv-md th, .tv .tv-md blockquote { font-size: calc(var(--u) * 2.5); }
+.tv .tv-md h1 { font-size: calc(var(--u) * 4.4); } .tv .tv-md h2 { font-size: calc(var(--u) * 3.4); } .tv .tv-md h3 { font-size: calc(var(--u) * 2.9); }
+.tv .tv-md code, .tv .tv-md pre { font-size: calc(var(--u) * 2.1); }
+
+/* ---------- quadro e site ---------- */
+.tv-q-cab b { font: 500 calc(var(--u) * 3) var(--fonte-ui); color: var(--texto); }
+.tv .quadro { background: var(--s1); }
+.tv-quadro-modo .tv-bloco, .tv-site-modo .tv-bloco { border: 1px solid var(--linha); border-radius: var(--r-painel, 8px); background: var(--s1); }
+
+/* ---------- projeção: hairline --t0 nas quatro bordas + rótulo no canto, estáticos ---------- */
+.tv-projecao { background: var(--s0); box-shadow: inset 0 0 0 calc(var(--u) * .3) var(--t0) !important; animation: none !important; padding: calc(var(--u) * 3) calc(var(--u) * 4.5); }
+.proj-marca { position: absolute; top: calc(var(--u) * .9); left: calc(var(--u) * 1.4); font: 500 calc(var(--u) * 1.7) / 1 var(--fonte-mono); color: var(--t0); letter-spacing: .04em; }
+.proj-cab .tv-rotulo { color: var(--t0) !important; }
+.proj-nome { font-size: calc(var(--u) * 3); color: var(--texto); }
+.proj-por, .proj-rodape { font-family: var(--fonte-mono); color: var(--apagado); }
+
+/* ---------- visita: Cosmic Latte com texto --s0 ---------- */
+.tv-visita { background: #fff8e7; color: #060b16; }
+.tv-visita .tv-visita-logo { display: none; }
+.tv-visita .tv-b { width: calc(var(--u) * 16); height: calc(var(--u) * 16); color: #060b16; }
+.tv-visita-texto { font: 500 calc(var(--u) * 7.6) / 1 var(--fonte-fala); color: #060b16; font-style: normal; }
+.tv-visita-hora { font: 500 calc(var(--u) * 4) / 1 var(--fonte-mono); color: #4a5568; }
+
+/* ---------- comemoração: o anel fecha (800 ms, uma vez), sem confete ---------- */
+.tv-comemora { background: color-mix(in srgb, var(--s0) 88%, transparent); gap: calc(var(--u) * 2); align-content: center; }
+.tv-comemora canvas { display: none; }
+.tv-com-anel { position: relative; width: calc(var(--u) * 22); aspect-ratio: 1; }
+.tv-comemora .valor { stroke: var(--ouro); }
+.tv-comemora.fecha .valor { stroke-dashoffset: 0; }
+.tv-comemora p { font: 500 calc(var(--u) * 6) / 1.05 var(--fonte-fala); color: var(--latte-88); text-shadow: none; animation: tv-entra 400ms var(--ease-saida); }
+
+/* ---------- abertura: o b que se desenha (R1), uma vez ao ligar ---------- */
+.tv-abertura { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; background: var(--s0); transition: opacity 400ms var(--ease-saida); }
+.tv-abertura video { width: min(62vh, 90vw); height: min(62vh, 90vw); object-fit: contain; }
+.tv-abertura.sai { opacity: 0; pointer-events: none; }
+
+/* ---------- efeitos CSS quando o organismo não está (protótipo puro) ---------- */
+.tv-recebe { box-shadow: 0 0 0 1px var(--t0), 0 0 calc(var(--u) * 2.4) color-mix(in srgb, var(--t0) 45%, transparent) !important; transition: box-shadow 600ms var(--ease-saida); }
+.tv-respira { animation: tv-respira 1.2s var(--ease-saida) 1; }
+@keyframes tv-respira { 25% { box-shadow: 0 0 0 1px var(--t2), 0 0 calc(var(--u) * 3) color-mix(in srgb, var(--t2) 40%, transparent); } }
+.tv-estalo { position: fixed; z-index: 30; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; pointer-events: none; background: var(--t0); box-shadow: 0 0 0 0 color-mix(in srgb, var(--t2) 70%, transparent); animation: tv-estalo 800ms var(--ease-saida) forwards; }
+.tv-estalo.forte { background: var(--t2); }
+@keyframes tv-estalo { 0% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(163, 118, 233, .7), 0 0 0 0 rgba(42, 213, 229, .6); } 100% { opacity: 0; transform: scale(.3); box-shadow: 0 0 0 26px rgba(163, 118, 233, 0), 0 0 0 44px rgba(42, 213, 229, 0); } }
+
+/* ---------- sem movimento: cor sem movimento, tudo em degraus (aceso · morno · repouso) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  #vista-tv .bc-c-no[data-estado="rodando"] .anel, .tv-mini-ag[data-estado="rodando"] > i.aro, .tv-rec { animation: none; }
+  .tv-gira-carta, .tv-chao, .tv-anel-svg .valor, .tv-abertura { transition: none; }
+  .tv-evento p.entra, .tv-comemora p, .tv-estalo, .tv-respira { animation: none; }
+  .tv-fio.pulso::after { animation: none; }
+}
+
+/* ---------- janela pequena (a Tela da TV num notebook) ---------- */
+@media (max-width: 760px) {
+  .tv-painel.tv-painel-2030 { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .tv-painel-2030 > * { grid-column: 1 / -1 !important; grid-row: auto !important; }
+  .tv-mapa-corpo, .tv-planta { grid-template-columns: minmax(0, 1fr); }
+  .tv-corpo3d { min-height: 260px; }
+  .tv-painel-2030 .tv-gira { min-height: 220px; }
+}

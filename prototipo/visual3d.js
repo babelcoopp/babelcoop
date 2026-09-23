@@ -253,4 +253,461 @@ window.BC = window.BC || {};
     }
   };
   window.addEventListener('resize', function () { BC.visual3d.redimensionar(); });
+
+  /* =====================================================================================
+     O CORPO DO PROJETO (TV · fase F4 do PLANO): as peças da Máquina em 3D, na parede da sala.
+     "A peça nova nasce tracejada e ganha corpo ao publicar." Nada gira nem respira sem dado:
+     o quadro só é desenhado quando algo muda (peça nova, peça que ganha corpo, pulso no cano, tamanho).
+
+     Estado compartilhado (vai para todas as janelas pela loja):
+       estado.corpo = { atual: <projeto>, projetos: { <projeto>: { nome, pecas: [{ id, tipo, nome, estado: 'corpo'|'tracejada', ts, por }],
+                        fios: [[de, para]], publicacoes: [{ ts, por, ids, versao }] } } }
+     Ações (BC.loja.fazer): 'corpoPeca' {projeto, nome?, pecas:[{id,tipo,nome}]} → peças tracejadas (ainda não publicadas)
+                            'corpoPublicar' {projeto, nome?, pecas?, fios?, tudo?} → as peças ganham corpo (evento 'corpo', vai para a TV)
+     As peças em GLB vêm de midia/pecas/pecas.json (geradas pelo pipeline da Replicate); sem GLB, uma forma simples do mesmo tipo.
+     ===================================================================================== */
+
+  var CORPO_TIPOS = { portaria: 'Portaria', gaveta: 'Gaveta', porta: 'Porta', robo: 'Robô', deposito: 'Depósito', cofre: 'Cofre', tela: 'Tela', cano: 'Cano',
+    campo: 'Campo', fio: 'Fio', chave: 'Chave', armario: 'Armário', ferramenta: 'Ferramenta', carteiro: 'Carteiro', casa: 'Casa de Máquinas', empresa: 'Empresa', vitrine: 'Vitrine', janela: 'Janela' };
+  var CORPO_FIOS = [['portaria', 'carteiro'], ['portaria', 'clinicas'], ['clinicas', 'pacientes'], ['pacientes', 'agendamentos'], ['porta-novo', 'agendamentos'], ['porta-listar', 'agendamentos'], ['tela-agenda', 'porta-novo'], ['tela-agenda', 'porta-listar'], ['agendamentos', 'robo-zap'], ['pacientes', 'deposito'], ['agendamentos', 'cano'], ['cano', 'tela-agenda']];
+
+  function tipoCorpo(t) {
+    var n = U.normalizar(t || '').replace(/[^a-z]+/g, '');
+    if (!n) return 'gaveta';
+    if (CORPO_TIPOS[n]) return n;
+    if (/^casa/.test(n)) return 'casa';
+    if (/tabela|gaveta/.test(n)) return 'gaveta';
+    if (/robo|gatilho|cron/.test(n)) return 'robo';
+    if (/api|rota|porta|funcao/.test(n)) return 'porta';
+    if (/login|auth|portaria/.test(n)) return 'portaria';
+    if (/bucket|deposito|arquivo/.test(n)) return 'deposito';
+    if (/segredo|cofre|vault/.test(n)) return 'cofre';
+    if (/realtime|cano|fila/.test(n)) return 'cano';
+    if (/tela|pagina/.test(n)) return 'tela';
+    return n;
+  }
+
+  function semearCorpo() {
+    var e = L().estado;
+    if (e.corpo && e.corpo.projetos) return e.corpo;
+    var t = Date.now(), H = U.HORA, D = U.DIA;
+    var pecas = [
+      ['carteiro', 'carteiro', 'Carteiro', 'carla', 6 * D], ['portaria', 'portaria', 'Portaria', 'carla', 6 * D], ['clinicas', 'gaveta', 'Clínicas', 'carla', 6 * D], ['pacientes', 'gaveta', 'Pacientes', 'bruno', 5 * D],
+      ['agendamentos', 'gaveta', 'Agendamentos', 'davi', 5 * D], ['porta-novo', 'porta', 'novo agendamento', 'bruno', 4 * D], ['porta-listar', 'porta', 'listar agendamentos', 'bruno', 4 * D],
+      ['robo-zap', 'robo', 'aviso no WhatsApp', 'davi', 3 * D], ['deposito', 'deposito', 'fotos', 'bruno', 3 * D], ['tela-agenda', 'tela', 'Agenda', 'davi', 2 * D],
+      ['cano', 'cano', 'ao vivo', 'davi', 2 * D], ['cofre', 'cofre', 'Cofre', 'carla', 2 * H]
+    ].map(function (p) { return { id: p[0], tipo: p[1], nome: p[2], estado: 'corpo', ts: t - p[4], por: p[3] }; });
+    e.corpo = { atual: 'clinicas', projetos: { clinicas: { nome: 'Clínicas em Campinas', pecas: pecas, fios: CORPO_FIOS.map(function (f) { return f.slice(); }),
+      publicacoes: [{ ts: t - 2 * H, por: 'carla', ids: ['cofre'], versao: 6 }] } } };
+    return e.corpo;
+  }
+  function corpoProjeto(pjId, nome) {
+    var c = semearCorpo(), pj = c.projetos[pjId];
+    if (!pj) {
+      var info = (L().estado.projetos || []).filter(function (p) { return p.id === pjId; })[0];
+      pj = c.projetos[pjId] = { nome: nome || (info ? info.nome : pjId), pecas: [], fios: [], publicacoes: [] };
+    }
+    return pj;
+  }
+  function pecaDoCorpo(pj, id) { for (var i = 0; i < pj.pecas.length; i++) if (pj.pecas[i].id === id) return pj.pecas[i]; return null; }
+  function juntarFios(pj, fios) {
+    (fios || []).forEach(function (f) {
+      if (!Array.isArray(f) || !f[0] || !f[1] || f[0] === f[1]) return;
+      var a = String(f[0]), b = String(f[1]);
+      if (!pj.fios.some(function (x) { return x[0] === a && x[1] === b; })) pj.fios.push([a, b]);
+    });
+  }
+
+  /* peças novas que ainda não foram publicadas: nascem tracejadas na parede */
+  LA.corpoPeca = function (quem, dados) {
+    if (!dados || !dados.projeto || !Array.isArray(dados.pecas)) return;
+    var pj = corpoProjeto(String(dados.projeto), dados.nome), novas = 0, agora = Date.now();
+    dados.pecas.forEach(function (p) {
+      if (!p || !p.id || pecaDoCorpo(pj, String(p.id))) return;
+      pj.pecas.push({ id: String(p.id), tipo: tipoCorpo(p.tipo), nome: String(p.nome || p.id).slice(0, 40), estado: p.publicada ? 'corpo' : 'tracejada', ts: agora, por: quem });
+      novas++;
+    });
+    juntarFios(pj, dados.fios);
+    if (!novas) return;
+    return [];
+  };
+
+  /* publicar: as peças tracejadas (e as que vierem na lista) ganham corpo. O evento vai para a TV. */
+  LA.corpoPublicar = function (quem, dados) {
+    if (!dados || !dados.projeto) return;
+    var pjId = String(dados.projeto), pj = corpoProjeto(pjId, dados.nome), agora = Date.now(), ganharam = [];
+    var idPub = String(dados.id || (quem + ':' + (dados.pecas || []).map(function (p) { return p && p.id; }).join(',') + ':' + Math.floor(agora / 5000)));
+    if (pj.publicacoes.some(function (x) { return x.id === idPub; })) return; /* a mesma publicação chegando de novo (outra janela, o diário) */
+    (dados.pecas || []).forEach(function (p) {
+      if (!p || !p.id) return;
+      var x = pecaDoCorpo(pj, String(p.id));
+      if (!x) { x = { id: String(p.id), tipo: tipoCorpo(p.tipo), nome: String(p.nome || p.id).slice(0, 40), estado: 'tracejada', ts: agora, por: quem }; pj.pecas.push(x); }
+      if (p.publicada === false) return; /* ainda no local: continua tracejada */
+      if (x.estado !== 'corpo') { x.estado = 'corpo'; x.ts = agora; x.por = quem; ganharam.push(x.id); }
+    });
+    if (dados.tudo !== false) pj.pecas.forEach(function (x) { if (x.estado === 'tracejada') { x.estado = 'corpo'; x.ts = agora; x.por = quem; ganharam.push(x.id); } });
+    juntarFios(pj, dados.fios);
+    var versao = ((pj.publicacoes[0] || {}).versao || 0) + 1;
+    pj.publicacoes.unshift({ id: idPub, ts: agora, por: quem, ids: ganharam.slice(), versao: dados.versao || versao });
+    if (dados.versao) versao = dados.versao;
+    if (pj.publicacoes.length > 12) pj.publicacoes.length = 12;
+    semearCorpo().atual = pjId;
+    var n = ganharam.length, nomes = ganharam.map(function (id) { return pecaDoCorpo(pj, id).nome; });
+    var texto = L().nome(quem) + ' publicou a Máquina de ' + pj.nome + ' (v' + versao + ')' + (n ? ': ' + (n === 1 ? 'a peça ' + nomes[0] + ' ganhou corpo' : n + ' peças ganharam corpo') : ', sem peça nova');
+    var textoTv = n ? (n === 1 ? 'A peça ' + nomes[0] + ' ganhou corpo na parede' : n + ' peças ganharam corpo na parede: ' + nomes.slice(0, 3).join(', ') + (n > 3 ? '…' : '')) : L().nome(quem) + ' publicou a Máquina de ' + pj.nome;
+    return [L()._evento('corpo', quem, texto, { tv: true, projeto: pjId, pecas: ganharam, versao: versao, textoTv: textoTv })];
+  };
+
+  /* ponte com a Máquina desta Estação (maquina.js guarda as peças só nesta janela):
+     - peça que existe na Máquina e não está no corpo → nasce tracejada na parede;
+     - "publicado em produção" (o formulário Publicar da Máquina) → as peças ganham corpo.
+     Só a Estação que publicou faz a ponte (os eventos dos outros chegam prontos). */
+  function maquinasLocais() { return (BC.maquina && BC.maquina.maquinas) || {}; }
+  /* as peças da Máquina desta Estação: pelo retrato (API da Máquina) quando existe, senão pelas peças cruas */
+  function pecasDaMaquina(pjId) {
+    var ms = maquinasLocais(), m = ms[pjId], r = null;
+    if (!m) return [];
+    try { r = BC.maquina.retrato ? BC.maquina.retrato(pjId) : null; } catch (e) { r = null; }
+    var lista = r && Array.isArray(r.pecas) ? r.pecas : (Array.isArray(m.pecas) ? m.pecas : []);
+    return lista.filter(function (p) { return p && p.id && p.tipo !== 'empresa'; })
+      .map(function (p) { return { id: String(p.id), tipo: p.tipo, nome: p.nome || p.id, publicada: p.publicada !== false && p.pronta !== false }; });
+  }
+  function fiosDaMaquina(pjId) {
+    var m = maquinasLocais()[pjId];
+    return (m && Array.isArray(m.fios) ? m.fios : []).map(function (f) { return Array.isArray(f) ? f : f && [f.de, f.para]; })
+      .filter(function (f) { return f && f[0] && f[1]; }).map(function (f) { return [String(f[0]), String(f[1])]; });
+  }
+  function nomeDoProjeto(pjId) { var m = maquinasLocais()[pjId]; return m && m.pj ? m.pj.nome : null; }
+  var ponteAgendada = false, ultimaPublicacao = {}, ultimaSinc = 0, sincPendente = null;
+  /* no máximo duas vezes por segundo (o retrato da Máquina não é de graça e a loja muda muito com a equipe trabalhando) */
+  function sincronizarTracejadas() {
+    if (ponteAgendada || L().papel !== 'estacao' || !L().estado) return;
+    var falta = 500 - (Date.now() - ultimaSinc);
+    if (falta > 0) { if (!sincPendente) sincPendente = setTimeout(function () { sincPendente = null; sincronizarTracejadas(); }, falta); return; }
+    ultimaSinc = Date.now();
+    var ms = maquinasLocais(), c = L().estado.corpo;
+    Object.keys(ms).forEach(function (pjId) {
+      var pecas = pecasDaMaquina(pjId);
+      if (!pecas.length) return;
+      var pj = c && c.projetos && c.projetos[pjId];
+      var novas = pecas.filter(function (p) { return !pj || !pecaDoCorpo(pj, p.id); });
+      if (!novas.length || ponteAgendada) return;
+      ponteAgendada = true;
+      setTimeout(function () { ponteAgendada = false; L().fazer('corpoPeca', { projeto: pjId, nome: nomeDoProjeto(pjId), pecas: novas, fios: fiosDaMaquina(pjId) }); }, 0);
+    });
+  }
+  L().aoMudar(function (estado, novos) {
+    if (L().papel !== 'estacao') return;
+    (novos || []).forEach(function (ev) {
+      if (!ev || ev.pessoa !== L().eu) return;
+      var pjId = null, m = null, versao = null;
+      if (ev.tipo === 'maquina' && ev.maquina === 'publicou' && ev.pj) pjId = ev.pj;
+      else if (ev.tipo === 'maquina-publicada' && ev.projeto) pjId = ev.projeto;
+      else if (ev.tipo === 'recado' && (m = /^Máquina: (.+?) publicad[oa] em produção(?: \(v(\d+)\))?/.exec(ev.texto || ''))) {
+        var pj = (estado.projetos || []).filter(function (p) { return p.nome === m[1]; })[0];
+        pjId = pj ? pj.id : null; versao = m[2] ? +m[2] : null;
+      }
+      if (!pjId || !maquinasLocais()[pjId]) return;
+      if (ultimaPublicacao[pjId] && Date.now() - ultimaPublicacao[pjId] < 4000) return; /* o recado e o evento da Máquina são a mesma publicação */
+      ultimaPublicacao[pjId] = Date.now();
+      setTimeout(function () { L().fazer('corpoPublicar', { id: 'pub-' + ev.id, projeto: pjId, nome: nomeDoProjeto(pjId), pecas: pecasDaMaquina(pjId), fios: fiosDaMaquina(pjId), tudo: false, versao: versao }); }, 0);
+    });
+    sincronizarTracejadas();
+  });
+
+  /* ---------- o catálogo das peças em GLB ---------- */
+  var catalogo = null, catalogoEspera = [];
+  function urlDaPeca(x) {
+    var u = x && (x.glb || x.arquivo || x.modelo || x.src || x.caminho || x.url);
+    if (!u || typeof u !== 'string' || !/\.glb(\?|$)/i.test(u)) return null;
+    if (/^(https?:|\/|midia\/)/.test(u)) return u;
+    return 'midia/pecas/' + u.replace(/^\.\//, '');
+  }
+  function carregarCatalogo(fn) {
+    if (catalogo) { fn(catalogo); return; }
+    catalogoEspera.push(fn);
+    if (catalogoEspera.length > 1) return;
+    var base = { cofre: 'midia/cofre.glb' };
+    function pronto(c) { catalogo = c; var f = catalogoEspera.splice(0); f.forEach(function (x) { try { x(c); } catch (e) { console.warn('[corpo]', e); } }); }
+    if (!window.fetch) { pronto(base); return; }
+    fetch('midia/pecas/pecas.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('sem pecas.json'); return r.json(); }).then(function (j) {
+      var lista = Array.isArray(j) ? j : (j && (j.pecas || j.lista || j.itens)) || (j && typeof j === 'object' ? Object.keys(j).map(function (k) { var v = j[k]; return typeof v === 'string' ? { id: k, glb: v } : Object.assign({ id: k }, v); }) : []);
+      var c = Object.assign({}, base);
+      (lista || []).forEach(function (x) { var u = urlDaPeca(x); if (!u) return; var t = tipoCorpo(x.tipo_maquina || x.tipo || x.id || x.slug || x.nome); c[t] = u; });
+      pronto(c);
+    }).catch(function () { pronto(base); });
+  }
+
+  /* ---------- three.js para o corpo (o mesmo three do modo 3D) ---------- */
+  var T3 = { T: null, GLTFLoader: null, meshopt: null, carregando: null, falhou: false, cache: {} };
+  function carregarTres(ok, erro) {
+    if (T3.T) { ok(); return; }
+    if (T3.falhou) { erro(); return; }
+    if (T3.carregando) { T3.carregando.push([ok, erro]); return; }
+    T3.carregando = [[ok, erro]];
+    var base = 'https://cdn.jsdelivr.net/npm/three@0.160.0/';
+    Promise.all([import(base + 'build/three.module.js'), import(base + 'examples/jsm/loaders/GLTFLoader.js'), import(base + 'examples/jsm/libs/meshopt_decoder.module.js').catch(function () { return {}; })])
+      .then(function (m) { T3.T = m[0]; T3.GLTFLoader = m[1].GLTFLoader; T3.meshopt = m[2].MeshoptDecoder || null; var f = T3.carregando; T3.carregando = null; f.forEach(function (x) { x[0](); }); })
+      .catch(function (e) { console.warn('[corpo] three.js não carregou:', e && e.message); T3.falhou = true; var f = T3.carregando; T3.carregando = null; f.forEach(function (x) { x[1](); }); });
+  }
+  function carregarGlb(url, fn) {
+    var c = T3.cache[url];
+    if (c && c.cena) { fn(c.cena); return; }
+    if (c && c.falhou) { fn(null); return; }
+    if (c) { c.espera.push(fn); return; }
+    c = T3.cache[url] = { espera: [fn], cena: null, falhou: false };
+    var ld = new T3.GLTFLoader();
+    if (T3.meshopt && ld.setMeshoptDecoder) ld.setMeshoptDecoder(T3.meshopt);
+    ld.load(url, function (g) { c.cena = g.scene; c.espera.splice(0).forEach(function (f) { f(c.cena); }); },
+      undefined, function (e) { console.warn('[corpo] peça não carregou:', url, e && e.message); c.falhou = true; c.espera.splice(0).forEach(function (f) { f(null); }); });
+  }
+
+  /* forma simples de cada tipo (enquanto não há GLB): contorno fino, sem enfeite */
+  function formaSimples(T, tipo) {
+    var g = new T.Group(), mat = new T.MeshStandardMaterial({ color: 0x28324a, roughness: 0.62, metalness: 0.28, emissive: 0x2ad5e5, emissiveIntensity: 0 });
+    function caixa(w, h, d, x, y, z) { var m = new T.Mesh(new T.BoxGeometry(w, h, d), mat); m.position.set(x || 0, (y || 0) + h / 2, z || 0); g.add(m); return m; }
+    function cil(r, h, x, y, z, deitado) { var m = new T.Mesh(new T.CylinderGeometry(r, r, h, 28), mat); m.position.set(x || 0, y || 0, z || 0); if (deitado) m.rotation.z = Math.PI / 2; g.add(m); return m; }
+    switch (tipo) {
+      case 'gaveta': caixa(0.62, 1.0, 0.6); [0.22, 0.52, 0.82].forEach(function (y) { caixa(0.5, 0.04, 0.02, 0, y, 0.31); }); break;
+      case 'porta': caixa(0.08, 1.0, 0.1, -0.34); caixa(0.08, 1.0, 0.1, 0.34); caixa(0.76, 0.08, 0.1, 0, 1.0); var f = caixa(0.56, 0.9, 0.04, 0, 0.02, 0.1); f.rotation.y = -0.5; break;
+      case 'robo': caixa(0.72, 0.42, 0.72); cil(0.26, 0.08, 0, 0.72, 0, false).rotation.x = Math.PI / 2; cil(0.18, 0.08, 0.28, 0.6, 0.1, false).rotation.x = Math.PI / 2; break;
+      case 'deposito': caixa(0.96, 0.08, 0.5); caixa(0.96, 0.08, 0.5, 0, 0.36); [-0.46, -0.15, 0.15, 0.46].forEach(function (x) { caixa(0.04, 0.36, 0.5, x, 0.04); }); break;
+      case 'tela': caixa(0.06, 0.3, 0.06); caixa(0.9, 0.56, 0.05, 0, 0.3); break;
+      case 'portaria': caixa(0.56, 0.9, 0.56, -0.12); caixa(0.62, 0.05, 0.05, 0.34, 0.5); break;
+      case 'cano': cil(0.12, 1.0, 0, 0.32, 0, true); cil(0.15, 0.06, -0.3, 0.32, 0, true); cil(0.15, 0.06, 0.3, 0.32, 0, true); break;
+      case 'cofre': caixa(0.72, 0.72, 0.72); cil(0.14, 0.05, 0, 0.36, 0.37).rotation.x = Math.PI / 2; break;
+      default: caixa(0.7, 0.7, 0.7);
+    }
+    g.userData.mat = mat;
+    return g;
+  }
+
+  var CORPO_ESPACO = 1.55;
+  function VistaCorpo(el, opcoes) {
+    this.el = el; this.op = opcoes || {}; this.itens = {}; this.ordem = []; this.anims = []; this.pulsos = []; this.fiosObj = [];
+    this.dados = null; this.pronto = false; this.falhou = false; this.renders = 0; this.motivos = {}; this.ganhou = []; this.raf = 0; this.catalogo = null;
+    el.classList.add('v3c');
+    el.innerHTML = '<canvas class="v3c-gl" aria-hidden="true"></canvas><div class="v3c-rotulos" aria-hidden="true"></div><p class="v3c-aviso">carregando o corpo…</p>';
+    this.canvas = el.querySelector('canvas'); this.rotulosEl = el.querySelector('.v3c-rotulos'); this.aviso = el.querySelector('.v3c-aviso');
+    var eu = this;
+    carregarCatalogo(function (c) { eu.catalogo = c; carregarTres(function () { if (!eu.el) return; eu._montar(); }, function () { if (!eu.el) return; eu.falhou = true; eu._semTres(); }); });
+  }
+  var VC = VistaCorpo.prototype;
+  VC._montar = function () {
+    var T = T3.T, eu = this;
+    try { this.gl = new T.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true }); }
+    catch (e) { this.falhou = true; this._semTres(); return; }
+    this.gl.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1));
+    this.gl.setClearColor(0x000000, 0);
+    this.gl.outputColorSpace = T.SRGBColorSpace;
+    this.cena = new T.Scene();
+    this.cam = new T.OrthographicCamera(-5, 5, 3, -3, 0.1, 100);
+    this.cam.position.set(9, 8.2, 9); this.cam.lookAt(0, 0.35, 0);
+    this.cena.add(new T.HemisphereLight(0xa9bbff, 0x0a0f1e, 1.25));
+    var sol = new T.DirectionalLight(0xffffff, 1.5); sol.position.set(5, 11, 7); this.cena.add(sol);
+    var contra = new T.DirectionalLight(0x7ba4f0, 0.55); contra.position.set(-7, 4, -6); this.cena.add(contra);
+    this.raiz = new T.Group(); this.cena.add(this.raiz);
+    this.pronto = true;
+    this.aviso.hidden = true;
+    if (window.ResizeObserver) { this.ro = new ResizeObserver(function () { eu._medir(); eu.pedir('tamanho'); }); this.ro.observe(this.el); }
+    this._visivel = function () { if (!document.hidden) eu.pedir('visivel'); };
+    document.addEventListener('visibilitychange', this._visivel);
+    this._medir();
+    if (this.dados) this._sincronizar(false);
+    this.pedir('montar');
+  };
+  VC._semTres = function () {
+    /* sem three.js (sem internet): a lista das peças, em texto, no mesmo lugar */
+    if (this.aviso) { this.aviso.hidden = false; this.aviso.textContent = 'o corpo em 3D precisa do three.js · ' + this._resumo(); }
+  };
+  VC._resumo = function () {
+    var d = this.dados; if (!d) return '';
+    var c = d.pecas.filter(function (p) { return p.estado === 'corpo'; }).length;
+    return c + ' peças com corpo' + (d.pecas.length > c ? ' · ' + (d.pecas.length - c) + ' tracejadas' : '');
+  };
+  VC._medir = function () {
+    if (!this.gl) return;
+    var r = this.el.getBoundingClientRect(), w = Math.max(10, Math.round(r.width)), h = Math.max(10, Math.round(r.height));
+    this.gl.setSize(w, h, false);
+    this.w = w; this.h = h;
+    this._enquadrar();
+  };
+  VC._posicao = function (i, n) {
+    var cols = Math.max(2, Math.ceil(Math.sqrt(n * 1.4))), rows = Math.ceil(n / cols);
+    return { x: (i % cols - (cols - 1) / 2) * CORPO_ESPACO, z: (Math.floor(i / cols) - (rows - 1) / 2) * CORPO_ESPACO };
+  };
+  VC._enquadrar = function () {
+    if (!this.cam || !this.w) return;
+    var T = T3.T, n = Math.max(1, this.ordem.length), a = this.w / this.h, eu = this;
+    this.cam.left = -a; this.cam.right = a; this.cam.top = 1; this.cam.bottom = -1; this.cam.zoom = 1; this.cam.updateProjectionMatrix();
+    this.cam.updateMatrixWorld();
+    var mx = 0.01, my = 0.01, v = new T.Vector3();
+    for (var i = 0; i < n; i++) {
+      var p = this._posicao(i, n);
+      [[-0.6, 0, -0.6], [0.6, 0, 0.6], [-0.6, 1.25, 0.6], [0.6, 1.25, -0.6], [0.6, 0, -0.6], [-0.6, 0, 0.6]].forEach(function (c) {
+        v.set(p.x + c[0], c[1], p.z + c[2]).project(eu.cam);
+        mx = Math.max(mx, Math.abs(v.x)); my = Math.max(my, Math.abs(v.y));
+      });
+    }
+    this.cam.zoom = 0.92 / Math.max(mx, my);
+    this.cam.updateProjectionMatrix();
+  };
+  VC.atualizar = function (dados) {
+    this.dados = dados ? { nome: dados.nome, pecas: (dados.pecas || []).map(function (p) { return { id: p.id, tipo: p.tipo, nome: p.nome, estado: p.estado, ts: p.ts, por: p.por }; }), fios: (dados.fios || []).slice() } : null;
+    if (this.pronto) this._sincronizar(true);
+    else if (this.falhou) this._semTres();
+    return this;
+  };
+  VC._sincronizar = function (animar) {
+    if (!this.dados) return;
+    animar = animar && !!this.sincronizado; this.sincronizado = true;
+    var eu = this, T = T3.T, vistos = {}, mudouLayout = false, reduz = BC.util.movimentoReduzido() || document.hidden;
+    this.dados.pecas.forEach(function (p) {
+      vistos[p.id] = true;
+      var it = eu.itens[p.id];
+      if (!it) { it = eu._criar(p); eu.itens[p.id] = it; eu.ordem.push(p.id); mudouLayout = true; if (p.estado === 'corpo' && animar) eu._ganhar(it, reduz); else eu._estadoDireto(it, p.estado); }
+      else if (it.estado !== p.estado) { if (p.estado === 'corpo') eu._ganhar(it, reduz || !animar); else eu._estadoDireto(it, p.estado); }
+      it.p = p;
+    });
+    Object.keys(this.itens).forEach(function (id) { if (!vistos[id]) { eu.raiz.remove(eu.itens[id].g); delete eu.itens[id]; eu.ordem.splice(eu.ordem.indexOf(id), 1); mudouLayout = true; } });
+    if (mudouLayout) { this.ordem.forEach(function (id, i) { var pos = eu._posicao(i, eu.ordem.length); eu.itens[id].g.position.set(pos.x, 0, pos.z); }); this._enquadrar(); }
+    this._fios();
+    this.pedir('dados');
+  };
+  VC._criar = function (p) {
+    var T = T3.T, g = new T.Group(), tipo = tipoCorpo(p.tipo);
+    var base = new T.Mesh(new T.BoxGeometry(1.2, 0.05, 1.2), new T.MeshStandardMaterial({ color: 0x161e2d, roughness: 0.9, metalness: 0.1 }));
+    base.position.y = 0.025; g.add(base);
+    var bordaBase = new T.LineSegments(new T.EdgesGeometry(base.geometry), new T.LineBasicMaterial({ color: 0x506b94, transparent: true, opacity: 0.55 }));
+    bordaBase.position.copy(base.position); g.add(bordaBase);
+    /* o contorno tracejado: a peça ainda não publicada */
+    var caixa = new T.BoxGeometry(0.9, 0.95, 0.9); caixa.translate(0, 0.525, 0);
+    var tracejo = new T.LineSegments(new T.EdgesGeometry(caixa), new T.LineDashedMaterial({ color: 0x7ba4f0, dashSize: 0.07, gapSize: 0.06, transparent: true, opacity: 0.95 }));
+    tracejo.computeLineDistances(); g.add(tracejo);
+    var corpo = new T.Group(); corpo.position.y = 0.05; g.add(corpo);
+    var forma = formaSimples(T, tipo); corpo.add(forma);
+    var it = { id: p.id, tipo: tipo, g: g, corpo: corpo, forma: forma, tracejo: tracejo, bordaBase: bordaBase, estado: null, luz: 0, glb: false, p: p };
+    this.raiz.add(g);
+    this._trocarPorGlb(it);
+    return it;
+  };
+  VC._trocarPorGlb = function (it) {
+    var url = this.catalogo && this.catalogo[it.tipo], eu = this;
+    if (!url) return;
+    carregarGlb(url, function (cena) {
+      if (!cena || !eu.itens[it.id] || !eu.gl) return;
+      var T = T3.T, c = cena.clone(true), box = new T.Box3().setFromObject(c), tam = new T.Vector3(), centro = new T.Vector3();
+      box.getSize(tam); box.getCenter(centro);
+      var k = 1.0 / Math.max(tam.x, tam.y, tam.z, 0.001);
+      c.scale.setScalar(k); c.position.set(-centro.x * k, -box.min.y * k, -centro.z * k);
+      c.traverse(function (o) { if (o.isMesh && o.material) { o.material = o.material.clone(); if (o.material.emissive) { o.material.emissive.setHex(0x2ad5e5); o.material.emissiveIntensity = 0; } } });
+      it.corpo.remove(it.forma); it.forma = c; it.corpo.add(c); it.glb = true;
+      eu.pedir('glb');
+    });
+  };
+  VC._estadoDireto = function (it, estado) {
+    it.estado = estado;
+    it.corpo.visible = estado === 'corpo'; it.corpo.scale.setScalar(1);
+    it.tracejo.visible = estado !== 'corpo'; it.tracejo.material.opacity = 0.95;
+  };
+  /* a peça ganha corpo: sobe do chão dentro do contorno tracejado, acende e esfria (1,2 s); o pulso corre pelos canos */
+  VC._ganhar = function (it, direto) {
+    it.estado = 'corpo';
+    this.ganhou.push({ id: it.id, ts: Date.now() });
+    if (this.ganhou.length > 20) this.ganhou.shift();
+    it.luzAte = Date.now() + 6000;
+    if (direto) { this._estadoDireto(it, 'corpo'); this.pedir('corpo'); return; }
+    it.corpo.visible = true; it.corpo.scale.set(0.001, 0.001, 0.001); it.tracejo.visible = true;
+    this.anims.push({ it: it, t0: performance.now(), dur: 1200 });
+    var eu = this;
+    setTimeout(function () { eu._pulsarDe(it.id); }, 700);
+    this.pedir('corpo');
+  };
+  VC._fios = function () {
+    var T = T3.T, eu = this;
+    this.fiosObj.forEach(function (f) { eu.raiz.remove(f.linha); });
+    this.fiosObj = [];
+    (this.dados.fios || []).forEach(function (f) {
+      var a = eu.itens[f[0]], b = eu.itens[f[1]];
+      if (!a || !b) return;
+      var pa = a.g.position.clone().setY(0.06), pb = b.g.position.clone().setY(0.06), meio = new T.Vector3(pa.x, 0.06, pb.z);
+      var curva = new T.CatmullRomCurve3([pa, pa.clone().lerp(meio, 0.85), meio, meio.clone().lerp(pb, 0.15), pb], false, 'centripetal');
+      var linha = new T.Line(new T.BufferGeometry().setFromPoints(curva.getPoints(40)), new T.LineBasicMaterial({ color: 0x506b94, transparent: true, opacity: 0.7 }));
+      eu.raiz.add(linha);
+      eu.fiosObj.push({ de: f[0], para: f[1], curva: curva, linha: linha });
+    });
+  };
+  VC._pulsarDe = function (id) {
+    if (!this.gl || BC.util.movimentoReduzido() || document.hidden) return;
+    var T = T3.T, eu = this;
+    this.fiosObj.filter(function (f) { return f.de === id || f.para === id; }).slice(0, 4).forEach(function (f) {
+      var bola = new T.Mesh(new T.SphereGeometry(0.07, 12, 12), new T.MeshBasicMaterial({ color: 0x2ad5e5 }));
+      eu.raiz.add(bola);
+      f.linha.material.color.setHex(0x2ad5e5);
+      eu.pulsos.push({ f: f, bola: bola, t0: performance.now(), dur: 900, volta: f.para === id });
+    });
+    this.pedir('pulso');
+  };
+  VC.pedir = function (motivo) {
+    if (!this.gl) return;
+    this.motivos[motivo || 'outro'] = (this.motivos[motivo || 'outro'] || 0) + 1; /* por que desenhou: só por dado, tamanho, peça que chegou ou animação de evento */
+    if (this.raf) return;
+    var eu = this;
+    this.raf = requestAnimationFrame(function (t) { eu.raf = 0; eu._quadro(t); });
+  };
+  VC._quadro = function (t) {
+    if (!this.gl || !this.el || !this.el.isConnected) return;
+    var eu = this, vivo = false;
+    this.anims = this.anims.filter(function (a) {
+      var k = Math.max(0, Math.min(1, (t - a.t0) / a.dur)), e = 1 - Math.pow(1 - k, 4), it = a.it;
+      it.corpo.scale.setScalar(Math.max(0.001, e));
+      it.tracejo.material.opacity = 0.95 * (1 - k);
+      it.corpo.traverse(function (o) { if (o.material && o.material.emissive) o.material.emissiveIntensity = 0.9 * (1 - k); });
+      if (k >= 1) { eu._estadoDireto(it, 'corpo'); return false; }
+      vivo = true; return true;
+    });
+    this.pulsos = this.pulsos.filter(function (p) {
+      var k = Math.max(0, Math.min(1, (t - p.t0) / p.dur));
+      p.bola.position.copy(p.f.curva.getPoint(p.volta ? 1 - k : k)).setY(0.12);
+      if (k >= 1) { eu.raiz.remove(p.bola); p.f.linha.material.color.setHex(0x506b94); return false; }
+      vivo = true; return true;
+    });
+    this.gl.render(this.cena, this.cam);
+    this.renders++;
+    this._rotulos();
+    if (vivo) this.pedir('animacao');
+  };
+  /* rótulos em HTML (nítidos): só das peças tracejadas e das que ganharam corpo há pouco (esfriam em 6 s) */
+  VC._rotulos = function () {
+    var T = T3.T, eu = this, agora = Date.now(), v = new T.Vector3(), h = '';
+    this.ordem.forEach(function (id) {
+      var it = eu.itens[id], recente = it.luzAte && it.luzAte > agora;
+      if (it.estado === 'corpo' && !recente) return;
+      v.set(it.g.position.x, 1.25, it.g.position.z).project(eu.cam);
+      var x = (v.x + 1) / 2 * 100, y = (1 - v.y) / 2 * 100;
+      h += '<span class="v3c-rotulo' + (it.estado === 'corpo' ? ' ganhou' : ' tracejada') + '" style="left:' + x.toFixed(2) + '%;top:' + y.toFixed(2) + '%">' + esc(it.p.nome) + '</span>';
+    });
+    if (this.rotulosEl.innerHTML !== h) this.rotulosEl.innerHTML = h;
+    if (h && !this._esfriar) this._esfriar = setTimeout(function () { eu._esfriar = null; eu.pedir('esfriar'); }, 6200);
+  };
+  VC.medidas = function () {
+    var d = this.dados || { pecas: [] }, eu = this;
+    return { pronto: this.pronto, semTres: this.falhou, total: d.pecas.length, comCorpo: d.pecas.filter(function (p) { return p.estado === 'corpo'; }).length,
+      tracejadas: d.pecas.filter(function (p) { return p.estado === 'tracejada'; }).length,
+      emCena: this.ordem.length, glb: this.ordem.filter(function (id) { return eu.itens[id].glb; }), renders: this.renders,
+      ganhou: this.ganhou.slice(), animando: this.anims.length + this.pulsos.length, motivos: JSON.parse(JSON.stringify(this.motivos)) };
+  };
+  VC.destruir = function () {
+    if (this.raf) cancelAnimationFrame(this.raf);
+    if (this.ro) this.ro.disconnect();
+    if (this._visivel) document.removeEventListener('visibilitychange', this._visivel);
+    clearTimeout(this._esfriar);
+    try { if (this.gl) this.gl.dispose(); } catch (e) { /* já */ }
+    this.gl = null; this.el = null; this.itens = {}; this.ordem = [];
+  };
+
+  BC.visual3d.corpo = function (el, opcoes) { return new VistaCorpo(el, opcoes); };
+  BC.visual3d.corpoDoEstado = function (pjId) { var c = semearCorpo(); return c.projetos[pjId || c.atual] || null; };
+  BC.visual3d.catalogo = function (fn) { carregarCatalogo(fn || function () {}); return catalogo; };
+  BC.visual3d.tipoCorpo = tipoCorpo;
 })(window.BC);

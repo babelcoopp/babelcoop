@@ -1,0 +1,32 @@
+{
+ "id": "h04xbaz30srmt0d0t0ws4ae1cc",
+ "model": "google/nano-banana-2",
+ "version": "hidden",
+ "input": {
+  "prompt": "A compact closed toolbox with a carrying handle on top and a small wrench resting on its lid; single object centered, isometric orthographic view, elevation 35 degrees, rotated 45 degrees, one small key light from upper-left, soft fill, no cast shadow on ground, matte dark slate body, uniform 2mm beveled edges, one thin cyan edge light, solid #060b16 background, no text, no labels, no people, clean product render, the object fits a 1-unit cube. No perspective, no ground plane, no gradient background, no extra objects, no letters, no reflections of environment.",
+  "aspect_ratio": "1:1",
+  "resolution": "1K",
+  "output_format": "png"
+ },
+ "logs": "No sid\nGenerating image with Gemini Flash...\nTokens: 1253\nGenerated image in 8.38 seconds\n",
+ "output": "https://replicate.delivery/xezq/F9jSfpinKnRPdqODCJMNGdniZtw2xo81DUNUlATfM9TyofguA/tmp7379cmqq.png",
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:44:09.734Z",
+ "started_at": "2026-09-23T21:44:09.752695669Z",
+ "completed_at": "2026-09-23T21:44:18.262831982Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/h04xbaz30srmt0d0t0ws4ae1cc/cancel",
+  "get": "https://api.replicate.com/v1/predictions/h04xbaz30srmt0d0t0ws4ae1cc",
+  "stream": "https://stream.replicate.com/v1/files/jbxs-hceqzuv2mzsmw3qy6gah3lhhapsgwtoqh26xsxo2jnjiqmkajc4a",
+  "web": "https://replicate.com/p/h04xbaz30srmt0d0t0ws4ae1cc"
+ },
+ "metrics": {
+  "image_output_count": 1,
+  "predict_time": 8.510136313,
+  "resolution_target": "1K",
+  "total_time": 8.528831982
+ }
+}

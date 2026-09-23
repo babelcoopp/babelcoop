@@ -1,0 +1,29 @@
+{
+ "id": "cssq05g1ndrmy0d0t0yajc35zg",
+ "model": "bria/remove-background",
+ "version": "hidden",
+ "input": {
+  "preserve_alpha": true,
+  "image": "arquivo:docs/design/assets/raw/google_nano-banana-2/2026-09-23/chave-iso.png"
+ },
+ "logs": "Downloading 898355 bytes\nDownloaded 0.86MB in 0.08sec\n",
+ "output": "https://replicate.delivery/xezq/OkScUBrLpLqEARfSUff3GtNVX5rlmPiVGSIsjqv84R4tVfBdB/tmp6duy60ny.png",
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:46:28.651Z",
+ "started_at": "2026-09-23T21:46:28.659454792Z",
+ "completed_at": "2026-09-23T21:46:30.37067764Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/cssq05g1ndrmy0d0t0yajc35zg/cancel",
+  "get": "https://api.replicate.com/v1/predictions/cssq05g1ndrmy0d0t0yajc35zg",
+  "stream": "https://stream.replicate.com/v1/files/jbxs-i7aslyv2xxajpcni2jsiohsdrnytlwxvvxat52eol2y6yogb25qq",
+  "web": "https://replicate.com/p/cssq05g1ndrmy0d0t0yajc35zg"
+ },
+ "metrics": {
+  "image_output_count": 1,
+  "predict_time": 1.711222848,
+  "total_time": 1.71967764
+ }
+}

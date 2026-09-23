@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ícones · babel-coop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* folha de conferência: cada ícone a 16, 20 e 32 px sobre --s0, --s1 e --s2; clique abre a lupa com a grade de 24 */
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--s0); color: var(--texto); font: 400 var(--t-14)/1.45 var(--fonte-ui); }
+  .fl { max-width: 1440px; margin: 0 auto; padding: 24px 24px 64px; }
+  .fl-cab { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; padding-bottom: 16px; border-bottom: 1px solid var(--linha); }
+  .fl-cab h1 { margin: 0; font: 500 var(--t-20)/1.2 var(--fonte-ui); }
+  .fl-cab p { margin: 0; color: var(--apagado); font: 400 var(--t-125)/1.4 var(--fonte-mono); }
+  .fl-ctl { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 12px 0; background: var(--s0); border-bottom: 1px solid var(--linha-fraca); }
+  .fl-ctl input { width: 220px; max-width: 100%; height: 28px; padding: 0 10px; border: 1px solid var(--linha); border-radius: var(--r-chip); background: var(--s1); color: var(--texto); font: 400 var(--t-13) var(--fonte-mono); }
+  .fl-ctl input:focus-visible, .fl-alt button:focus-visible, .fl-celula:focus-visible, .fl-lupa button:focus-visible { outline: 1.5px solid var(--t0); outline-offset: 2px; }
+  .fl-alt { display: inline-flex; border: 1px solid var(--linha); border-radius: var(--r-chip); overflow: hidden; }
+  .fl-alt span { padding: 0 8px; align-self: center; color: var(--fraco); font: 500 var(--t-11) var(--fonte-mono); letter-spacing: var(--rotulo-tracking); text-transform: uppercase; }
+  .fl-alt button { height: 26px; padding: 0 10px; border: 0; border-left: 1px solid var(--linha-fraca); background: transparent; color: var(--apagado); font: 500 var(--t-125) var(--fonte-mono); cursor: pointer; }
+  .fl-alt button[aria-pressed="true"] { color: var(--texto); background: var(--s3); box-shadow: inset 0 -2px 0 var(--t0); }
+  .fl-conta { margin-left: auto; color: var(--apagado); font: 400 var(--t-125) var(--fonte-mono); }
+  .fl-aviso { min-height: 18px; color: var(--ok); font: 400 var(--t-125) var(--fonte-mono); }
+
+  .fl-barra { display: flex; gap: 16px; margin: 20px 0 8px; padding: 12px 16px; border: 1px solid var(--linha-fraca); border-radius: var(--r-painel); background: var(--s0); overflow-x: auto; }
+  .fl-barra figure { margin: 0; display: grid; justify-items: center; gap: 4px; min-width: 48px; color: var(--texto-90); }
+  .fl-barra figcaption { font: 500 var(--t-11)/1.1 var(--fonte-ui); color: var(--apagado); white-space: nowrap; }
+  .fl-abas { display: flex; gap: 0; border-bottom: 1px solid var(--linha); overflow-x: auto; }
+  .fl-abas span { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; color: var(--apagado); font: 500 var(--t-125) var(--fonte-ui); white-space: nowrap; background: var(--s0); }
+  .fl-abas span:first-child { color: var(--texto); box-shadow: inset 0 2px 0 var(--t0); background: var(--s1); }
+
+  .fl-sec { margin-top: 32px; }
+  .fl-sec > h2 { margin: 0 0 4px; font: 500 var(--t-15) var(--fonte-ui); }
+  .fl-sec > p { margin: 0 0 12px; color: var(--apagado); font-size: var(--t-13); }
+  .fl-sub { margin: 20px 0 8px; color: var(--fraco); font: 500 var(--t-11) var(--fonte-mono); letter-spacing: var(--rotulo-tracking); text-transform: uppercase; }
+  .fl-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 8px; }
+  .fl-celula { display: grid; gap: 8px; padding: 10px; border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao); background: var(--s1); color: var(--texto); text-align: left; font: inherit; cursor: pointer; transition: border-color 6s var(--ease-saida); }
+  .fl-celula:hover { border-color: var(--linha); transition-duration: var(--mov-toque); }
+  .fl-celula.aceso { border-color: var(--t0); transition: none; }
+  .fl-celula.fora { border-color: var(--alarme); }
+  .fl-celula[hidden] { display: none; }
+  .fl-nome { display: flex; justify-content: space-between; gap: 6px; font: 500 var(--t-125)/1.2 var(--fonte-mono); }
+  .fl-nome small { color: var(--fraco); font: 400 var(--t-11) var(--fonte-mono); }
+  .fl-rot { color: var(--apagado); font-size: var(--t-11); line-height: 1.25; min-height: 28px; }
+  .fl-mat { display: grid; grid-template-columns: repeat(3, 1fr); border-radius: var(--r-chip); overflow: hidden; border: 1px solid var(--linha-fraca); }
+  .fl-mat i { display: grid; place-items: center; height: 44px; color: var(--texto-90); }
+  .fl-mat i[data-f="s0"] { background: var(--s0); } .fl-mat i[data-f="s1"] { background: var(--s1); } .fl-mat i[data-f="s2"] { background: var(--s2); }
+  .fl-mat i[hidden] { display: none; }
+  .fl-medida { color: var(--fraco); font: 400 var(--t-11) var(--fonte-mono); }
+
+  .fl-lupa { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; padding: 16px; background: rgba(6, 11, 22, .72); }
+  .fl-lupa[hidden] { display: none; }
+  .fl-lupa-caixa { width: min(720px, 100%); max-height: calc(100vh - 32px); overflow: auto; display: grid; grid-template-columns: auto 1fr; gap: 20px; padding: 20px; border: 1px solid rgba(63, 227, 255, .22); border-radius: var(--r-janela); background: rgba(22, 30, 45, .86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .fl-lupa-grade { position: relative; width: 240px; height: 240px; background: var(--s1); border-radius: var(--r-cartao); color: var(--texto); }
+  .fl-lupa-grade svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .fl-lupa-grade .fl-keylines { color: var(--t2); opacity: .55; }
+  .fl-lupa-info h3 { margin: 0; font: 500 var(--t-20) var(--fonte-mono); }
+  .fl-lupa-info p { margin: 4px 0 12px; color: var(--apagado); }
+  .fl-lupa-info code { display: block; padding: 8px 10px; border-radius: var(--r-chip); background: var(--s0); color: var(--t0); font: 400 var(--t-125) var(--fonte-mono); word-break: break-all; }
+  .fl-lupa-info { min-width: 0; }
+  .fl-lupa-tams { display: grid; grid-template-columns: repeat(3, 48px); gap: 8px; margin-top: 12px; }
+  .fl-lupa-tams span { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--r-chip); }
+  .fl-lupa-cab { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+  .fl-lupa-cab button { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--linha); border-radius: var(--r-chip); background: transparent; color: var(--apagado); cursor: pointer; }
+  .fl-lupa-nav { display: flex; gap: 8px; margin-top: 12px; }
+  .fl-lupa-nav button { height: 28px; padding: 0 10px; border: 1px solid var(--linha); border-radius: var(--r-chip); background: transparent; color: var(--apagado); font: 500 var(--t-125) var(--fonte-mono); cursor: pointer; }
+  @media (max-width: 640px) { .fl { padding: 16px 16px 48px; } .fl-lupa-caixa { grid-template-columns: 1fr; } .fl-lupa-grade { width: 100%; height: auto; aspect-ratio: 1; } .fl-conta { margin-left: 0; } }
+  @media (prefers-reduced-motion: reduce) { .fl-celula { transition: none; } }
+</style>
+</head>
+<body>
+<main class="fl" id="fl">
+  <header class="fl-cab">
+    <h1>Ícones · babel-coop</h1>
+    <p id="fl-resumo">carregando…</p>
+  </header>
+  <div class="fl-ctl" role="toolbar" aria-label="Filtros da folha">
+    <input id="fl-busca" type="search" placeholder="filtrar por nome (ex.: gav)" autocomplete="off" spellcheck="false" aria-label="Filtrar ícones por nome">
+    <div class="fl-alt" role="group" aria-label="Fundo"><span>fundo</span>
+      <button type="button" data-fl-fundo="todos" aria-pressed="true">todos</button><button type="button" data-fl-fundo="s0" aria-pressed="false">--s0</button><button type="button" data-fl-fundo="s1" aria-pressed="false">--s1</button><button type="button" data-fl-fundo="s2" aria-pressed="false">--s2</button>
+    </div>
+    <div class="fl-alt" role="group" aria-label="Tamanho"><span>px</span>
+      <button type="button" data-fl-tam="todos" aria-pressed="true">todos</button><button type="button" data-fl-tam="16" aria-pressed="false">16</button><button type="button" data-fl-tam="20" aria-pressed="false">20</button><button type="button" data-fl-tam="32" aria-pressed="false">32</button>
+    </div>
+    <span class="fl-conta" id="fl-conta"></span>
+  </div>
+  <p class="fl-aviso" id="fl-aviso" role="status" aria-live="polite"></p>
+
+  <section class="fl-sec" aria-labelledby="fl-h-uso">
+    <h2 id="fl-h-uso">Como aparecem na casca</h2>
+    <p>A barra de atividades a 20 px com rótulo de 11 px, e a fila de abas a 14 px, na mesma cor e no mesmo chão da Estação.</p>
+    <div class="fl-barra" id="fl-barra"></div>
+    <div class="fl-abas" id="fl-abas"></div>
+  </section>
+
+  <section class="fl-sec" id="fl-casca" aria-labelledby="fl-h-casca"><h2 id="fl-h-casca">Casca</h2><p>As 16 atividades e os botões que se repetem no topo, na lateral, nas abas, no painel de agentes e no rodapé.</p><div id="fl-casca-corpo"></div></section>
+  <section class="fl-sec" id="fl-pecas" aria-labelledby="fl-h-pecas"><h2 id="fl-h-pecas">Peças da Máquina</h2><p>Os 16 glifos: as 12 peças com nome de gente e as 4 do Supabase. A Máquina 2D e a Loja usam o mesmo desenho.</p><div class="fl-grade" id="fl-pecas-corpo"></div></section>
+  <section class="fl-sec" id="fl-estados" aria-labelledby="fl-h-estados"><h2 id="fl-h-estados">Estados da Máquina</h2><p>Alerta, sujo, não publicado, fixado, barrado e preset: cor só pelo token de estado de quem usa, nunca no desenho.</p><div class="fl-grade" id="fl-estados-corpo"></div></section>
+</main>
+
+<div class="fl-lupa" id="fl-lupa" hidden>
+  <div class="fl-lupa-caixa" role="dialog" aria-modal="true" aria-labelledby="fl-lupa-nome">
+    <div class="fl-lupa-grade" id="fl-lupa-grade"></div>
+    <div class="fl-lupa-info">
+      <div class="fl-lupa-cab"><h3 id="fl-lupa-nome"></h3><button type="button" id="fl-lupa-fechar" aria-label="Fechar a lupa"></button></div>
+      <p id="fl-lupa-rotulo"></p>
+      <code id="fl-lupa-codigo"></code>
+      <div class="fl-lupa-tams" id="fl-lupa-tams"></div>
+      <p class="fl-medida" id="fl-lupa-medida"></p>
+      <div class="fl-lupa-nav"><button type="button" id="fl-ant">← anterior</button><button type="button" id="fl-prox">próximo →</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="icones.js"></script>
+<script>
+/* babel-coop · folha de conferência dos ícones: desenha cada ícone a 16/20/32 px em --s0/--s1/--s2, mede a caixa de cada um
+   (traço incluído) contra a margem de 2 px e abre a lupa com a grade de 24 no clique. Sem laço: nada anda sem evento. */
+(function () {
+  'use strict';
+  var I = BC.icones, $ = function (id) { return document.getElementById(id); };
+  var FUNDOS = ['s0', 's1', 's2'], TAMS = [16, 20, 32];
+  var SUB = { atividades: 'as 16 atividades', casca: 'topo, lateral e rodapé', agentes: 'agentes, presença e terminal', acoes: 'ações do objeto', organismo: 'o organismo e o trabalho', tipos: 'tipos de objeto' };
+  var filtro = { busca: '', fundo: 'todos', tam: 'todos' }, ordem = [], atual = -1, medidas = {};
+
+  function celula(nome) {
+    var m = '';
+    FUNDOS.forEach(function (f) { TAMS.forEach(function (t) { m += '<i data-f="' + f + '" data-t="' + t + '" title="' + t + ' px em --' + f + '">' + I.svg(nome, t) + '</i>'; }); });
+    return '<button type="button" class="fl-celula" data-nome="' + nome + '" aria-label="' + I.rotulo(nome) + ' (' + nome + ')">' +
+      '<span class="fl-nome">' + nome + '<small>' + (ordem.length + 1) + '</small></span><span class="fl-rot">' + I.rotulo(nome) + '</span>' +
+      '<span class="fl-mat">' + m + '</span><span class="fl-medida" data-medida></span></button>';
+  }
+  function montar() {
+    var casca = '';
+    ['atividades', 'casca', 'agentes', 'acoes', 'organismo', 'tipos'].forEach(function (g) {
+      var h = I.nomes(g).map(function (n) { var c = celula(n); ordem.push(n); return c; }).join('');
+      casca += '<h3 class="fl-sub">' + SUB[g] + ' · ' + I.nomes(g).length + '</h3><div class="fl-grade">' + h + '</div>';
+    });
+    $('fl-casca-corpo').innerHTML = casca;
+    ['pecas', 'estados'].forEach(function (g) { $('fl-' + g + '-corpo').innerHTML = I.nomes(g).map(function (n) { var c = celula(n); ordem.push(n); return c; }).join(''); });
+    $('fl-barra').innerHTML = I.nomes('atividades').map(function (n) { return '<figure>' + I.svg(n, 20) + '<figcaption>' + I.rotulo(n).split(' ')[0] + '</figcaption></figure>'; }).join('');
+    $('fl-abas').innerHTML = [['dia', 'Meu dia'], ['demandas', 'Demandas'], ['chat', 'Babel · todos'], ['acervo', 'Acervo'], ['terminais', 'Terminais ao vivo'], ['navegador', 'Navegador · Rita'], ['maquina', 'agenda.maquina']]
+      .map(function (a) { return '<span>' + I.svg(a[0], 14) + a[1] + '</span>'; }).join('');
+    $('fl-resumo').textContent = I.casca().length + ' da casca · ' + I.nomes('pecas').length + ' peças · ' + I.nomes('estados').length + ' estados · traço ' + I.grade.traco + ' · grade ' + I.grade.viewBox + ' · área viva ' + I.grade.areaViva.join('–');
+    $('fl-lupa-fechar').innerHTML = I.svg('fechar', 16);
+    medir();
+    aplicar();
+  }
+
+  /* a caixa de cada ícone, com meio traço de cada lado, tem de caber entre 2 e 22 (a margem de 2 px da grade) */
+  function caixa(svgEl) {
+    var b = svgEl.getBBox(), m = I.grade.traco / 2;
+    return { x0: +(b.x - m).toFixed(2), y0: +(b.y - m).toFixed(2), x1: +(b.x + b.width + m).toFixed(2), y1: +(b.y + b.height + m).toFixed(2) };
+  }
+  function medir() {
+    Array.prototype.forEach.call(document.querySelectorAll('.fl-celula'), function (c) {
+      var s = c.querySelector('i[data-t="32"] svg'), bx = caixa(s), fora = bx.x0 < 2 || bx.y0 < 2 || bx.x1 > 22 || bx.y1 > 22;
+      medidas[c.dataset.nome] = bx;
+      c.classList.toggle('fora', fora);
+      c.querySelector('[data-medida]').textContent = (fora ? 'fora da margem · ' : '') + 'caixa ' + bx.x0 + '–' + bx.x1 + ' × ' + bx.y0 + '–' + bx.y1;
+    });
+  }
+
+  function aplicar() {
+    var q = filtro.busca.trim().toLowerCase(), vis = 0;
+    Array.prototype.forEach.call(document.querySelectorAll('.fl-celula'), function (c) {
+      var n = c.dataset.nome, ok = !q || n.indexOf(q) !== -1 || I.rotulo(n).toLowerCase().indexOf(q) !== -1;
+      c.hidden = !ok; if (ok) vis++;
+      Array.prototype.forEach.call(c.querySelectorAll('.fl-mat i'), function (i) { i.hidden = (filtro.fundo !== 'todos' && i.dataset.f !== filtro.fundo) || (filtro.tam !== 'todos' && i.dataset.t !== filtro.tam); });
+      c.querySelector('.fl-mat').style.gridTemplateColumns = filtro.tam === 'todos' ? 'repeat(3, 1fr)' : '1fr';
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.fl-sub'), function (h) { var g = h.nextElementSibling; h.hidden = !g.querySelector('.fl-celula:not([hidden])'); g.hidden = h.hidden; });
+    $('fl-conta').textContent = vis + ' de ' + ordem.length + ' ícones';
+  }
+
+  function keylines() {
+    var l = '';
+    for (var k = 0; k <= 24; k++) l += '<path d="M' + k + ' 0V24M0 ' + k + 'H24" stroke-width="' + (k === 2 || k === 22 ? .12 : .04) + '"/>';
+    return '<svg class="fl-keylines" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">' + l +
+      '<rect x="3" y="3" width="18" height="18" stroke-width=".08" stroke-dasharray=".4 .4"/><circle cx="12" cy="12" r="9" stroke-width=".08"/><rect x="4" y="4" width="16" height="16" rx="2" stroke-width=".08"/></svg>';
+  }
+  function abrirLupa(i) {
+    atual = (i + ordem.length) % ordem.length;
+    var n = ordem[atual], bx = medidas[n], cod = "BC.icones.svg('" + n + "', 20)";
+    $('fl-lupa-grade').innerHTML = keylines() + I.svg(n, 240);
+    $('fl-lupa-nome').textContent = n;
+    $('fl-lupa-rotulo').textContent = I.rotulo(n);
+    $('fl-lupa-codigo').textContent = cod;
+    $('fl-lupa-tams').innerHTML = FUNDOS.map(function (f) { return TAMS.map(function (t) { return '<span style="background:var(--' + f + ')">' + I.svg(n, t) + '</span>'; }).join(''); }).join('');
+    $('fl-lupa-medida').textContent = 'caixa com o traço: ' + bx.x0 + '–' + bx.x1 + ' × ' + bx.y0 + '–' + bx.y1 + ' (margem 2–22)';
+    $('fl-lupa').hidden = false;
+    $('fl-lupa-fechar').focus();
+    return cod;
+  }
+  function fecharLupa() { if ($('fl-lupa').hidden) return; $('fl-lupa').hidden = true; var c = document.querySelector('.fl-celula[data-nome="' + ordem[atual] + '"]'); if (c) c.focus(); }
+  function avisar(t) { $('fl-aviso').textContent = t; }
+  function copiar(cod) {
+    avisar('copie: ' + cod);
+    try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(cod).then(function () { avisar('copiado: ' + cod); }, function () { /* sem permissão: o texto já está no aviso */ }); } catch (e) { /* idem */ }
+  }
+  /* a luz da célula é o evento do clique e esfria em 6 s (meia-vida curta); nada acende sozinho */
+  function acender(c) { c.classList.add('aceso'); requestAnimationFrame(function () { requestAnimationFrame(function () { c.classList.remove('aceso'); }); }); }
+
+  document.addEventListener('click', function (ev) {
+    var c = ev.target.closest('.fl-celula');
+    if (c) { acender(c); copiar(abrirLupa(ordem.indexOf(c.dataset.nome))); return; }
+    var f = ev.target.closest('[data-fl-fundo]'), t = ev.target.closest('[data-fl-tam]');
+    if (f) { filtro.fundo = f.dataset.flFundo; document.querySelectorAll('[data-fl-fundo]').forEach(function (b) { b.setAttribute('aria-pressed', b === f); }); aplicar(); return; }
+    if (t) { filtro.tam = t.dataset.flTam; document.querySelectorAll('[data-fl-tam]').forEach(function (b) { b.setAttribute('aria-pressed', b === t); }); aplicar(); return; }
+    if (ev.target.closest('#fl-lupa-fechar') || ev.target === $('fl-lupa')) fecharLupa();
+    if (ev.target.closest('#fl-ant')) abrirLupa(atual - 1);
+    if (ev.target.closest('#fl-prox')) abrirLupa(atual + 1);
+  });
+  $('fl-busca').addEventListener('input', function (e) { filtro.busca = e.target.value; aplicar(); });
+  document.addEventListener('keydown', function (e) {
+    if ($('fl-lupa').hidden) return;
+    if (e.key === 'Escape') fecharLupa();
+    else if (e.key === 'ArrowRight') abrirLupa(atual + 1);
+    else if (e.key === 'ArrowLeft') abrirLupa(atual - 1);
+  });
+
+  /* o que o teste lê: contagens, caixas e a coerência da família */
+  BC.folha = {
+    medir: function () {
+      var svgs = document.querySelectorAll('.fl-celula .fl-mat svg'), fora = [], preenchidos = [], tracos = {};
+      Object.keys(medidas).forEach(function (n) { var b = medidas[n]; if (b.x0 < 2 || b.y0 < 2 || b.x1 > 22 || b.y1 > 22) fora.push(n + ' ' + JSON.stringify(b)); });
+      Array.prototype.forEach.call(svgs, function (s) {
+        tracos[s.getAttribute('stroke-width')] = (tracos[s.getAttribute('stroke-width')] || 0) + 1;
+        Array.prototype.forEach.call(s.querySelectorAll('*'), function (el) { var f = el.getAttribute('fill'); if (f && f !== 'none') preenchidos.push(s.getAttribute('data-icone')); });
+      });
+      return {
+        celulas: document.querySelectorAll('.fl-celula').length, visiveis: document.querySelectorAll('.fl-celula:not([hidden])').length,
+        svgs: svgs.length, svgsVisiveis: Array.prototype.filter.call(svgs, function (s) { return s.getBoundingClientRect().width > 0; }).length,
+        casca: I.casca().length, pecas: I.nomes('pecas').length, estados: I.nomes('estados').length,
+        foraDaMargem: fora, preenchidos: preenchidos, tracos: tracos, lupaAberta: !$('fl-lupa').hidden, fundo: filtro.fundo, tam: filtro.tam
+      };
+    },
+    abrir: function (nome) { return abrirLupa(ordem.indexOf(nome)); },
+    medidas: medidas
+  };
+  montar();
+})();
+</script>
+</body>
+</html>

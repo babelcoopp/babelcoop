@@ -1,0 +1,32 @@
+{
+ "id": "8fgrv4ba3hrmr0d0t0wtr1sh3w",
+ "model": "google/nano-banana-2",
+ "version": "hidden",
+ "input": {
+  "prompt": "A thin flat rectangular screen panel standing upright on a small slab, no monitor stand, its face softly lit showing only a blank page with a thin cyan top bar and two plain grey rectangles, no writing; single object centered, isometric orthographic view, elevation 35 degrees, rotated 45 degrees, one small key light from upper-left, soft fill, no cast shadow on ground, matte dark slate body, uniform 2mm beveled edges, one thin cyan edge light, solid #060b16 background, no text, no labels, no people, clean product render, the object fits a 1-unit cube. No perspective, no ground plane, no gradient background, no extra objects, no letters, no reflections of environment.",
+  "aspect_ratio": "1:1",
+  "resolution": "1K",
+  "output_format": "png"
+ },
+ "logs": "No sid\nGenerating image with Gemini Flash...\nTokens: 1275\nGenerated image in 8.00 seconds\n",
+ "output": "https://replicate.delivery/xezq/TAcRGjKIeiR6FivP5MgfFRGcUugr2sEeHCD6RcYvavtkQfBdB/tmpc1bvsfw4.png",
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:43:38.78Z",
+ "started_at": "2026-09-23T21:43:38.795998533Z",
+ "completed_at": "2026-09-23T21:43:46.899382967Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/8fgrv4ba3hrmr0d0t0wtr1sh3w/cancel",
+  "get": "https://api.replicate.com/v1/predictions/8fgrv4ba3hrmr0d0t0wtr1sh3w",
+  "stream": "https://stream.replicate.com/v1/files/jbxs-5fterzkhq5iedzt7mdzsylvmkkzi2fkw3hofdoh7qig5e423gpyq",
+  "web": "https://replicate.com/p/8fgrv4ba3hrmr0d0t0wtr1sh3w"
+ },
+ "metrics": {
+  "image_output_count": 1,
+  "predict_time": 8.103384434,
+  "resolution_target": "1K",
+  "total_time": 8.119382967
+ }
+}

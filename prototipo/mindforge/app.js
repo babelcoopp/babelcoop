@@ -150,6 +150,7 @@
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', `M ${startX} ${p.y} C ${startX + dir*bend} ${p.y}, ${endX - dir*bend} ${n.y}, ${endX} ${n.y}`);
       path.setAttribute('class', 'connector');
+      path.dataset.filho = n.id;
       path.style.setProperty('--branch-color', n.color);
       svg.appendChild(path);
     });
@@ -179,7 +180,11 @@
 
     $('#emptyHint').hidden = !!state.nodes.length;
     updateTransform(); updateInspector(); drawMinimap(); persist();
+    ganchos.desenhou.forEach(fn => { try { fn(); } catch (e) { console.error(e); } });
   }
+
+  /* ganchos para o observatório do babel-coop (observatorio.js): quem quiser decorar o mapa depois de cada desenho */
+  const ganchos = { desenhou: [], selecionou: [] };
 
   function bindNode(el, node) {
     el.addEventListener('pointerdown', e => {
@@ -219,6 +224,7 @@
     $$('.node.selected').forEach(n => n.classList.remove('selected'));
     document.querySelector(`.node[data-id="${CSS.escape(id)}"]`)?.classList.add('selected');
     updateInspector();
+    ganchos.selecionou.forEach(fn => { try { fn(id); } catch (e) { console.error(e); } });
   }
 
   function beginEdit(el, node) {
@@ -249,7 +255,13 @@
     if (at) { parent = null; x = at.x; y = at.y; }
     else if (!base) { parent = null; x = WORLD.width/2; y = WORLD.height/2; }
     else if (kind === 'sibling' && base.parent) { parent = base.parent; x = base.x; y = base.y + 70; }
-    else { parent = base.id; x = base.x + 235; y = base.y + (children(base.id).length - .5) * 62; }
+    else {
+      /* o filho sai para o mesmo lado do pai (na raiz, para o lado com menos galhos) */
+      const raiz = state.nodes.find(n => !n.parent);
+      let dir = raiz && base.x < raiz.x ? -1 : 1;
+      if (raiz && base.id === raiz.id) { const f = children(raiz.id), d = f.filter(n => n.x >= raiz.x).length; dir = f.length - d < d ? -1 : 1; }
+      parent = base.id; x = base.x + dir * 235; y = base.y + (children(base.id).length - .5) * 62;
+    }
     const n = { id: `n${Date.now().toString(36)}`, parent, text: 'Novo tópico', x, y, color: base?.color || COLORS[0], shape: 'pill', size: 14, bold: false, collapsed: false, note: '' };
     state.nodes.push(n); selected = n.id; render();
     requestAnimationFrame(() => { const el = document.querySelector(`.node[data-id="${n.id}"]`); if (el) beginEdit(el, n); });
@@ -321,7 +333,7 @@
   }
 
   function drawMinimap() {
-    const c = $('#minimap'), w = c.width, h = c.height; ctx.clearRect(0,0,w,h); ctx.fillStyle='#202a2d'; ctx.fillRect(0,0,w,h);
+    const c = $('#minimap'), w = c.width, h = c.height; ctx.clearRect(0,0,w,h); ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--mf-minimapa').trim()||'#202a2d'; ctx.fillRect(0,0,w,h);
     if (!state.nodes.length) return;
     const minX=Math.min(...state.nodes.map(n=>n.x))-100,maxX=Math.max(...state.nodes.map(n=>n.x))+100,minY=Math.min(...state.nodes.map(n=>n.y))-100,maxY=Math.max(...state.nodes.map(n=>n.y))+100;
     const s=Math.min((w-8)/(maxX-minX),(h-8)/(maxY-minY));
@@ -405,6 +417,14 @@
 
   try { if(location.hash.startsWith('#map=')){const data=JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(5)))));if(Array.isArray(data.nodes))state=data;} } catch {}
   initControls(); normalize(); render(); updateHistoryButtons(); setTimeout(fitView, 40);
+
+  /* o que o observatório do babel-coop (observatorio.js) lê e comanda; fora do babel-coop ninguém usa */
+  window.mindforge = {
+    embutido: EMBUTIDO, ganchos,
+    estado: () => state, byId, children, selecionado: () => selected, select, render, fitView, toast, hideContext,
+    transform: () => ({ ...transform }),
+    definirTransform: (t) => { transform = { ...transform, ...t }; updateTransform(); drawMinimap(); }
+  };
 
   /* ponte com a Estação do Babel Coop */
   if (EMBUTIDO) {

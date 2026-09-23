@@ -1,0 +1,43 @@
+{
+ "id": "zbq2p2jy3hrnc0d0t10tnq1c28",
+ "model": "firtoz/trellis",
+ "version": "e8f6c45206993f297372f5436b90350817bd9b4a0d52d2a76df50c1c8afa2b3c",
+ "input": {
+  "seed": 19770815,
+  "randomize_seed": false,
+  "mesh_simplify": 0.95,
+  "texture_size": 512,
+  "generate_color": true,
+  "generate_normal": false,
+  "generate_model": true,
+  "save_gaussian_ply": false,
+  "images": [
+   "arquivo:docs/design/assets/raw/bria_remove-background/2026-09-23/campo-iso-recorte.png"
+  ]
+ },
+ "logs": "INFO:predict:Loading and preprocessing input images...\nINFO:predict:Using provided seed: 19770815\nINFO:predict:Running TRELLIS pipeline...\nSampling:   0%|          | 0/12 [00:00<?, ?it/s]\nSampling:  17%|█▋        | 2/12 [00:00<00:00, 12.01it/s]\nSampling:  33%|███▎      | 4/12 [00:00<00:00, 11.53it/s]\nSampling:  50%|█████     | 6/12 [00:00<00:00, 11.29it/s]\nSampling:  67%|██████▋   | 8/12 [00:00<00:00, 11.16it/s]\nSampling:  83%|████████▎ | 10/12 [00:00<00:00, 11.15it/s]\nSampling: 100%|██████████| 12/12 [00:00<00:00, 12.25it/s]\nSampling:   0%|          | 0/12 [00:00<?, ?it/s]\nSampling:   8%|▊         | 1/12 [00:00<00:02,  5.41it/s]\nSampling:  17%|█▋        | 2/12 [00:00<00:01,  5.52it/s]\nSampling:  25%|██▌       | 3/12 [00:00<00:01,  5.56it/s]\nSampling:  33%|███▎      | 4/12 [00:00<00:01,  5.59it/s]\nSampling:  42%|████▏     | 5/12 [00:00<00:01,  5.61it/s]\nSampling:  50%|█████     | 6/12 [00:01<00:01,  5.60it/s]\nSampling:  58%|█████▊    | 7/12 [00:01<00:00,  5.58it/s]\nSampling:  67%|██████▋   | 8/12 [00:01<00:00,  5.60it/s]\nSampling:  75%|███████▌  | 9/12 [00:01<00:00,  5.61it/s]\nSampling:  83%|████████▎ | 10/12 [00:01<00:00,  5.61it/s]\nSampling: 100%|██████████| 12/12 [00:01<00:00,  7.32it/s]\nSampling: 100%|██████████| 12/12 [00:01<00:00,  6.10it/s]\nINFO:predict:TRELLIS pipeline complete!\nINFO:predict:Available output formats: dict_keys(['mesh', 'gaussian'])\nINFO:predict:Starting video rendering...\nINFO:predict:Generating color video from gaussian output...\nRendering: 0it [00:00, ?it/s]\nRendering: 24it [00:00, 237.66it/s]\nRendering: 48it [00:00, 212.10it/s]\nRendering: 74it [00:00, 228.72it/s]\nRendering: 98it [00:00, 212.98it/s]\nRendering: 120it [00:00, 220.61it/s]\nINFO:predict:Available gaussian render types: ['color', 'depth']\nINFO:predict:Generated color video successfully\nINFO:predict:Video rendering complete!\nINFO:predict:Generating GLB model...\nINFO- Loaded 4357 vertices and 8693 faces.\n0% done\n100% done\nRendering: 0it [00:00, ?it/s]\nRendering: 12it [00:00, 113.06it/s]\nRendering: 24it [00:00, 114.94it/s]\nRendering: 37it [00:00, 117.44it/s]\nRendering: 50it [00:00, 119.94it/s]\nRendering: 63it [00:00, 121.58it/s]\nRendering: 76it [00:00, 122.55it/s]\nRendering: 89it [00:00, 124.87it/s]\nRendering: 100it [00:00, 122.16it/s]\nINFO:predict:GLB model generation complete!\nINFO:predict:Prediction complete! Returning results...\n",
+ "output": {
+  "color_video": "https://replicate.delivery/yhqm/wWsRGtHmM9rKL94fX1ZiaxlENriev3XeblIiXpNfNO4OCfD6C/output_color.mp4",
+  "combined_video": null,
+  "gaussian_ply": null,
+  "model_file": "https://replicate.delivery/yhqm/139BB9ocSu6VPN7Phgmbb1jr3Fm6gkdHFYAO3G1gSTyI8H0F/output.glb",
+  "no_background_images": null,
+  "normal_video": null
+ },
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:52:19.996Z",
+ "started_at": "2026-09-23T21:52:20.010548101Z",
+ "completed_at": "2026-09-23T21:52:36.087761888Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/zbq2p2jy3hrnc0d0t10tnq1c28/cancel",
+  "get": "https://api.replicate.com/v1/predictions/zbq2p2jy3hrnc0d0t10tnq1c28",
+  "web": "https://replicate.com/p/zbq2p2jy3hrnc0d0t10tnq1c28"
+ },
+ "metrics": {
+  "predict_time": 16.077213788,
+  "total_time": 16.091761888
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "id": "0sv2b7m191rnc0d0t13byf8x2w",
+ "model": "firtoz/trellis",
+ "version": "e8f6c45206993f297372f5436b90350817bd9b4a0d52d2a76df50c1c8afa2b3c",
+ "input": {
+  "seed": 19770815,
+  "randomize_seed": false,
+  "mesh_simplify": 0.95,
+  "texture_size": 512,
+  "generate_color": true,
+  "generate_normal": false,
+  "generate_model": true,
+  "save_gaussian_ply": false,
+  "images": [
+   "arquivo:docs/design/assets/raw/bria_remove-background/2026-09-23/casa-de-maquinas-iso-recorte.png"
+  ]
+ },
+ "logs": "INFO:predict:Loading and preprocessing input images...\nINFO:predict:Using provided seed: 19770815\nINFO:predict:Running TRELLIS pipeline...\nSampling:   0%|          | 0/12 [00:00<?, ?it/s]\nSampling:  17%|█▋        | 2/12 [00:00<00:00, 12.25it/s]\nSampling:  33%|███▎      | 4/12 [00:00<00:00, 11.59it/s]\nSampling:  50%|█████     | 6/12 [00:00<00:00, 11.40it/s]\nSampling:  67%|██████▋   | 8/12 [00:00<00:00, 11.32it/s]\nSampling:  83%|████████▎ | 10/12 [00:00<00:00, 11.27it/s]\nSampling: 100%|██████████| 12/12 [00:00<00:00, 12.40it/s]\nSampling:   0%|          | 0/12 [00:00<?, ?it/s]\nSampling:   8%|▊         | 1/12 [00:00<00:02,  5.27it/s]\nSampling:  17%|█▋        | 2/12 [00:00<00:01,  5.28it/s]\nSampling:  25%|██▌       | 3/12 [00:00<00:01,  5.30it/s]\nSampling:  33%|███▎      | 4/12 [00:00<00:01,  5.29it/s]\nSampling:  42%|████▏     | 5/12 [00:00<00:01,  5.30it/s]\nSampling:  50%|█████     | 6/12 [00:01<00:01,  5.30it/s]\nSampling:  58%|█████▊    | 7/12 [00:01<00:00,  5.30it/s]\nSampling:  67%|██████▋   | 8/12 [00:01<00:00,  5.30it/s]\nSampling:  75%|███████▌  | 9/12 [00:01<00:00,  5.30it/s]\nSampling:  83%|████████▎ | 10/12 [00:01<00:00,  5.30it/s]\nSampling: 100%|██████████| 12/12 [00:02<00:00,  6.92it/s]\nSampling: 100%|██████████| 12/12 [00:02<00:00,  5.78it/s]\nINFO:predict:TRELLIS pipeline complete!\nINFO:predict:Available output formats: dict_keys(['mesh', 'gaussian'])\nINFO:predict:Starting video rendering...\nINFO:predict:Generating color video from gaussian output...\nRendering: 0it [00:00, ?it/s]\nRendering: 19it [00:00, 189.39it/s]\nRendering: 40it [00:00, 197.64it/s]\nRendering: 60it [00:00, 197.98it/s]\nRendering: 80it [00:00, 192.73it/s]\nRendering: 100it [00:00, 186.58it/s]\nRendering: 119it [00:00, 184.17it/s]\nRendering: 120it [00:00, 188.25it/s]\nINFO:predict:Available gaussian render types: ['color', 'depth']\nINFO:predict:Generated color video successfully\nINFO:predict:Video rendering complete!\nINFO:predict:Generating GLB model...\nINFO- Loaded 27605 vertices and 55020 faces.\n0% done\n1% done\n3% done\n5% done\n7% done\n9% done\n11% done\n13% done\n15% done\n17% done\n19% done\n21% done\n23% done\n25% done\n27% done\n29% done\n31% done\n33% done\n35% done\n37% done\n39% done\n41% done\n43% done\n45% done\n47% done\n49% done\n50% done\n52% done\n54% done\n56% done\n58% done\n60% done\n62% done\n64% done\n66% done\n68% done\n70% done\n72% done\n74% done\n76% done\n78% done\n80% done\n82% done\n84% done\n86% done\n88% done\n90% done\n92% done\n94% done\n96% done\n98% done\n100% done\nWARNING- Some cuts were necessary to cope with non manifold configuration.\nRendering: 0it [00:00, ?it/s]\nRendering: 11it [00:00, 101.71it/s]\nRendering: 22it [00:00, 101.56it/s]\nRendering: 33it [00:00, 102.76it/s]\nRendering: 44it [00:00, 102.13it/s]\nRendering: 55it [00:00, 101.62it/s]\nRendering: 66it [00:00, 103.17it/s]\nRendering: 77it [00:00, 103.05it/s]\nRendering: 88it [00:00, 102.47it/s]\nRendering: 99it [00:00, 101.71it/s]\nRendering: 100it [00:00, 102.14it/s]\nINFO:predict:GLB model generation complete!\nINFO:predict:Prediction complete! Returning results...\n",
+ "output": {
+  "color_video": "https://replicate.delivery/yhqm/dxuKt3L9oM7AB5OHsdoL6EEA4AO3nmsoGqpcyTS5Mm3h9H0F/output_color.mp4",
+  "combined_video": null,
+  "gaussian_ply": null,
+  "model_file": "https://replicate.delivery/yhqm/rnd0qoQtdwYjOZ16AeZMdUCHtzaYaolIXOjKBTP7d75D7PoLA/output.glb",
+  "no_background_images": null,
+  "normal_video": null
+ },
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:57:56.68Z",
+ "started_at": "2026-09-23T21:57:56.693510276Z",
+ "completed_at": "2026-09-23T21:58:31.839534897Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/0sv2b7m191rnc0d0t13byf8x2w/cancel",
+  "get": "https://api.replicate.com/v1/predictions/0sv2b7m191rnc0d0t13byf8x2w",
+  "web": "https://replicate.com/p/0sv2b7m191rnc0d0t13byf8x2w"
+ },
+ "metrics": {
+  "predict_time": 35.146024621,
+  "total_time": 35.159534897
+ }
+}

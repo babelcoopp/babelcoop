@@ -1,0 +1,786 @@
+{
+ "versao": 1,
+ "gerado_em": "2026-09-23T22:01:48.006Z",
+ "pipeline": "google/nano-banana-2 (1K, bloco-base de ardósia do cofre, sem texto) → bria/remove-background → firtoz/trellis (seed 19770815) → gltfpack -si 0.5 (quantizado, sem decodificador) + textura JPEG + material sem metal",
+ "rodada": "terminal-ao-vivo-pecas",
+ "custo_rodada_usd": 2.025,
+ "predicoes_rodada": 36,
+ "custo_total_usd": 2.57,
+ "como_usar": "BC.pecas (midia/pecas/pecas.js): carregar(), url(id, \"png\"|\"glb\"|\"clipe\"), peca(el, id, {estado}), ganharCorpo(el), abrir3d(el, id), carregarModelo(id), vitrine(el)",
+ "pecas": [
+  {
+   "id": "gaveta",
+   "nome": "Gaveta",
+   "o_que_e": "tabela: guarda linhas de uma coisa (pacientes, pedidos); vitrine (view) e janela (tabela estrangeira) são variantes dela",
+   "curto": "guarda as linhas (tabela)",
+   "frase": "guarda os Pacientes",
+   "grupo": "dados",
+   "tipo_maquina": "gaveta",
+   "png": "gaveta.png",
+   "png_lado": 512,
+   "mini": "gaveta-iso.png",
+   "glb": "gaveta.glb",
+   "glb_bytes": 284324,
+   "triangulos": 18436,
+   "giro_graus": 0,
+   "clipe": "gaveta-ganha-corpo.mp4",
+   "custo_usd": 0.63,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "vjsd2hfxexrmy0d0sv3a9kmeec",
+     "custo_usd": 0.067,
+     "custo_estimado": true,
+     "tempo_s": 8.9,
+     "rodada": "design-2030",
+     "data": "2026-09-23T14:59:12Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "ks5e6rdaw5rmy0d0sv4aankd8c",
+     "custo_usd": 0.018,
+     "custo_estimado": true,
+     "tempo_s": 1.6,
+     "rodada": "design-2030",
+     "data": "2026-09-23T15:00:55Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "g3crs2t64hrnc0d0t0yv5psk8r",
+     "custo_usd": 0.045,
+     "tempo_s": 33.8,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:48:27.201Z"
+    },
+    {
+     "etapa": "clipe",
+     "modelo": "wan-video/wan-2.7-i2v",
+     "id": "z739gkvwb5rmw0d0t13veq5bmc",
+     "custo_usd": 0.5,
+     "tempo_s": 30.7,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:59:32.454Z"
+    }
+   ]
+  },
+  {
+   "id": "campo",
+   "nome": "Campo",
+   "o_que_e": "coluna: cada informação da gaveta, com o tipo (texto, data, ligação, vetor, lugar)",
+   "curto": "cada informação (coluna)",
+   "frase": "nome (texto) · nascimento (data) · clínica (ligação)",
+   "grupo": "dados",
+   "tipo_maquina": null,
+   "png": "campo.png",
+   "png_lado": 512,
+   "mini": "campo-iso.png",
+   "glb": "campo.glb",
+   "glb_bytes": 75696,
+   "triangulos": 4374,
+   "giro_graus": 270,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "5qcsp743ydrmy0d0t0w9ak3azg",
+     "custo_usd": 0.067,
+     "tempo_s": 8.7,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:42:49.548Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "xhdvjd0ev1rmt0d0t0xv7hfqp4",
+     "custo_usd": 0.018,
+     "tempo_s": 1.8,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:45:29.014Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "zbq2p2jy3hrnc0d0t10tnq1c28",
+     "custo_usd": 0.045,
+     "tempo_s": 16.1,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:52:37.415Z"
+    }
+   ]
+  },
+  {
+   "id": "fio",
+   "nome": "Fio",
+   "o_que_e": "chave estrangeira: liga uma gaveta à outra e diz o que acontece ao apagar",
+   "curto": "liga uma gaveta à outra",
+   "frase": "cada Agendamento pertence a um Paciente",
+   "grupo": "dados",
+   "tipo_maquina": null,
+   "png": "fio.png",
+   "png_lado": 512,
+   "mini": "fio-iso.png",
+   "glb": "fio.glb",
+   "glb_bytes": 139328,
+   "triangulos": 7620,
+   "giro_graus": 180,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "58qmxp5dz5rmy0d0t0wbs5sdf8",
+     "custo_usd": 0.067,
+     "tempo_s": 9.4,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:43:00.237Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "rb7mnsxgzsrmw0d0t0xrkn4s9m",
+     "custo_usd": 0.018,
+     "tempo_s": 1.8,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:46:10.571Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "2ar9v1ew9xrna0d0t10td4rt48",
+     "custo_usd": 0.045,
+     "tempo_s": 40.6,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:53:35.438Z"
+    }
+   ]
+  },
+  {
+   "id": "chave",
+   "nome": "Chave",
+   "o_que_e": "política de acesso (RLS): o cadeado na frente da gaveta decide quem vê e quem muda",
+   "curto": "quem vê e quem muda (RLS)",
+   "frase": "cada empresa vê só o seu",
+   "grupo": "acesso",
+   "tipo_maquina": null,
+   "png": "chave.png",
+   "png_lado": 512,
+   "mini": "chave-iso.png",
+   "glb": "chave.glb",
+   "glb_bytes": 70024,
+   "triangulos": 4232,
+   "giro_graus": 0,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "2gwn0rqynsrmy0d0t0w90wqej8",
+     "custo_usd": 0.067,
+     "tempo_s": 10.7,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:43:22.231Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "cssq05g1ndrmy0d0t0yajc35zg",
+     "custo_usd": 0.018,
+     "tempo_s": 1.7,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:46:30.898Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "3ry3wxdy4nrna0d0t11b6c2dxg",
+     "custo_usd": 0.045,
+     "tempo_s": 16.7,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:54:08.269Z"
+    }
+   ]
+  },
+  {
+   "id": "empresa",
+   "nome": "Empresa",
+   "o_que_e": "separação por cliente (tenant): tudo dentro da bandeja é de uma empresa só",
+   "curto": "cada empresa vê só o seu",
+   "frase": "tudo aqui dentro é separado por empresa",
+   "grupo": "acesso",
+   "tipo_maquina": "empresa",
+   "png": "empresa.png",
+   "png_lado": 512,
+   "mini": "empresa-iso.png",
+   "glb": "empresa.glb",
+   "glb_bytes": 123848,
+   "triangulos": 7178,
+   "giro_graus": 270,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "ch3hgd6nt1rmy0d0t0wbf81z80",
+     "custo_usd": 0.067,
+     "tempo_s": 13.8,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:43:15.118Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "rznamww8xsrmy0d0t0xtsrh0f8",
+     "custo_usd": 0.018,
+     "tempo_s": 2,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:46:00.243Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "h3tnnmsxjnrnc0d0t11rytv4a4",
+     "custo_usd": 0.045,
+     "tempo_s": 20.2,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:54:46.115Z"
+    }
+   ]
+  },
+  {
+   "id": "portaria",
+   "nome": "Portaria",
+   "o_que_e": "login (Auth): jeitos de entrar, papéis, crachá, senha e sessão",
+   "curto": "quem entra (login)",
+   "frase": "entra com e-mail e senha; papéis: dono, atendente",
+   "grupo": "acesso",
+   "tipo_maquina": "portaria",
+   "png": "portaria.png",
+   "png_lado": 512,
+   "mini": "portaria-iso.png",
+   "glb": "portaria.glb",
+   "glb_bytes": 94360,
+   "triangulos": 3992,
+   "giro_graus": 180,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "fc5h6gtmnsrmy0d0sv3tadjemg",
+     "custo_usd": 0.067,
+     "custo_estimado": true,
+     "tempo_s": 8.9,
+     "rodada": "design-2030",
+     "data": "2026-09-23T14:59:34Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "n9hy7k75f1rmw0d0sv4aj12j78",
+     "custo_usd": 0.018,
+     "custo_estimado": true,
+     "tempo_s": 1.6,
+     "rodada": "design-2030",
+     "data": "2026-09-23T15:01:10Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "r82m4k073srna0d0t0z9rgrmsc",
+     "custo_usd": 0.045,
+     "tempo_s": 16.6,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:49:06.182Z"
+    }
+   ]
+  },
+  {
+   "id": "porta",
+   "nome": "Porta",
+   "o_que_e": "rota de API ou função na borda (Edge Function): recebe um pedido e grava",
+   "curto": "recebe pedidos (API)",
+   "frase": "recebe \"novo agendamento\" e grava na gaveta Agendamentos",
+   "grupo": "movimento",
+   "tipo_maquina": "porta",
+   "png": "porta.png",
+   "png_lado": 512,
+   "mini": "porta-iso.png",
+   "glb": "porta.glb",
+   "glb_bytes": 164148,
+   "triangulos": 10500,
+   "giro_graus": 180,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "g4cersxcm5rmy0d0sv3r3q2t3g",
+     "custo_usd": 0.067,
+     "custo_estimado": true,
+     "tempo_s": 9.4,
+     "rodada": "design-2030",
+     "data": "2026-09-23T14:59:57Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "3ecnxarztxrmt0d0sv4r5hf0v4",
+     "custo_usd": 0.018,
+     "custo_estimado": true,
+     "tempo_s": 1.7,
+     "rodada": "design-2030",
+     "data": "2026-09-23T15:01:25Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "gzgw3jn0fnrnc0d0t0z87cz0gr",
+     "custo_usd": 0.045,
+     "tempo_s": 20.8,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:49:43.190Z"
+    }
+   ]
+  },
+  {
+   "id": "robo",
+   "nome": "Robô",
+   "o_que_e": "gatilho, agenda (pg_cron), webhook ou função: faz algo sozinho quando algo acontece",
+   "curto": "faz sozinho quando algo acontece",
+   "frase": "quando entra um Paciente, manda o WhatsApp",
+   "grupo": "movimento",
+   "tipo_maquina": "robo",
+   "png": "robo.png",
+   "png_lado": 512,
+   "mini": "robo-iso.png",
+   "glb": "robo.glb",
+   "glb_bytes": 185080,
+   "triangulos": 10286,
+   "giro_graus": 180,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "nq6v5303gnrmy0d0sv49snnmcr",
+     "custo_usd": 0.067,
+     "custo_estimado": true,
+     "tempo_s": 8.1,
+     "rodada": "design-2030",
+     "data": "2026-09-23T15:00:18Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "7gfcaw2sdsrmr0d0sv4s3486p4",
+     "custo_usd": 0.018,
+     "custo_estimado": true,
+     "tempo_s": 1.8,
+     "rodada": "design-2030",
+     "data": "2026-09-23T15:01:40Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "eqypaesg0srnc0d0t0ztby8eyc",
+     "custo_usd": 0.045,
+     "tempo_s": 27.2,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:53:09.883Z"
+    }
+   ]
+  },
+  {
+   "id": "deposito",
+   "nome": "Depósito",
+   "o_que_e": "arquivos (Storage): prateleiras de fotos e documentos, públicas ou trancadas",
+   "curto": "guarda arquivos (Storage)",
+   "frase": "guarda as fotos dos pacientes · 1,2 GB",
+   "grupo": "dados",
+   "tipo_maquina": "deposito",
+   "png": "deposito.png",
+   "png_lado": 512,
+   "mini": "deposito-iso.png",
+   "glb": "deposito.glb",
+   "glb_bytes": 110336,
+   "triangulos": 7348,
+   "giro_graus": 90,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "04gyy0h8k9rmw0d0t0wvwqhsnm",
+     "custo_usd": 0.067,
+     "tempo_s": 8.9,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:43:31.393Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "v71gj59qysrmy0d0t0xs3jdfg8",
+     "custo_usd": 0.018,
+     "tempo_s": 1.7,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:45:39.032Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "5sf7z86fr1rne0d0t11rh771pr",
+     "custo_usd": 0.045,
+     "tempo_s": 16.5,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:55:18.634Z"
+    }
+   ]
+  },
+  {
+   "id": "cofre",
+   "nome": "Cofre",
+   "o_que_e": "segredos e variáveis de ambiente: mostra quais chaves faltam, nunca o valor",
+   "curto": "guarda os segredos",
+   "frase": "precisa de: SUPABASE_URL, ZAPI_TOKEN",
+   "grupo": "acesso",
+   "tipo_maquina": "cofre",
+   "png": "cofre.png",
+   "png_lado": 512,
+   "mini": "cofre-iso.png",
+   "glb": "cofre.glb",
+   "glb_bytes": 289012,
+   "triangulos": 17714,
+   "giro_graus": 180,
+   "clipe": null,
+   "custo_usd": 0.12,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "rdrzz1yvy9rmw0d0sspt4w1d7w",
+     "custo_usd": 0.067,
+     "custo_estimado": true,
+     "tempo_s": 8.8,
+     "rodada": "design-2030",
+     "data": "2026-09-23T13:21:50Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "1ndw3g1fa5rmy0d0ssstdhzz80",
+     "custo_usd": 0.018,
+     "custo_estimado": true,
+     "tempo_s": 1.8,
+     "rodada": "design-2030",
+     "data": "2026-09-23T13:27:32Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "6x2pzcx9h5rne0d0sst87n3n84",
+     "custo_usd": 0.035,
+     "custo_estimado": true,
+     "tempo_s": 31,
+     "rodada": "design-2030",
+     "data": "2026-09-23T13:30:10Z"
+    }
+   ]
+  },
+  {
+   "id": "tela",
+   "nome": "Tela",
+   "o_que_e": "página do frontend: o que a pessoa vê e usa",
+   "curto": "a página que a pessoa usa",
+   "frase": "a tela Agenda usa a porta \"listar agendamentos\"",
+   "grupo": "frente",
+   "tipo_maquina": "tela",
+   "png": "tela.png",
+   "png_lado": 512,
+   "mini": "tela-iso.png",
+   "glb": "tela.glb",
+   "glb_bytes": 131088,
+   "triangulos": 8814,
+   "giro_graus": 180,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "8fgrv4ba3hrmr0d0t0wtr1sh3w",
+     "custo_usd": 0.067,
+     "tempo_s": 8.1,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:43:47.590Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "fe6ge3w1qsrmy0d0t0ya62y9t8",
+     "custo_usd": 0.018,
+     "tempo_s": 2,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:47:03.745Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "9wmb2d2fsxrnc0d0t12bsbf0b0",
+     "custo_usd": 0.045,
+     "tempo_s": 18.9,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:55:54.493Z"
+    }
+   ]
+  },
+  {
+   "id": "cano",
+   "nome": "Cano",
+   "o_que_e": "tempo real (Realtime) e filas: leva a mudança até a tela na hora",
+   "curto": "avisa na hora (tempo real)",
+   "frase": "cada mudança em Agendamentos avisa a tela na hora",
+   "grupo": "movimento",
+   "tipo_maquina": "cano",
+   "png": "cano.png",
+   "png_lado": 512,
+   "mini": "cano-iso.png",
+   "glb": "cano.glb",
+   "glb_bytes": 285676,
+   "triangulos": 14680,
+   "giro_graus": 0,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "q3gtcajp5hrmt0d0sv48yzkmfw",
+     "custo_usd": 0.067,
+     "custo_estimado": true,
+     "tempo_s": 8.5,
+     "rodada": "design-2030",
+     "data": "2026-09-23T15:00:40Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "83a8ybckwsrmt0d0sv4ve2yyag",
+     "custo_usd": 0.018,
+     "custo_estimado": true,
+     "tempo_s": 1.5,
+     "rodada": "design-2030",
+     "data": "2026-09-23T15:01:55Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "t1v0zm2jjsrne0d0t108m6b1kc",
+     "custo_usd": 0.045,
+     "tempo_s": 52.4,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:52:05.874Z"
+    }
+   ]
+  },
+  {
+   "id": "armario",
+   "nome": "Armário",
+   "o_que_e": "schema: onde as gavetas ficam; o da frente tem porta na rua, o dos fundos só o sistema abre",
+   "curto": "onde as gavetas ficam (schema)",
+   "frase": "esta gaveta tem porta na rua",
+   "grupo": "dados",
+   "tipo_maquina": null,
+   "png": "armario.png",
+   "png_lado": 512,
+   "mini": "armario-iso.png",
+   "glb": "armario.glb",
+   "glb_bytes": 212980,
+   "triangulos": 14646,
+   "giro_graus": 90,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "rh0bzd4j0srmw0d0t0ws5150e4",
+     "custo_usd": 0.067,
+     "tempo_s": 7.6,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:43:57.059Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "2kzbkcjjqdrmt0d0t0yb99vnkw",
+     "custo_usd": 0.018,
+     "tempo_s": 1.7,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:46:51.879Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "9a11e9ewbnrne0d0t128m6a2fw",
+     "custo_usd": 0.045,
+     "tempo_s": 20,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:56:30.131Z"
+    }
+   ]
+  },
+  {
+   "id": "ferramenta",
+   "nome": "Ferramenta",
+   "o_que_e": "extensão do Postgres (pgvector, PostGIS, pg_cron…): dá uma habilidade nova à máquina",
+   "curto": "uma habilidade nova (extensão)",
+   "frase": "a máquina sabe procurar por parecido",
+   "grupo": "dados",
+   "tipo_maquina": null,
+   "png": "ferramenta.png",
+   "png_lado": 512,
+   "mini": "ferramenta-iso.png",
+   "glb": "ferramenta.glb",
+   "glb_bytes": 243516,
+   "triangulos": 15488,
+   "giro_graus": 270,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "h04xbaz30srmt0d0t0ws4ae1cc",
+     "custo_usd": 0.067,
+     "tempo_s": 8.5,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:44:19.062Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "cs4p673085rmt0d0t0xtkrmx80",
+     "custo_usd": 0.018,
+     "tempo_s": 1.9,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:45:49.594Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "4yg13ab815rna0d0t12rs1v5pw",
+     "custo_usd": 0.045,
+     "tempo_s": 26.6,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:57:12.117Z"
+    }
+   ]
+  },
+  {
+   "id": "carteiro",
+   "nome": "Carteiro",
+   "o_que_e": "remetente de e-mail e SMS (SMTP próprio ou hook): o que mais derruba um lançamento",
+   "curto": "manda e-mail e SMS",
+   "frase": "Carteiro de teste: 2 por hora, só para a equipe",
+   "grupo": "acesso",
+   "tipo_maquina": null,
+   "png": "carteiro.png",
+   "png_lado": 512,
+   "mini": "carteiro-iso.png",
+   "glb": "carteiro.glb",
+   "glb_bytes": 76580,
+   "triangulos": 3830,
+   "giro_graus": 180,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "tymn2s0bvhrmt0d0t0xbzkd2yg",
+     "custo_usd": 0.067,
+     "tempo_s": 7.4,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:44:28.187Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "dk4x966smxrmr0d0t0xsv57hp4",
+     "custo_usd": 0.018,
+     "tempo_s": 2,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:46:21.018Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "k73s4sr9ghrne0d0t139tssm3c",
+     "custo_usd": 0.045,
+     "tempo_s": 15.2,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:57:42.812Z"
+    }
+   ]
+  },
+  {
+   "id": "casa-de-maquinas",
+   "nome": "Casa de Máquinas",
+   "o_que_e": "a infraestrutura: servidor, disco, cópias de segurança, réplicas, domínio e região",
+   "curto": "servidor, disco e backup",
+   "frase": "Small · 2 GB · São Paulo · backup diário 7 dias",
+   "grupo": "chao",
+   "tipo_maquina": null,
+   "png": "casa-de-maquinas.png",
+   "png_lado": 512,
+   "mini": "casa-de-maquinas-iso.png",
+   "glb": "casa-de-maquinas.glb",
+   "glb_bytes": 344700,
+   "triangulos": 16622,
+   "giro_graus": 0,
+   "clipe": null,
+   "custo_usd": 0.13,
+   "predicoes": [
+    {
+     "etapa": "keyframe",
+     "modelo": "google/nano-banana-2",
+     "id": "495a2cxt3hrmw0d0t0ws4j2h4r",
+     "custo_usd": 0.067,
+     "tempo_s": 8.1,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:44:07.858Z"
+    },
+    {
+     "etapa": "recorte",
+     "modelo": "bria/remove-background",
+     "id": "6en82k9aadrmw0d0t0y8be63d8",
+     "custo_usd": 0.018,
+     "tempo_s": 2.4,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:46:42.146Z"
+    },
+    {
+     "etapa": "3d",
+     "modelo": "firtoz/trellis",
+     "id": "0sv2b7m191rnc0d0t13byf8x2w",
+     "custo_usd": 0.045,
+     "tempo_s": 35.1,
+     "rodada": "terminal-ao-vivo-pecas",
+     "data": "2026-09-23T21:58:33.918Z"
+    }
+   ]
+  }
+ ]
+}

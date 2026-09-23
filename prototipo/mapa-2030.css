@@ -1,0 +1,12 @@
+/* babel-coop · mapa-2030.css — o mapa-observatório (PLANO §1 propriedade 5, R6) do lado da Estação e da TV.
+   O desenho do mapa em si (céu, galhos, cartões, ficha, HUD, luz) mora em mindforge/observatorio.css, dentro do iframe;
+   aqui só a moldura: o chão s0 sem costura com a casca 2030, sem sombra, e a TV sem margem. */
+
+.ed-corpo.ed-mapa { padding: 0; overflow: hidden; background: var(--s0, #060b16); }
+.ed-corpo.ed-mapa > .ed-mapa, .ed-corpo.ed-mapa .mm { height: 100%; }
+.mm { background: var(--s0, #060b16) !important; border-top: 1px solid var(--linha-fraca, rgba(215, 228, 251, .09)); }
+.mm-frame { background: var(--s0, #060b16); color-scheme: dark; }
+
+/* na TV o mapa ocupa o palco inteiro (apresentação galho a galho) */
+.tv .tv-mm, .tv .tv-mm .mm { height: 100%; min-height: 0; border: 0; }
+.tv .tv-mm .mm-frame { min-height: 0; height: 100%; }

@@ -11,9 +11,20 @@ BC.formularios = BC.formularios || {};
   function L() { return BC.loja; }
   function ui() { return BC.estacao.ui; }
   var NOME_TIPO = { nota: 'nota', 'código': 'código', planilha: 'planilha', pdf: 'PDF', mapa: 'mapa mental', quadro: 'quadro', imagem: 'imagem', 'vídeo': 'vídeo', arquivo: 'arquivo',
-    ata: 'ata', aprendizado: 'aprendizado', demanda: 'demanda', prompt: 'prompt', ideia: 'ideia', resposta: 'pergunta da semana', fala: 'fala guardada', terminal: 'terminal' };
+    ata: 'ata', aprendizado: 'aprendizado', demanda: 'demanda', prompt: 'prompt', ideia: 'ideia', resposta: 'pergunta da semana', fala: 'fala guardada', terminal: 'terminal', preset: 'preset' };
 
   /* ======================= ACERVO ======================= */
+
+  /* a memória com nome em números: o da equipe é público (semana); o da pessoa, só ela vê (régua R4) */
+  function painelMemoria() {
+    var M = BC.memoria;
+    if (!M) return '';
+    var r = M.resumoParaAgente({ limite: 1 }), sem = M.semana(), eu = M.meus(L().eu);
+    return '<div class="mem-painel"><span class="rotulo">Memória com nome</span><b>' + r.total + '</b>' +
+      '<small>coisas que a equipe aprendeu, cada uma com autor e usos (' + esc(r.partes.join(' · ')) + '). Todo agente novo nasce sabendo.</small>' +
+      '<small>esta semana: usada ' + sem.usos + '× · ' + sem.aprendizadosNovos + ' aprendizado' + (sem.aprendizadosNovos === 1 ? '' : 's') + ' novo' + (sem.aprendizadosNovos === 1 ? '' : 's') + '</small>' +
+      (eu ? '<small class="mem-eu">o que você ensinou: ' + eu.memorias + ' · usado ' + eu.usadoTotal + '× · +' + eu.pontosSemana + ' pontos esta semana · só você vê</small>' : '') + '</div>';
+  }
 
   BC.vistas.acervo = {
     lateral: function () {
@@ -24,12 +35,12 @@ BC.formularios = BC.formularios || {};
         '<li><button class="lat-item" type="button" data-acao="acervo-tipo" data-tipo="" aria-current="' + (!f) + '"><span class="rotulo-texto">Tudo</span><span class="conta">' + st.docs + '</span></button></li>' +
         tipos.map(function (t) {
           return '<li><button class="lat-item" type="button" data-acao="acervo-tipo" data-tipo="' + esc(t) + '" aria-current="' + (f === t) + '"><span class="rotulo-texto">' + esc(NOME_TIPO[t] || t) + '</span><span class="conta">' + st.porTipo[t] + '</span></button></li>';
-        }).join('') + '</ul><p class="lat-nota">A IA do terminal usa o mesmo acervo: <code>coop buscar "…"</code> e <code>coop ler caminho</code>.</p>';
+        }).join('') + '</ul>' + painelMemoria() + '<p class="lat-nota">A IA do terminal usa o mesmo acervo: <code>coop buscar "…"</code> e <code>coop ler caminho</code>.</p>';
     },
     conteudo: function () {
       var q = ui().buscaAcervo || '', modo = ui().modoAcervo || 'palavras';
       var res = q ? BC.acervo.buscar(L().estado, q, { modo: modo, tipo: ui().tipoAcervo || null, limite: 15 }) : [];
-      var html = '<div class="pagina-cab"><div><h1 class="pagina-titulo">Acervo</h1><p class="pagina-sub">Tudo o que a equipe cria vira busca. Sem LLM: por palavras (BM25) ou por semelhança (vetores calculados aqui).</p></div></div>' +
+      var html = '<div class="pagina-cab"><div><h1 class="pagina-titulo">Acervo</h1><p class="pagina-sub">Tudo o que a equipe cria vira busca. Sem LLM: por palavras (BM25) ou por semelhança (vetores calculados aqui). A memória tem nome: cada aprendizado, preset, prompt, ideia e ata cita quem ensinou e quantas vezes foi usado.</p></div></div>' +
         '<div class="acervo-busca"><input type="text" id="busca-acervo" placeholder="Procure qualquer coisa: reembolso, sessão expirando, plano anual…" autocomplete="off" value="' + esc(q) + '">' +
         '<div class="alternar"><button type="button" class="' + (modo === 'palavras' ? 'ativo' : '') + '" data-acao="acervo-modo" data-modo="palavras">Palavras</button>' +
         '<button type="button" class="' + (modo === 'semelhanca' ? 'ativo' : '') + '" data-acao="acervo-modo" data-modo="semelhanca">Semelhança</button></div></div>';
@@ -40,11 +51,16 @@ BC.formularios = BC.formularios || {};
       }
       html += '<p class="pagina-sub">' + res.length + ' resultado(s) · ' + (modo === 'palavras' ? 'por palavras' : 'por semelhança') + '</p><div class="lista-limpa">';
       res.forEach(function (r) {
-        var d = r.doc;
-        html += '<div class="resultado"><div class="resultado-cab"><span class="chip">' + esc(NOME_TIPO[d.tipo] || d.tipo) + '</span><b>' + esc(d.titulo) + '</b>' +
-          '<span class="pagina-sub">' + esc(d.caminho || L().nome(d.pessoa)) + ' · ' + U.quando(d.ts) + ' · pontos ' + r.pontos.toFixed(2) + '</span></div>' +
-          '<p class="resultado-trecho">' + r.trecho + '</p>' +
-          '<button class="botao discreto" type="button" data-acao="acervo-abrir" data-tipo="' + esc(d.abrir.tipo) + '" data-ref="' + esc(d.abrir.ref || '') + '">Abrir</button></div>';
+        var d = r.doc, M = BC.memoria, mem = !!(M && M.eMemoria(d.id)), meu = d.pessoa === L().eu;
+        /* memória com nome: cita quem ensinou e quantas vezes foi usada; "Usar no agente" conta um uso e acende a luz para o autor */
+        html += '<div class="resultado" data-doc="' + esc(d.id) + '"' + (d.pessoa ? ' data-autor="' + esc(d.pessoa) + '"' : '') + (mem ? ' data-mem="' + esc(d.id) + '"' : '') + '>' +
+          '<div class="resultado-cab"><span class="chip">' + esc(NOME_TIPO[d.tipo] || d.tipo) + '</span><b>' + esc(d.titulo) + '</b>' +
+          '<span class="pagina-sub">' + esc(d.caminho || L().nome(d.pessoa)) + ' · ' + U.quando(d.ts) + ' · relevância ' + r.pontos.toFixed(2) + '</span></div>' +
+          (mem ? M.citarHtml(d.id, BC.acervo.termosEm(q, d).join(' ')) : '') +
+          '<p class="resultado-trecho">' + r.trecho + '</p><div class="mem-acoes">' +
+          (mem && !meu ? '<button class="botao" type="button" data-acao="mem-usar" data-doc="' + esc(d.id) + '" title="Leva para o seu agente e conta um uso: ' + esc(L().nome(d.pessoa)) + ' vê a luz acender">Usar no agente</button>' : '') +
+          (mem && meu ? '<span class="mem-seu">é seu · a luz acende quando alguém usa</span>' : '') +
+          '<button class="botao discreto" type="button" data-acao="acervo-abrir" data-tipo="' + esc(d.abrir.tipo) + '" data-ref="' + esc(d.abrir.ref || '') + '">Abrir</button></div></div>';
       });
       return html + '</div>' + (res.length ? '' : '<p class="vazio">Nada encontrado. Tente a busca por semelhança.</p>');
     }
@@ -77,6 +93,11 @@ BC.formularios = BC.formularios || {};
     else if (t === 'demanda') A['abrir-demanda'](el, null);
     else if (t === 'terminal') { ui().termPessoa = ref; BC.estacao.abrir('terminais'); }
     else if (t === 'momento') BC.estacao.abrir('reuniao');
+    else if (t === 'preset') {
+      var pr = (L().estado.presets || []).filter(function (x) { return x.id === ref; })[0], arq = pr && pr.arquivo && L().arquivo(pr.arquivo);
+      var pj = pr && (L().estado.projetos || []).filter(function (x) { return x.nome === pr.projeto; })[0];
+      if (arq) BC.explorador.abrirArquivo(arq.id); else if (BC.maquina) BC.maquina.abrir(pj ? pj.id : 'clinicas');
+    }
     else { ui().secaoInt = t === 'prompts' ? 'prompts' : t === 'ideias' ? 'ideias' : t === 'pergunta' ? 'pergunta' : 'aprendizados'; BC.estacao.abrir('inteligencia'); }
   };
 
@@ -90,7 +111,7 @@ BC.formularios = BC.formularios || {};
 
   function cartaoPrompt(p, i) {
     var eu = L().eu, dei = p.estrelas.indexOf(eu) !== -1;
-    return '<div class="prompt-cartao">' + (i != null ? '<span class="prompt-pos">' + (i + 1) + '</span>' : '') + U.avatar(L().pessoa(p.pessoa), 30) +
+    return '<div class="prompt-cartao" data-mem="pr:' + esc(p.id) + '">' + (i != null ? '<span class="prompt-pos">' + (i + 1) + '</span>' : '') + U.avatar(L().pessoa(p.pessoa), 30) +
       '<div class="item-corpo"><p class="prompt-texto">“' + esc(p.texto) + '”</p><span class="item-meta">' + esc(L().nome(p.pessoa)) + ' · ' + U.quando(p.ts) + ' · ' + pontos(p) + ' · ' + L().pontosPrompt(p).toFixed(1) + ' pontos</span></div>' +
       '<div class="dem-acoes">' + (p.pessoa !== eu ? '<button class="botao' + (dei ? ' primario' : '') + '" type="button" data-acao="prompt-estrela" data-id="' + p.id + '">' + (dei ? '★' : '☆') + '</button>' : '') +
       '<button class="botao" type="button" data-acao="prompt-usar" data-id="' + p.id + '">Usar no terminal</button></div></div>';
@@ -113,10 +134,12 @@ BC.formularios = BC.formularios || {};
           '<form class="aprender" data-form="aprendizado"><input type="text" id="novo-aprendizado" placeholder="O que você aprendeu hoje?" autocomplete="off">' +
           '<p class="aprender-novidade" id="novidade-geral">Uma frase curta. Se a equipe já souber, soma +1 em vez de repetir.</p><div><button class="botao primario" type="submit">Registrar aprendizado</button></div></form><div class="lista-limpa">';
         e.aprendizados.forEach(function (ap) {
-          var confirmei = ap.confirmacoes.indexOf(eu) !== -1;
-          html += '<div class="item" style="--cor:' + ((L().pessoa(ap.pessoa) || {}).cor || '#8670ff') + '">' + U.avatar(L().pessoa(ap.pessoa), 28) +
+          var confirmei = ap.confirmacoes.indexOf(eu) !== -1, ref = 'ap:' + ap.id, usos = BC.memoria ? BC.memoria.usos(ref) : 0;
+          html += '<div class="item" data-mem="' + esc(ref) + '" style="--cor:' + ((L().pessoa(ap.pessoa) || {}).cor || '#8670ff') + '">' + U.avatar(L().pessoa(ap.pessoa), 28) +
             '<span class="item-corpo"><span class="item-titulo quebra">' + esc(ap.texto) + '</span><span class="item-meta">' + (ap.ia ? '🤖 IA do terminal de ' : '') + esc(L().nome(ap.pessoa)) + ' · ' + U.quando(ap.ts) +
-            (ap.origem ? ' · de "' + esc(ap.origem) + '"' : '') + (ap.confirmacoes.length ? ' · +' + ap.confirmacoes.length + ' confirmado' : '') + '</span></span>' +
+            (ap.origem ? ' · de "' + esc(ap.origem) + '"' : '') + (ap.confirmacoes.length ? ' · +' + ap.confirmacoes.length + ' confirmado' : '') +
+            (BC.memoria ? ' · usado ' + usos + '×' + (ap.pessoa === eu ? ' (a luz acende quando alguém usa)' : '') : '') + '</span></span>' +
+            (ap.pessoa !== eu && BC.memoria ? '<button class="botao discreto" type="button" data-acao="mem-usar" data-doc="' + esc(ref) + '" title="Leva para o seu agente e conta um uso">Usar</button>' : '') +
             (ap.pessoa !== eu ? '<button class="botao' + (confirmei ? ' primario' : '') + '" type="button" data-acao="confirmar-ap" data-id="' + ap.id + '">' + (confirmei ? '+1 dado' : '+1 também aprendi') + '</button>' : '') + '</div>';
         });
         return html + '</div>';
@@ -157,9 +180,9 @@ BC.formularios = BC.formularios || {};
       html = '<div class="pagina-cab"><div><h1 class="pagina-titulo">Ideias</h1><p class="pagina-sub">Qualquer um propõe; os outros apoiam. As que ganham força aparecem na TV.</p></div><button class="botao" type="button" data-acao="falar-ideia">🎙 Falar uma ideia</button></div>' +
         '<form class="campo-inline" data-form="ideia"><input type="text" id="nova-ideia" placeholder="Tive uma ideia…"><button class="botao primario" type="submit">Mandar ideia</button></form><div class="lista-limpa">';
       e.ideias.slice().sort(function (a, b) { return b.apoios.length - a.apoios.length; }).forEach(function (i) {
-        var apoiei = i.apoios.indexOf(eu) !== -1;
-        html += '<div class="item" style="--cor:' + ((L().pessoa(i.pessoa) || {}).cor || '#8670ff') + '">' + U.avatar(L().pessoa(i.pessoa), 28) + '<span class="item-corpo"><span class="item-titulo quebra">' + (i.falada ? '🎙 ' : '') + esc(i.texto) + '</span>' +
-          '<span class="item-meta">' + esc(L().nome(i.pessoa)) + ' · ' + U.quando(i.ts) + ' · ' + i.apoios.length + ' apoio(s)' + (i.apoios.length ? ': ' + i.apoios.map(L().nome).join(', ') : '') + '</span></span>' +
+        var apoiei = i.apoios.indexOf(eu) !== -1, usosI = BC.memoria ? BC.memoria.usos('id:' + i.id) : 0;
+        html += '<div class="item" data-mem="id:' + esc(i.id) + '" style="--cor:' + ((L().pessoa(i.pessoa) || {}).cor || '#8670ff') + '">' + U.avatar(L().pessoa(i.pessoa), 28) + '<span class="item-corpo"><span class="item-titulo quebra">' + (i.falada ? '🎙 ' : '') + esc(i.texto) + '</span>' +
+          '<span class="item-meta">' + esc(L().nome(i.pessoa)) + ' · ' + U.quando(i.ts) + ' · ' + i.apoios.length + ' apoio(s)' + (i.apoios.length ? ': ' + i.apoios.map(L().nome).join(', ') : '') + (usosI ? ' · usada ' + usosI + '×' : '') + '</span></span>' +
           (i.pessoa !== eu ? '<button class="botao' + (apoiei ? ' primario' : '') + '" type="button" data-acao="apoiar" data-id="' + i.id + '">' + (apoiei ? 'Apoiando' : 'Apoiar') + '</button>' : '') + '</div>';
       });
       return html + '</div>';

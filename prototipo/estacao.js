@@ -11,7 +11,9 @@ BC.formularios = BC.formularios || {};
   function L() { return BC.loja; }
   function $(id) { return document.getElementById(id); }
 
-  var ICONE = {
+  /* ICONES · o desenho vem de BC.icones (icones.js: 61 da casca + 16 peças + 6 estados, traço 1,5, à mão);
+     este mapa antigo só serve de reserva para um nome que ainda não esteja lá (ex.: ipad) */
+  var ICONE_ANTIGO = {
     explorador: '<path d="M8 3h7l4 4v11a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M15 3v4h4"/><path d="M4 7v13a1 1 0 0 0 1 1h10"/>',
     dia: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
     demandas: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9.5 2h5"/><path d="M12 2v3"/>',
@@ -33,6 +35,15 @@ BC.formularios = BC.formularios || {};
     loja: '<path d="M4 9l1.5-4h13L20 9"/><path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 20v-6h6v6"/>',
     maquina: '<rect x="3" y="4" width="8" height="6" rx="1.2"/><rect x="13" y="4" width="8" height="6" rx="1.2"/><rect x="8" y="14" width="8" height="6" rx="1.2"/><path d="M7 10v2h10v-2M12 12v2"/>'
   };
+  var ICONE = (function () {
+    var o = {}, I = BC.icones;
+    Object.keys(ICONE_ANTIGO).forEach(function (k) { o[k] = ICONE_ANTIGO[k]; });
+    if (I && I.nomes) {
+      I.nomes().forEach(function (k) { o[k] = I[k]; });
+      Object.keys(I.apelidos || {}).forEach(function (k) { if (I.tem(k)) o[k] = I[I.real(k)]; });
+    }
+    return o;
+  })();
   var ATIVIDADES = [
     ['explorador', 'Criar · telas, máquina e pesquisas'], ['dia', 'Meu dia'], ['demandas', 'Demandas'], ['chat', 'Chat'], ['reuniao', 'Reunião'],
     ['acervo', 'Acervo · busca sem LLM'], ['inteligencia', 'Inteligência da equipe'], ['terminais', 'Terminais ao vivo'],
@@ -42,12 +53,26 @@ BC.formularios = BC.formularios || {};
   var CELULAR = [['dia', 'Meu dia'], ['demandas', 'Demandas'], ['chat', 'Chat'], ['explorador', 'Criar'], ['mais', 'Mais']];
   var NOMES = { explorador: 'Criar', maquina: 'Máquina' };
   ATIVIDADES.forEach(function (a) { if (!NOMES[a[0]]) NOMES[a[0]] = a[1].split(' · ')[0]; });
+  /* a barra do plano (CONCEITO §3.1): 12 atividades na ordem da peneira; os grupos abrem a primeira vista e a lateral
+     mostra no topo o alternador entre as vistas do grupo. Todas as 16 vistas continuam registradas (E.abrir, paleta, Mais). */
+  var BARRA = [
+    ['dia', 'Meu dia', ['dia']], ['explorador', 'Criar', ['explorador']], ['demandas', 'Trabalho', ['demandas', 'tarefas']],
+    ['chat', 'Chat', ['chat']], ['whatsapp', 'WhatsApp', ['whatsapp']], ['reuniao', 'Reunião', ['reuniao']], ['terminais', 'Terminais', ['terminais']],
+    ['projetos', 'Projetos', ['projetos']], ['acervo', 'Acervo', ['acervo', 'inteligencia']], ['equipe', 'Equipe', ['equipe', 'metas', 'mapa']],
+    ['loja', 'Loja', ['loja']], ['oficina', 'Oficina', ['oficina']]
+  ];
+  var GRUPO_DE = {};
+  BARRA.forEach(function (g) { g[2].forEach(function (v) { GRUPO_DE[v] = g; }); });
+  var NOME_VISTA = { demandas: 'Demandas', tarefas: 'Tarefas', acervo: 'Acervo', inteligencia: 'Inteligência', equipe: 'Equipe', metas: 'Metas', mapa: 'Mapa' };
+  function tituloAtividade(id) { var a = ATIVIDADES.filter(function (x) { return x[0] === id; })[0]; return a ? a[1] : NOMES[id] || id; }
   var LAT_PADRAO = 264, TERM_PADRAO = 440;
   var FALAS_EXEMPLO = ['E se a gente mandasse um áudio de boas-vindas para cada cliente novo?', 'Que tal uma pergunta da semana só sobre atendimento?',
     'A gente podia gravar os webinars e deixar no acervo.', 'E se o cronômetro avisasse quando passar da estimativa?', 'Vamos testar a proposta de uma página com as clínicas de Campinas.'];
 
   function svg(nome, tam) {
-    return '<svg viewBox="0 0 24 24" width="' + (tam || 22) + '" height="' + (tam || 22) + '" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONE[nome] + '</svg>';
+    var I = BC.icones;
+    if (I && I.tem && I.tem(nome)) return I.svg(nome, tam || 22);
+    return '<svg class="bci" data-icone-antigo="' + nome + '" viewBox="0 0 24 24" width="' + (tam || 22) + '" height="' + (tam || 22) + '" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONE[nome] || '') + '</svg>';
   }
   function layoutSalvo() { try { return JSON.parse(U.lerLocal('babel-coop:layout') || '{}') || {}; } catch (e) { return {}; } }
   var salvo = layoutSalvo();
@@ -234,14 +259,13 @@ BC.formularios = BC.formularios || {};
 
   var ALIAS_ATIVIDADE = { maquina: 'explorador', navegador: 'terminais', perfil: 'equipe', projeto: 'projetos' };
   function renderAtividades() {
-    var atual = ALIAS_ATIVIDADE[atividadeAtual()] || atividadeAtual(), p = L().pessoa(L().eu), m = marcas();
-    $('e-atividades').innerHTML = ATIVIDADES.map(function (a) {
-      var n = m[a[0]];
-      return '<button type="button" data-acao="atividade" data-id="' + a[0] + '" title="' + a[1] + '" aria-label="' + a[1] + '"' + (a[0] === atual ? ' aria-current="page"' : '') + '>' +
-        svg(a[0]) + (n ? '<span class="marca-num' + (n === '●' ? ' vivo' : '') + '">' + n + '</span>' : '') + '</button>';
+    var atual = ALIAS_ATIVIDADE[atividadeAtual()] || atividadeAtual(), p = L().pessoa(L().eu), m = marcas(), grupo = GRUPO_DE[atual];
+    $('e-atividades').innerHTML = BARRA.map(function (g) {
+      var n = m[g[0]], titulo = g[2].map(tituloAtividade).join(' + ');
+      return '<button type="button" data-acao="atividade" data-id="' + g[0] + '" data-grupo="' + g[2].join(' ') + '" title="' + esc(titulo) + '" aria-label="' + esc(g[1]) + '"' + (grupo === g ? ' aria-current="page"' : '') + '>' +
+        svg(g[0], 20) + (n ? '<span class="marca-num' + (n === '●' ? ' vivo' : '') + '">' + n + '</span>' : '') + '<span class="ativ-rotulo">' + esc(g[1]) + '</span></button>';
     }).join('') + '<span class="ativ-espaco"></span>' +
-      '<button type="button" data-acao="ir-tv" title="Abre a tela da TV numa janela própria, para espelhar na TV" aria-label="Tela da TV">' + svg('tv') + '</button>' +
-      '<button type="button" class="ativ-perfil" data-acao="abrir-perfil" data-id="' + p.id + '" title="Sobre você: trabalhos, tempo, materiais e conquistas" aria-label="Seu perfil">' + U.avatar(p, 28, true) + '</button>';
+      (p ? '<button type="button" class="ativ-perfil" data-acao="abrir-perfil" data-id="' + p.id + '" title="Sobre você: trabalhos, tempo, materiais e conquistas" aria-label="Seu perfil">' + U.avatar(p, 22, true) + '</button>' : '');
     $('e-abas-celular').innerHTML = CELULAR.map(function (c) {
       var ativo = c[0] === 'mais' ? E.ui.mais : c[0] === atual && !E.ui.mais;
       return '<button type="button" data-acao="' + (c[0] === 'mais' ? 'mais' : 'atividade') + '" data-id="' + c[0] + '"' + (ativo ? ' aria-current="page"' : '') + '>' + svg(c[0], 20) + '<span>' + c[1] + '</span>' +
@@ -259,9 +283,15 @@ BC.formularios = BC.formularios || {};
   function renderLateral() {
     var lat = $('e-lateral'), at = atividadeAtual(), v = vistaDe(at);
     var mesma = lat.dataset.vista === at, r = guardar(lat), topo = lat.scrollTop;
-    lat.innerHTML = v && v.lateral ? v.lateral() : '';
+    /* grupo da barra (Trabalho, Acervo, Equipe): o alternador entre as vistas vem no topo da lateral */
+    var g = GRUPO_DE[ALIAS_ATIVIDADE[at] || at], alternador = g && g[2].length > 1 ? '<div class="ativ-grupo" role="tablist" aria-label="' + esc(g[1]) + '">' + g[2].map(function (id) {
+      return '<button type="button" role="tab" data-acao="grupo-vista" data-id="' + id + '" aria-selected="' + (id === at) + '">' + esc(NOME_VISTA[id] || NOMES[id]) + '</button>';
+    }).join('') + '</div>' : '';
+    /* Equipe: a planta da sala vem primeiro (quem está em cada projeto ou atividade, endereco.js) */
+    lat.innerHTML = alternador + (at === 'equipe' && BC.endereco ? BC.endereco.planta() : '') + (v && v.lateral ? v.lateral() : '');
     lat.dataset.vista = at;
     if (mesma) { restaurar(lat, r); lat.scrollTop = topo; }
+    if (BC.endereco) BC.endereco.decorarLateral(lat); /* presença vira posição ao lado de cada arquivo */
   }
 
   function renderAbas() {
@@ -286,7 +316,7 @@ BC.formularios = BC.formularios || {};
       '<button class="criar-cartao" type="button" data-acao="criar-tela"><span class="criar-ic" style="--c:#29ccec">⬚</span><b>Tela</b><small>uma página, uma landing, um login: abre já como site, edita no visual e tem o modo 3D</small></button>' +
       '<button class="criar-cartao" type="button" data-acao="pj-maquina" data-id="clinicas"><span class="criar-ic" style="--c:#8670ff">⚙</span><b>Máquina</b><small>o backend em peças de Lego: gavetas, portas, robôs, chaves; testa vendo os dados andar</small></button>' +
       '<button class="criar-cartao" type="button" data-acao="criar-pesquisa"><span class="criar-ic" style="--c:#ffcf5c">▤</span><b>Pesquisa</b><small>MD, TXT ou PDF: o agente pesquisa e o texto abre em leitura</small></button>' +
-      '<button class="criar-cartao destaque" type="button" data-acao="abrir-caminho" data-caminho="davi/Projetos/Clínicas/landing.html"><span class="criar-ic" style="--c:#7fd6a6">◈</span><b>Ver um exemplo em 3D</b><small>abre a landing das clínicas: clique em "3D" para ver a tela e os próximos itens</small></button></div>' +
+      (L().arquivo('davi/Projetos/Clínicas/landing.html') ? '<button class="criar-cartao destaque" type="button" data-acao="abrir-caminho" data-caminho="davi/Projetos/Clínicas/landing.html"><span class="criar-ic" style="--c:#7fd6a6">◈</span><b>Ver um exemplo em 3D</b><small>abre a landing das clínicas: clique em "3D" para ver a tela e os próximos itens</small></button>' : '') + '</div>' +
       (BC.maquina && BC.maquina.presetsHtml ? '<section class="secao criar-presets"><span class="rotulo">Começar de um preset · o que a equipe já construiu e funcionou</span>' + BC.maquina.presetsHtml(null) + '</section>' : '') +
       '<div class="dem-acoes"><button class="botao" type="button" data-acao="novo-nota">＋ Nota</button><button class="botao" type="button" data-acao="novo-mapa">＋ Mapa mental</button>' +
       '<button class="botao" type="button" data-acao="novo-quadro">＋ Quadro</button><button class="botao" type="button" data-acao="subir-arquivo">↥ Abrir do computador</button></div>' +
@@ -546,6 +576,7 @@ BC.formularios = BC.formularios || {};
     renderLateral();
     renderAbas();
     renderConteudo();
+    if (BC.endereco) BC.endereco.render(E.abaAtual()); /* cabeçalho do objeto: Sala › bancada › peça e quem está com ele */
     renderCronometro();
     renderStatus();
     renderColuna();
@@ -578,6 +609,10 @@ BC.formularios = BC.formularios || {};
 
   function comandos(q) {
     var e = L().estado, eu = L().eu, c = [];
+    /* "Onde estão" (pessoas e agentes com a posição) e o verbo "Ir até" (endereco.js): primeiro quando a busca é
+       vazia, "onde…/ir até…" ou um nome; depois dos outros comandos quando se busca outra coisa (arquivo, comando) */
+    var onde = BC.endereco ? BC.endereco.comandos(q) : [];
+    if (onde.primeiro) c = c.concat(onde);
     if (q) c.push({ nome: 'Procurar "' + q + '" no acervo', atalho: 'acervo', fixo: true, fn: function () { E.ui.buscaAcervo = q; E.abrir('acervo'); } });
     ATIVIDADES.forEach(function (a) { c.push({ nome: 'Ir para: ' + a[1], fn: function () { E.abrir(a[0]); } }); });
     c.push({ nome: 'Nova demanda', fn: function () { A['nova-demanda'](); } });
@@ -613,7 +648,9 @@ BC.formularios = BC.formularios || {};
     e.pessoas.forEach(function (p) { if (p.id !== eu) c.push({ nome: 'Entrar no terminal de ' + p.nome, atalho: 'Ctrl Shift E', fn: function () { A['term-entrar']({ dataset: { id: p.id } }); } }); });
     e.pessoas.forEach(function (p) { if (p.id !== eu) c.push({ nome: 'Sobre ' + p.nome, fn: function () { E.abrirPerfil(p.id); } }); });
     (e.projetos || []).forEach(function (pj) { c.push({ nome: 'Projeto: ' + pj.nome, fn: function () { E.abrirProjeto(pj.id); } }); });
-    e.pessoas.forEach(function (p) { if (p.id !== eu) c.push({ nome: 'Ver como: ' + p.nome, fn: function () { mudarPessoa(p.id); } }); });
+    /* "Ver como" é ferramenta de teste do protótipo: no app real cada um é quem é */
+    if (!window.COOP_REAL) e.pessoas.forEach(function (p) { if (p.id !== eu) c.push({ nome: 'Ver como: ' + p.nome, fn: function () { mudarPessoa(p.id); } }); });
+    if (!onde.primeiro) c = c.concat(onde);
     return c;
   }
 
@@ -622,9 +659,15 @@ BC.formularios = BC.formularios || {};
     if (paleta.pedindo) { $('paleta-lista').innerHTML = ''; return; }
     paleta.lista = comandos(bruto).filter(function (c) { return c.fixo || !q || U.normalizar(c.nome).indexOf(q) !== -1; }).slice(0, 14);
     paleta.sel = Math.min(paleta.sel, Math.max(0, paleta.lista.length - 1));
+    var grupoAnt = null;
     $('paleta-lista').innerHTML = paleta.lista.map(function (c, i) {
-      return '<li role="option" data-i="' + i + '" aria-selected="' + (i === paleta.sel) + '"><span>' + esc(c.nome) + '</span><span>' + esc(c.atalho || '') + '</span></li>';
+      /* grupos com rótulo (ex.: "Onde estão"); c.html já vem escapado por quem monta */
+      var cab = c.grupo && c.grupo !== grupoAnt ? '<li class="paleta-grupo" role="presentation">' + esc(c.grupo) + '</li>' : '';
+      grupoAnt = c.grupo || null;
+      return cab + '<li role="option" data-i="' + i + '" aria-selected="' + (i === paleta.sel) + '"><span>' + (c.html || esc(c.nome)) + '</span><span>' + esc(c.atalho || '') + '</span></li>';
     }).join('') || '<li><span>Nenhum comando com esse nome</span></li>';
+    var sel = $('paleta-lista').querySelector('li[aria-selected="true"]');
+    if (sel && sel.scrollIntoView) sel.scrollIntoView({ block: 'nearest' });
   }
 
   E.abrirPaleta = function () {
@@ -649,6 +692,9 @@ BC.formularios = BC.formularios || {};
       desenharPaleta();
       return;
     }
+    /* de onde a luz sai quando o comando leva a pessoa a outro lugar ("Ir até") */
+    var li = $('paleta-lista').querySelector('li[data-i="' + i + '"]'), r = li ? li.getBoundingClientRect() : null;
+    E.ui.paletaOrigem = r && r.width ? { x: r.left + 28, y: r.top + r.height / 2 } : null;
     fecharPaleta();
     c.fn();
   }
@@ -660,8 +706,16 @@ BC.formularios = BC.formularios || {};
     E.ui.mais = false;
     /* com o meio vazio, o ícone da barra só troca a lateral; o meio abre quando se clica num item da lateral */
     if (vazio && el.closest && el.closest('.e-atividades')) { E.ui.ultimaAtividade = id; if (!E.ui.lat) E.alternarLateral(true); E.render(); return; }
-    if (!celular && id === atual && E.ui.lat && !vazio) { E.alternarLateral(false); return; }
+    /* clicar de novo no grupo aberto (ex.: Trabalho estando em Tarefas) recolhe a lateral, como o ícone da própria vista */
+    var naBarra = el.closest && el.closest('.e-atividades'), mesmo = id === atual || (naBarra && GRUPO_DE[id] && GRUPO_DE[id] === GRUPO_DE[ALIAS_ATIVIDADE[atual] || atual]);
+    if (!celular && mesmo && E.ui.lat && !vazio) { E.alternarLateral(false); return; }
     if (!celular && !E.ui.lat) E.alternarLateral(true);
+    E.abrir(id);
+  };
+  /* alternador do grupo no topo da lateral: Demandas | Tarefas · Acervo | Inteligência · Equipe | Metas | Mapa */
+  A['grupo-vista'] = function (el) {
+    var id = el.dataset.id;
+    if (E.abaAtual().tipo === 'vazio') { E.ui.ultimaAtividade = id; E.render(); return; }
     E.abrir(id);
   };
   A.aba = function (el) { E.ui.ativa = el.dataset.id; E.ui.inline = null; E.render(); };
@@ -862,6 +916,7 @@ BC.formularios = BC.formularios || {};
       if (ev.key === '/' && !digitando && $('paleta').hidden) { ev.preventDefault(); E.abrirPaleta(); return; }
       if (ev.key === 'Escape') {
         if (!$('paleta').hidden) fecharPaleta();
+        else if (BC.endereco && BC.endereco.popAberto()) BC.endereco.fecharPop();
         else if (E.ui.falar || E.ui.perfil || E.ui.mais) A['sobre-fechar']();
         else if (E.ui.inline) { E.ui.inline = null; E.render(); }
         else if (E.ui.coluna) A.coluna();
@@ -881,6 +936,8 @@ BC.formularios = BC.formularios || {};
       });
       if (!$('vista-estacao').hidden) E.render();
     });
+    /* endereço: depois do ouvinte acima, para a luz de chegada achar o cabeçalho já desenhado */
+    if (BC.endereco) BC.endereco.iniciar();
 
     setInterval(tique, 1000);
     setInterval(renderStatus, 5000);

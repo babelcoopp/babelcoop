@@ -1,0 +1,32 @@
+{
+ "id": "ch3hgd6nt1rmy0d0t0wbf81z80",
+ "model": "google/nano-banana-2",
+ "version": "hidden",
+ "input": {
+  "prompt": "A shallow square tray with a raised beveled rim, like a sunken floor plate, with a small simple two-story building block standing in its center; single object centered, isometric orthographic view, elevation 35 degrees, rotated 45 degrees, one small key light from upper-left, soft fill, no cast shadow on ground, matte dark slate body, uniform 2mm beveled edges, one thin cyan edge light, solid #060b16 background, no text, no labels, no people, clean product render, the object fits a 1-unit cube. No perspective, no ground plane, no gradient background, no extra objects, no letters, no reflections of environment.",
+  "aspect_ratio": "1:1",
+  "resolution": "1K",
+  "output_format": "png"
+ },
+ "logs": "No sid\nGenerating image with Gemini Flash...\nTokens: 1265\nGenerated image in 13.64 seconds\n",
+ "output": "https://replicate.delivery/xezq/m66L2m8dSKrfcC4T2aaegKyDe0pf1E09X5gZeiQ8faPv85H0F/tmp7few5_p6.png",
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:43:00.816Z",
+ "started_at": "2026-09-23T21:43:00.844870423Z",
+ "completed_at": "2026-09-23T21:43:14.616021563Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/ch3hgd6nt1rmy0d0t0wbf81z80/cancel",
+  "get": "https://api.replicate.com/v1/predictions/ch3hgd6nt1rmy0d0t0wbf81z80",
+  "stream": "https://stream.replicate.com/v1/files/jbxs-53jeej2dmf7th72t3sn7s3r6otviw43ziq6uydiar5frzxym23ma",
+  "web": "https://replicate.com/p/ch3hgd6nt1rmy0d0t0wbf81z80"
+ },
+ "metrics": {
+  "image_output_count": 1,
+  "predict_time": 13.77115115,
+  "resolution_target": "1K",
+  "total_time": 13.800021563
+ }
+}

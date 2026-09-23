@@ -1,0 +1,37 @@
+{
+ "id": "z739gkvwb5rmw0d0t13veq5bmc",
+ "model": "wan-video/wan-2.7-i2v",
+ "version": "hidden",
+ "input": {
+  "prompt": "[LENS] fixed isometric camera, locked-off, no movement. [MOTION] over 4 seconds the plain slate cube slowly takes the shape of the small filing cabinet, as if being carved and assembled from the same slate: the block divides into three drawers, the handles emerge, and the top drawer slides half open with a thin cyan light inside it; the material, light and cyan edge stay identical throughout; in the last second the finished object holds perfectly still exactly as in the last frame. [SUBJECT] one matte dark slate object on a solid very dark blue-black background. [NEGATIVE] no camera motion, no zoom, no cut, no flicker, no text, no particles, no dust, no glow, no extra objects, no sound.",
+  "negative_prompt": "camera motion, zoom, cut, flicker, text, particles, dust, glow, extra objects, watermark",
+  "duration": 4,
+  "resolution": "720p",
+  "seed": 19770815,
+  "enable_prompt_expansion": false,
+  "first_frame": "arquivo:docs/design/assets/raw/google_nano-banana-2/2026-09-23/cubo-kf.png",
+  "last_frame": "arquivo:docs/design/assets/raw/google_nano-banana-2/2026-09-23/gaveta-iso.png"
+ },
+ "logs": "Using seed: 19770815\nDetected image format as '.png' from file content\nDetected image format as '.png' from file content\nCreating Wan 2.7 I2V task...\nCreated task fba153db-72a2-48b2-93c0-c8c29ba9fb55, polling for result...\nTask status: RUNNING\nTask status: RUNNING\nTask status: RUNNING\nTask status: SUCCEEDED\nWan 2.7 I2V completed in 29.5sec\nDownloading 734543 bytes\nDownloaded 0.70MB in 0.40sec\n",
+ "output": "https://replicate.delivery/xezq/XQLgRNa7VdqUM5AkpPhb05OsYM8fhGvsKk4pXasmck5h7PoLA/tmplt3cntu3.mp4",
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T21:59:00.953Z",
+ "started_at": "2026-09-23T21:59:00.978458884Z",
+ "completed_at": "2026-09-23T21:59:31.6528588Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/z739gkvwb5rmw0d0t13veq5bmc/cancel",
+  "get": "https://api.replicate.com/v1/predictions/z739gkvwb5rmw0d0t13veq5bmc",
+  "stream": "https://stream.replicate.com/v1/files/jbxs-k5crx3wu35744dkqdmlr63inphyiuwyi5piblypptn3vxbppr2oa",
+  "web": "https://replicate.com/p/z739gkvwb5rmw0d0t13veq5bmc"
+ },
+ "metrics": {
+  "predict_time": 30.674399926,
+  "resolution_target": "720p",
+  "total_time": 30.6998588,
+  "video_output_count": 1,
+  "video_output_duration_seconds": 4
+ }
+}

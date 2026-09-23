@@ -96,6 +96,7 @@ window.BC = window.BC || {};
       }
       if (q.indexOf('abrir:') === 0) { var a = L().arquivo(q.slice(6)); if (a) BC.explorador.abrirArquivo(a.id); }
       if (q === 'oficina') BC.estacao.abrir('oficina');
+      if (q.indexOf('campanha:') === 0 && BC.campanha) BC.campanha.abrir(q.slice(9));
       if (q.indexOf('pessoa:') === 0) BC.estacao.abrirPerfil(q.slice(7));
     });
 
@@ -321,6 +322,8 @@ window.BC = window.BC || {};
     if (BC.mapaAgente && BC.mapaAgente.entende(n) && BC.mapaAgente.pedido(pedido, ag, this) !== false) return;
     /* Oficina: mudar o próprio Babel Coop pelo terminal (quem o Theus liberou) */
     if (BC.oficina && BC.oficina.entende(n) && BC.oficina.pedido(pedido, ag, this) !== false) return;
+    /* "gera a campanha <nome> para <pessoa> até <data>": o meio vira o palco da campanha (Tela, 3 anúncios, WhatsApp, calendário; campanha.js) */
+    if (BC.campanha && BC.campanha.entende(n) && BC.campanha.pedido(pedido, ag, this) !== false) return;
 
     /* campanha */
     var mc = n.match(/campanha\s+(?:de\s+)?(\d+)?\s*([a-z0-9 ]*?)(?:\s+para\b|\s+ate\b|$)/);
@@ -436,6 +439,7 @@ window.BC = window.BC || {};
 
     if (sub === 'ajuda') {
       ['Pedidos em português: "cria uma campanha de 50 clientes para a Carla até 30/09" · "cria uma demanda para o Bruno: revisar a proposta"',
+        '"gera a campanha Clínica Vida para a Carla até 30/09": Tela, 3 anúncios, WhatsApp e calendário, cada peça com dono, no meio',
         '"manda um aviso para a TV: reunião às 16h" · "mostra o site babel-os.com na TV" · "projeta precos na TV" · "entra em clinicavida.com.br e preenche o cadastro"',
         'coop status · coop demandas · coop comecar 1 · pausar · retomar · coop pronta "o que aprendi"',
         'coop livres · coop pegar 1 · coop buscar "reembolso" · coop ler caminho · coop abrir caminho',

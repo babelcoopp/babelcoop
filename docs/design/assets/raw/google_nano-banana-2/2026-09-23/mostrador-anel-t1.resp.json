@@ -1,0 +1,35 @@
+{
+ "id": "6rff9e9h9xrmy0d0szsbn6xeyr",
+ "model": "google/nano-banana-2",
+ "version": "hidden",
+ "input": {
+  "prompt": "Use the attached image only as a style reference for the fine engraved tick marks and the violet-to-cyan palette of its instrument dial; ignore its numbers, its glowing light column and its oval shape. Create one single physical object: the bezel ring of a precision observatory instrument, seen exactly head-on (orthographic front view, zero tilt), a perfect circle centered in the square frame, its outer edge filling 88% of the frame width. The ring is a wide flat band machined from dark graphite and black obsidian metal with a fine brushed finish, a thin polished raised lip on the outer edge and another on the inner edge, and all around the band a scale of very fine engraved radial tick marks, evenly spaced: a long mark every 30 degrees, a medium mark every 10 degrees and a short fine mark every 2 degrees, like the bezel of a scientific instrument. The inner opening is large (about 62% of the outer diameter) and completely empty, pure black, with nothing inside. A faint violet reflection glints on the upper-left arc of the polished lips and a faint cyan reflection on the lower-right arc; the rest of the metal stays dark and matte. Background: solid pure black (#000000), perfectly flat. No numbers, no digits, no letters, no text, no logos, no symbols, no faces, no needle, no hands, no light column, no glow bloom, no halo, no lens flare, no particles, no cast shadow, no perspective. Ultra-sharp macro product render, perfectly symmetric, 1:1.",
+  "aspect_ratio": "1:1",
+  "resolution": "1K",
+  "output_format": "png",
+  "image_input": [
+   "arquivo:docs/design/assets/raw/google_nano-banana-2/2026-09-23/ref-mostrador-estacao.jpg"
+  ]
+ },
+ "logs": "No sid\nGenerating image with Gemini Flash...\nTokens: 2570\nGenerated image in 8.92 seconds\n",
+ "output": "https://replicate.delivery/xezq/VPsoGTjiZ3K1BdfZeiAyCEepzOMI1tK95LfvOkeV3AyE7zD6C/tmpo60_t8wt.png",
+ "data_removed": false,
+ "error": null,
+ "source": "api",
+ "status": "succeeded",
+ "created_at": "2026-09-23T20:25:51.183Z",
+ "started_at": "2026-09-23T20:25:51.225349398Z",
+ "completed_at": "2026-09-23T20:26:00.504180749Z",
+ "urls": {
+  "cancel": "https://api.replicate.com/v1/predictions/6rff9e9h9xrmy0d0szsbn6xeyr/cancel",
+  "get": "https://api.replicate.com/v1/predictions/6rff9e9h9xrmy0d0szsbn6xeyr",
+  "stream": "https://stream.replicate.com/v1/files/jbxs-xf6b5i3to4cbwmqjmgl46vy26gszuheql5kil2s3vitqwqfe7k4a",
+  "web": "https://replicate.com/p/6rff9e9h9xrmy0d0szsbn6xeyr"
+ },
+ "metrics": {
+  "image_output_count": 1,
+  "predict_time": 9.278831341,
+  "resolution_target": "1K",
+  "total_time": 9.321180749
+ }
+}

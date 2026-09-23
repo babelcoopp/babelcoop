@@ -1,4 +1,4 @@
-<title>Babel Coop</title>
+<title>babel-coop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
@@ -8,6 +8,12 @@
 <link rel="stylesheet" href="tv.css">
 <link rel="stylesheet" href="ipad.css">
 <link rel="stylesheet" href="v3.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="casca-2030.css">
+<link rel="stylesheet" href="maquina-2030.css">
+<link rel="stylesheet" href="tv-2030.css">
+<link rel="stylesheet" href="mapa-2030.css">
+<link rel="stylesheet" href="campanha.css">
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 
 <div class="app" id="app">
@@ -18,7 +24,7 @@
       <div class="e-janela" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="e-marca">
         <img src="babel-logo.png" alt="" class="e-logo">
-        <strong>Babel Coop</strong>
+        <strong>babel-coop</strong>
         <span class="e-marca-sub">Estação · protótipo</span>
       </div>
       <button class="e-comando" id="abrir-paleta" type="button">
@@ -62,7 +68,7 @@
     <canvas class="tv-mapa" id="tv-mapa" aria-hidden="true"></canvas>
     <div class="tv-palco">
       <header class="tv-topo">
-        <div class="tv-marca"><img src="babel-logo.png" alt="" class="tv-logo"><span>Babel Coop</span></div>
+        <div class="tv-marca"><img src="babel-logo.png" alt="" class="tv-logo"><span>babel-coop</span></div>
         <div class="tv-cronometro" id="tv-cronometro"></div>
         <div class="tv-relogio"><span class="tv-selos" id="tv-selos"></span><span class="num" id="tv-hora">--:--</span><span id="tv-data"></span></div>
       </header>
@@ -102,6 +108,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
 <script src="util.js"></script>
+<script src="icones.js"></script>
 <script src="conteudos.js"></script>
 <script src="dados.js"></script>
 <script src="acervo.js"></script>
@@ -124,6 +131,9 @@
 <script src="maquina.js"></script>
 <script src="visual3d.js"></script>
 <script src="oficina.js"></script>
+<script src="endereco.js"></script>
+<script src="memoria-nome.js"></script>
+<script src="campanha.js"></script>
 <script src="estacao.js"></script>
 <script src="tv.js"></script>
 <script src="ipad.js"></script>

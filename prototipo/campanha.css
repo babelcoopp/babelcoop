@@ -1,0 +1,371 @@
+/* =====================================================================
+   babel-coop · campanha.css · o palco de "gera a campanha" (PLANO §5 F3 · imag-campanha.jpg)
+   Tokens: tokens.css (cópia de docs/design/tokens.css). Régua da luz: REGUA_ORGANISMO.md.
+   Repouso sem luz. Acende só com evento: a peça viva (sendo escrita) ganha o HUD do Babel OS
+   (vidro, borda 1 px rgba(63,227,255,.22), glow discreto, scanlines ≤ 5 %) e esfria ao ficar pronta;
+   a peça pronta recebe o pulso e acende uma vez; o OK de quem pediu fecha o Selo em ouro.
+   ===================================================================== */
+
+/* o palco ocupa o lugar de #e-conteudo (o render da Estação não toca nele) */
+.e-editor.cp-on > #e-conteudo { display: none !important; }
+.cp-vista { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--s1, #0b1320); }
+.cp-vista[hidden], .cp-palco[hidden], .cp-rito[hidden], .cp-pontos[hidden], .cp-selo[hidden], .cp-ok[hidden], .cp-ok-todas[hidden] { display: none !important; }
+
+.cp-palco {
+  --cp-hud: rgba(63, 227, 255, .22);
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  position: relative;
+  padding: var(--esp-4, 16px) var(--esp-6, 24px) var(--esp-8, 32px);
+  container: cp-palco / inline-size;
+  color: var(--texto);
+  font: 400 var(--t-14, 14px)/1.45 var(--fonte-ui);
+}
+
+/* ---------------- cabeçalho: nome, estado, endereço, régua das 6 peças ---------------- */
+.cp-cab { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-2, 8px); margin-bottom: var(--esp-4, 16px); }
+.cp-cab-linha { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--esp-3, 12px); flex-wrap: wrap; min-width: 0; }
+.cp-titulo { display: grid; gap: 2px; min-width: 0; }
+.cp-titulo h1 { margin: 0; font: 600 var(--t-20, 20px)/1.2 var(--fonte-ui); color: var(--texto); overflow-wrap: anywhere; }
+.cp-cab-dir { display: flex; align-items: center; gap: var(--esp-3, 12px); flex-wrap: wrap; }
+.cp-estado { font: 500 var(--t-11, 11px)/1.4 var(--fonte-mono); font-variant-numeric: tabular-nums; color: var(--apagado); }
+.cp-palco[data-estado="gerando"] .cp-estado { color: var(--t0); }
+.cp-palco[data-estado="pronta"] .cp-estado { color: var(--atencao); }
+.cp-palco[data-estado="no-ar"] .cp-estado { color: var(--ok); }
+.cp-cab-sub { align-items: center; }
+.cp-endereco { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; min-width: 0; font: 400 var(--t-125, 12.5px)/1.4 var(--fonte-mono); color: var(--apagado); }
+.cp-endereco i { font-style: normal; color: var(--fraco); }
+.cp-endereco b { color: var(--texto); font-weight: 500; }
+.cp-link { padding: 0; border: 0; background: none; color: var(--texto-90); font: inherit; text-decoration: underline; text-decoration-color: var(--linha); text-underline-offset: 3px; cursor: pointer; }
+.cp-link:hover { color: var(--t0); text-decoration-color: var(--t0); }
+.cp-meta { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; font: 400 var(--t-125, 12.5px)/1.4 var(--fonte-ui); color: var(--apagado); }
+.cp-meta b { color: var(--texto-90); font-weight: 500; }
+
+.cp-regua { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; position: relative; }
+.cp-regua::before { content: ""; position: absolute; left: 12px; right: 12px; top: 11px; height: 1px; background: var(--linha); }
+.cp-regua li { position: relative; display: flex; align-items: center; gap: 6px; min-width: 0; padding-right: 6px; }
+.cp-regua li b {
+  position: relative; z-index: 1; flex: none; width: 22px; height: 22px; display: grid; place-items: center;
+  border: var(--traco, 1.5px) solid var(--dono); border-radius: var(--r-chip, 4px); background: var(--s1);
+  color: var(--dono); font: 600 var(--t-11, 11px)/1 var(--fonte-mono);
+  transition: background-color var(--mov-padrao, 180ms) var(--ease-saida), color var(--mov-padrao, 180ms) var(--ease-saida);
+}
+.cp-regua li span { font: 500 var(--t-11, 11px)/1.2 var(--fonte-ui); color: var(--casca-fraco, var(--apagado)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: var(--s1); padding-right: 4px; position: relative; z-index: 1; }
+.cp-regua li.gerando b { background: color-mix(in srgb, var(--dono) 18%, var(--s1)); }
+.cp-regua li.pronta b, .cp-regua li.ok b { background: var(--dono); color: var(--s0); }
+.cp-regua li.ok b { box-shadow: 0 0 0 2px var(--s1), 0 0 0 3px var(--ouro); }
+.cp-regua li.pronta span, .cp-regua li.ok span { color: var(--texto-90); }
+
+/* ---------------- corpo: peças à esquerda, plano à direita ---------------- */
+.cp-corpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-4, 16px); align-items: start; }
+.cp-pecas-caixa { container: cp-pecas / inline-size; min-width: 0; }
+.cp-pecas {
+  display: grid; gap: var(--esp-3, 12px);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "tela" "a1" "a2" "a3" "wa" "cal";
+}
+.cp-peca[data-peca="tela"] { grid-area: tela; }
+.cp-peca[data-peca="anuncio-1"] { grid-area: a1; }
+.cp-peca[data-peca="anuncio-2"] { grid-area: a2; }
+.cp-peca[data-peca="anuncio-3"] { grid-area: a3; }
+.cp-peca[data-peca="whatsapp"] { grid-area: wa; }
+.cp-peca[data-peca="calendario"] { grid-area: cal; }
+@container cp-pecas (min-width: 360px) {
+  .cp-pecas { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "tela tela" "a1 a2" "a3 wa" "cal cal"; }
+}
+@container cp-pecas (min-width: 620px) {
+  .cp-pecas { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "tela tela tela" "a1 a2 a3" "wa cal cal"; }
+}
+@container cp-pecas (min-width: 900px) {
+  .cp-pecas { grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-areas: "tela tela a1 a2 a3" "tela tela wa cal cal"; }
+}
+
+/* ---------------- a peça (cartão) ---------------- */
+.cp-peca {
+  position: relative; display: flex; flex-direction: column; min-width: 0;
+  background: var(--s2); border: 1px solid var(--linha); border-left: 3px solid var(--dono);
+  border-radius: var(--r-painel, 8px); overflow: hidden; isolation: isolate;
+  transition: border-color var(--mov-padrao, 180ms) var(--ease-saida), background-color var(--mov-padrao, 180ms) var(--ease-saida), box-shadow 600ms var(--ease-saida);
+}
+/* luz de evento (meia-vida escrita pelo motor do organismo em --luz) */
+.cp-peca::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--t2) 26%, transparent), color-mix(in srgb, var(--t0) 10%, transparent) 55%, transparent);
+  opacity: var(--luz, 0);
+}
+.cp-peca[data-estado="fila"] { background: transparent; border-style: dashed; border-left-style: solid; border-left-color: color-mix(in srgb, var(--dono) 45%, transparent); }
+.cp-peca[data-estado="fila"] .cp-previa { opacity: .5; }
+/* HUD do Babel OS só na peça viva (sendo escrita): vidro, borda de 1 px, glow discreto, scanlines ≤ 5 % */
+.cp-peca[data-estado="gerando"] {
+  background: color-mix(in srgb, var(--s2) 72%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  backdrop-filter: blur(10px) saturate(1.15);
+  border-color: var(--cp-hud);
+  border-left-color: var(--dono);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--dono) 18%, transparent), 0 0 24px -12px rgba(42, 213, 229, .55);
+}
+.cp-scan { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; background: repeating-linear-gradient(180deg, rgba(215, 228, 251, .045) 0 1px, transparent 1px 3px); transition: opacity 600ms var(--ease-saida); }
+.cp-peca[data-estado="gerando"] .cp-scan { opacity: 1; }
+/* pronta: o pulso chegou → acende uma vez e esfria (900 ms) */
+.cp-peca.cp-chegou { animation: cp-chega 900ms var(--ease-heroi) 1; }
+@keyframes cp-chega {
+  0% { border-color: var(--t2); box-shadow: 0 0 0 1px var(--t2), 0 0 26px -6px color-mix(in srgb, var(--t2) 70%, transparent); }
+  45% { border-color: var(--t0); box-shadow: 0 0 0 1px var(--t0), 0 0 22px -8px color-mix(in srgb, var(--t0) 65%, transparent); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+/* o OK de quem pediu: a luz percorre a peça (400 ms) e o Selo fecha em ouro */
+.cp-peca.cp-selando::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--ouro) 30%, transparent) 50%, transparent 70%);
+  animation: cp-sela 400ms var(--ease-saida) 1 both;
+}
+@keyframes cp-sela { from { transform: translateX(-100%); } to { transform: translateX(100%); opacity: 0; } }
+.cp-peca.com-ok { border-color: color-mix(in srgb, var(--ouro) 40%, var(--linha)); border-left-color: var(--dono); }
+
+.cp-peca-cab { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--linha-fraca); min-width: 0; }
+.cp-glifo { flex: none; color: var(--dono); }
+.cp-peca-nome { display: grid; min-width: 0; flex: 1; }
+.cp-peca-nome b { font: 500 var(--t-13, 13px)/1.25 var(--fonte-ui); color: var(--texto); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-peca-nome small { font: 400 var(--t-11, 11px)/1.3 var(--fonte-mono); color: var(--casca-fraco, var(--apagado)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-progresso { flex: none; display: inline-flex; align-items: center; gap: 4px; font: 500 var(--t-11, 11px)/1 var(--fonte-mono); color: var(--apagado); }
+.cp-anel { flex: none; transform: rotate(-90deg); }
+.cp-anel-trilho { fill: none; stroke: var(--s3); stroke-width: 2.4; }
+.cp-anel-valor { fill: none; stroke: var(--dono, var(--t0)); stroke-width: 2.4; stroke-linecap: butt; transition: stroke-dashoffset 420ms var(--ease-saida), stroke 300ms; }
+.cp-peca[data-estado="pronta"] .cp-anel-valor { stroke: var(--t0); }
+.cp-peca.com-ok .cp-anel-valor { stroke: var(--ouro); }
+.cp-peca[data-estado="pronta"] .cp-progresso { color: var(--t0); }
+.cp-peca.com-ok .cp-progresso { color: var(--ouro); }
+
+.cp-previa { position: relative; flex: 1; min-height: 0; padding: 10px; cursor: pointer; outline-offset: -2px; }
+.cp-peca[data-estado="fila"] .cp-previa, .cp-peca[data-estado="gerando"] .cp-previa { cursor: progress; }
+.cp-previa:focus-visible { outline: var(--traco, 1.5px) solid var(--t0); }
+.cp-peca-pe { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; padding: 7px 10px; border-top: 1px solid var(--linha-fraca); min-width: 0; }
+.cp-dono { display: inline-flex; align-items: center; gap: 6px; font: 500 var(--t-125, 12.5px)/1 var(--fonte-ui); color: var(--texto-90); }
+.cp-peca-st { flex: 1; min-width: 80px; font: 400 var(--t-11, 11px)/1.3 var(--fonte-mono); color: var(--casca-fraco, var(--apagado)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-peca[data-estado="gerando"] .cp-peca-st { color: var(--t0); }
+.cp-peca-acoes { display: inline-flex; gap: 4px; margin-left: auto; }
+.cp-peca-acoes .botao, .cp-ok, .cp-ok-todas { min-height: var(--alvo, 24px); padding: 2px 10px; font-size: var(--t-125, 12.5px); display: inline-flex; align-items: center; gap: 6px; }
+.cp-peca[data-estado="fila"] .cp-abrir, .cp-peca[data-estado="gerando"] .cp-abrir { opacity: .45; }
+
+/* o Selo (Lei 2): anel de 16 px · aberto (tracejado, espera) · selado (ouro, nome e hora) · rompido (ponto de quem rompeu) */
+.cp-selo { display: inline-flex; align-items: center; gap: 6px; font: 500 var(--t-11, 11px)/1.2 var(--fonte-mono); color: var(--apagado); white-space: nowrap; }
+.cp-selo-ic { position: relative; flex: none; width: 14px; height: 14px; border-radius: 50%; border: var(--traco, 1.5px) dashed currentColor; border-top-color: transparent; }
+.cp-selo.esperando-eu { color: var(--atencao); }
+.cp-selo.aberto { color: var(--quem, var(--apagado)); }
+.cp-selo.selado { color: var(--ouro); }
+.cp-selo.selado .cp-selo-ic { border-style: solid; border-top-color: currentColor; transition: border-color var(--mov-padrao, 180ms); }
+.cp-selo.rompido { color: var(--apagado); }
+.cp-selo.rompido .cp-selo-ic::before { content: ""; position: absolute; left: -6px; top: 50%; width: 3px; height: 3px; margin-top: -1.5px; border-radius: 50%; background: var(--quem, currentColor); }
+.cp-ok .cp-selo-ic, .cp-ok-todas .cp-selo-ic { color: var(--atencao); }
+.cp-ok:hover .cp-selo-ic, .cp-ok-todas:hover .cp-selo-ic { border-style: solid; border-top-color: currentColor; }
+
+/* ---------------- prévia da Tela: a landing de verdade, reduzida (1100 px → largura do cartão) ---------------- */
+.cp-peca[data-tipo="tela"] .cp-previa { padding: 0; }
+.cp-tela-quadro { position: relative; height: 260px; overflow: hidden; background: var(--s0); --k: .3; --alt: 866px; --y: 0px; }
+/* na grade larga a Tela ocupa duas linhas: a prévia enche o cartão */
+@container cp-pecas (min-width: 900px) {
+  .cp-peca[data-tipo="tela"] .cp-previa { display: flex; flex-direction: column; }
+  .cp-tela-quadro { height: auto; flex: 1; min-height: 392px; }
+}
+.cp-tela-host, .cp-tela-quadro iframe {
+  position: absolute; left: 0; top: 0; width: 1100px; height: var(--alt); border: 0; pointer-events: none;
+  transform-origin: 0 0; transform: scale(var(--k)) translateY(var(--y, 0px));
+  transition: transform 700ms var(--ease-saida);
+}
+.cp-tela-quadro iframe { transform: scale(var(--k)); background: #060b16; animation: cp-surge 480ms var(--ease-saida) both; }
+@keyframes cp-surge { from { opacity: 0; } }
+
+/* ---------------- prévia do anúncio: a arte (vetor) + a legenda ---------------- */
+.cp-arte { display: grid; place-items: center; aspect-ratio: 1 / 1; max-height: 210px; margin: 0 auto; border-radius: var(--r-cartao, 6px); overflow: hidden; background: var(--s0); }
+.cp-arte.stories { aspect-ratio: 9 / 16; max-height: 210px; }
+.cp-arte svg { display: block; width: 100%; height: 100%; }
+.cp-legenda { margin: 8px 0 0; font: 400 var(--t-125, 12.5px)/1.45 var(--fonte-ui); color: var(--texto-90); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.cp-legenda.vazia { color: var(--casca-fraco, var(--apagado)); font-family: var(--fonte-mono); font-size: var(--t-11, 11px); }
+.cp-novo { animation: cp-nasce 520ms var(--ease-saida) both; }
+@keyframes cp-nasce { from { opacity: 0; transform: translateY(4px); } }
+g.cp-novo { animation: cp-nasce-svg 520ms var(--ease-saida) both; }
+@keyframes cp-nasce-svg { from { opacity: 0; } }
+
+/* ---------------- prévia do WhatsApp: a mensagem sugerida ---------------- */
+.cp-wa { border-radius: var(--r-cartao, 6px); overflow: hidden; background: #0b141a; border: 1px solid var(--linha-fraca); }
+.cp-wa-topo { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: #1f2c34; color: #e9edef; font: 400 var(--t-125, 12.5px)/1.25 var(--fonte-ui); }
+.cp-wa-topo small { display: block; color: #8696a0; font-size: var(--t-11, 11px); }
+.cp-wa-av { width: 22px; height: 22px; border-radius: 50%; background: #3b4a54; flex: none; }
+.cp-wa-conversa { padding: 10px; min-height: 120px; background: #0b141a; }
+.cp-wa-balao { position: relative; max-width: 92%; margin-left: auto; padding: 8px 10px 6px; border-radius: 8px 0 8px 8px; background: #005c4b; color: #e9edef; font: 400 var(--t-125, 12.5px)/1.45 var(--fonte-ui); }
+.cp-wa-balao p { margin: 0 0 6px; }
+.cp-wa-balao p:last-of-type { margin-bottom: 0; }
+.cp-wa-balao time { display: block; margin-top: 4px; text-align: right; font: 400 10.5px/1.3 var(--fonte-mono); color: rgba(233, 237, 239, .7); }
+.cp-wa-espera { margin: 0; color: #8696a0; font: 400 var(--t-11, 11px)/1.4 var(--fonte-mono); }
+.cp-var { background: rgba(42, 213, 229, .18); color: #e9fbff; border-radius: 3px; padding: 0 2px; }
+.cp-cursor { display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -2px; background: var(--t0); }
+
+/* ---------------- prévia do calendário: o mês + a lista de datas ---------------- */
+.cp-cal { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@container cp-pecas (min-width: 600px) { .cp-peca[data-peca="calendario"] .cp-cal { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
+.cp-cal-grade { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; font: 500 var(--t-11, 11px)/1 var(--fonte-mono); font-variant-numeric: tabular-nums; }
+.cp-cal-dsem { text-align: center; color: var(--fraco); padding: 2px 0 4px; }
+.cp-cal-dia { position: relative; min-height: 26px; padding: 3px 4px; border-radius: 3px; background: var(--s1); color: var(--apagado); }
+.cp-cal-dia.fora { background: transparent; color: var(--fraco); opacity: .55; }
+.cp-cal-dia.hoje { box-shadow: inset 0 0 0 1px var(--t0); color: var(--texto); }
+.cp-cal-dia.prazo { box-shadow: inset 0 0 0 1px var(--atencao); color: var(--texto); }
+.cp-cal-dia i { position: absolute; left: 4px; right: 4px; bottom: 3px; display: flex; gap: 2px; }
+.cp-cal-dia i b { flex: 1; height: 3px; border-radius: 2px; background: var(--dono); }
+.cp-cal-lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3px; align-content: start; }
+.cp-cal-lista li { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 3px 6px; border-left: 2px solid var(--dono); background: var(--s1); border-radius: 0 3px 3px 0; font: 400 var(--t-125, 12.5px)/1.3 var(--fonte-ui); color: var(--texto-90); }
+.cp-cal-lista time { flex: none; font: 500 var(--t-11, 11px)/1 var(--fonte-mono); color: var(--apagado); min-width: 72px; }
+.cp-cal-lista span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------------- o rito: "Campanha pronta" / "Campanha no ar" ---------------- */
+.cp-rito { margin: 4px 0 0; padding-top: 10px; border-top: 1px solid var(--linha-fraca); text-align: center; }
+.cp-rito b { display: block; text-wrap: balance; font: 500 30px/1.1 var(--fonte-fala); color: var(--latte-88, #fff8e7); }
+.cp-rito.no-ar b { color: color-mix(in oklch, var(--latte-88, #fff8e7), var(--ouro) 35%); }
+.cp-rito small { display: block; margin-top: 6px; font: 400 var(--t-11, 11px)/1.6 var(--fonte-mono); color: var(--apagado); }
+.cp-rito.nasce { animation: cp-rito 600ms var(--ease-heroi) both; }
+@keyframes cp-rito { from { opacity: 0; transform: translateY(8px); } }
+/* sem o motor do organismo: o grupo de peças respira uma vez em CSS (1,2 s) */
+.cp-pecas.cp-respira { animation: cp-respira 1200ms var(--ease-saida) 1; border-radius: var(--r-painel, 8px); }
+@keyframes cp-respira { 0% { box-shadow: 0 0 0 0 transparent; } 25% { box-shadow: 0 0 0 1.5px var(--t2), 0 0 28px -6px color-mix(in srgb, var(--t0) 45%, transparent); } 100% { box-shadow: 0 0 0 0 transparent; } }
+.cp-pecas.cp-respira.ouro { animation-name: cp-respira-ouro; }
+@keyframes cp-respira-ouro { 25% { box-shadow: 0 0 0 1.5px var(--ouro), 0 0 28px -6px color-mix(in srgb, var(--ouro) 45%, transparent); } 100% { box-shadow: 0 0 0 0 transparent; } }
+/* o ponto de luz que corre da presença até a peça (reserva sem o motor do organismo) */
+.cp-pulso { position: absolute; left: 0; top: 0; z-index: 20; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; pointer-events: none; background: var(--t0); box-shadow: 0 0 12px 3px color-mix(in srgb, var(--t0) 55%, transparent); }
+
+/* ---------------- o plano (à direita): presença, pedido, consulta, checklist, pontos ---------------- */
+.cp-plano {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; align-content: start; min-width: 0;
+  padding: 12px; border: 1px solid var(--linha); border-radius: var(--r-painel, 8px); background: var(--s0);
+  font: 400 var(--t-125, 12.5px)/1.5 var(--fonte-mono); color: var(--texto-90);
+}
+.cp-pres { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.cp-pres .bc-presenca { --bc-tam: 56px; }
+.cp-pres-txt { display: grid; gap: 2px; min-width: 0; }
+.cp-pres-txt b { font: 500 var(--t-125, 12.5px)/1.2 var(--fonte-mono); color: var(--texto); }
+.cp-pres-l2 { font-size: var(--t-11, 11px); color: var(--apagado); }
+.cp-pres-st { font-size: var(--t-11, 11px); color: var(--t0); font-variant-numeric: tabular-nums; }
+.cp-palco[data-estado="no-ar"] .cp-pres-st { color: var(--ok); }
+.cp-pres-st.espera { color: var(--atencao); }
+/* a presença em CSS (sem o motor do organismo): anel + coluna de luz roxo → ciano */
+.cp-pres-css { position: relative; display: inline-block; flex: none; width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(215, 228, 251, .2); }
+.cp-pres-css::before { content: ""; position: absolute; inset: 6px; border-radius: 50%; border: 1px dashed rgba(215, 228, 251, .14); }
+.cp-pres-css::after { content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 1.5px solid transparent; border-top-color: var(--t2); border-right-color: var(--t0); opacity: 0; }
+.cp-pres-css i { position: absolute; left: 50%; top: 12px; bottom: 12px; width: 8px; margin-left: -4px; border-radius: 4px; background: linear-gradient(180deg, var(--t2), var(--t0)); transform: scaleY(.28); transform-origin: bottom; opacity: .55; transition: transform 240ms var(--ease-saida), opacity 240ms; }
+.cp-pres-css[data-estado="rodando"] i { transform: scaleY(.85); opacity: 1; }
+.cp-pres-css[data-estado="rodando"]::after { opacity: 1; animation: cp-gira var(--laco-agente, 1.2s) linear infinite; }
+.cp-pres-css[data-estado="espera"] { border-color: var(--atencao); }
+.cp-pres-css[data-estado="espera"] i { background: var(--atencao); transform: scaleY(.7); opacity: .8; }
+.cp-pres-css[data-estado="terminou"] i { transform: scaleY(.4); }
+@keyframes cp-gira { to { transform: rotate(360deg); } }
+
+.cp-bloco { border-left: 2px solid var(--linha-fraca); padding: 2px 10px; min-width: 0; }
+.cp-bloco p { margin: 0; overflow-wrap: anywhere; }
+.cp-bloco.pedido p, .cp-bloco.consulta p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.cp-tipo { display: block; margin-bottom: 3px; font: 500 10.5px/1 var(--fonte-mono); letter-spacing: var(--rotulo-tracking, .08em); text-transform: uppercase; color: var(--casca-fraco, var(--fraco)); }
+.cp-bloco.pedido { border-left-color: var(--linha); }
+.cp-bloco.consulta { color: var(--apagado); }
+.cp-memoria { color: var(--t0); }
+.cp-bloco.plano { border-left-color: var(--t1); }
+.cp-check { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3px; }
+.cp-check li { position: relative; display: flex; align-items: center; gap: 8px; padding: 3px 4px; border-radius: var(--r-chip, 4px); color: var(--apagado); opacity: 0; transform: translateX(4px); transition: opacity 120ms var(--ease-saida), transform 120ms var(--ease-saida), color 200ms; }
+.cp-check li.on { opacity: 1; transform: none; }
+.cp-luz { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(90deg, color-mix(in srgb, var(--t2) 30%, transparent), color-mix(in srgb, var(--t0) 8%, transparent)); opacity: var(--luz, 0); }
+.cp-check li.cp-acende .cp-luz { animation: cp-esfria 6s linear 1 both; }
+@keyframes cp-esfria { from { opacity: 1; } to { opacity: 0; } }
+.cp-ck { position: relative; flex: none; width: 14px; height: 14px; border-radius: 50%; border: var(--traco, 1.5px) solid var(--dono); transition: background-color 200ms, border-color 200ms; }
+.cp-check li.feito { color: var(--texto); }
+.cp-check li.feito .cp-ck { background: var(--t0); border-color: var(--t0); }
+.cp-check li.feito .cp-ck::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; font: 700 9px/1 var(--fonte-mono); color: var(--s0); }
+.cp-ck-t { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-ck-dono { flex: none; font-size: var(--t-11, 11px); color: var(--dono); }
+.cp-ck-pts { flex: none; min-width: 20px; text-align: right; font: 500 var(--t-11, 11px)/1 var(--fonte-mono); color: var(--t0); opacity: 0; transform: translateY(3px); }
+.cp-check li.feito .cp-ck-pts { opacity: 1; transform: none; transition: opacity 300ms 200ms, transform 300ms 200ms; }
+.cp-pontos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; padding-top: 8px; border-top: 1px solid var(--linha-fraca); }
+.cp-pts-n { font: 500 26px/1.1 var(--fonte-mono); color: var(--texto); }
+.cp-pts-n.sobe { animation: cp-sobe 900ms var(--ease-saida) 1; }
+@keyframes cp-sobe { 0%, 40% { color: var(--t0); } 100% { color: var(--texto); } }
+.cp-pts-o { font: 400 var(--t-11, 11px)/1.5 var(--fonte-mono); color: var(--apagado); }
+.cp-pts-o b { color: var(--t0); font-weight: 500; }
+
+/* o plano fica à direita desde o meio estreito (app a 1440 px com lateral e terminal abertos: ~650 px) */
+@container cp-palco (min-width: 600px) {
+  .cp-corpo { grid-template-columns: minmax(0, 1fr) 216px; }
+  .cp-plano { position: sticky; top: 0; max-height: calc(100vh - 140px); overflow: auto; }
+  .cp-ck-dono { display: none; }
+  .cp-plano { font-size: 11.5px; padding: 10px; gap: 8px; }
+  .cp-pres .bc-presenca, .cp-pres-css { --bc-tam: 44px; width: 44px; height: 44px; }
+}
+@container cp-palco (min-width: 980px) {
+  .cp-corpo { grid-template-columns: minmax(0, 1fr) 272px; }
+  .cp-ck-dono { display: inline; }
+}
+@container cp-palco (max-width: 300px) {
+  .cp-ck-dono, .cp-cab-dir .cp-estado { display: none; }
+}
+@container cp-palco (max-width: 520px) {
+  .cp-regua li span { display: none; }
+  .cp-regua li { justify-content: center; padding: 0; }
+}
+
+/* ---------------- lateral: campanhas e as peças da aberta ---------------- */
+.cp-lat .cp-lat-camp[data-estado="gerando"] .conta { color: var(--t0); }
+.cp-lat .cp-lat-camp[data-estado="pronta"] .conta { color: var(--atencao); }
+.cp-lat .cp-lat-camp[data-estado="no-ar"] .conta { color: var(--ok); }
+.cp-lat-pecas { list-style: none; margin: 2px 0 6px; padding: 0 0 0 10px; border-left: 1px solid var(--linha-fraca); }
+.cp-lat-peca { gap: 8px; }
+.cp-lat-peca .cp-anel-valor { stroke: var(--dono); }
+.cp-lat-peca[data-estado="pronta"] .cp-anel-valor { stroke: var(--t0); }
+.cp-lat-peca[data-estado="ok"] .cp-anel-valor { stroke: var(--ouro); }
+.cp-lat-pasta { padding: 4px 8px; font: 400 var(--t-11, 11px)/1.4 var(--fonte-mono); overflow-wrap: anywhere; }
+.cp-lat-vazio { padding: 0 14px; }
+
+/* ---------------- editores das peças (anúncio · WhatsApp · calendário) ---------------- */
+.cp-ed { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-4, 16px); max-width: 1100px; }
+.cp-ed-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid var(--linha-fraca); }
+.cp-ed-cab-dir { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.cp-ed-arq { color: var(--fraco); margin-left: 6px; }
+.cp-ed-anuncio { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-4, 16px); align-items: start; }
+@media (min-width: 1100px) { .cp-ed-anuncio { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); } }
+.cp-ed-arte { margin: 0; width: 100%; max-width: 420px; aspect-ratio: 1 / 1; border-radius: var(--r-painel, 8px); overflow: hidden; border: 1px solid var(--linha); background: var(--s0); }
+.cp-ed-arte.stories { aspect-ratio: 9 / 16; max-width: 300px; }
+.cp-ed-arte.pequena { max-width: 300px; }
+.cp-ed-arte.pequena.stories { max-width: 200px; }
+.cp-ed-arte svg { display: block; width: 100%; height: 100%; }
+.cp-ed-feed { display: grid; gap: 12px; min-width: 0; }
+.cp-ed-post { padding: 12px; border: 1px solid var(--linha-fraca); border-radius: var(--r-cartao, 6px); background: var(--s2); }
+.cp-ed-marca { display: inline-flex; align-items: center; gap: 8px; font: 600 var(--t-13, 13px)/1 var(--fonte-ui); color: var(--texto); }
+.cp-ed-marca i { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(135deg, var(--t2), var(--t0)); }
+.cp-ed-post .cp-legenda { -webkit-line-clamp: unset; display: block; font-size: var(--t-14, 14px); }
+.cp-ed-ficha { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 4px 12px; margin: 0; font: 400 var(--t-125, 12.5px)/1.5 var(--fonte-ui); }
+.cp-ed-ficha dt { font: 500 var(--t-11, 11px)/1.8 var(--fonte-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--casca-fraco, var(--apagado)); }
+.cp-ed-ficha dd { margin: 0; color: var(--texto-90); overflow-wrap: anywhere; }
+.cp-ed-form { display: grid; gap: 12px; }
+.cp-ed-campos { display: grid; gap: 12px; min-width: 0; }
+.cp-ed-form label { display: grid; gap: 6px; font: 500 var(--t-125, 12.5px)/1.3 var(--fonte-ui); color: var(--apagado); }
+.cp-ed-form input[type="text"], .cp-ed-form input[type="date"], .cp-ed-form textarea { width: 100%; min-height: 32px; padding: 6px 10px; font: 400 var(--t-14, 14px)/1.45 var(--fonte-ui); }
+.cp-ed-form textarea { resize: vertical; }
+.cp-ed-wa { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--esp-4, 16px); align-items: start; }
+@media (min-width: 1100px) { .cp-ed-wa { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); } }
+.cp-ed-wa-tela { display: grid; gap: 8px; }
+.cp-ed-wa .cp-wa-conversa { min-height: 260px; }
+.cp-datas { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.cp-datas li { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 6px 8px; border-left: 3px solid var(--dono); background: var(--s2); border-radius: 0 var(--r-cartao, 6px) var(--r-cartao, 6px) 0; }
+.cp-datas .cp-link { font: 400 var(--t-11, 11px)/1 var(--fonte-mono); }
+.cp-ed-mes .cp-cal { grid-template-columns: minmax(0, 1fr); max-width: 720px; }
+.cp-ed-mes .cp-cal-dia { min-height: 54px; font-size: var(--t-125, 12.5px); }
+@media (max-width: 760px) {
+  .cp-palco { padding: 12px 14px 90px; }
+  .cp-datas li { grid-template-columns: minmax(0, 1fr) auto; }
+  .cp-datas li input[type="text"] { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* ---------------- movimento reduzido (ou efeitos desligados pela pessoa): cor e texto, nada corre ---------------- */
+@media (prefers-reduced-motion: reduce) {
+  .cp-palco *, .cp-palco *::before, .cp-palco *::after, .cp-ed * { animation: none !important; transition: none !important; }
+  .cp-check li { opacity: 1; transform: none; }
+}
+html.bc-org-parado .cp-palco *, html.bc-org-parado .cp-palco *::before, html.bc-org-parado .cp-palco *::after { animation: none !important; transition: none !important; }
+html.bc-org-parado .cp-check li { opacity: 1; transform: none; }
+@media (prefers-reduced-transparency: reduce) {
+  .cp-peca[data-estado="gerando"] { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--s2); }
+}
