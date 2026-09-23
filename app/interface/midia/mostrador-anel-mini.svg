@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" width="22" height="22" fill="none" stroke="currentColor" color="#a8b8d5">
+  <!-- Babel Coop · mini presença (abas, 22 px): o mesmo anel-instrumento do mostrador-anel.png, simplificado à mão.
+       Miolo vazio: a coluna de luz entra por código. Cor por currentColor, ou use como máscara (mask-image) para pintar degradê. -->
+  <circle cx="11" cy="11" r="9.6" stroke-width="1.3" opacity=".6"/>
+  <g stroke-width="1.4" stroke-linecap="butt">
+    <path d="M11 2.9V5.2M19.1 11H16.8M11 19.1V16.8M2.9 11H5.2"/>
+  </g>
+  <g stroke-width="1" stroke-linecap="butt" opacity=".75">
+    <path d="M14.95 4.16L14.1 5.63M17.84 7.05L16.37 7.9M17.84 14.95L16.37 14.1M14.95 17.84L14.1 16.37M7.05 17.84L7.9 16.37M4.16 14.95L5.63 14.1M4.16 7.05L5.63 7.9M7.05 4.16L7.9 5.63"/>
+  </g>
+</svg>

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="pt-BR" data-vista="estacao">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Organismo do terminal</title>
+<link rel="icon" href="data:,">
+<meta name="description" content="Demonstração do motor BC.organismo: a presença (anel-instrumento com coluna de luz) em todos os estados, pulsos, faíscas, respirar, o b em neon, a parede com a constelação da sala e os sons.">
+<style>
+/* tokens mínimos (docs/design/tokens.css v2) */
+:root{
+  color-scheme:dark;
+  --s0:#060b16;--s1:#0b1320;--s2:#161e2d;--s3:#212a3b;
+  --linha:#4d5564;--linha-fraca:rgba(215,228,251,.09);
+  --texto:#d7e4fb;--texto-90:#c3cfe5;--apagado:#a8b8d5;--fraco:#6c7b96;--latte:#fff8e7;
+  --t0:#2ad5e5;--t1:#7ba4f0;--t2:#a376e9;
+  --ok:#7fd6a6;--atencao:#f0b35a;--alarme:#ff6b6b;--sem-dado:#5d6b78;--ouro:#f5c76a;
+  --pessoa-1:#f69a9a;--pessoa-3:#d8b260;--pessoa-6:#57cebe;--pessoa-8:#7dbdfa;--pessoa-10:#d0a3ea;
+  --fonte-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fonte-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fonte-fala:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --ease-saida:cubic-bezier(.2,0,0,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--s0);color:var(--texto);font:400 14px/1.45 var(--fonte-ui);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:1.5px solid var(--t0);outline-offset:2px}
+.mono{font-family:var(--fonte-mono);font-variant-numeric:tabular-nums}
+.pg{max-width:1320px;margin:0 auto;padding:0 16px 40px}
+.topo{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;padding:14px 0;border-bottom:1px solid var(--linha)}
+.topo h1{margin:0;font:500 15px/1 var(--fonte-ui)}
+.topo .meta{font:400 12px/1 var(--fonte-mono);color:var(--fraco)}
+.topo .ctl{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border:1px solid var(--linha);border-radius:4px;font:500 11px/1 var(--fonte-mono);color:var(--texto-90);white-space:nowrap}
+.chip:hover{border-color:var(--apagado);color:var(--texto)}
+.chip[aria-pressed="true"]{border-color:var(--t0);color:var(--t0)}
+.chip.prim{background:var(--t0);border-color:var(--t0);color:var(--s0);font-weight:600}
+.rot{font:500 11px/1 var(--fonte-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--fraco);margin:0 0 8px}
+h2{font:500 13px/1.3 var(--fonte-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--apagado);margin:28px 0 12px}
+.intro{color:var(--apagado);max-width:92ch;margin:14px 0 18px}
+.intro b{color:var(--texto);font-weight:500}
+
+/* ---------- o painel da direita (360–520 px) ---------- */
+.linha1{display:grid;grid-template-columns:400px minmax(0,1fr);gap:20px;align-items:start}
+.painel{width:400px;border:1px solid var(--linha);border-radius:10px;overflow:hidden;background:var(--s0);display:flex;flex-direction:column;height:600px;position:relative}
+.abas{height:32px;display:flex;align-items:stretch;border-bottom:1px solid var(--linha);flex:none;position:relative}
+.aba{display:flex;align-items:center;gap:7px;padding:0 12px;font:500 12.5px/1 var(--fonte-ui);color:var(--apagado);border-right:1px solid var(--linha-fraca);position:relative}
+.aba .lz{position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,var(--t2),var(--t0));opacity:var(--luz,0);pointer-events:none}
+.aba.ativa{color:var(--texto)}
+.aba.ativa::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--t0)}
+.aba{background:linear-gradient(180deg,rgba(163,118,233,calc(var(--luz,0)*.16)),transparent)}
+.abas .vivo{margin-left:auto;display:flex;align-items:center;gap:6px;padding:0 12px;font:500 11px/1 var(--fonte-mono);color:var(--t0)}
+.abas .vivo i{width:6px;height:6px;border-radius:50%;background:var(--t0)}
+.abas .vivo.pausa{color:var(--fraco)}.abas .vivo.pausa i{background:var(--sem-dado)}
+.cab{background:var(--s2);border-bottom:1px solid var(--linha);display:flex;align-items:center;gap:14px;padding:10px 14px;flex:none;position:relative;min-height:96px}
+.cab::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(42,213,229,calc(var(--luz,0)*.12))}
+.cab .txt{display:flex;flex-direction:column;gap:6px;min-width:0}
+.cab .l1{font:500 12px/1 var(--fonte-mono);color:var(--texto);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cab .l1 span{color:var(--fraco);font-weight:400}
+.cab .l2{font:400 11px/1.3 var(--fonte-mono);color:var(--apagado)}
+.cab .l2 b{font-weight:500;color:var(--t0)}
+.cab[data-estado="espera"] .l2 b{color:var(--atencao)}
+.cab[data-estado="falhou"] .l2 b{color:var(--alarme)}
+.cab[data-estado="pausado"] .l2 b,.cab[data-estado="desligado"] .l2 b{color:var(--fraco)}
+.selo{display:none;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid var(--linha-fraca);font:500 11px/1.2 var(--fonte-mono);color:var(--texto-90);background:linear-gradient(90deg,color-mix(in oklch,var(--pessoa,var(--t0)) calc(8% + var(--luz,0)*14%),transparent),transparent 70%)}
+.selo.on{display:flex}
+.selo .anel{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--pessoa);display:grid;place-items:center;font:600 7.5px/1 var(--fonte-mono);color:var(--pessoa);flex:none}
+.selo button{margin-left:auto;font:500 11px/1 var(--fonte-mono);color:var(--texto);border:1px solid var(--linha);border-radius:4px;padding:5px 8px}
+.corpo{flex:1;min-height:0;background:#060b16;position:relative;overflow:hidden;padding:12px 16px;font:12.5px/1.55 var(--fonte-mono);color:var(--texto-90)}
+.corpo:focus{outline:none;box-shadow:inset 0 0 0 1px rgba(42,213,229,.35)}
+.corpo .marca{position:absolute;right:14px;top:12px}
+.corpo .marca .bc-marca-b{--bc-tam:34px}
+.corpo .saida{position:relative;white-space:pre-wrap;word-break:break-word;padding-right:40px}
+.corpo .p1{color:#a88bf0}.corpo .p2{color:var(--t0)}.corpo .p3{color:#c7a2ff}
+.corpo .deg{background:linear-gradient(90deg,#b9a8ff,#7ab8ff 55%,#6fe3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.corpo .erro{color:var(--alarme)}
+.corpo .dica{color:var(--fraco)}
+.corpo .cursor{display:inline-block;width:.6em;height:1.15em;vertical-align:-3px;background:var(--t0);opacity:.85}
+.pe{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid var(--linha);background:var(--s1);font:400 11px/1 var(--fonte-mono);color:var(--fraco);flex:none}
+.pe input{flex:1;min-width:0;background:none;border:1px solid var(--linha);border-radius:6px;height:28px;padding:0 8px;color:var(--texto);font:inherit}
+
+.controles{display:grid;gap:14px}
+.grupo{background:var(--s1);border:1px solid var(--linha-fraca);border-radius:8px;padding:12px}
+.grupo .bts{display:flex;flex-wrap:wrap;gap:6px}
+.grupo p{margin:8px 0 0;color:var(--fraco);font-size:12px}
+.medidor{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;font:400 11.5px/1.5 var(--fonte-mono);color:var(--apagado)}
+.medidor b{display:block;font:500 20px/1.2 var(--fonte-mono);color:var(--texto)}
+.registro{margin-top:10px;font:400 11px/1.6 var(--fonte-mono);color:var(--fraco);max-height:132px;overflow:auto}
+.registro .ok{color:var(--ok)}.registro .no{color:var(--atencao)}
+
+/* ---------- os sete estados ---------- */
+.estados{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.estado{background:var(--s1);border:1px solid var(--linha-fraca);border-radius:8px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.estado .par{display:flex;align-items:center;gap:14px}
+.estado .nome{font:500 12px/1 var(--fonte-mono);color:var(--texto)}
+.estado .fr{font:400 11px/1.4 var(--fonte-mono);color:var(--apagado);min-height:30px}
+.estado .bc-presenca--grande{--bc-tam:88px}
+.estado .mini-fila{display:flex;align-items:center;gap:6px;font:500 11px/1 var(--fonte-ui);color:var(--apagado);border:1px solid var(--linha-fraca);border-radius:4px;padding:5px 8px}
+
+/* ---------- a parede ---------- */
+.sala{background:var(--s0);border:1px solid var(--linha);border-radius:10px;padding:14px 16px 6px;position:relative;overflow:hidden}
+.sala::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(163,118,233,.10) 60%,rgba(42,213,229,.07));opacity:var(--luz,0)}
+.sala .bc-constelacao{max-height:250px}
+.parede{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}
+.cartao{--pessoa:var(--t0);background:var(--s1);border:1px solid var(--linha-fraca);border-left:3px solid var(--pessoa);border-radius:8px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.cartao[data-estado="pausado"],.cartao[data-estado="desligado"]{border-left-color:var(--sem-dado)}
+.cartao .fio{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,var(--t2),var(--t0));opacity:var(--luz,0);pointer-events:none}
+.cartao.controlado{border-color:color-mix(in oklch,var(--visita) 55%,transparent);border-left-color:var(--pessoa)}
+.cartao .topo-c{height:44px;display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid var(--linha-fraca)}
+.cartao .pes{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--pessoa);display:grid;place-items:center;font:600 8.5px/1 var(--fonte-mono);color:var(--pessoa);flex:none}
+.cartao .ag{display:flex;align-items:center;gap:6px;font:500 12.5px/1 var(--fonte-ui);color:var(--texto)}
+.cartao .ag small{font:400 11px/1 var(--fonte-mono);color:var(--apagado)}
+.cartao .st{margin-left:auto;display:flex;align-items:center;gap:6px;font:500 10.5px/1 var(--fonte-mono);color:var(--t0);white-space:nowrap}
+.cartao .st i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.cartao[data-estado="pausado"] .st,.cartao[data-estado="desligado"] .st{color:var(--fraco)}
+.cartao .st.visita{color:var(--visita)}
+.cartao .tela{height:118px;background:#060b16;padding:8px 10px;font:11px/1.5 var(--fonte-mono);color:var(--texto-90);overflow:hidden;white-space:pre-wrap}
+.cartao[data-estado="pausado"] .tela{color:var(--fraco);filter:saturate(0)}
+.cartao .tela .deg{background:linear-gradient(90deg,#b9a8ff,#7ab8ff 55%,#6fe3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cartao .pe-c{display:flex;align-items:center;gap:6px;padding:7px 10px;font:400 11px/1 var(--fonte-mono);color:var(--fraco)}
+.cartao .pe-c .ac{margin-left:auto;display:flex;gap:6px}
+.cartao .pe-c button{font:500 11px/1 var(--fonte-mono);color:var(--texto-90);border:1px solid var(--linha);border-radius:4px;padding:5px 8px}
+.eco{margin-top:10px;display:flex;gap:8px;align-items:center}
+.eco input{flex:1;height:30px;border:1px solid var(--linha);border-radius:6px;background:var(--s0);color:var(--texto);padding:0 10px;font:12px var(--fonte-mono)}
+.rodape-pg{margin-top:26px;font:400 11.5px/1.6 var(--fonte-mono);color:var(--fraco)}
+@media (max-width:960px){.linha1{grid-template-columns:1fr}.painel{width:100%}}
+</style>
+</head>
+<body>
+<div class="pg">
+  <header class="topo">
+    <span id="marca-topo"></span>
+    <h1>Organismo do terminal</h1>
+    <span class="meta" id="versao">BC.organismo</span>
+    <div class="ctl">
+      <button class="chip" id="bt-som" aria-pressed="true">som</button>
+      <button class="chip" id="bt-efeitos" aria-pressed="true">efeitos</button>
+      <button class="chip" id="bt-neon" aria-pressed="true">b neon</button>
+    </div>
+  </header>
+  <p class="intro"><b>O painel da direita como presença.</b> Cada botão da esquerda manda ao motor a mesma mensagem que o servidor manda de verdade (<span class="mono">term-saida</span>, <span class="mono">term-atividade</span>, <span class="mono">term-pausa</span>, controles). Nada acende sozinho: toda luz, faísca e som sai de um evento. Contrato em <span class="mono">docs/design/TERMINAL_2030.md</span>.</p>
+
+  <div class="linha1">
+    <!-- o painel da direita -->
+    <section class="painel" id="painel" aria-label="painel da direita">
+      <div class="abas" role="tablist">
+        <div class="aba ativa" id="aba1" role="tab" aria-selected="true"><span class="lz"></span><span class="ic"></span>Aurora</div>
+        <div class="aba" id="aba2" role="tab"><span class="lz"></span><span class="ic"></span>zsh</div>
+        <div class="aba" id="aba3" role="tab"><span class="lz"></span><span class="ic"></span>claude</div>
+        <div class="vivo" id="vivo"><i></i>ao vivo</div>
+      </div>
+      <div class="cab" id="cab" data-estado="shell">
+        <span id="pres-grande"></span>
+        <div class="txt">
+          <div class="l1">→ <span id="cab-alvo">~/BabelCoop/theus</span></div>
+          <div class="l2">Aurora · <b id="cab-estado">em repouso</b></div>
+        </div>
+      </div>
+      <div class="selo" id="selo" style="--pessoa:var(--pessoa-1)"><span class="anel">CA</span><span>Carla está no seu terminal Aurora</span><button type="button" id="bt-encerrar">Encerrar</button></div>
+      <div class="corpo" id="corpo" tabindex="0" aria-label="terminal Aurora">
+        <div class="marca" id="marca-corpo"></div>
+        <div class="saida" id="saida"></div>
+      </div>
+      <div class="pe"><span class="p2">❯</span><input id="campo" placeholder="digite aqui para medir o eco com efeitos rodando" aria-label="campo de eco" autocomplete="off"></div>
+    </section>
+
+    <!-- os controles -->
+    <section class="controles">
+      <div class="grupo">
+        <div class="rot">eventos reais (as mensagens do protocolo)</div>
+        <div class="bts">
+          <button class="chip prim" data-ev="npm">npm test · 3 s</button>
+          <button class="chip" data-ev="build">build · 14 s</button>
+          <button class="chip" data-ev="longo">instalação · 75 s</button>
+          <button class="chip" data-ev="enter">Enter</button>
+          <button class="chip" data-ev="espera">claude espera</button>
+          <button class="chip" data-ev="erro">erro provável</button>
+          <button class="chip" data-ev="entra">Carla entra</button>
+          <button class="chip" data-ev="sai">Carla sai</button>
+          <button class="chip" data-ev="pausar">pausar</button>
+          <button class="chip" data-ev="retomar">retomar</button>
+          <button class="chip" data-ev="fim0">shell saiu (0)</button>
+          <button class="chip" data-ev="fim1">shell caiu (1)</button>
+          <button class="chip" data-ev="reset">recomeçar</button>
+        </div>
+        <p>Os tempos longos são acelerados: o cabeçalho conta o tempo simulado. Comando com menos de 2 s só acende a aba (era o esperado, R2).</p>
+      </div>
+      <div class="grupo">
+        <div class="rot">efeitos crus</div>
+        <div class="bts">
+          <button class="chip" data-fx="pulso">pulso marca</button>
+          <button class="chip" data-fx="pulso-ok">pulso ok</button>
+          <button class="chip" data-fx="pulso-alarme">pulso alarme</button>
+          <button class="chip" data-fx="faiscas">faíscas 6</button>
+          <button class="chip" data-fx="faiscas-fortes">faíscas fortes 12</button>
+          <button class="chip" data-fx="respirar">respirar o terminal</button>
+          <button class="chip" data-fx="tres">3 efeitos de uma vez</button>
+          <button class="chip" data-fx="trinta">30 faíscas (teto 24)</button>
+        </div>
+      </div>
+      <div class="grupo">
+        <div class="rot">sons (Web Audio · ganho ≤ 0,08)</div>
+        <div class="bts">
+          <button class="chip" data-som="tique">tique</button>
+          <button class="chip" data-som="duas">duas</button>
+          <button class="chip" data-som="tres">tres</button>
+          <button class="chip" data-som="espera">espera</button>
+          <button class="chip" data-som="erro">erro</button>
+          <button class="chip" data-som="acordar">acordar</button>
+        </div>
+      </div>
+      <div class="grupo">
+        <div class="rot">instrumentos (o motor conta tudo)</div>
+        <div class="medidor">
+          <div>sons tocados<b id="m-sons">0</b></div>
+          <div>sons segurados<b id="m-segurados">0</b></div>
+          <div>efeitos vivos · máx<b id="m-vivos">0 · 0</b></div>
+          <div>descartados pelo teto<b id="m-desc">0</b></div>
+          <div>faíscas lançadas<b id="m-parts">0</b></div>
+        </div>
+        <div class="registro" id="registro"></div>
+      </div>
+    </section>
+  </div>
+
+  <h2>Os sete estados da presença</h2>
+  <div class="estados" id="estados"></div>
+
+  <h2>A parede e a constelação da sala</h2>
+  <div class="sala" id="sala">
+    <div class="rot">a sala · cada terminal é um nó; o evento acende o nó e corre até o centro</div>
+    <div id="constelacao"></div>
+  </div>
+  <div class="bts" style="display:flex;gap:6px;margin-top:10px"><button class="chip prim" id="bt-sala">simular a sala</button></div>
+  <div class="parede" id="parede"></div>
+
+  <p class="rodape-pg">Motor: <span class="mono">/coop/organismo.js</span> · régua: REGUA_ORGANISMO.md (R1 luz só com evento · R2 intensidade pela surpresa · R9 tudo desligável, &lt; 100 ms) · teto: 2 efeitos vivos, 24 faíscas · prefers-reduced-motion = cor sem movimento · som nunca na TV.</p>
+</div>
+
+<script src="/coop/organismo.js"></script>
+<script>
+(function () {
+  'use strict';
+  var O = window.BC && window.BC.organismo;
+  if (!O) { document.body.insertAdjacentHTML('afterbegin', '<p style="color:#ff6b6b;padding:16px">organismo.js não carregou</p>'); return; }
+  var $ = function (s) { return document.querySelector(s); }, $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var espera = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  $('#versao').textContent = 'BC.organismo v' + O.versao + ' · demonstração';
+
+  /* ---------- preferências ---------- */
+  var marcaTopo = new O.MarcaB('#marca-topo', { neon: true }); marcaTopo.el.style.setProperty('--bc-tam', '22px');
+  function sincronizar() {
+    $('#bt-som').setAttribute('aria-pressed', String(O.somLigado()));
+    $('#bt-som').textContent = O.somLigado() ? 'som ligado' : 'som desligado';
+    $('#bt-efeitos').setAttribute('aria-pressed', String(O.efeitosLigados()));
+    $('#bt-efeitos').textContent = O.efeitosLigados() ? 'efeitos ligados' : 'efeitos desligados';
+  }
+  O.ouvir(sincronizar); sincronizar();
+  $('#bt-som').addEventListener('click', function () { O.ligarSom(!O.somLigado()); if (O.somLigado()) O.som('tique'); });
+  $('#bt-efeitos').addEventListener('click', function () { O.ligarEfeitos(!O.efeitosLigados()); });
+
+  /* ---------- o painel: presença grande, minis nas abas, o b em neon ---------- */
+  var pres = new O.Presenca('#pres-grande', { tamanho: 'grande' });
+  var minis = ['#aba1', '#aba2', '#aba3'].map(function (s) { return new O.Presenca(document.querySelector(s + ' .ic'), { tamanho: 'mini' }); });
+  minis[2].estado('espera', { processo: 'claude' });
+  var marca = new O.MarcaB('#marca-corpo', { neon: true });
+  $('#bt-neon').addEventListener('click', function () { var v = !marca.ligado(); marca.ligar(v); marcaTopo.ligar(v); this.setAttribute('aria-pressed', String(v)); });
+  var erroAgora = false;
+  var sess = O.vincular({ presenca: pres, mini: minis[0], aba: $('#aba1'), corpo: $('#corpo'), marca: marca, meu: true, erroProvavel: function () { return erroAgora; } });
+
+  var alvoAtual = '~/BabelCoop/theus', relogio = null;
+  function cabecalho() {
+    var e = sess.estado();
+    $('#cab').setAttribute('data-estado', e);
+    $('#cab-alvo').textContent = (e === 'rodando' || e === 'terminou' || e === 'espera' || e === 'falhou') && sess.dados().processo ? sess.dados().processo : alvoAtual;
+    $('#cab-estado').textContent = sess.frase();
+    if (e === 'rodando' && !relogio) relogio = setInterval(cabecalho, 1000); /* "há N s" é medido; o relógio só existe enquanto roda */
+    if (e !== 'rodando' && relogio) { clearInterval(relogio); relogio = null; }
+  }
+  cabecalho();
+
+  /* ---------- a tela do terminal (imitação do xterm, só para a demonstração) ---------- */
+  var saida = $('#saida');
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function linha(html) { var d = document.createElement('div'); d.innerHTML = html; saida.appendChild(d); while (saida.children.length > 22) saida.removeChild(saida.firstChild); }
+  function prompt(cmd) { linha('<span class="p1">╭ theus@estacao</span> · <span class="p2">~/BabelCoop/theus</span> · <span class="p3">Aurora</span>'); linha('<span class="p2">❯</span> ' + esc(cmd)); }
+  function inicio() { saida.innerHTML = ''; linha('<span class="deg">Aurora · agente do Theus · terminal de verdade (zsh) na pasta compartilhada</span>'); linha('<span class="dica">pronto. o b acende com a saída; a presença diz o que está rodando.</span>'); linha('<span class="p1">╭ theus@estacao</span> · <span class="p2">~/BabelCoop/theus</span> · <span class="p3">Aurora</span>'); linha('<span class="p2">❯</span> <span class="cursor"></span>'); }
+  inicio();
+
+  /* um comando "de verdade" simulado: Enter → rodando → saída → terminou (com a duração real informada pelo servidor) */
+  /* tira o prompt vazio (linha do prompt + linha do cursor) antes de escrever o comando */
+  function tirarCursor() {
+    var u = saida.lastChild;
+    if (!u || !u.querySelector('.cursor')) return;
+    saida.removeChild(u);
+    var p = saida.lastChild;
+    if (p && p.querySelector('.p1')) saida.removeChild(p);
+  }
+  function novoPrompt() { linha('<span class="p1">╭ theus@estacao</span> · <span class="p2">~/BabelCoop/theus</span> · <span class="p3">Aurora</span>'); linha('<span class="p2">❯</span> <span class="cursor"></span>'); }
+  var ocupado = false;
+  async function rodar(cmd, processo, durSimulada, durReal, linhas, erro) {
+    if (ocupado) return; ocupado = true;
+    tirarCursor();
+    prompt(cmd);
+    sess.enter();
+    await espera(320);
+    var desde = Date.now() - Math.max(0, durSimulada - durReal);
+    sess.atividade({ estado: 'rodando', processo: processo, desde: desde }); cabecalho();
+    var passos = Math.max(4, Math.round(durReal / 110)), i;
+    for (i = 0; i < passos; i++) {
+      var t = linhas[i % linhas.length], n = t.length * (1 + (i % 3)) * 40;
+      sess.saida(n);
+      if (i % Math.max(1, Math.round(passos / linhas.length)) === 0) linha('<span class="' + (erro && i > passos / 2 ? 'erro' : 'deg') + '">' + esc(linhas[Math.min(linhas.length - 1, Math.floor(i / Math.max(1, Math.round(passos / linhas.length))))]) + '</span>');
+      await espera(durReal / passos);
+    }
+    erroAgora = !!erro;
+    sess.atividade({ estado: 'terminou', processo: processo, desde: desde, duracao: durSimulada, fim: Date.now() }); cabecalho();
+    erroAgora = false;
+    novoPrompt();
+    ocupado = false;
+  }
+  var EV = {
+    npm: function () { return rodar('npm test', 'npm', 3100, 1600, ['> babel-coop@0.1.0 teste', '▶ servidor · 14 testes', '✔ carteira assinada confere (4 ms)', '✔ pausa não vaza nada (12 ms)', 'ℹ 14 passaram · 0 falharam']); },
+    build: function () { return rodar('npm run dist:mac', 'npm', 14200, 2200, ['• electron-builder 26.0.0', '• empacotando plataforma=darwin arch=arm64', '• assinando Babel Coop.app', '• dmg pronto · 132 MB']); },
+    longo: function () { return rodar('npm install', 'npm', 75400, 2600, ['added 312 packages', 'node scripts/preparar.js', 'spawn-helper pronto', 'up to date, audited 313 packages in 75s']); },
+    erro: function () { return rodar('npm run teste:e2e', 'node', 6300, 1500, ['▶ e2e · estação', '✖ a tela não abriu em 10 s', 'Error: Timeout 10000ms exceeded', '1 falhou'], true); },
+    enter: function () { tirarCursor(); prompt(''); sess.enter(); novoPrompt(); },
+    espera: function () { tirarCursor(); prompt('claude'); sess.atividade({ estado: 'espera', processo: 'claude', desde: Date.now() - 1600 }); cabecalho(); linha('<span class="deg">✻ claude · Posso rodar os testes? (s/N)</span>'); },
+    entra: function () { sess.visitantes([{ id: 'carla', nome: 'Carla', cor: getComputedStyle(document.documentElement).getPropertyValue('--pessoa-1').trim() }]); $('#selo').classList.add('on'); O.acender($('#selo'), 300000); },
+    sai: function () { sess.visitantes([]); $('#selo').classList.remove('on'); },
+    pausar: function () { sess.pausa(true); $('#vivo').classList.add('pausa'); $('#vivo').lastChild.textContent = 'pausado'; cabecalho(); },
+    retomar: function () { sess.pausa(false); $('#vivo').classList.remove('pausa'); $('#vivo').lastChild.textContent = 'ao vivo'; cabecalho(); },
+    fim0: function () { sess.fim(0); cabecalho(); linha('<span class="dica">[processo encerrado · código 0]</span>'); },
+    fim1: function () { sess.fim(1); cabecalho(); linha('<span class="erro">[processo encerrado · código 1]</span>'); },
+    reset: function () { sess.atividade({ estado: 'shell' }); sess.pausa(false); sess.visitantes([]); $('#selo').classList.remove('on'); $('#vivo').classList.remove('pausa'); $('#vivo').lastChild.textContent = 'ao vivo'; cabecalho(); inicio(); }
+  };
+  $('#bt-encerrar').addEventListener('click', EV.sai);
+  $$('[data-ev]').forEach(function (b) { b.addEventListener('click', function () { EV[b.dataset.ev](); }); });
+
+  /* ---------- efeitos crus ---------- */
+  var FX = {
+    pulso: function () { return O.pulso(pres, $('#aba2'), { cor: 'marca', aoChegar: function () { O.acender($('#aba2 .lz'), 6000); } }); },
+    'pulso-ok': function () { return O.pulso(pres, $('#aba3'), { cor: 'ok' }); },
+    'pulso-alarme': function () { return O.pulso(pres, $('#aba1'), { cor: 'alarme', forte: true }); },
+    faiscas: function () { return O.faiscas($('#aba1'), 6, false); },
+    'faiscas-fortes': function () { return O.faiscas($('#corpo'), 12, true); },
+    respirar: function () { return O.respirar($('#corpo')); },
+    tres: function () { O.pulso(pres, $('#aba3'), { cor: 'marca' }); O.faiscas($('#aba1'), 8, true); return O.respirar($('#corpo')); },
+    trinta: function () { var r = $('#corpo').getBoundingClientRect(); return O.faiscas({ x: r.left + r.width / 2, y: r.top + r.height * 0.6 }, 30, true); }
+  };
+  $$('[data-fx]').forEach(function (b) { b.addEventListener('click', function () { FX[b.dataset.fx](); }); });
+  $$('[data-som]').forEach(function (b) { b.addEventListener('click', function () { O.som(b.dataset.som); }); });
+
+  /* ---------- os sete estados ---------- */
+  var DADOS = {
+    shell: {}, rodando: { processo: 'npm', desde: Date.now() - 4000 }, terminou: { processo: 'npm', duracao: 12000, fim: Date.now() },
+    espera: { processo: 'claude' }, pausado: {}, desligado: {}, falhou: { codigo: 1, fim: Date.now() }
+  };
+  var estadosPres = {};
+  O.estados.forEach(function (e) {
+    var c = document.createElement('div'); c.className = 'estado'; c.id = 'estado-' + e;
+    c.innerHTML = '<div class="par"><span class="g"></span><span class="mini-fila"><span class="m"></span>Aurora</span></div><div class="nome">' + e + '</div><div class="fr">' + O.frase(e, DADOS[e]) + '</div>';
+    $('#estados').appendChild(c);
+    var g = new O.Presenca(c.querySelector('.g'), { tamanho: 'grande', estado: e, dados: DADOS[e] });
+    var m = new O.Presenca(c.querySelector('.m'), { tamanho: 'mini', estado: e, dados: DADOS[e] });
+    if (e === 'rodando') { g.nivel(0.55); m.nivel(0.55); }
+    if (e === 'terminou') { O.acender(g.el, 6000); O.acender(m.el, 6000); }
+    estadosPres[e] = { grande: g, mini: m };
+  });
+
+  /* ---------- a parede: cartões-instrumento + constelação ---------- */
+  var css = function (v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); };
+  var EQUIPE = [
+    { id: 'carla-lia', pessoa: 'Carla', ini: 'CA', agente: 'Lia', cor: css('--pessoa-1'), estado: 'rodando', processo: 'claude', linhas: ['<span class="deg">● Lendo proposta-clinica-vida.md</span>', '<span class="deg">● Escrevendo 3 anúncios para a campanha…</span>'] },
+    { id: 'davi-rafa', pessoa: 'Davi', ini: 'DA', agente: 'Rafa', cor: css('--pessoa-6'), estado: 'rodando', processo: 'npm', linhas: ['❯ npm run build', '<span class="deg">vite v7 building for production…</span>'] },
+    { id: 'theus-aurora', pessoa: 'Theus', ini: 'TH', agente: 'Aurora', cor: css('--pessoa-8'), estado: 'shell', linhas: ['❯ git status', '<span class="deg">On branch main · nothing to commit</span>'], meu: true },
+    { id: 'rita-nina', pessoa: 'Rita', ini: 'RI', agente: 'Nina', cor: css('--pessoa-3'), estado: 'shell', linhas: ['❯ ls', '<span class="deg">atas  campanhas  README.md</span>'] },
+    { id: 'bia-otto', pessoa: 'Bia', ini: 'BI', agente: 'Otto', cor: css('--pessoa-10'), estado: 'desligado', linhas: [] }
+  ];
+  var con = new O.Constelacao('#constelacao', { centro: 'Babel · sala', rotulo: 'constelação da sala' });
+  var cartoes = {};
+  EQUIPE.forEach(function (p) {
+    con.no(p.id, { nome: p.agente + ' · ' + p.pessoa, cor: p.cor, estado: p.estado });
+    if (p.estado === 'desligado') return;
+    var c = document.createElement('div'); c.className = 'cartao'; c.id = 'cartao-' + p.id; c.style.setProperty('--pessoa', p.cor); c.setAttribute('data-estado', p.estado);
+    c.innerHTML = '<span class="fio"></span><div class="topo-c"><span class="pes">' + p.ini + '</span><span class="ag"><span class="mini"></span>' + p.agente + ' <small>· ' + p.pessoa + '</small></span><span class="st"><i></i><span class="stt">ao vivo</span></span></div>' +
+      '<div class="tela">' + p.linhas.join('\n') + '</div><div class="pe-c"><span class="fr"></span><span class="ac">' + (p.meu ? '' : '<button type="button">Entrar</button><button type="button">Chamar</button>') + '</span></div>';
+    $('#parede').appendChild(c);
+    var mini = new O.Presenca(c.querySelector('.mini'), { tamanho: 'mini' });
+    var v = O.vincular({ mini: mini, aba: c.querySelector('.fio'), meu: false }); /* a parede nunca soa: o som do meu terminal sai do painel */
+    v.atividade({ estado: p.estado, processo: p.processo, desde: Date.now() - 8000 });
+    cartoes[p.id] = { el: c, v: v, mini: mini, p: p };
+    frasear(p.id);
+  });
+  function frasear(id) { var k = cartoes[id]; if (!k) return; k.el.querySelector('.fr').textContent = (k.v.dados().processo ? k.v.dados().processo + ' · ' : '') + k.v.frase(); k.el.setAttribute('data-estado', k.v.estado()); }
+  function sala(id, msg) {
+    var k = cartoes[id];
+    if (msg.saida) { k.v.saida(msg.saida); O.acender(k.el, 6000); con.acender(id, { pulso: false }); }
+    if (msg.atividade) { k.v.atividade(msg.atividade); con.estado(id, k.v.estado()); if (msg.atividade.estado === 'terminou') { con.acender(id, { cor: 'marca', forte: msg.atividade.duracao > 10000 }); O.acender($('#sala'), 9000); } }
+    if (msg.pausa !== undefined) { k.v.pausa(msg.pausa); con.estado(id, msg.pausa ? 'pausado' : 'shell'); k.el.querySelector('.stt').textContent = msg.pausa ? 'pausado por ' + k.p.pessoa : 'ao vivo'; }
+    frasear(id);
+  }
+  $('#bt-sala').addEventListener('click', simularSala);
+  async function simularSala() {
+    sala('davi-rafa', { atividade: { estado: 'rodando', processo: 'npm', desde: Date.now() - 38000 } });
+    for (var i = 0; i < 8; i++) { sala('carla-lia', { saida: 900 }); await espera(150); }
+    sala('davi-rafa', { atividade: { estado: 'terminou', processo: 'npm', duracao: 42000, fim: Date.now() } });
+    await espera(700);
+    /* Carla entra no terminal do Theus: arco de luz na cor dela, laço na constelação, selo no painel e 'duas' (é o meu terminal) */
+    var carla = EQUIPE[0];
+    cartoes['theus-aurora'].v.visitantes([{ id: 'carla', nome: 'Carla', cor: carla.cor }]);
+    cartoes['theus-aurora'].el.classList.add('controlado'); cartoes['theus-aurora'].el.style.setProperty('--visita', carla.cor);
+    var st = cartoes['theus-aurora'].el.querySelector('.st'); st.classList.add('visita'); st.querySelector('.stt').textContent = 'Carla aqui';
+    con.laco('carla-lia', 'theus-aurora', carla.cor);
+    EV.entra();
+    await espera(600);
+    sala('rita-nina', { pausa: true });
+  }
+
+  /* ---------- instrumentos ---------- */
+  function medir() {
+    var c = O.contagem(), tocados = 0, seg = 0, k;
+    for (k in c.somTocado) tocados += c.somTocado[k];
+    for (k in c.somBloqueado) seg += c.somBloqueado[k];
+    $('#m-sons').textContent = tocados; $('#m-segurados').textContent = seg;
+    $('#m-vivos').textContent = O.vivos() + ' · ' + c.maxVivos; $('#m-desc').textContent = c.descartados; $('#m-parts').textContent = c.particulas;
+    var r = O.registro().slice(-7).reverse();
+    $('#registro').innerHTML = r.map(function (x) { return '<div class="' + (x.ok ? 'ok' : 'no') + '">' + x.t + ' ms · ' + x.tipo + (x.nome ? ' ' + x.nome : '') + (x.ms != null ? ' · ' + x.ms + ' ms' : '') + (x.motivo ? ' · ' + x.motivo : '') + '</div>'; }).join('');
+  }
+  setInterval(medir, 400); medir();
+
+  /* eco com efeitos rodando: atraso entre a tecla e o tratamento dela (para o teste) */
+  var atrasos = [], ateQuadro = [];
+  $('#campo').addEventListener('input', function (e) {
+    var t = e.timeStamp;
+    atrasos.push(performance.now() - t);
+    requestAnimationFrame(function () { ateQuadro.push(performance.now() - t); }); /* tecla → próximo quadro (a letra aparece nele) */
+  });
+
+  window.DEMO = { O: O, sess: sess, pres: pres, minis: minis, marca: marca, con: con, cartoes: cartoes, EV: EV, FX: FX, estados: estadosPres, simularSala: simularSala, atrasos: atrasos, ateQuadro: ateQuadro, rodar: rodar };
+})();
+</script>
+</body>
+</html>

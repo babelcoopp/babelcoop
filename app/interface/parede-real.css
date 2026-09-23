@@ -1,0 +1,180 @@
+/* babel-coop · a parede dos terminais ao vivo (TERMINAL_2030 §4–§5, tokens de prototipo/tokens.css)
+   Luz só com evento (--luz escrita pelo BC.organismo, meia-vida); em repouso nada se mexe.
+   HUD do Babel OS (contexto Gabriel, PROTOCOLO §11): vidro com backdrop-filter, borda 1 px rgba(63,227,255,.22), glow discreto e
+   scanlines ≤ 5 % SÓ em superfície viva: o cartão ao vivo e o terminal ampliado. Pausado e desligado perdem o vidro.
+*/
+.pr-raiz { --pr-vidro-borda: rgba(63, 227, 255, .22); position: relative; display: block; min-height: 100%; }
+.pr-raiz [hidden] { display: none !important; }
+/* o chão da parede: um frio roxo → ciano bem baixo, para o vidro dos cartões ter o que desfocar */
+.pr-raiz::before {
+  content: ""; position: absolute; left: -24px; right: -24px; top: -24px; height: 460px; pointer-events: none; z-index: 0;
+  background: radial-gradient(60% 70% at 50% 0%, rgba(163, 118, 233, .075), transparent 70%), radial-gradient(38% 50% at 82% 12%, rgba(42, 213, 229, .05), transparent 70%);
+}
+.pr-raiz > * { position: relative; z-index: 1; }
+
+/* ---------- cabeçalho ---------- */
+.pr-cab { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--esp-4, 16px); margin-bottom: var(--esp-3, 12px); }
+.pr-cab .pagina-titulo { margin: 0; }
+.pr-cab .pagina-sub { margin: 4px 0 0; }
+.pr-cab-acoes { display: flex; align-items: center; gap: 8px; }
+.pr-chip-filtro { font: 500 var(--t-11)/1 var(--fonte-mono); color: var(--t0); }
+
+/* ---------- o mapa da sala (constelação) ---------- */
+.pr-sala { position: relative; overflow: hidden; background: var(--s0); border: 1px solid var(--linha-fraca); border-radius: var(--r-janela, 10px); padding: 12px 16px 2px; margin-bottom: var(--esp-3, 12px); }
+.pr-sala::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 45%; pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(163, 118, 233, .10) 60%, rgba(42, 213, 229, .07)); opacity: var(--luz, 0);
+}
+.pr-sala-rot { display: flex; align-items: baseline; gap: 14px; font: 500 var(--t-11)/1 var(--fonte-mono); letter-spacing: var(--rotulo-tracking, .08em); text-transform: uppercase; color: var(--apagado); }
+.pr-sala-equipe { color: var(--fraco); }
+.pr-sala-sinal { margin-left: auto; color: var(--t0); }
+.pr-sala-sinal.quieto { color: var(--fraco); }
+.pr-constelacao { max-width: 780px; margin: 0 auto; }
+.pr-constelacao .bc-constelacao { max-height: 232px; }
+
+/* ---------- a grade de cartões-instrumento ---------- */
+.pr-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--esp-3, 12px); }
+.pr-vazio { margin: var(--esp-4, 16px) 0; color: var(--apagado); font: 400 var(--t-125)/1.5 var(--fonte-mono); }
+
+.pr-cartao {
+  --pessoa: var(--t0); --visita: var(--t0);
+  position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden; cursor: pointer;
+  background: var(--s1); border: 1px solid var(--linha-fraca); border-left: 3px solid var(--pessoa); border-radius: var(--r-painel, 8px);
+  transition: border-color var(--mov-toque, 120ms) var(--ease-saida, ease);
+}
+.pr-cartao:hover { border-top-color: var(--linha); border-right-color: var(--linha); border-bottom-color: var(--linha); }
+.pr-cartao:focus-visible { outline: 2px solid var(--t0); outline-offset: 2px; }
+/* HUD do Babel OS, só ao vivo: vidro, borda ciano 22 %, glow discreto */
+.pr-cartao[data-vivo="sim"] {
+  background: color-mix(in oklch, var(--s1) 80%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15); backdrop-filter: blur(10px) saturate(1.15);
+  border-top-color: var(--pr-vidro-borda); border-right-color: var(--pr-vidro-borda); border-bottom-color: var(--pr-vidro-borda);
+  box-shadow: inset 0 0 0 1px rgba(42, 213, 229, .035), 0 12px 30px -20px rgba(42, 213, 229, .40);
+}
+.pr-cartao[data-estado="pausado"], .pr-cartao[data-estado="desligado"] { border-left-color: var(--sem-dado); }
+.pr-cartao[data-estado="desligado"] { border-style: dashed; cursor: default; }
+/* alguém no terminal: borda na cor de quem entrou a 55 % (a fita da esquerda continua a do dono) */
+.pr-cartao.controlado, .pr-cartao.controlado[data-vivo="sim"] {
+  border-top-color: color-mix(in oklch, var(--visita) 55%, transparent); border-right-color: color-mix(in oklch, var(--visita) 55%, transparent);
+  border-bottom-color: color-mix(in oklch, var(--visita) 55%, transparent);
+}
+/* a única luz do cartão além da mini presença: a hairline do topo acende com a saída e esfria em 6 s */
+.pr-fio { position: absolute; left: 0; right: 0; top: 0; height: 1px; z-index: 3; pointer-events: none; background: linear-gradient(90deg, var(--t2), var(--t0)); opacity: var(--luz, 0); }
+.pr-cartao[data-vivo="sim"] .pr-fio { box-shadow: 0 0 calc(var(--luz, 0) * 8px) rgba(42, 213, 229, .6); }
+
+.pr-topo { height: 44px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 10px; border-bottom: 1px solid var(--linha-fraca); min-width: 0; }
+.pr-av, .pr-mini { display: inline-flex; flex: none; }
+.pr-av .avatar { --tam: 22px; }
+.pr-ag { display: flex; align-items: baseline; gap: 6px; min-width: 0; overflow: hidden; white-space: nowrap; }
+.pr-ag-nome { font: 500 var(--t-125)/1.2 var(--fonte-ui); color: var(--texto); overflow: hidden; text-overflow: ellipsis; }
+.pr-ag-pessoa { font: 400 var(--t-11)/1.2 var(--fonte-mono); color: var(--apagado); overflow: hidden; text-overflow: ellipsis; }
+
+/* selo de estado: ● ao vivo · ● pausado por X (esfria) · desligado pontilhado · ● X aqui na cor de quem entrou */
+.pr-selo { margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 6px; font: 500 var(--t-11)/1 var(--fonte-mono); color: var(--t0); white-space: nowrap; transition: color 600ms var(--ease-saida, ease); }
+.pr-selo i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+.pr-selo.pausa, .pr-selo.off { color: var(--fraco); }
+.pr-selo.off i { background: transparent; border: 1px dashed currentColor; width: 7px; height: 7px; }
+.pr-selo.visita { color: var(--visita); }
+.pr-selo.visita i { box-shadow: 0 0 6px var(--visita); }
+
+/* o último bloco da presença do agente (agente-bloco) */
+.pr-bloco { display: flex; align-items: baseline; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--linha-fraca); font: 400 var(--t-11)/1.35 var(--fonte-mono); color: var(--apagado); white-space: nowrap; overflow: hidden; }
+.pr-bloco b { flex: none; font-weight: 500; color: color-mix(in oklch, var(--texto-90), var(--t0) calc(var(--luz, 0) * 100%)); }
+.pr-bloco span { overflow: hidden; text-overflow: ellipsis; }
+.pr-bloco[data-tipo="espera"] b { color: var(--atencao); }
+.pr-bloco[data-tipo="falha"] b { color: var(--alarme); }
+.pr-bloco[data-tipo="resultado"] b { color: var(--ok); }
+
+/* a tela: o xterm de quem assiste, só leitura, no tamanho do dono e escalado para caber */
+.pr-tela { position: relative; flex: none; height: 130px; overflow: hidden; background: #060b16; }
+.pr-escala { position: absolute; left: 8px; top: 6px; transform-origin: 0 0; }
+.pr-cartao .pr-xterm { pointer-events: none; }
+.pr-cartao[data-vivo="sim"] .pr-tela::after, .pr-amp-tela::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, .045) 0 1px, transparent 1px 3px); /* scanlines a 4,5 % */
+}
+.pr-cartao[data-estado="pausado"]:not(.meu) .pr-escala, .pr-cartao[data-estado="desligado"] .pr-escala {
+  filter: saturate(0) brightness(.75); opacity: .5; transition: filter 600ms var(--ease-saida, ease), opacity 600ms var(--ease-saida, ease);
+}
+.pr-tela-aviso {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 14px 10px 7px; font: 500 var(--t-11)/1.3 var(--fonte-mono); color: var(--apagado);
+  background: linear-gradient(0deg, rgba(6, 11, 22, .94) 40%, rgba(6, 11, 22, 0));
+}
+
+.pr-pe { display: flex; align-items: center; gap: 8px; padding: 7px 10px; min-height: 40px; border-top: 1px solid var(--linha-fraca); }
+.pr-frase { flex: 1; min-width: 0; font: 400 var(--t-11)/1.3 var(--fonte-mono); color: var(--fraco); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pr-frase[data-estado="rodando"] { color: var(--texto-90); }
+.pr-frase[data-estado="espera"] { color: var(--atencao); }
+.pr-frase[data-estado="falhou"] { color: var(--alarme); }
+.pr-acoes { display: flex; align-items: center; gap: 6px; flex: none; }
+
+.pr-bt {
+  font: 500 var(--t-11)/1 var(--fonte-mono); color: var(--texto-90); background: transparent; cursor: pointer; white-space: nowrap;
+  border: 1px solid var(--linha); border-radius: var(--r-chip, 4px); padding: 6px 9px;
+  transition: border-color var(--mov-toque, 120ms) var(--ease-saida, ease), color var(--mov-toque, 120ms) var(--ease-saida, ease);
+}
+.pr-bt:hover { border-color: var(--t0); color: var(--texto); }
+.pr-bt:focus-visible { outline: 2px solid var(--t0); outline-offset: 1px; }
+.pr-bt.prim { border-color: color-mix(in oklch, var(--t0) 60%, transparent); color: var(--t0); }
+.pr-bt.discreto { border-color: transparent; color: var(--apagado); }
+.pr-bt.ativo { border-color: var(--t0); color: var(--texto); }
+.pr-chip { font: 500 var(--t-11)/1 var(--fonte-mono); color: var(--atencao); white-space: nowrap; }
+
+/* ---------- o degradê roxo → azul → ciano no texto de cor padrão (as cores ANSI continuam as delas) ---------- */
+.pr-xterm .xterm-rows > div { background-image: linear-gradient(90deg, #b9a8ff, #7ab8ff 55%, #6fe3ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pr-xterm .xterm { padding: 0; }
+.pr-xterm .xterm-viewport { overflow: hidden !important; background-color: transparent !important; }
+.pr-xterm .xterm .scrollbar, .pr-xterm .xterm .xterm-scrollable-element > .scrollbar { display: none !important; }
+
+/* ---------- ampliado ---------- */
+.pr-amp { --pessoa: var(--t0); --visita: var(--t0); display: flex; flex-direction: column; gap: 10px; }
+.pr-amp-cab { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.pr-amp-av .avatar { --tam: 40px; }
+.pr-amp-pres { display: inline-flex; }
+.pr-amp-pres .bc-presenca--grande { --bc-tam: 56px; }
+.pr-amp-titulo { min-width: 0; }
+.pr-amp-titulo h1 { margin: 0; font: 600 var(--t-20)/1.2 var(--fonte-ui); color: var(--texto); letter-spacing: -.005em; }
+.pr-amp-frase { margin: 4px 0 0; font: 400 var(--t-11)/1.3 var(--fonte-mono); color: var(--apagado); }
+.pr-amp-selo { margin-left: 4px; }
+.pr-amp-acoes { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pr-amp-sessoes { display: flex; gap: 6px; flex-wrap: wrap; }
+.pr-amp-sessoes:empty { display: none; }
+.pr-amp-faixa {
+  font: 500 var(--t-11)/1 var(--fonte-mono); color: var(--visita); padding: 9px 12px; border-radius: var(--r-cartao, 6px);
+  background: linear-gradient(90deg, color-mix(in oklch, var(--visita) 16%, transparent), transparent 72%);
+}
+.pr-amp-faixa.pedido { color: var(--atencao); background: linear-gradient(90deg, color-mix(in oklch, var(--atencao) 12%, transparent), transparent 72%); }
+.pr-amp-tela {
+  position: relative; height: min(62vh, 640px); min-height: 300px; overflow: hidden; background: #060b16; cursor: default;
+  border: 1px solid var(--pr-vidro-borda); border-radius: var(--r-painel, 8px);
+  box-shadow: inset 0 0 0 1px rgba(42, 213, 229, .04), 0 22px 60px -34px rgba(42, 213, 229, .5);
+}
+.pr-amp-tela.digitavel { cursor: text; border-color: color-mix(in oklch, var(--visita) 62%, transparent); box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--visita) 18%, transparent), 0 22px 60px -34px color-mix(in oklch, var(--visita) 60%, transparent); }
+.pr-amp-tela[data-estado="pausado"] .pr-amp-escala, .pr-amp-tela[data-estado="desligado"] .pr-amp-escala { filter: saturate(0) brightness(.75); opacity: .55; }
+.pr-amp-escala { position: absolute; left: 14px; top: 12px; transform-origin: 0 0; }
+.pr-amp-aviso { margin: 0; min-height: 1.3em; font: 400 var(--t-11)/1.3 var(--fonte-mono); color: var(--apagado); }
+.pr-amp-aviso.erro { color: var(--alarme); }
+
+/* ---------- lateral: os meus terminais ---------- */
+.pr-lat-meus { list-style: none; margin: 0 0 var(--esp-2, 8px); padding: 0 var(--esp-2, 8px); display: grid; gap: 4px; }
+.pr-lat-meu { display: flex; align-items: center; gap: 8px; min-height: 28px; font: 400 var(--t-13)/1.2 var(--fonte-ui); color: var(--texto-90); }
+.pr-lat-meu small { font: 500 var(--t-11)/1 var(--fonte-mono); color: var(--t0); }
+.pr-lat-meu.pausado small { color: var(--fraco); }
+.pr-lat-meu .botao { margin-left: auto; }
+
+/* ---------- selos do rodapé ("X está no seu terminal Y", "X quer entrar"): luz na cor da pessoa, meia-vida média ---------- */
+#e-status .pr-selo-st { background: linear-gradient(90deg, color-mix(in oklch, var(--pr-cor) calc(8% + var(--luz, 0) * 14%), transparent), transparent 70%); border-radius: var(--r-chip, 4px); }
+#e-status .st-controle.pr-selo-st { color: color-mix(in oklch, var(--texto-90), var(--pr-cor) 70%) !important; }
+/* o Selo aberto do pedido: anel tracejado na cor de quem pede (CONCEITO lei 2) */
+#e-status .st-pedido.pr-selo-st::before {
+  content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; vertical-align: -1px;
+  border: 1.5px dashed var(--pr-cor);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-cartao, .pr-bt, .pr-selo, .pr-escala { transition: none !important; }
+}
+@media (max-width: 720px) {
+  .pr-grade { grid-template-columns: 1fr; }
+  .pr-amp-acoes { margin-left: 0; }
+}

@@ -1,0 +1,23 @@
+{
+  "mostrador-anel.png": {
+    "uso": "anel-instrumento da presença (painel da direita e parede); a coluna de luz, o brilho e os estados são desenhados por código por cima/dentro",
+    "lado_px": 1024,
+    "alfa": "fundo e miolo transparentes (medido: miolo com alfa 0, borda com 3 a 5 px de antisserrilhado)",
+    "centro_px": [511.5, 511.5],
+    "diametro_externo_frac": 0.974,
+    "diametro_do_miolo_frac": 0.674,
+    "nota_css": "a abertura do miolo começa a 16,3 % de cada borda da imagem; uma coluna entre top 22 % e bottom 22 % cabe inteira dentro dela",
+    "origem": "google/nano-banana-2 vfxrb47sfdrmw0d0szss6z7wpm (tentativa 3) → bria/remove-background 6aeb1tm33srmt0d0szt86dy440 → gera-replicate.mjs --recodificar (mesmos pixels visíveis)",
+    "manifesto": ["docs/design/assets/raw/google_nano-banana-2/2026-09-23/MANIFESTO.jsonl", "docs/design/assets/raw/bria_remove-background/2026-09-23/MANIFESTO.jsonl"]
+  },
+  "mostrador-anel-512.png": {
+    "uso": "o mesmo anel reduzido por média de área (alfa pré-multiplicado); é o que a interface deve carregar até 256 px de CSS em tela Retina",
+    "lado_px": 512,
+    "origem": "gera-replicate.mjs --reduzir app/interface/midia/mostrador-anel.png app/interface/midia/mostrador-anel-512.png 512"
+  },
+  "mostrador-anel-mini.svg": {
+    "uso": "mini presença das abas (22 px): anel + 12 marcas, miolo vazio para a coluna de luz de código",
+    "cor": "currentColor (padrão #a8b8d5 = --apagado quando usado como <img>); para degradê roxo→ciano ou a cor da pessoa, use como mask-image sobre um fundo pintado",
+    "origem": "desenhado à mão (custo 0): a 22 px o PNG gerado vira uma rosca escura sem marcas; o SVG mantém as marcas e aceita a cor"
+  }
+}

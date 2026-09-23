@@ -1,0 +1,81 @@
+/* babel-coop · o placar (placar.js): casa no rodapé da Estação e a lista com a origem de cada ponto
+   Tokens: prototipo/tokens.css. Régua: docs/design/REGUA_ORGANISMO.md R3 (origem), R4 (só a pessoa vê), R5 (meta escolhida),
+   R9 (desligável). Luz só com evento: a casa acende quando um ponto chega (--luz, meia-vida curta) e esfria; ouro só na meta a 100 %. */
+
+/* ---------- a casa: "N pontos · hoje" + o anel da meta da semana ---------- */
+.st-placar { gap: 6px; color: var(--texto-90, #c3cfe5); cursor: pointer; }
+.st-placar .pl-n { color: var(--texto, #d7e4fb); font-weight: 500; font-variant-numeric: tabular-nums; min-width: 1ch; text-align: right; }
+.st-placar.sobe .pl-n { color: var(--t0, #2ad5e5); }
+.st-placar.oculto .pl-n { display: none; }
+.st-placar[aria-expanded="true"] { color: var(--texto, #d7e4fb); }
+.st-placar:focus-visible { outline: 1px solid var(--t0, #2ad5e5); outline-offset: 2px; border-radius: 2px; }
+
+.pl-anel { width: 13px; height: 13px; flex: none; transform: rotate(-90deg); overflow: visible; }
+.pl-anel circle, .pl-anel-g circle { fill: none; }
+.pl-anel .pl-fundo { stroke: var(--s3, #212a3b); stroke-width: 2.2; }
+.pl-anel .pl-val { stroke: var(--t0, #2ad5e5); stroke-width: 2.2; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 800ms var(--ease-heroi, cubic-bezier(.16,1,.3,1)), stroke 300ms; }
+.pl-anel.sem-meta .pl-fundo { stroke-dasharray: 2 2.6; stroke: var(--sem-dado, #5d6b78); }
+.pl-anel.ouro .pl-val { stroke: var(--ouro, #f5c76a); }
+.pl-anel.ouro .pl-fundo { stroke: color-mix(in oklch, var(--ouro, #f5c76a) 30%, transparent); }
+
+/* o ganho, com a origem, sobe da casa e some */
+.pl-voo {
+  position: fixed; z-index: 70; pointer-events: none; max-width: min(460px, 70vw);
+  padding: 4px 8px; border-radius: var(--r-chip, 4px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: rgba(22, 30, 45, .82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border: 1px solid rgba(63, 227, 255, .22); box-shadow: 0 0 14px rgba(63, 227, 255, .08);
+  font: 400 11px/1.3 var(--fonte-mono, "JetBrains Mono", ui-monospace, monospace); color: var(--texto-90, #c3cfe5);
+}
+.pl-voo b { color: var(--t0, #2ad5e5); font-weight: 500; }
+
+/* ---------- a lista: de onde veio cada ponto ---------- */
+.pl-pop {
+  position: fixed; z-index: 80; width: min(420px, calc(100vw - 16px)); max-height: min(560px, calc(100vh - 80px)); overflow: auto;
+  padding: 12px 14px 10px; border-radius: var(--r-painel, 8px);
+  background: var(--s2, #161e2d); border: 1px solid var(--linha, #4d5564);
+  color: var(--texto-90, #c3cfe5); font: 400 var(--t-13, 13px)/1.45 var(--fonte-ui, "IBM Plex Sans", system-ui, sans-serif);
+}
+.pl-cab { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; row-gap: 4px; margin-bottom: 10px; }
+.pl-cab .pl-so { grid-column: 1 / -1; grid-row: 2; }
+.pl-titulo { white-space: nowrap; font: 500 var(--t-11, 11px)/1 var(--fonte-ui, sans-serif); letter-spacing: var(--rotulo-tracking, .08em); text-transform: uppercase; color: var(--fraco, #6c7b96); }
+.pl-so { font: 400 11px/1.2 var(--fonte-mono, monospace); color: var(--apagado, #a8b8d5); }
+.pl-x { justify-self: end; border: 0; background: transparent; color: var(--apagado, #a8b8d5); font-size: 12px; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; }
+.pl-x:hover { background: var(--s3, #212a3b); color: var(--texto, #d7e4fb); }
+
+.pl-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--linha-fraca, rgba(215,228,251,.09)); border-radius: var(--r-cartao, 6px); overflow: hidden; margin-bottom: 12px; }
+.pl-nums > div { background: var(--s1, #0b1320); padding: 8px 10px; display: grid; gap: 2px; }
+.pl-nums b { font: 500 22px/1.1 var(--fonte-mono, monospace); color: var(--texto, #d7e4fb); font-variant-numeric: tabular-nums; }
+.pl-nums b.pl-hoje { color: var(--t0, #2ad5e5); }
+.pl-nums span { font: 400 11px/1.3 var(--fonte-mono, monospace); color: var(--apagado, #a8b8d5); }
+
+.pl-meta { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.pl-anel-g { width: 40px; height: 40px; flex: none; transform: rotate(-90deg); }
+.pl-anel-g .pl-fundo { stroke: var(--s3, #212a3b); stroke-width: 3.2; }
+.pl-anel-g .pl-val { stroke: var(--t0, #2ad5e5); stroke-width: 3.2; stroke-dasharray: 100; transition: stroke-dashoffset 800ms var(--ease-heroi, cubic-bezier(.16,1,.3,1)); }
+.pl-anel-g.ouro .pl-val { stroke: var(--ouro, #f5c76a); }
+.pl-anel-g.sem-meta .pl-fundo { stroke-dasharray: 3 3; stroke: var(--sem-dado, #5d6b78); }
+.pl-meta-txt { font: 400 11.5px/1.45 var(--fonte-mono, monospace); color: var(--apagado, #a8b8d5); }
+.pl-meta-txt b { color: var(--texto, #d7e4fb); font-weight: 500; }
+.pl-meta-form { display: flex; gap: 6px; align-items: center; margin-top: 6px; flex-wrap: wrap; }
+.pl-meta-form label { display: inline-flex; gap: 6px; align-items: center; }
+.pl-meta-form input { width: 72px; height: 26px; box-sizing: border-box; padding: 0 8px; border: 1px solid var(--linha, #4d5564); border-radius: var(--r-chip, 4px); background: var(--s0, #060b16); color: var(--texto, #d7e4fb); font: 400 12px/1 var(--fonte-mono, monospace); }
+.pl-meta-form input:focus { outline: none; border-color: var(--t0, #2ad5e5); }
+.pl-bt { height: 26px; padding: 0 10px; border: 1px solid var(--linha, #4d5564); border-radius: var(--r-chip, 4px); background: var(--s3, #212a3b); color: var(--texto, #d7e4fb); font: 500 11.5px/1 var(--fonte-ui, sans-serif); cursor: pointer; }
+.pl-bt:hover { border-color: var(--t0, #2ad5e5); }
+.pl-bt.fraco { background: transparent; color: var(--apagado, #a8b8d5); }
+
+.pl-rot-lista { font: 500 var(--t-11, 11px)/1 var(--fonte-ui, sans-serif); letter-spacing: var(--rotulo-tracking, .08em); text-transform: uppercase; color: var(--fraco, #6c7b96); margin: 4px 0 6px; }
+.pl-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+.pl-lista li { display: flex; gap: 10px; align-items: baseline; padding: 6px 2px; border-top: 1px solid var(--linha-fraca, rgba(215,228,251,.09)); }
+.pl-lista li:first-child { border-top: 0; }
+.pl-pts { flex: none; min-width: 3ch; text-align: right; font: 500 13px/1 var(--fonte-mono, monospace); color: var(--t0, #2ad5e5); font-variant-numeric: tabular-nums; }
+.pl-org { min-width: 0; color: var(--texto, #d7e4fb); overflow-wrap: anywhere; }
+.pl-org small { display: block; font: 400 11px/1.45 var(--fonte-mono, monospace); color: var(--apagado, #a8b8d5); }
+.pl-org small.pl-prova { color: var(--fraco, #6c7b96); }
+.pl-vazio, .pl-antes { margin: 6px 0; font: 400 11.5px/1.5 var(--fonte-mono, monospace); color: var(--apagado, #a8b8d5); }
+.pl-pe { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--linha-fraca, rgba(215,228,251,.09)); display: flex; justify-content: flex-end; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-anel .pl-val, .pl-anel-g .pl-val { transition: none !important; }
+}
+html.bc-org-parado .pl-anel .pl-val, html.bc-org-parado .pl-anel-g .pl-val { transition: none; }

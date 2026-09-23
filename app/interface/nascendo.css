@@ -1,0 +1,146 @@
+/* babel-coop · o meio vivo (nascendo.js): o arquivo que o agente escreve nasce no meio da Estação
+   Tokens: prototipo/tokens.css (cópia de docs/design/tokens.css). Régua: docs/design/REGUA_ORGANISMO.md §2.
+   Luz só com evento: o rastro e o HUD existem enquanto o documento está sendo escrito (data-vivo="sim") e esfriam.
+   HUD do Babel OS (contexto Gabriel, PROTOCOLO §11): vidro + borda 1 px rgba(63,227,255,.22) + glow discreto +
+   scanlines ≤ 5 %, só nesta superfície viva. */
+
+/* ---------- o painel entra no lugar de #e-conteudo quando a aba ativa é um documento vivo ---------- */
+.e-editor.nasc-on > #e-conteudo { display: none !important; }
+.nasc-vista { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--s1, #0b1320); }
+.nasc-vista[hidden], .nasc-doc[hidden], .nasc-concluido[hidden] { display: none !important; }
+.nasc-doc { flex: 1; min-height: 0; display: flex; flex-direction: column; position: relative; }
+
+/* ---------- cabeçalho do objeto (40 px): presença mini · caminho · o que a presença está fazendo ---------- */
+.nasc-cab {
+  flex: none; height: var(--cabecalho-objeto, 40px); display: flex; align-items: center; gap: 10px;
+  padding: 0 16px 0 14px; border-bottom: 1px solid var(--linha-fraca, rgba(215,228,251,.09));
+  background: var(--s1, #0b1320); color: var(--texto-90, #c3cfe5);
+  font: 500 var(--t-13, 13px)/1 var(--fonte-ui, "IBM Plex Sans", system-ui, sans-serif);
+  transition: background-color 600ms var(--ease-saida, cubic-bezier(.2,0,0,1)), border-color 600ms, box-shadow 600ms;
+  position: relative; z-index: 1;
+}
+.nasc-pres { flex: none; display: inline-flex; width: 20px; height: 20px; }
+.nasc-pres .bc-presenca { --bc-tam: 20px; }
+.nasc-caminho { display: flex; align-items: center; gap: 6px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nasc-dono, .nasc-pasta { color: var(--apagado, #a8b8d5); font-weight: 400; }
+.nasc-pasta { overflow: hidden; text-overflow: ellipsis; }
+.nasc-sep { color: var(--fraco, #6c7b96); }
+.nasc-nome { color: var(--texto, #d7e4fb); font-weight: 500; }
+.nasc-st {
+  margin-left: auto; flex: none; max-width: 52%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font: 400 var(--t-11, 11px)/1 var(--fonte-mono, "JetBrains Mono", ui-monospace, monospace); color: var(--apagado, #a8b8d5);
+  font-variant-numeric: tabular-nums; letter-spacing: .01em;
+}
+.nasc-doc[data-vivo="sim"] .nasc-st { color: var(--t0, #2ad5e5); }
+
+/* HUD (vivo): vidro, borda ciano de 1 px e glow discreto */
+.nasc-doc[data-vivo="sim"] .nasc-cab {
+  background: rgba(22, 30, 45, .58);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15); backdrop-filter: blur(10px) saturate(1.15);
+  border-bottom-color: rgba(63, 227, 255, .22);
+  box-shadow: 0 1px 14px rgba(63, 227, 255, .08);
+}
+
+/* ---------- o corpo: a folha que rola, as scanlines por cima enquanto vive ---------- */
+.nasc-corpo { flex: 1; min-height: 0; position: relative; display: flex; }
+.nasc-rolo { flex: 1; min-height: 0; overflow: auto; padding: 22px 28px 72px; outline: none; transition: box-shadow 600ms var(--ease-saida, cubic-bezier(.2,0,0,1)); }
+.nasc-doc[data-vivo="sim"] .nasc-rolo { box-shadow: inset 0 0 0 1px rgba(63, 227, 255, .22), inset 0 0 28px rgba(63, 227, 255, .05); }
+.nasc-scan {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  /* uma linha clara de 1 px a cada 3 px com 4,5 % de opacidade: o HUD do Babel OS, abaixo do teto de 5 % */
+  background: repeating-linear-gradient(to bottom, rgba(170, 220, 255, .045) 0 1px, transparent 1px 3px);
+  transition: opacity 600ms var(--ease-saida, cubic-bezier(.2,0,0,1));
+}
+.nasc-doc[data-vivo="sim"] .nasc-scan { opacity: 1; }
+
+/* ---------- as linhas ---------- */
+.nasc-folha { position: relative; }
+.nasc-folha.md { max-width: 72ch; color: var(--texto, #d7e4fb); font: var(--peso-corpo, 400) var(--t-14, 14px)/1.6 var(--fonte-ui, "IBM Plex Sans", system-ui, sans-serif); }
+.nasc-folha.codigo { color: var(--texto-90, #c3cfe5); font: 400 var(--t-13, 13px)/1.6 var(--fonte-mono, "JetBrains Mono", ui-monospace, monospace); }
+.nasc-l { position: relative; min-height: 1.6em; }
+.nasc-t { position: relative; }
+.nasc-num { display: none; }
+.nasc-folha.codigo .nasc-l { display: flex; gap: 14px; white-space: pre; tab-size: 2; }
+.nasc-folha.codigo .nasc-num { display: inline-block; flex: none; width: 3.2ch; text-align: right; color: var(--fraco, #6c7b96); user-select: none; font-variant-numeric: tabular-nums; }
+.nasc-folha.codigo .nasc-t { min-width: 0; }
+
+/* o rastro: luz roxo → ciano da ponta da linha, com a hairline ciano; a opacidade é animada (meia-vida curta) ou vem de --luz (edição) */
+.nasc-rastro {
+  position: absolute; inset: 0 -10px 0 -12px; pointer-events: none; border-radius: 2px;
+  background: linear-gradient(90deg, rgba(163, 118, 233, .26), rgba(123, 164, 240, .14) 38%, rgba(42, 213, 229, .06) 66%, transparent 88%);
+  box-shadow: inset 2px 0 0 var(--t0, #2ad5e5);
+  opacity: calc(var(--luz, 0) * .9);
+}
+.nasc-l[style*="--luz"] .nasc-t { color: color-mix(in oklch, var(--texto, #d7e4fb), var(--t0, #2ad5e5) calc(var(--luz, 0) * 55%)); }
+.nasc-folha.codigo .nasc-l[style*="--luz"] .nasc-num { color: color-mix(in oklch, var(--fraco, #6c7b96), var(--t0, #2ad5e5) calc(var(--luz, 0) * 100%)); }
+
+/* markdown leve: o documento nasce como documento */
+.nasc-folha.md .h1 { font: 600 26px/1.25 var(--fonte-ui, "IBM Plex Sans", sans-serif); color: var(--texto, #d7e4fb); margin: 4px 0 8px; letter-spacing: -.01em; }
+.nasc-folha.md .h2 { font: 600 20px/1.3 var(--fonte-ui, "IBM Plex Sans", sans-serif); color: var(--texto, #d7e4fb); margin: 18px 0 6px; }
+.nasc-folha.md .h3, .nasc-folha.md .h4 { font: 500 15.5px/1.35 var(--fonte-ui, "IBM Plex Sans", sans-serif); color: var(--texto, #d7e4fb); margin: 14px 0 4px; }
+.nasc-folha.md .p { color: var(--texto-90, #c3cfe5); margin: 0 0 4px; }
+.nasc-folha.md .li { color: var(--texto-90, #c3cfe5); display: flex; gap: 8px; }
+.nasc-folha.md .li .nasc-t { display: flex; gap: 8px; align-items: baseline; }
+.nasc-bala { color: var(--t0, #2ad5e5); font-weight: 500; flex: none; }
+.nasc-bala.num { font: 500 12px/1 var(--fonte-mono, monospace); color: var(--apagado, #a8b8d5); }
+.nasc-caixa { flex: none; display: inline-grid; place-items: center; width: 13px; height: 13px; border: 1.5px solid var(--apagado, #a8b8d5); border-radius: 3px; font: 600 9px/1 var(--fonte-mono, monospace); color: var(--s0, #060b16); transform: translateY(1px); }
+.nasc-caixa.feita { background: var(--ok, #7fd6a6); border-color: var(--ok, #7fd6a6); }
+.nasc-folha.md .citacao { color: var(--apagado, #a8b8d5); border-left: 2px solid var(--t2, #a376e9); padding-left: 12px; font-style: italic; }
+.nasc-folha.md .tabela, .nasc-folha.md .codigo, .nasc-folha.md .cerca { font: 400 12.5px/1.6 var(--fonte-mono, monospace); white-space: pre; }
+.nasc-folha.md .codigo, .nasc-folha.md .cerca { background: var(--s0, #060b16); padding: 0 12px; color: var(--texto-90, #c3cfe5); }
+.nasc-folha.md .cerca { color: var(--fraco, #6c7b96); }
+.nasc-folha.md .hr { min-height: 0; height: 1px; margin: 14px 0; background: var(--linha, #4d5564); }
+.nasc-folha.md .vazia { min-height: .7em; }
+.nasc-folha code { font: 400 .9em var(--fonte-mono, monospace); background: var(--s2, #161e2d); border-radius: 3px; padding: 0 4px; }
+.nasc-folha strong { color: var(--texto, #d7e4fb); font-weight: 600; }
+.nasc-folha u { text-decoration-color: var(--t0, #2ad5e5); text-underline-offset: 3px; }
+.nasc-l.nota { color: var(--fraco, #6c7b96); font: 400 12px/1.6 var(--fonte-mono, monospace); margin-top: 10px; }
+.nasc-bin img { max-width: 100%; max-height: 70vh; border-radius: var(--r-cartao, 6px); border: 1px solid var(--linha-fraca, rgba(215,228,251,.09)); }
+
+/* o cursor da presença: a coluna de luz roxo → ciano, na ponta da linha que está nascendo */
+.nasc-cursor {
+  display: inline-block; width: 2px; height: 1.15em; margin-left: 3px; vertical-align: -.2em; border-radius: 1px;
+  background: linear-gradient(to top, var(--t2, #a376e9), var(--t1, #7ba4f0) 55%, var(--t0, #2ad5e5));
+  box-shadow: 0 0 6px rgba(42, 213, 229, .75), 0 0 14px rgba(163, 118, 233, .4);
+}
+
+/* ---------- o rito: "Documento concluído" em Cormorant, a voz humana ---------- */
+.nasc-concluido {
+  font: 500 var(--t-34, 34px)/1.15 var(--fonte-fala, "Cormorant Garamond", "Iowan Old Style", Georgia, serif);
+  color: var(--latte, #fff8e7); text-align: center; margin: 30px 0 6px; max-width: 72ch;
+  opacity: 0; transform: translateY(6px);
+}
+.nasc-folha.codigo + .nasc-concluido { max-width: none; }
+.nasc-concluido.on { opacity: 1; transform: none; transition: opacity 500ms var(--ease-heroi, cubic-bezier(.16,1,.3,1)), transform 500ms var(--ease-heroi, cubic-bezier(.16,1,.3,1)); }
+.nasc-concluido small { display: block; margin-top: 6px; font: 400 var(--t-11, 11px)/1.6 var(--fonte-mono, monospace); color: var(--apagado, #a8b8d5); letter-spacing: .01em; }
+
+/* plano concluído sem arquivo aberto: cartão breve no pé do meio */
+.nasc-cartao {
+  position: fixed; z-index: 60; transform: translate(-50%, 8px); opacity: 0; pointer-events: none;
+  padding: 14px 22px 12px; border-radius: var(--r-painel, 8px); text-align: center;
+  background: rgba(22, 30, 45, .72); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid rgba(63, 227, 255, .22); box-shadow: 0 0 22px rgba(63, 227, 255, .10);
+  font: 500 28px/1.1 var(--fonte-fala, "Cormorant Garamond", Georgia, serif); color: var(--latte, #fff8e7);
+}
+.nasc-cartao small { display: block; margin-top: 6px; font: 400 11px/1.5 var(--fonte-mono, monospace); color: var(--apagado, #a8b8d5); }
+.nasc-cartao.on { opacity: 1; transform: translate(-50%, 0); transition: opacity 500ms var(--ease-heroi, cubic-bezier(.16,1,.3,1)), transform 500ms var(--ease-heroi, cubic-bezier(.16,1,.3,1)); }
+.nasc-cartao.sai { opacity: 0; transition: opacity 700ms var(--ease-saida, cubic-bezier(.2,0,0,1)); }
+
+/* ---------- a aba do documento vivo, na barra de abas do meio ---------- */
+#e-abas .e-aba[data-nasc="vivo"] { box-shadow: inset 0 -1px 0 rgba(63, 227, 255, .55); }
+#e-abas .e-aba[data-nasc="vivo"] .e-aba-nome::after {
+  content: ""; display: inline-block; width: 5px; height: 5px; margin-left: 6px; border-radius: 50%; vertical-align: 1px;
+  background: var(--t0, #2ad5e5); box-shadow: 0 0 6px var(--t0, #2ad5e5);
+}
+
+/* ---------- movimento reduzido: aparece inteiro, cor sem movimento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .nasc-cursor { display: none; }
+  .nasc-concluido, .nasc-concluido.on, .nasc-cartao, .nasc-cartao.on, .nasc-cartao.sai { transition: none !important; transform: none; }
+  .nasc-cartao, .nasc-cartao.on, .nasc-cartao.sai { transform: translate(-50%, 0); }
+  /* dentro do painel nada transita nem anima (inclui a presença mini, que herda transições de outras folhas) */
+  .nasc-vista, .nasc-vista * { transition: none !important; animation: none !important; }
+}
+html.bc-org-parado .nasc-cursor { display: none; }
+html.bc-org-parado .nasc-vista, html.bc-org-parado .nasc-vista * { transition: none !important; animation: none !important; }
+html.bc-org-parado .nasc-concluido.on { transform: none; }
