@@ -254,6 +254,27 @@ describe('integração com o claude real, pela tela da Estação', { skip: REAL,
     assert.ok(naTv && naTv.assinatura === 'Assistente · Theus', 'a TV tem o aviso assinado: ' + JSON.stringify(naTv));
   });
 
+  it('pedido Máquina (A28): o claude lê o schema.sql da pasta e monta a Máquina do projeto pelo coop, assinada', async () => {
+    /* o "sistema real": um schema de Supabase/Postgres na pasta da pessoa; o projeto nasce pela loja (a Máquina dele nasce vazia) */
+    fs.writeFileSync(path.join(pasta, 'schema.sql'), '-- sistema da Clínica Vida\ncreate table pacientes (\n  id uuid primary key,\n  nome text not null,\n  nascimento date\n);\n' +
+      'create table consultas (\n  id uuid primary key,\n  paciente uuid references pacientes(id),\n  quando timestamptz not null\n);\n');
+    await page.evaluate(() => BC.loja.fazer('novoProjeto', { nome: 'Clínica Vida' }));
+    const pj = await page.evaluate(() => BC.loja.estado.projetos[0].id);
+    const d = (await msgs()).length;
+    await pedir('leia o arquivo schema.sql desta pasta e monte a Máquina do projeto Clínica Vida: uma gaveta para cada tabela, com os campos, usando a ferramenta coop_maquina_peca (a gaveta consultas liga na gaveta pacientes)');
+    const t = await turno(d, 'pedido máquina');
+    const m = await msgs(d);
+    const maq = await ate((id) => { const x = (BC.loja.estado.maquinas || {})[id]; return x && x.pecas && x.pecas.length >= 2 ? { pecas: x.pecas.map((p) => ({ tipo: p.tipo, nome: p.nome, por: p.por, assinatura: p.assinatura, campos: (p.campos || []).length, publicada: !!p.publicada })), fios: (x.fios || []).length } : null; }, pj, 'as peças na Máquina', 20000);
+    await page.evaluate((id) => { BC.estacao.fecharTodas(); BC.maquina.abrir(id); }, pj);
+    await esperar(800);
+    res.passos.maquina = { turno: t, mcp: m.filter((x) => x.tipo === 'mcp-chamada').map((x) => x.ferramenta), maquina: maq };
+    await print('10-maquina-montada-pelo-claude');
+    assert.ok(res.passos.maquina.mcp.includes('coop_maquina_peca'), 'o claude chamou coop_maquina_peca: ' + JSON.stringify(res.passos.maquina.mcp));
+    const nomes = maq.pecas.map((p) => String(p.nome).toLowerCase());
+    assert.ok(nomes.some((n) => /pacientes/.test(n)) && nomes.some((n) => /consultas/.test(n)), 'as duas gavetas do schema: ' + nomes.join(', '));
+    assert.ok(maq.pecas.every((p) => p.tipo === 'gaveta' && !p.publicada), 'gavetas tracejadas até a pessoa publicar');
+  });
+
   it('pedido 3: o navegador próprio abre o site, preenche nome e e-mail e a senha fica para a pessoa', async () => {
     const d = (await msgs()).length;
     await pedir('abra no navegador o site http://localhost:' + SITE + ' e preencha o cadastro com nome Rita e e-mail rita@teste.com; não preencha a senha');

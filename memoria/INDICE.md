@@ -1,4 +1,4 @@
-# Índice vivo do Ryan — v0.1.0 · geração 1 · 11 memórias ativas · 1 projeto aberto · 4 pendências
+# Índice vivo do Ryan — v0.1.0 · geração 1 · 13 memórias ativas · 1 projeto aberto · 4 pendências
 Estado: ativo
 
 <!-- Mantido à mão pelo Ryan; contrato em .claude/rules/memoria.md; até 150 linhas. Entra no contexto só em sessão nova, /clear ou /compact. -->
@@ -7,7 +7,7 @@ Estado: ativo
 Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente não escreve nem roda Python, mas Node e JavaScript estão liberados para construir o app. Detalhes: memoria/perfil/theus.md
 
 ## Missão DEUS
-- Ativa: **babel-coop/terminal-ao-vivo** — etapa: terminal no design 2030 (presença, organismo, sons) · próxima: agentes em paralelo (servidor, casca 2030, presença, parede) · .deus/terminal-ao-vivo/CAPSULA.json
+- Ativa: **babel-coop/terminal-ao-vivo** — etapa: entregue no Mac (revisão 12: faltas W7 fechadas, .app em /Applications) · próxima: push e ver o CI Windows (A0, A29) · .deus/terminal-ao-vivo/CAPSULA.json
 - Última: **babel-coop/design-2030** — entregue (revisão 7), aguardando aprovação do plano pelo Theus · .deus/missao-design/CAPSULA.json
 
 ## Projetos abertos
@@ -21,6 +21,7 @@ Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente
 - 2026-09-23 · Node e JavaScript liberados para construir o Babel Coop; Python segue proibido (2026-09-23-node-e-javascript-liberados-para-construir)
 
 ## Memórias recentes
+- [learning 0.9] Quarentena do macOS impede o node-pty e o Electron de carregar (2026-09-23-quarentena-do-macos-trava-node-pty-e-electron)
 - [preference 0.9] O babel-coop não mostra nem abre o Google Chrome: tem navegador próprio (2026-09-23-app-sem-google-chrome-navegador-proprio)
 - [preference 0.9] O nome do app se escreve babel-coop, tudo minúsculo (2026-09-23-o-nome-e-babel-coop-minusculo)
 - [reference 0.9] O babel-coop está no GitHub, privado: theusveyra/babel-coop (2026-09-23-repositorio-privado-no-github)
@@ -36,4 +37,4 @@ Dono do repositório babel-coop e do Babel Coop; pt-BR, direto e curto; o agente
 - [ ] ryan: agente/: o settings.json do Dominic ainda chama o hook apagado e diz "Gabriel" (só o Theus edita), e o backup .tar.gz tem cópias do motor
 
 ## Fora do índice
-- 2 memórias ativas fora do índice; /consultar <tema> acha tudo.
+- 3 memórias ativas fora do índice; /consultar <tema> acha tudo.

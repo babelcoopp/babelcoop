@@ -76,17 +76,17 @@
 - [ ] Cada terminal é um agente com nome, foto e instruções próprias; a pessoa cria, renomeia e apaga os seus.
 - [ ] Um agente é uma sessão de Claude Code (ou outra IA) com a conta da pessoa.
 - [ ] Conector `coop`/MCP com todas as ações do app: buscar, ler, aprendi, aprendizados, demandas, campanha, meta, aviso, projetar, tv, pessoas, projetos, whatsapp, loja.
-- [ ] Evidência: no terminal, "cria uma campanha de 50 clientes para a Carla até 30/09" cria a campanha de verdade, e ela aparece na TV.
+- [x] Evidência: no terminal, "cria uma campanha de 50 clientes para a Carla até 30/09" cria a campanha de verdade, e ela aparece na TV. ✅ Evidência: e2e coop-ui.test.js (24/09): coop_campanha cria "50 clientes" para a Carla até 30/09 e a TV mostra; o pedido em linguagem natural ao claude real foi provado em 23/09 (evidencias/integracao, haiku).
 - [ ] Menção de pessoa: ao digitar um nome da equipe no terminal, o nome fica marcado e aparece a foto.
 - [ ] `coop tv painel | reuniao | site <url> | visita` e `coop projetar <arquivo>` trocam a TV.
 - [ ] Toda ação de agente fica assinada com o nome do agente e da pessoa dona; "Voltar como estava" desfaz.
 - [ ] Ações que apagam ou encerram algo de outra pessoa pedem confirmação no terminal.
 - [ ] Cada pasta tem um CLAUDE.md que manda o agente consultar o acervo e ler os aprendizados.
 - [ ] Receitas em cima do terminal para quem está começando.
-- [ ] Navegador do agente [Theus]: aba "Navegador · <agente>" com `<webview>` próprio; as ferramentas de navegar, clicar, digitar, ler página, raio-x, clonar e print são do nosso conector `coop` (MCP nativo, sobre webContents/CDP do Electron), sem Playwright; o agente navega, clica e preenche e a pessoa vê cada passo; "Assumir" e "Devolver"; senhas só a pessoa digita. Evidência: "Rita, entra no site X e preenche o cadastro" acontece na aba, à vista.
-- [ ] Raio-X do site [Theus]: painel ao lado da página com HTML (DOM vivo, busca, copiar bloco), CSS (estilos do elemento, fontes, cores), Copy (textos em ordem, exportar Markdown), Rede (pedidos e respostas) e Console; "Selecionar elemento".
-- [ ] Clonar página [Theus]: salva HTML, CSS, imagens e fontes em `Clones/<site>/` da pessoa e abre como site editável na Estação. Evidência: clonar uma landing e abrir a cópia funcionando.
-- [ ] Clonar copy [Theus]: gera `copy.md` com os textos por seção. Print inteiro da página.
+- [x] Navegador do agente [Theus]: aba "Navegador · <agente>" com `<webview>` próprio; as ferramentas de navegar, clicar, digitar, ler página, raio-x, clonar e print são do nosso conector `coop` (MCP nativo, sobre webContents/CDP do Electron), sem Playwright; o agente navega, clica e preenche e a pessoa vê cada passo; "Assumir" e "Devolver"; senhas só a pessoa digita. Evidência: "Rita, entra no site X e preenche o cadastro" acontece na aba, à vista. ✅ Evidência: e2e navegador.test.js (webview + CDP, sem Playwright nem Chrome: abrir, clicar, digitar, senha recusada, assumir/devolver) e navegador-ui.test.js (aba "Navegador · <agente>", passos à vista, Assumir/Devolver), 24/09; pedido real ao claude "preenche o cadastro" em 23/09 (evidencias/integracao 08–09c).
+- [x] Raio-X do site [Theus]: painel ao lado da página com HTML (DOM vivo, busca, copiar bloco), CSS (estilos do elemento, fontes, cores), Copy (textos em ordem, exportar Markdown), Rede (pedidos e respostas) e Console; "Selecionar elemento". ✅ Evidência: e2e navegador-ui.test.js: HTML (DOM vivo, busca, copiar bloco), CSS (regras pelo CDP, fontes, cores), Copy (exportar Markdown), Rede, Console e Selecionar elemento.
+- [x] Clonar página [Theus]: salva HTML, CSS, imagens e fontes em `Clones/<site>/` da pessoa e abre como site editável na Estação. Evidência: clonar uma landing e abrir a cópia funcionando. ✅ Evidência: e2e navegador-ui.test.js e navegador.test.js: Clones/<site>/ com CSS, imagem e fonte abre sozinho, sem o site no ar.
+- [x] Clonar copy [Theus]: gera `copy.md` com os textos por seção. Print inteiro da página. ✅ Evidência: e2e navegador-ui.test.js: copy.md por seção e print da página inteira mais alta que a janela.
 - [ ] O agente faz tudo isso por pedido ("clona a landing do concorrente e me traz a copy").
 - [ ] Os agentes de cada pessoa aparecem na parede de terminais e na Equipe.
 
