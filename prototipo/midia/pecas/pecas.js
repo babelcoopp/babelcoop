@@ -24,7 +24,7 @@
     if (s) return s.replace(/[^/]*$/, '');
     return 'midia/pecas/';
   })();
-  var THREE_CDN = 'https://cdn.jsdelivr.net/npm/three@0.160.0/';
+  var THREE_CDN = window.COOP_REAL ? '/vendor/three/' : 'https://cdn.jsdelivr.net/npm/three@0.160.0/'; /* no app, de dentro dele */
   var catalogo = null, promCatalogo = null, promThree = null, ultimoInfo = null;
 
   /* ------------------------------------------------------------------ estilo (injetado uma vez; tokens da casca 2030 com recuo) */

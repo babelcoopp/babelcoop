@@ -36,6 +36,12 @@ const VENDOR = {
   'xterm.css': require.resolve('@xterm/xterm/css/xterm.css'),
   'addon-fit.js': require.resolve('@xterm/addon-fit/lib/addon-fit.js')
 };
+/* three.js: no app empacotado vem em Resources/three (extraResources: o electron-builder não põe pastas examples/ no asar); no repositório, de node_modules */
+const PASTA_THREE = (() => {
+  const empacotado = process.resourcesPath ? path.join(process.resourcesPath, 'three') : '';
+  if (empacotado && fs.existsSync(path.join(empacotado, 'build', 'three.module.js'))) return empacotado;
+  try { return path.dirname(path.dirname(require.resolve('three'))); } catch (e) { return path.join(__dirname, '..', 'node_modules', 'three'); }
+})();
 const MIME = { html: 'text/html; charset=utf-8', js: 'text/javascript; charset=utf-8', css: 'text/css; charset=utf-8', json: 'application/json; charset=utf-8', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', svg: 'image/svg+xml', ico: 'image/x-icon', md: 'text/markdown; charset=utf-8', txt: 'text/plain; charset=utf-8', pdf: 'application/pdf', mp4: 'video/mp4', webp: 'image/webp', gif: 'image/gif', woff2: 'font/woff2', woff: 'font/woff', mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg', m4a: 'audio/mp4', webm: 'video/webm', mov: 'video/quicktime', htm: 'text/html; charset=utf-8', ttf: 'font/ttf', otf: 'font/otf', eot: 'application/vnd.ms-fontobject', avif: 'image/avif', xml: 'application/xml; charset=utf-8', csv: 'text/csv; charset=utf-8', mjs: 'text/javascript; charset=utf-8', bmp: 'image/bmp', map: 'application/json; charset=utf-8' };
 /* a pasta compartilhada servida como site (/pasta/…): a página nunca ganha a origem da Estação (sandbox sem allow-same-origin =
    origem opaca "null"): o servidor recusa o Origin dela no /api/convite, /api/evento, /api/fundar e no WebSocket, e ela não lê
@@ -501,6 +507,14 @@ function iniciar(opcoes) {
       /* a interface */
       const rel = p === '/' ? '/index.html' : p;
       const PASTA_UI = atualizacao.pastaUi(); /* a versão instalada pela Oficina, ou a que veio com o app */
+      /* three.js de dentro do app (o protótipo puro usa a CDN): só build/ e examples/jsm/ do pacote three */
+      const tres = rel.match(/^\/vendor\/three\/((?:build|examples\/jsm)\/[A-Za-z0-9_./-]+\.js)$/);
+      if (tres) {
+        const f = path.normalize(path.join(PASTA_THREE, tres[1]));
+        if (!f.startsWith(PASTA_THREE + path.sep) || !fs.existsSync(f)) { res.writeHead(404); return res.end('não achei'); }
+        res.writeHead(200, { 'Content-Type': MIME.js, 'Cache-Control': 'no-store' });
+        return fs.createReadStream(f).pipe(res);
+      }
       const vendor = rel.match(/^\/vendor\/([a-z0-9.-]+)$/);
       if (vendor) { const f = VENDOR[vendor[1]]; if (!f) { res.writeHead(404); return res.end('não achei'); } res.writeHead(200, { 'Content-Type': MIME[f.split('.').pop()], 'Cache-Control': 'no-store' }); return fs.createReadStream(f).pipe(res); }
       if (rel.startsWith('/coop/')) {
@@ -514,7 +528,8 @@ function iniciar(opcoes) {
       if (!alvo.startsWith(PASTA_UI + path.sep) || !fs.existsSync(alvo) || fs.statSync(alvo).isDirectory()) { res.writeHead(404); return res.end('não achei'); }
       if (rel === '/index.html') {
         /* injeta a ponte no fim da página: é ela que troca o simulado pelo real */
-        const html = fs.readFileSync(alvo, 'utf8').replace('<script src="app.js"></script>', INJETAR(terminais.disponivel(), listarMidia()) + '\n<script src="app.js"></script>');
+        const html = fs.readFileSync(alvo, 'utf8').replace('<script src="app.js"></script>', INJETAR(terminais.disponivel(), listarMidia()) + '\n<script src="app.js"></script>')
+          .split('https://cdn.jsdelivr.net/npm/three@0.160.0/').join('/vendor/three/');
         res.writeHead(200, { 'Content-Type': MIME.html, 'Cache-Control': 'no-store' });
         return res.end(html);
       }

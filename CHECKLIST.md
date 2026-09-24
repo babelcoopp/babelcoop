@@ -24,9 +24,9 @@
 - [ ] Cara de VS Code: barra de atividades, explorador à esquerda, editor no meio, terminal à direita [Theus].
 - [ ] Laterais recolhem (Ctrl+B e Ctrl+`) e as bordas arrastam.
 - [ ] Terminal de verdade (xterm.js + node-pty): zsh/bash no Mac, PowerShell no Windows.
-- [ ] Mais de um terminal aberto ao mesmo tempo, em abas [Theus].
-- [ ] Visual do Babel Terminal: fundo `#060b16`, degradê roxo → azul → ciano, logo "b" em neon (liga e desliga).
-- [ ] Terminal abre por padrão dentro da pasta compartilhada.
+- [x] Mais de um terminal aberto ao mesmo tempo, em abas [Theus]. ✅ Evidência: e2e painel.test.js A2: duas abas com PIDs diferentes vivos ao mesmo tempo.
+- [x] Visual do Babel Terminal: fundo `#060b16`, degradê roxo → azul → ciano, logo "b" em neon (liga e desliga). ✅ Evidência: e2e painel.test.js A3: fundo #060b16 computado, degradê no texto, b neon liga e desliga.
+- [x] Terminal abre por padrão dentro da pasta compartilhada. ✅ Evidência: e2e painel.test.js A4: pwd = <raiz>/<id>.
 - [ ] Paleta de comandos Ctrl+K com arquivos, comandos e acervo.
 
 **Cada computador é um servidor [Theus]**
@@ -62,14 +62,14 @@
 
 ## 2. Terminal ao vivo com controle [Theus]
 
-- [ ] Parede dos terminais da equipe em tempo real, cada um com nome do agente e foto da pessoa; um clique amplia.
-- [ ] Transmissão da saída (mais redimensionamento) por WebSocket.
-- [ ] Quem tem permissão digita no terminal ampliado e as teclas chegam na sessão do dono. Evidência: comando digitado pelo Theus roda na tela do outro.
-- [ ] Theus e gestão entram direto; membros do mesmo projeto entram direto; os outros pedem e o dono aceita com um clique.
-- [ ] Selo "Theus está no seu terminal Rita" na tela do dono; o dono encerra quando quiser.
-- [ ] Pausar a transmissão de um terminal (ex.: enquanto digita senha).
-- [ ] Nada é gravado nesta fase.
-- [ ] Latência aceitável na rede local: digitar e ver em menos de 100 ms.
+- [x] Parede dos terminais da equipe em tempo real, cada um com nome do agente e foto da pessoa; um clique amplia. ✅ Evidência: e2e parede.test.js com duas Estações (Theus e Rita) + prints em .deus/terminal-ao-vivo/evidencias/parede/.
+- [x] Transmissão da saída (mais redimensionamento) por WebSocket. ✅ Evidência: equipe.test.js b) A6: quem assiste recebe a saída e cols/rows do dono.
+- [x] Quem tem permissão digita no terminal ampliado e as teclas chegam na sessão do dono. Evidência: comando digitado pelo Theus roda na tela do outro. ✅ Evidência: equipe.test.js c) A7 + parede.test.js: o comando do Theus roda na sessão da Rita.
+- [x] Theus e gestão entram direto; membros do mesmo projeto entram direto; os outros pedem e o dono aceita com um clique. ✅ Evidência: equipe.test.js d) A8: matriz de permissões no servidor do dono, sem permissão recusado.
+- [x] Selo "Theus está no seu terminal Rita" na tela do dono; o dono encerra quando quiser. ✅ Evidência: equipe.test.js e) A9 + print a9-selo-na-rita.png: após encerrar, as teclas são recusadas.
+- [x] Pausar a transmissão de um terminal (ex.: enquanto digita senha). ✅ Evidência: equipe.test.js f) A10: o marcador não chega a quem assiste, nem depois.
+- [x] Nada é gravado nesta fase. ✅ Evidência: equipe.test.js g) A11: o marcador não existe em disco e nenhum shell ficou vivo.
+- [x] Latência aceitável na rede local: digitar e ver em menos de 100 ms. ✅ Evidência: equipe.test.js i) A12: 200 teclas, p50 2,55 ms · p95 3,46 ms · máx 4,31 ms (23/09/2026, duas Estações na mesma máquina).
 
 ## 3. Agentes com nome humano [Theus]
 

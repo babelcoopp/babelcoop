@@ -12,6 +12,11 @@ window.BC = window.BC || {};
   function L() { return BC.loja; }
   function $(id) { return document.getElementById(id); }
   var MV_CURTA = 6000, MV_MEDIA = 300000, MIN = U.MIN;
+  /* app real (window.COOP_REAL sem exemplos): tudo vem do estado da equipe; nada de dado de exemplo, rótulo de protótipo nem demonstração */
+  function real() { return !!(window.COOP_REAL && !window.COOP_REAL.exemplos); }
+  /* campanha de verdade = tem alvo; prazo de verdade = fim numérico. Sem isso a TV não conta nada (nada de NaN, nada de "meta batida" com 0 de 0). */
+  function temCampanha(c) { return !!(c && +c.alvo > 0); }
+  function temPrazo(c) { return temCampanha(c) && c.fim != null && isFinite(+c.fim) && +c.fim > 0; }
 
   var T = {
     fila: [], atual: null, ate: 0, pulso: null, inicio: Date.now(), atualizado: Date.now(), mexeuTimer: null, comp: {}, proj: null,
@@ -205,9 +210,15 @@ window.BC = window.BC || {};
     if (ct && ct.fim > Date.now()) {
       box.className = 'tv-cronometro reuniao';
       box.innerHTML = '<span class="tv-rotulo">' + esc(ct.rotulo) + '</span><span class="tv-cron-valor num" data-regressiva="' + ct.fim + '">' + U.regressiva(ct.fim).texto + '</span>';
-    } else {
+    } else if (temPrazo(c)) {
       box.className = 'tv-cronometro';
-      box.innerHTML = '<span class="tv-rotulo">' + esc(c.nome) + ' · faltam</span><span class="tv-cron-valor num" data-regressiva="' + c.fim + '">' + U.regressiva(c.fim).texto + '</span>';
+      box.innerHTML = '<span class="tv-rotulo">' + esc(c.nome) + ' · faltam</span><span class="tv-cron-valor num" data-regressiva="' + (+c.fim) + '">' + U.regressiva(+c.fim).texto + '</span>';
+    } else if (temCampanha(c)) {
+      box.className = 'tv-cronometro sem-prazo';
+      box.innerHTML = '<span class="tv-rotulo">' + esc(c.nome) + ' · sem prazo</span>';
+    } else {
+      box.className = 'tv-cronometro vazio';
+      box.innerHTML = '<span class="tv-rotulo">sem campanha no ar</span>';
     }
     var s = e.sala, r = e.reuniao, selos = '';
     if (s.gravando) selos += '<span class="tv-selo gravando"><i class="tv-rec" aria-hidden="true"></i>gravando · desde ' + U.hora(s.desde) + '</span>';
@@ -497,25 +508,64 @@ window.BC = window.BC || {};
     Object.keys(T.agentes).forEach(function (k) { if (T.agentes[k].estado === 'rodando') n++; });
     return n;
   }
+  /* quem está na sala agora (online ou em foco) */
+  function presentes(e) { return e.pessoas.filter(function (p) { return p.status === 'online' || p.status === 'foco'; }).length; }
+  /* o chão toca enquanto a sala trabalha e para quando para. No protótipo, "trabalha" = cronômetro ou agente rodando (a equipe de exemplo fica
+     sempre online). No app real a sala trabalha quando tem gente dentro: com a TV aberta e alguém na sala, o chão toca em loop (mudo);
+     sala vazia, ele para. A intensidade (--chao) continua medida pelo trabalho que roda. Movimento reduzido: fica o pôster parado. */
   function renderChao(e) {
-    var raiz = $('vista-tv'), v = $('tv-chao'), n = contarTrabalho(e), estado = n > 0 ? 'toca' : 'parado';
-    T.chao.trabalhando = n;
+    var raiz = $('vista-tv'), v = $('tv-chao'), n = contarTrabalho(e), gente = real() ? presentes(e) : 0, estado = n > 0 || gente > 0 ? 'toca' : 'parado';
+    T.chao.trabalhando = n; T.chao.presentes = gente;
     if (T.chao.estado !== estado) { T.chao.estado = estado; T.chao.trocas++; T.chao.desde = Date.now(); }
     raiz.dataset.chao = estado;
     raiz.style.setProperty('--chao', Math.min(1, 0.55 + 0.1 * n).toFixed(2));
     if (!v) return;
+    /* mudo e inline de novo antes do play(): a política de autoplay só libera vídeo sem som */
+    v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true;
     var deveTocar = estado === 'toca' && !FX.reduzido() && !document.hidden && modoAtual(e) === 'painel';
-    if (deveTocar && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () { /* recusado: fica o pôster */ }); }
+    T.chao.recusado = T.chao.recusado || null;
+    if (deveTocar && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function (x) { T.chao.recusado = String(x && x.name || x); /* recusado: fica o pôster */ }); }
     else if (!deveTocar && !v.paused) v.pause();
   }
 
   /* ================================================================== painel: o corpo do projeto (R5) e os agentes trabalhando (R3) */
 
+  /* app real: o corpo sai só do que a equipe fez de verdade. Lê o estado.corpo sem semear (o corpoDoEstado semeia o projeto de exemplo)
+     e fica só com as peças e publicações de pessoas que existem na equipe. Sem nada disso, não há corpo. */
+  function corpoReal(e) {
+    var c = e.corpo, proj = c && c.projetos;
+    if (!proj) return null;
+    function daEquipe(x) { return x && x.por && !!L().pessoa(x.por); }
+    function filtrar(id) {
+      var pj = proj[id]; if (!pj) return null;
+      var pecas = (pj.pecas || []).filter(daEquipe), ids = {};
+      pecas.forEach(function (p) { ids[p.id] = true; });
+      var pubs = (pj.publicacoes || []).filter(daEquipe);
+      if (!pecas.length && !pubs.length) return null;
+      var nome = pj.nome, info = (e.projetos || []).filter(function (x) { return x.id === id; })[0];
+      if (info) nome = info.nome;
+      return { nome: nome || id, pecas: pecas, fios: (pj.fios || []).filter(function (f) { return ids[f[0]] && ids[f[1]]; }), publicacoes: pubs };
+    }
+    var r = filtrar(c.atual);
+    if (r) return r;
+    var ids = Object.keys(proj).map(function (id) { return { id: id, d: filtrar(id) }; }).filter(function (x) { return x.d; });
+    ids.sort(function (a, b) { return ultimoTs(b.d) - ultimoTs(a.d); });
+    return ids.length ? ids[0].d : null;
+  }
+  function ultimoTs(d) { return Math.max.apply(null, [0].concat(d.pecas.map(function (p) { return p.ts || 0; }), d.publicacoes.map(function (p) { return p.ts || 0; }))); }
+
   function renderCorpo(e) {
-    var dados = BC.visual3d && BC.visual3d.corpoDoEstado ? BC.visual3d.corpoDoEstado() : null, box = $('tv-corpo3d');
+    var dados = real() ? corpoReal(e) : BC.visual3d && BC.visual3d.corpoDoEstado ? BC.visual3d.corpoDoEstado() : null, box = $('tv-corpo3d');
     if (!box) return;
-    if (!dados) { $('tv-corpo-legenda').textContent = 'sem Máquina publicada'; return; }
-    if (!T.corpo && BC.visual3d.corpo) T.corpo = BC.visual3d.corpo(box);
+    if (!dados) {
+      if (T.corpo) { T.corpo.destruir(); T.corpo = null; T.corpoAssin = null; }
+      $('tv-corpo-bloco').classList.add('vazio');
+      $('tv-corpo-nome').textContent = '';
+      $('tv-corpo-legenda').textContent = real() ? 'nenhuma Máquina publicada ainda · quando alguém publicar, as peças ganham corpo aqui' : 'sem Máquina publicada';
+      return;
+    }
+    $('tv-corpo-bloco').classList.remove('vazio');
+    if (!T.corpo && BC.visual3d && BC.visual3d.corpo) T.corpo = BC.visual3d.corpo(box);
     var assin = JSON.stringify(dados.pecas.map(function (p) { return [p.id, p.estado]; })) + dados.fios.length;
     if (T.corpoAssin !== assin) { T.corpoAssin = assin; if (T.corpo) T.corpo.atualizar(dados); }
     var com = dados.pecas.filter(function (p) { return p.estado === 'corpo'; }).length, trac = dados.pecas.length - com, pub = dados.publicacoes[0];
@@ -590,8 +640,13 @@ window.BC = window.BC || {};
   function renderMetas(e) {
     var box = $('tv-metas');
     if (!box.firstChild) box.innerHTML = '<header class="tv-bloco-cab"><span class="tv-rotulo">METAS DO MÊS</span></header><div class="tv-instrumentos"></div>';
-    var grade = box.querySelector('.tv-instrumentos');
-    e.metas.forEach(function (m) {
+    var grade = box.querySelector('.tv-instrumentos'), metas = (e.metas || []).filter(function (m) { return m && +m.alvo > 0; });
+    /* sem meta: uma linha digna no lugar dos anéis (nunca "NaN%") */
+    var vazio = box.querySelector('.tv-metas-vazio');
+    if (!metas.length && !vazio) box.insertAdjacentHTML('beforeend', '<p class="tv-metas-vazio">nenhuma meta do mês ainda</p>');
+    else if (metas.length && vazio) vazio.remove();
+    box.classList.toggle('vazio', !metas.length);
+    metas.forEach(function (m) {
       var pc = BC.pctMeta(m), el = grade.querySelector('[data-meta="' + m.id + '"]'), st = T.metas[m.id];
       if (!el) {
         el = document.createElement('div'); el.className = 'tv-inst'; el.setAttribute('data-meta', m.id);
@@ -611,19 +666,31 @@ window.BC = window.BC || {};
       } else el.classList.toggle('ouro', fechada);
       st.pc = pc;
     });
+    var ids = metas.map(function (m) { return String(m.id); });
+    grade.querySelectorAll('[data-meta]').forEach(function (el) { if (ids.indexOf(el.getAttribute('data-meta')) === -1) el.remove(); });
   }
   function renderCampanha(e) {
-    var c = e.campanha, pc = Math.min(1, c.atual / c.alvo), box = $('tv-campanha'), st = T.campanha;
+    var c = e.campanha, box = $('tv-campanha'), st = T.campanha;
+    if (!temCampanha(c)) { /* sem campanha no ar: estado vazio, sem placar, sem porcentagem */
+      if (!box.classList.contains('vazio')) {
+        cancelAnimationFrame(st.raf); st.valor = null; st.fechou = false;
+        box.classList.remove('fecha', 'ouro'); box.classList.add('vazio');
+        box.innerHTML = '<header class="tv-bloco-cab"><span class="tv-rotulo">CAMPANHA</span></header><div class="tv-camp tv-camp-vazia"><p>sem campanha no ar</p><small>quando a equipe puser uma no ar, o placar aparece aqui</small></div>';
+      }
+      return;
+    }
+    if (box.classList.contains('vazio')) { box.classList.remove('vazio'); box.innerHTML = ''; }
+    var atual = Math.max(0, +c.atual || 0), pc = Math.min(1, atual / c.alvo);
     var nova = !box.firstChild;
     if (nova) box.innerHTML = '<header class="tv-bloco-cab"><span class="tv-rotulo"></span></header><div class="tv-camp"><div class="tv-camp-anel">' + anelSvg('grande') + '<div class="tv-camp-centro"><b class="num"></b><span class="num"></span></div></div><p></p></div>';
-    box.querySelector('.tv-rotulo').textContent = c.nome.toUpperCase();
+    box.querySelector('.tv-rotulo').textContent = String(c.nome || 'campanha').toUpperCase();
     box.querySelector('.valor').style.strokeDashoffset = (100 - pc * 100).toFixed(2);
     box.querySelector('.tv-camp-centro span').textContent = Math.round(pc * 100) + '%';
-    box.querySelector('p').textContent = c.descricao + (c.atual < c.alvo ? ' · faltam ' + (c.alvo - c.atual) : ' · meta batida');
+    box.querySelector('p').textContent = [c.descricao, atual < c.alvo ? 'faltam ' + (c.alvo - atual) : 'meta batida'].filter(Boolean).join(' · ');
     var num = box.querySelector('.tv-camp-centro b');
-    if (nova || st.valor == null || FX.reduzido()) { cancelAnimationFrame(st.raf); num.innerHTML = U.pad(c.atual) + '<small>/' + c.alvo + '</small>'; }
-    else if (st.valor !== c.atual) { /* o placar sobe contando (700 ms), com a origem no evento da faixa de baixo */
-      var de = st.valor, para = c.atual, t0 = performance.now();
+    if (nova || st.valor == null || FX.reduzido()) { cancelAnimationFrame(st.raf); num.innerHTML = U.pad(atual) + '<small>/' + c.alvo + '</small>'; }
+    else if (st.valor !== atual) { /* o placar sobe contando (700 ms), com a origem no evento da faixa de baixo */
+      var de = st.valor, para = atual, t0 = performance.now();
       cancelAnimationFrame(st.raf);
       (function passo(t) { var k = Math.max(0, Math.min(1, (t - t0) / 700)), v = Math.round(de + (para - de) * (1 - Math.pow(1 - k, 3))); num.innerHTML = U.pad(v) + '<small>/' + c.alvo + '</small>'; if (k < 1) st.raf = requestAnimationFrame(passo); })(t0);
       FX.acender(box, MV_CURTA);
@@ -632,7 +699,7 @@ window.BC = window.BC || {};
     if (pc >= 1 && !st.fechou && st.valor != null) { st.fechou = true; box.classList.add('fecha', 'ouro'); }
     else box.classList.toggle('ouro', pc >= 1);
     if (pc >= 1) st.fechou = true;
-    st.valor = c.atual;
+    st.valor = atual;
   }
 
   /* ================================================================== painel: a zona que gira (troca só quando o dado muda) */
@@ -892,7 +959,9 @@ window.BC = window.BC || {};
   }
 
   T.render = function () {
-    var e = L().estado, modo = modoAtual(e), raiz = $('vista-tv'), ametista = e.temaTv === 'ametista';
+    var e = L().estado;
+    if (!e) return;
+    var modo = modoAtual(e), raiz = $('vista-tv'), ametista = e.temaTv === 'ametista';
     T.atualizado = Date.now();
     raiz.dataset.tema = e.temaTv;
     raiz.dataset.tema2030 = ametista ? 'ametista' : 'noite';
@@ -907,6 +976,26 @@ window.BC = window.BC || {};
     renderEvento(false);
     tique();
   };
+  /* a barra fixa do app real (PLANO: "online · N na caixa · ◌ memória da sala · N pontos · TV · terminal ao vivo"), só com número do estado;
+     o pedaço sem número de verdade some em vez de inventar */
+  function barraReal(e) {
+    var partes = [], n = presentes(e), s = e.sala || {};
+    partes.push('<span class="tv-b-item"><i class="tv-b-ponto' + (n ? ' on' : '') + '"></i><b class="num">' + n + '</b> online</span>');
+    var caixa = (e.demandas || []).filter(function (d) { return d.estado === 'livre' || d.estado === 'enviada'; }).length;
+    partes.push('<span class="tv-b-item"><b class="num">' + caixa + '</b> na caixa</span>');
+    if (s.gravando) partes.push('<span class="tv-b-item gravando">● gravando a sala</span>');
+    else if (s.memoria) partes.push('<span class="tv-b-item">◌ memória da sala</span>');
+    try {
+      if (BC.placar && typeof BC.placar.hoje === 'function' && BC.placar.eventos().length) {
+        var pts = BC.placar.hoje();
+        if (typeof pts === 'number' && isFinite(pts)) partes.push('<span class="tv-b-item"><b class="num">' + pts + '</b> ' + (pts === 1 ? 'ponto' : 'pontos') + ' hoje</span>');
+      }
+    } catch (x) { /* placar indisponível: o pedaço some */ }
+    partes.push('<span class="tv-b-item">TV' + (L().conectado('estacao') ? ' · conectada à Estação' : ' · esperando a Estação') + '</span>');
+    var aoVivo = window.COOP_REAL && window.COOP_REAL.terminal && e.pessoas.some(function (p) { return (p.status === 'online' || p.status === 'foco') && (e.transmissao || {})[p.id] !== false; });
+    if (aoVivo) partes.push('<span class="tv-b-item vivo">● terminal ao vivo</span>');
+    return '<span class="tv-b-itens">' + partes.join('<span class="tv-sep"> · </span>') + '</span><span>atualizado às <span class="num">' + U.horaSeg(T.atualizado) + '</span></span>';
+  }
   function renderChaoParado() { var raiz = $('vista-tv'); raiz.dataset.chao = 'parado'; T.chao.estado = 'parado'; }
 
   function tique() {
@@ -914,6 +1003,7 @@ window.BC = window.BC || {};
     $('tv-hora').textContent = U.hora(agora);
     $('tv-data').textContent = U.dataCurta();
     $('tv-visita-hora').textContent = U.hora(agora);
+    if (!e) return; /* estado ainda não chegou (a ponte está trocando o estado): só o relógio anda */
     document.querySelectorAll('#vista-tv [data-regressiva]').forEach(function (el) { el.textContent = U.regressiva(+el.getAttribute('data-regressiva')).texto; });
     document.querySelectorAll('#vista-tv [data-desde]').forEach(function (el) { el.textContent = U.relogio(agora - +el.getAttribute('data-desde')); });
     document.querySelectorAll('#vista-tv [data-cron]').forEach(function (el) { var d = L().demanda(el.getAttribute('data-cron')); if (d) el.textContent = cronTexto(L().tempo(d).trabalho); });
@@ -922,7 +1012,9 @@ window.BC = window.BC || {};
     luzesDoDado();
     var sinal = $('tv-sinal');
     if (sinal) sinal.textContent = T.chao.trabalhando ? 'SINAL · ' + T.chao.trabalhando + (T.chao.trabalhando === 1 ? ' CRONÔMETRO RODANDO' : ' CRONÔMETROS RODANDO') : 'SINAL · EM REPOUSO';
-    $('tv-rodape').innerHTML = '<span>protótipo com dados de exemplo · atualizado às <span class="num">' + U.horaSeg(T.atualizado) + '</span></span><span>' +
+    var rod = $('tv-rodape');
+    if (real()) { rod.classList.add('tv-barra'); rod.innerHTML = barraReal(e); }
+    else rod.innerHTML = '<span>protótipo com dados de exemplo · atualizado às <span class="num">' + U.horaSeg(T.atualizado) + '</span></span><span>' +
       (L().conectado('estacao') ? 'conectada à Estação' : 'demonstração: sem Estação aberta, a própria TV simula a equipe') + '</span>';
     var sg = e.sugestaoIdeia, sb = $('tv-sugestao');
     if (sb && !sb.hidden) { if (!sg || agora - sg.ts > 30000) sb.hidden = true; else sb.style.setProperty('--luz', Math.max(0, 1 - (agora - sg.ts) / 30000).toFixed(3)); }
@@ -981,7 +1073,7 @@ window.BC = window.BC || {};
     var v = $('tv-chao'), raiz = $('vista-tv'), e = L().estado;
     return {
       modo: modoAtual(e), tema: raiz.dataset.tema2030,
-      chao: { estado: raiz.dataset.chao || 'parado', trabalhando: T.chao.trabalhando, tocando: !!(v && !v.paused), tempo: v ? +v.currentTime.toFixed(2) : 0, trocas: T.chao.trocas },
+      chao: { estado: raiz.dataset.chao || 'parado', trabalhando: T.chao.trabalhando, presentes: T.chao.presentes || 0, recusado: T.chao.recusado || null, tocando: !!(v && !v.paused), tempo: v ? +v.currentTime.toFixed(2) : 0, trocas: T.chao.trocas },
       abertura: { feita: T.abertura.feita, tocou: T.abertura.tocou, motivo: T.abertura.motivo, ms: T.abertura.fim ? T.abertura.fim - T.abertura.inicio : null, naTela: !!$('tv-abertura') },
       planta: T.planta, gira: { atual: T.gira.atual, trocas: T.gira.trocas, historico: T.gira.historico.slice() },
       constelacao: { tipo: T.conTipo, nos: Object.keys(T.conNos).length, lacos: Object.keys(T.conLacos).length },
@@ -1028,7 +1120,7 @@ window.BC = window.BC || {};
 
     function acordada() {
       if (navigator.wakeLock && document.visibilityState === 'visible') navigator.wakeLock.request('screen').catch(function () { /* recusado */ });
-      if (!raiz.hidden && modoAtual(L().estado) === 'painel') renderChao(L().estado); /* aba escondida: o chão para; voltou: volta a tocar se a sala trabalha */
+      if (!raiz.hidden && L().estado && modoAtual(L().estado) === 'painel') renderChao(L().estado); /* aba escondida: o chão para; voltou: volta a tocar se a sala trabalha */
     }
     acordada();
     document.addEventListener('visibilitychange', acordada);

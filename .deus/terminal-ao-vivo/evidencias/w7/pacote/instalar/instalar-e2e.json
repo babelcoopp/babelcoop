@@ -1,0 +1,84 @@
+{
+  "quando": "2026-09-24T02:38:59.158Z",
+  "plataforma": "darwin-arm64",
+  "versao": "0.1.0",
+  "copia": {
+    "como": "cp -Rc (clone APFS)",
+    "ms": 222,
+    "destino": "pasta temporária/Aplicativos/babel-coop.app"
+  },
+  "pacote": {
+    "arquivosPrototipo": 109,
+    "glb": 17,
+    "mp4": 4,
+    "asar": 114,
+    "midiaInterfaceForaDoAsar": 6,
+    "runAsNode": {
+      "node": "24.21.0",
+      "electron": "44.4.5"
+    }
+  },
+  "theus": {
+    "abrirMs": 2709,
+    "id": "theus",
+    "papel": "gestao",
+    "terminalReal": true,
+    "dadosDoElectronNaRaiz": true
+  },
+  "convite": {
+    "tamanhoToken": 780,
+    "prefixo": "babel-"
+  },
+  "rita": {
+    "abrirMs": 2743,
+    "entrarMs": 5636,
+    "id": "rita",
+    "papel": "membro",
+    "equipe": "babel"
+  },
+  "rede": {
+    "theusVeRitaMs": 112,
+    "ritaVeTheusMs": 168
+  },
+  "parede": {
+    "saidaMs": 693
+  },
+  "midia": {
+    "videos": [
+      {
+        "src": "/coop/midia/b-entrada.mp4",
+        "tocou": true,
+        "currentTime": 0.3,
+        "largura": 960,
+        "duracao": 4
+      },
+      {
+        "src": "/midia/b-entrada.mp4",
+        "tocou": true,
+        "currentTime": 0.3,
+        "largura": 960,
+        "duracao": 4
+      },
+      {
+        "src": "/midia/chao-vivo.mp4",
+        "tocou": true,
+        "currentTime": 0.3,
+        "largura": 1280,
+        "duracao": 4
+      }
+    ],
+    "pecas": [
+      {
+        "src": "/midia/pecas/robo.glb",
+        "bytes": 185080,
+        "glTF": true
+      },
+      {
+        "src": "/midia/cofre.glb",
+        "bytes": 1119444,
+        "glTF": true
+      }
+    ]
+  },
+  "erros": []
+}

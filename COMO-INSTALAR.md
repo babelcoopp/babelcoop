@@ -16,7 +16,12 @@ Mac com processador Intel ainda não tem instalador: fale com o Theus.
 1. Abra o `.dmg` e arraste o **babel-coop** para a pasta **Aplicativos**.
 2. Na primeira vez, o macOS avisa que não conseguiu verificar o app, porque ele ainda não tem a assinatura da Apple. Para liberar (só uma vez):
    - clique com o botão direito (ou Control + clique) no babel-coop, em Aplicativos → **Abrir** → **Abrir**;
-   - se esse botão não aparecer: **Ajustes do Sistema → Privacidade e Segurança**, role até "babel-coop foi bloqueado" → **Abrir assim mesmo** → digite a senha do Mac.
+   - se esse botão não aparecer: **Ajustes do Sistema → Privacidade e Segurança**, role até "babel-coop foi bloqueado" → **Abrir assim mesmo** → digite a senha do Mac;
+   - ou, no Terminal, um comando só (tira a marca de "baixado da internet" e o app abre direto):
+     ```
+     xattr -dr com.apple.quarantine "/Applications/babel-coop.app"
+     ```
+   Se o app não abrir de jeito nenhum depois de copiado por AirDrop ou pendrive, é a mesma marca: rode o comando acima.
 3. Quando o Mac perguntar se o babel-coop pode encontrar dispositivos na rede local, clique em **Permitir**. Sem isso ninguém da equipe vê você.
 
 ## 3. Instalar no Windows
@@ -45,7 +50,7 @@ O token é a sua chave. Não passe o seu para outra pessoa e não publique em lu
 2. Para cada pessoa: **Equipe → Convidar pessoa** → nome → **Gerar token** → **Copiar**, e mande pelo WhatsApp junto com o instalador.
 3. Onde pegar os instaladores:
    - **GitHub**: aba **Actions** → "terminal · node-pty no Electron e instaladores" → a última execução verde → **Artifacts** (`babel-coop-mac` e `babel-coop-windows`). Cada um baixa como `.zip`: abra o zip para tirar o `.dmg` ou o `.exe`.
-   - **No seu Mac**: `cd app && npm run empacotar` gera o `.dmg` em `app/dist/`, e `npm run dist:win` gera o `.exe` no mesmo lugar.
+   - **No seu Mac**: `cd app && npm run empacotar` gera o `.app` e o `.dmg` em `app/dist/` (sem assinatura Apple, com selo ad hoc e sem marca de quarentena). O `.exe` sai do GitHub Actions, no runner Windows (`npm run dist:win`).
 
 ## Para tirar os avisos
 

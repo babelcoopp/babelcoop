@@ -1,0 +1,265 @@
+{
+  "casos": {
+    "semProjeto": {
+      "lateral": "Máquina · backend visualO backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto:Nenhum projeto ainda: crie um e a Máquina dele aparece aqui.Presets da equipe0Nada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".Presets são o que a equipe já construiu e funcionou: backends e telas. Entram em qualquer projeto com um clique ou por \"usa o preset X\" no terminal.A Máquina é o construtor de backend da equipe: o código é a verdade, ela lê e desenha, quem escreve é o agente. Testa no local ou na branch; \"Publicar\" vem depois de \"O que muda\". Peça ao agente no terminal: \"monta a Máquina deste projeto a partir do código\".",
+      "conteudo": "Máquinao backend de cada projeto, em peças com nome de genteAinda não há projeto na equipe, então não há Máquina para mostrar.Crie um projeto e a Máquina dele nasce vazia, pronta para as peças. Ou peça ao agente no terminal: \"cria o projeto X e monta a Máquina dele a partir do código\".＋ Criar projetoPedir ao agente no terminal",
+      "canvas": 0
+    },
+    "m-sem-projeto": {
+      "ferramenta": "coop_maquina_peca",
+      "args": {
+        "tipo": "gaveta",
+        "nome": "pacientes"
+      },
+      "ok": false,
+      "texto": "a equipe ainda não tem projeto: crie um com coop_acao {\"acao\":\"novoProjeto\",\"args\":[{\"nome\":\"…\"}]} e depois monte a Máquina dele."
+    },
+    "primeiroProjeto": {
+      "lateral": "Máquina · backend visualO backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto:Agenda RealLinha do tempo0Nada ainda: a linha do tempo começa quando a primeira peça entrar.Presets da equipe0Nada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".Presets são o que a equipe já construiu e funcionou: backends e telas. Entram em qualquer projeto com um clique ou por \"usa o preset X\" no terminal.A Máquina é o construtor de backend da equipe: o código é a verdade, ela lê e desenha, quem escreve é o agente. Testa no local ou na branch; \"Publicar\" vem depois de \"O que muda\". Peça ao agente no terminal: \"monta a Máquina deste projeto a partir do código\".",
+      "conteudo": "Máquina · Agenda Reallocal ●branchprodução v1 · 0 peças · 0 alertasTestarPublicarO que mudaProjetar na TVMáquina inteira›todas as peçasInteiraDomínioPeça3Dpor pessoaA Máquina de Agenda Real ainda está vazia.Peça ao agente no terminal: ele lê o código do projeto e monta as peças aqui (gavetas, portas, robôs), assinadas. Ou monte a primeira pela vitrine das 16 peças.Pedir ao agente no terminalMontar pela vitrineCASA DE MÁQUINASainda não descrita · o agente preenche quando ler a configuração do pro",
+      "canvas": 0
+    },
+    "m-gaveta": {
+      "ferramenta": "coop_maquina_peca",
+      "args": {
+        "tipo": "gaveta",
+        "nome": "pacientes",
+        "frase": "guarda os pacientes",
+        "campos": [
+          "nome (texto)",
+          "nascimento (data)",
+          "telefone (texto)"
+        ],
+        "chave": "só o dono"
+      },
+      "ok": true,
+      "texto": "Gaveta \"pacientes\" montada na Máquina de Agenda Real: entra tracejada (no local) e ganha corpo quando a pessoa publicar · assinada Rita · Theus."
+    },
+    "m-porta": {
+      "ferramenta": "coop_maquina_peca",
+      "args": {
+        "tipo": "porta",
+        "nome": "novo paciente",
+        "verbo": "RECEBE",
+        "campos": [
+          "nome",
+          "nascimento"
+        ],
+        "para": "pacientes"
+      },
+      "ok": true,
+      "texto": "Porta \"novo paciente\" montada na Máquina de Agenda Real: entra tracejada (no local) e ganha corpo quando a pessoa publicar · ligada: novo paciente → pacientes · assinada Rita · Theus."
+    },
+    "m-tela": {
+      "ferramenta": "coop_maquina_peca",
+      "args": {
+        "tipo": "tela",
+        "nome": "Cadastro",
+        "para": "novo paciente"
+      },
+      "ok": true,
+      "texto": "Tela \"Cadastro\" montada na Máquina de Agenda Real: entra tracejada (no local) e ganha corpo quando a pessoa publicar · ligada: Cadastro → novo paciente · assinada Rita · Theus."
+    },
+    "m-robo": {
+      "ferramenta": "coop_maquina_peca",
+      "args": {
+        "tipo": "robo",
+        "nome": "boas-vindas",
+        "frase": "quando entra um paciente, manda a mensagem de boas-vindas",
+        "quando": "quando entra",
+        "de": "pacientes"
+      },
+      "ok": true,
+      "texto": "Robô \"boas-vindas\" montada na Máquina de Agenda Real: entra tracejada (no local) e ganha corpo quando a pessoa publicar · ligada: pacientes → boas-vindas · assinada Rita · Theus."
+    },
+    "m-cano": {
+      "ferramenta": "coop_maquina_peca",
+      "args": {
+        "tipo": "cano",
+        "nome": "ao vivo"
+      },
+      "ok": true,
+      "texto": "Cano \"ao vivo\" montada na Máquina de Agenda Real: entra tracejada (no local) e ganha corpo quando a pessoa publicar · assinada Rita · Theus."
+    },
+    "m-tela-gaveta": {
+      "ferramenta": "coop_maquina_ligar",
+      "args": {
+        "de": "Cadastro",
+        "para": "pacientes"
+      },
+      "ok": false,
+      "texto": "uma Tela não grava direto numa Gaveta: passa por uma Porta (Cadastro → pacientes)."
+    },
+    "m-repetida": {
+      "ferramenta": "coop_maquina_peca",
+      "args": {
+        "tipo": "gaveta",
+        "nome": "Pacientes"
+      },
+      "ok": false,
+      "texto": "Gaveta \"pacientes\" já está na Máquina de Agenda Real."
+    },
+    "m-fantasma": {
+      "ferramenta": "coop_maquina_ligar",
+      "args": {
+        "de": "pacientes",
+        "para": "agenda fantasma"
+      },
+      "ok": false,
+      "texto": "não achei a peça \"agenda fantasma\" na Máquina de Agenda Real. Peças: Gaveta \"pacientes\", Porta \"novo paciente\", Tela \"Cadastro\", Robô \"boas-vindas\", Cano \"ao vivo\"."
+    },
+    "m-ligar": {
+      "ferramenta": "coop_maquina_ligar",
+      "args": {
+        "de": "pacientes",
+        "para": "ao vivo"
+      },
+      "ok": true,
+      "texto": "Fio novo na Máquina de Agenda Real: pacientes → ao vivo · assinado Rita · Theus."
+    },
+    "m-ligar-2": {
+      "ferramenta": "coop_maquina_ligar",
+      "args": {
+        "de": "ao vivo",
+        "para": "Cadastro"
+      },
+      "ok": true,
+      "texto": "Fio novo na Máquina de Agenda Real: ao vivo → Cadastro · assinado Rita · Theus."
+    },
+    "m-ler": {
+      "ferramenta": "coop_maquina",
+      "args": {
+        "projeto": "agenda"
+      },
+      "ok": true,
+      "texto": "Máquina de Agenda Real · v1 · 5 peça(s) (0 publicada(s), 5 no local) · 5 fio(s):\n- Gaveta \"pacientes\" (no local, tracejada) · guarda os pacientes · campos: nome (texto), nascimento (data), telefone (texto) · chave: só o dono\n- Porta \"novo paciente\" (no local, tracejada) · por onde um pedido entra e sai: \"novo agendamento\", \"listar do dia\" · campos: nome, nascimento\n- Tela \"Cadastro\" (no local, tracejada) · a página que a equipe ou o cliente usa\n- Robô \"boas-vindas\" (no local, tracejada) · quando entra um paciente, manda a mensagem de boas-vindas\n- Cano \"ao vivo\" (no local, tracejada) · avisa na hora quando uma gaveta muda; vazio quando nada acontece\nFios: novo paciente → pacientes; Cadastro → novo paciente; pacientes → boas-vindas; pacientes → ao vivo; ao vivo → Cadastro"
+    },
+    "montada": {
+      "lateral": "Máquina · backend visualO backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto:Agenda RealLinha do tempo7THRita · Theus ligou Cano \"ao vivo\" a Tela \"Cadastro\"agoraTHRita · Theus ligou Gaveta \"pacientes\" a Cano \"ao vivo\"agoraTHRita · Theus montou Cano \"ao vivo\"agoraTHRita · Theus montou Robô \"boas-vindas\"agoraTHRita · Theus montou Tela \"Cadastro\"agoraTHRita · Theus montou Porta \"novo paciente\"agoraTHRita · Theus montou Gaveta \"pacientes\"agoraPresets da equipe0Nada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".Presets são o que a equipe já construiu e funcionou: backends e telas. Entram em qualquer projeto com um clique ou por \"usa o preset X\" no terminal.A Máquina é o construtor de backend da equipe: o código é a verdade, ela lê e desenha, quem escreve é o agente. Testa no local ou na branch; \"Publicar\" vem depois de \"O que muda\". Peça ao agente no terminal: \"monta a Máquina deste projeto a partir do código\".",
+      "conteudo": "Máquina · Agenda Reallocal ●branchprodução v1 · 5 peças · 0 alertas · 5 mudança(s) não publicada(s)TestarPublicar · 5O que mudaProjetar na TVMáquina inteira›todas as peçasInteiraDomínioPeça3Dpor pessoaARMÁRIO DA FRENTE · as gavetas daqui têm porta na ruaCadastroTHa página que a equipe ou o cliente usano local · falta publicarnovo pacienteTHRECEBE nome + nascimentopor onde um pedido entra e sai: \"novo agendamento\", \"listar do dia\"no local · falta publicarpacientesTH¶nometexto▭nascimentodata¶telef",
+      "canvas": 0
+    },
+    "tresD": {
+      "med": {
+        "pj": "pj-wvn897l5-3-1",
+        "ligado": true,
+        "pronto": true,
+        "semTres": false,
+        "total": 5,
+        "comCorpo": 0,
+        "tracejadas": 5,
+        "emCena": 5,
+        "glb": [
+          "mqmuexgc7letb",
+          "mqmuexgc8glqr",
+          "mqmuexgc9ajhb",
+          "mqmuexgca9uhp",
+          "mqmuexgcb6su6"
+        ],
+        "renders": 3,
+        "ganhou": [],
+        "animando": 0,
+        "motivos": {
+          "dados": 1,
+          "montar": 1,
+          "tamanho": 1,
+          "glb": 5
+        }
+      },
+      "canvas": {
+        "w": 1005,
+        "h": 745,
+        "cssW": 670,
+        "cssH": 497,
+        "visivel": true,
+        "dentroDoConteudo": true
+      },
+      "pixels": 148813,
+      "claros": 11423,
+      "total": 748725
+    },
+    "tresDAntes": {
+      "pixels": 148813,
+      "claros": 11423
+    },
+    "tresDDepois": {
+      "med": {
+        "pj": "pj-wvn897l5-3-1",
+        "ligado": true,
+        "pronto": true,
+        "semTres": false,
+        "total": 5,
+        "comCorpo": 5,
+        "tracejadas": 0,
+        "emCena": 5,
+        "glb": [
+          "mqmuexgc7letb",
+          "mqmuexgc8glqr",
+          "mqmuexgc9ajhb",
+          "mqmuexgca9uhp",
+          "mqmuexgcb6su6"
+        ],
+        "renders": 151,
+        "ganhou": [
+          {
+            "id": "mqmuexgc7letb",
+            "ts": 1790217800584
+          },
+          {
+            "id": "mqmuexgc8glqr",
+            "ts": 1790217801073
+          },
+          {
+            "id": "mqmuexgc9ajhb",
+            "ts": 1790217801348
+          },
+          {
+            "id": "mqmuexgca9uhp",
+            "ts": 1790217801622
+          },
+          {
+            "id": "mqmuexgcb6su6",
+            "ts": 1790217801899
+          }
+        ],
+        "animando": 0,
+        "motivos": {
+          "dados": 6,
+          "montar": 1,
+          "tamanho": 7,
+          "glb": 5,
+          "corpo": 5,
+          "animacao": 145,
+          "pulso": 5
+        }
+      },
+      "canvas": {
+        "w": 1005,
+        "h": 420,
+        "cssW": 670,
+        "cssH": 280,
+        "visivel": true,
+        "dentroDoConteudo": true
+      },
+      "pixels": 86309,
+      "claros": 14251,
+      "total": 422100
+    },
+    "depoisDeRecarregar": {
+      "tela": {
+        "lateral": "Máquina · backend visualO backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto:Agenda RealLinha do tempo8THTheus publicou v2: 5 mudança(s) em produçãoagoraTHRita · Theus ligou Cano \"ao vivo\" a Tela \"Cadastro\"agoraTHRita · Theus ligou Gaveta \"pacientes\" a Cano \"ao vivo\"agoraTHRita · Theus montou Cano \"ao vivo\"agoraTHRita · Theus montou Robô \"boas-vindas\"agoraTHRita · Theus montou Tela \"Cadastro\"agoraTHRita · Theus montou Porta \"novo paciente\"agoraTHRita · Theus montou Gaveta \"pacientes\"agoraPresets da equipe0Nada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".Presets são o que a equipe já construiu e funcionou: backends e telas. Entram em qualquer projeto com um clique ou por \"usa o preset X\" no terminal.A Máquina é o construtor de backend da equipe: o código é a verdade, ela lê e desenha, quem escreve é o agente. Testa no local ou na branch; \"Publicar\" vem depois de \"O que muda\". Peça ao agente no terminal: \"monta a Máquina deste projeto a partir do código\".",
+        "conteudo": "Máquina · Agenda Reallocal ●branchprodução v2 · 5 peças · 0 alertasTestarPublicarO que mudaProjetar na TVMáquina inteira›todas as peçasInteiraDomínioPeça3Dpor pessoaARMÁRIO DA FRENTE · as gavetas daqui têm porta na ruaCadastroTHa página que a equipe ou o cliente usanovo pacienteTHRECEBE nome + nascimentopor onde um pedido entra e sai: \"novo agendamento\", \"listar do dia\"pacientesTH¶nometexto▭nascimentodata¶telefonetextoTABELA · pacientes · 0 linhasboas-vindasTHQUANDO ENTRAao vivoTHAO VIVO · pacie",
+        "canvas": 0
+      },
+      "n": 5,
+      "publicadas": 5,
+      "fios": 5,
+      "versao": 2,
+      "corpo2d": 5
+    }
+  },
+  "eu": {
+    "id": "theus",
+    "nome": "Theus"
+  }
+}

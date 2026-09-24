@@ -52,6 +52,8 @@ BC.formularios = BC.formularios || {};
   ];
   var CELULAR = [['dia', 'Meu dia'], ['demandas', 'Demandas'], ['chat', 'Chat'], ['explorador', 'Criar'], ['mais', 'Mais']];
   var NOMES = { explorador: 'Criar', maquina: 'Máquina' };
+  /* eventos da loja que acendem as laterais da foto de quem fez (os acertos; o terminal e a presença vêm da parede-real) */
+  var AV_EVENTOS = { inicio: 1, retomada: 1, pegou: 1, pronta: 1, conclusao: 1, comemoracao: 1, valeu: 1, controle: 1 };
   ATIVIDADES.forEach(function (a) { if (!NOMES[a[0]]) NOMES[a[0]] = a[1].split(' · ')[0]; });
   /* a barra do plano (CONCEITO §3.1): 12 atividades na ordem da peneira; os grupos abrem a primeira vista e a lateral
      mostra no topo o alternador entre as vistas do grupo. Todas as 16 vistas continuam registradas (E.abrir, paleta, Mais). */
@@ -600,6 +602,20 @@ BC.formularios = BC.formularios || {};
 
   var paleta = { lista: [], sel: 0, pedindo: null };
 
+  /* temas que existem de verdade: da Estação (casca-2030.css §20, sobre os tokens) e da TV (temaTv, tv-2030.css) */
+  var TEMAS_ESTACAO = [['noite', 'noite', 'padrão'], ['ametista', 'ametista', ''], ['claro', 'claro', 'Latte']];
+  var TEMAS_TV = [['roxo', 'roxo', 'grafo v5'], ['azul', 'azul', 'Babel Terminal'], ['ametista', 'ametista', '']];
+  var CHAVE_TEMA = 'babel-coop:tema-estacao';
+  /* E.tema() → o tema em uso; E.tema('claro') troca e guarda neste computador (localStorage, por pessoa e máquina) */
+  E.tema = function (id) {
+    var raiz = document.documentElement;
+    if (id === undefined) return raiz.getAttribute('data-tema-estacao') || 'noite';
+    if (!TEMAS_ESTACAO.some(function (t) { return t[0] === id; })) return E.tema();
+    if (id === 'noite') raiz.removeAttribute('data-tema-estacao'); else raiz.setAttribute('data-tema-estacao', id);
+    U.guardarLocal(CHAVE_TEMA, id);
+    return id;
+  };
+
   function mudarPessoa(id) {
     L().verComo(id);
     E.ui.inline = null;
@@ -637,6 +653,10 @@ BC.formularios = BC.formularios || {};
       c.push({ nome: (e.visita ? 'Desligar' : 'Ligar') + ' o modo visita na TV', fn: function () { L().fazer('visita', !e.visita); } });
       [['painel', 'painel geral'], ['reuniao', 'reunião'], ['quadro', 'quadro ao vivo']].forEach(function (m) { c.push({ nome: 'TV: ' + m[1], fn: function () { A['tv-modo']({ dataset: { modo: m[0] } }); } }); });
     }
+    /* temas: o da Estação é de cada um (fica neste computador); o da TV é da equipe (gestão, como no Controle da TV) */
+    var temaAgora = E.tema();
+    TEMAS_ESTACAO.forEach(function (t) { c.push({ nome: 'Tema ' + t[1] + ' na Estação' + (t[2] ? ' (' + t[2] + ')' : ''), atalho: temaAgora === t[0] ? 'em uso' : '', fn: function () { E.tema(t[0]); E.aviso('Estação no tema ' + t[1] + '.'); } }); });
+    if (L().eAdmin()) TEMAS_TV.forEach(function (t) { c.push({ nome: 'Tema ' + t[1] + ' na TV' + (t[2] ? ' (' + t[2] + ')' : ''), atalho: e.temaTv === t[0] ? 'em uso' : '', fn: function () { L().fazer('temaTv', t[0]); E.aviso('TV no tema ' + t[1] + '.'); } }); });
     c.push({ nome: 'Cronômetro na TV: Foco · 25 min', fn: function () { L().fazer('cronometroTv', 25, 'Foco'); } });
     c.push({ nome: 'Mostrar ou esconder a lateral', atalho: 'Ctrl B', fn: function () { E.alternarLateral(); } });
     c.push({ nome: 'Mostrar ou esconder o terminal', atalho: 'Ctrl `', fn: function () { E.alternarTerminal(); } });
@@ -794,6 +814,7 @@ BC.formularios = BC.formularios || {};
   E.iniciar = function () {
     var raiz = $('vista-estacao'), eu = L().eu;
     raiz.hidden = false;
+    E.tema(U.lerLocal(CHAVE_TEMA) || 'noite'); /* o tema escolhido na paleta volta com a Estação */
     E.ui.abertas.equipe = true;
     E.ui.abertas[eu] = true;
     var readme = L().arquivo(eu + '/README.md') || L().arquivo('theus/README.md');
@@ -934,6 +955,9 @@ BC.formularios = BC.formularios || {};
         }
         if (ev.tipo === 'passagem' && mapa) mapa.pulso(ev.de, ev.para);
       });
+      /* acerto de alguém (começou, entregou, concluiu, pegou, entrou num terminal): a luz pisca nas laterais da foto dela.
+         Antes do render: a foto redesenhada continua o mesmo piscar (U.avatar lê o evento) */
+      novos.forEach(function (ev) { if (ev.pessoa && AV_EVENTOS[ev.tipo]) U.avatarEvento(ev.pessoa); });
       if (!$('vista-estacao').hidden) E.render();
     });
     /* endereço: depois do ouvinte acima, para a luz de chegada achar o cabeçalho já desenhado */

@@ -100,14 +100,44 @@ window.BC = window.BC || {};
     return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   };
 
-  /* avatar: foto quando houver, senão iniciais */
+  /* avatar: foto quando houver, senão iniciais, no círculo da cor da pessoa que brilha em volta (casca-2030.css).
+     Classe "on" = a pessoa está online (a borda respira devagar); "evento" = a luz pisca nas laterais da foto
+     (U.avatarEvento). data-pessoa deixa o evento achar todas as fotos da pessoa na tela. */
+  var PISCA_MS = 1400, avEventos = {}, avContagem = { eventos: 0, fotos: 0 };
   U.avatar = function (p, tam, comPonto) {
     if (!p) return '';
     var estilo = '--cor:' + p.cor + (tam ? ';--tam:' + tam + 'px' : '');
     var dentro = p.foto ? '<img src="' + U.esc(p.foto) + '" alt="">' : U.esc(p.nome.slice(0, 2).toUpperCase());
-    return '<span class="avatar' + (p.foto ? ' com-foto' : '') + '" style="' + estilo + '" title="' + U.esc(p.nome) + '">' +
+    var on = p.status === 'online' || p.status === 'foco', ev = avEventos[p.id], idade = ev ? Date.now() - ev : PISCA_MS;
+    /* re-render no meio do piscar: a foto nova continua de onde a antiga estava (atraso negativo), não pisca de novo */
+    if (idade < PISCA_MS) estilo += ';--av-atraso:-' + idade + 'ms';
+    return '<span class="avatar' + (p.foto ? ' com-foto' : '') + (on ? ' on' : '') + (idade < PISCA_MS ? ' evento' : '') + '" style="' + estilo + '"' +
+      (p.id ? ' data-pessoa="' + U.esc(p.id) + '"' : '') + ' title="' + U.esc(p.nome) + '">' +
       dentro + (comPonto ? '<span class="ponto ' + p.status + '"></span>' : '') + '</span>';
   };
+  /* evento da pessoa (ficou online, o terminal começou a rodar, terminou): a luz pisca nas laterais de todas as fotos
+     dela, uma vez (1,4 s, só opacidade). Movimento reduzido: a luz fica parada o mesmo tempo (casca-2030.css).
+     Repetido em menos de 0,4 s é o mesmo evento. Devolve quantas fotos acenderam. */
+  U.avatarEvento = function (id) {
+    if (!id || typeof document === 'undefined') return 0;
+    var agora = Date.now();
+    if (avEventos[id] && agora - avEventos[id] < 400) return 0;
+    avEventos[id] = agora;
+    avContagem.eventos++;
+    var n = 0, sel = '.avatar[data-pessoa="' + String(id).replace(/["\\]/g, '\\$&') + '"]';
+    Array.prototype.forEach.call(document.querySelectorAll(sel), function (a) {
+      a.classList.remove('evento');
+      a.style.removeProperty('--av-atraso');
+      void a.offsetWidth; /* reinicia a animação */
+      a.classList.add('evento');
+      clearTimeout(a.__avPisca);
+      a.__avPisca = setTimeout(function () { a.classList.remove('evento'); }, PISCA_MS + 50);
+      n++;
+    });
+    avContagem.fotos += n;
+    return n;
+  };
+  U.avatarContagem = function () { return { eventos: avContagem.eventos, fotos: avContagem.fotos }; };
 
   BC.util = U;
 })(window.BC);

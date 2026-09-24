@@ -328,6 +328,25 @@ html[data-vista="tv"] .app { height: 100%; }
 @keyframes tv-entra { from { opacity: 0; } }
 .tv-evento time, .tv-evento .fila { font: 500 calc(var(--u) * 1.9) var(--fonte-mono); color: var(--apagado); }
 .tv-rodape { font: 500 calc(var(--u) * 1.3) var(--fonte-mono); color: var(--fraco); opacity: 1; }
+/* app real: a barra fixa (online · na caixa · memória da sala · pontos · TV · terminal ao vivo), só com números do estado */
+.tv-rodape.tv-barra { align-items: center; color: var(--apagado); }
+.tv-b-itens { display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--u) * .5); min-width: 0; }
+.tv-b-item { display: inline-flex; align-items: center; gap: calc(var(--u) * .5); white-space: nowrap; }
+.tv-b-item b { font-weight: 500; color: var(--texto-90); }
+.tv-b-item.vivo, .tv-b-item.gravando { color: var(--t0); }
+.tv-b-ponto { width: calc(var(--u) * .7); height: calc(var(--u) * .7); border-radius: 50%; background: var(--s3); }
+.tv-b-ponto.on { background: var(--ok); }
+.tv-barra .tv-sep { color: var(--fraco); }
+
+/* ---------- estados vazios dignos: sem campanha, sem meta, sem Máquina publicada (nada de NaN nem dado de exemplo) ---------- */
+.tv-cronometro.vazio .tv-rotulo, .tv-cronometro.sem-prazo .tv-rotulo { font-size: calc(var(--u) * 2.1); color: var(--apagado); }
+.tv-camp-vazia { gap: calc(var(--u) * .5); }
+.tv-camp-vazia p { font: 500 calc(var(--u) * 2.6) / 1.15 var(--fonte-ui); color: var(--texto-90); }
+.tv-camp-vazia small, .tv-metas-vazio { margin: 0; font: 500 calc(var(--u) * 1.7) / 1.25 var(--fonte-mono); color: var(--fraco); white-space: normal; }
+.tv-metas.vazio .tv-instrumentos { display: none; }
+.tv-metas-vazio { align-self: center; justify-self: start; text-align: left; }
+.tv-corpo-bloco.vazio .tv-corpo3d { opacity: .35; }
+.tv-corpo-bloco.vazio .tv-corpo-legenda { white-space: normal; color: var(--fraco); }
 
 /* ---------- sugestão de ideia: faixa fina que esfria em 30 s ---------- */
 /* fica no lugar do acontecimento do momento (rodapé), nunca por cima do trabalho */

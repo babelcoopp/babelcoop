@@ -1,17 +1,19 @@
 {
-  "erros": [],
+  "erros": [
+    "theus console: Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+  ],
   "medidas": {
-    "a5_saida_ms": 52,
-    "a7_tecla_ate_rita_ms": 156,
+    "a5_saida_ms": 41,
+    "a7_tecla_ate_rita_ms": 164,
     "a7_eco_teclas": {
       "n": 60,
-      "p50": 2,
-      "p95": 8.3,
-      "max": 11.7
+      "p50": 4,
+      "p95": 14,
+      "max": 16.4
     },
     "sons_pedidos_theus": {
-      "antes": 2,
-      "depois": 2
+      "antes": 3,
+      "depois": 3
     }
   }
 }

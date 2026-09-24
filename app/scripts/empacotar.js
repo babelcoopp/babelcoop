@@ -87,9 +87,23 @@ function conferirConteudo(appPath) {
    da internet, o macOS diria "está danificado" e não ofereceria "Abrir assim mesmo". Com o selo válido, o aviso vira o de
    desenvolvedor não verificado, que a pessoa libera uma vez. Não substitui o Developer ID + notarização (depende do Theus). */
 function assinarAdHoc(appPath) {
+  /* sem o codesign (ferramentas de linha de comando ausentes), segue sem selo: o app construído aqui abre do mesmo jeito */
+  if (spawnSync('codesign', ['--help'], { stdio: 'ignore' }).error) { log('codesign não existe nesta máquina: pacote sem assinatura ad hoc'); return false; }
   execFileSync('codesign', ['--force', '--deep', '--sign', '-', '--timestamp=none', appPath], { stdio: ['ignore', 'pipe', 'pipe'] });
   const v = spawnSync('codesign', ['--verify', '--deep', '--strict', appPath], { encoding: 'utf8' });
   if (v.status !== 0) throw new Error('assinatura ad hoc não confere: ' + v.stderr.trim());
+  return true;
+}
+
+/* sem quarentena: se o código veio por AirDrop, e-mail ou navegador, os arquivos copiados para o pacote (protótipo, mídias,
+   binários) levam com.apple.quarantine e o macOS barra o app construído aqui ("Process failed to launch!"). Quem baixar o
+   .dmg recebe a quarentena do próprio download; essa é liberada uma vez (COMO-INSTALAR.md). */
+function tirarQuarentena(caminho) {
+  try { execFileSync('xattr', ['-dr', 'com.apple.quarantine', caminho], { stdio: ['ignore', 'pipe', 'pipe'] }); }
+  catch (e) { log('xattr não tirou a quarentena de ' + path.relative(APP, caminho) + ': ' + String(e.message || e).split('\n')[0]); }
+  const resta = spawnSync('xattr', ['-r', '-l', caminho], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).stdout || '';
+  const n = resta.split('\n').filter((l) => /com\.apple\.quarantine/.test(l)).length;
+  if (n) throw new Error('quarentena ainda em ' + n + ' arquivo(s) de ' + path.relative(APP, caminho));
 }
 
 /* fuse RunAsNode ligado: o gancho SessionStart do claude roda o próprio executável do app como Node (ELECTRON_RUN_AS_NODE=1) */
@@ -120,6 +134,7 @@ function fazerDmg(appPath) {
     if (fs.lstatSync(atalho, { throwIfNoEntry: false })?.isSymbolicLink()) fs.unlinkSync(atalho);
   }
   execFileSync('hdiutil', ['verify', dmg], { stdio: ['ignore', 'pipe', 'pipe'] });
+  tirarQuarentena(dmg);
   return dmg;
 }
 
@@ -144,8 +159,9 @@ async function main() {
   const pty = conferirPty(appPath);
   const executavel = path.join(appPath, 'Contents', 'MacOS', NOME);
   if (!fs.existsSync(executavel)) throw new Error('executável não encontrado: ' + executavel);
-  assinarAdHoc(appPath);
-  log('assinatura ad hoc do pacote inteiro: codesign --verify --deep --strict confere');
+  tirarQuarentena(appPath);
+  log('sem com.apple.quarantine no pacote');
+  if (assinarAdHoc(appPath)) log('assinatura ad hoc do pacote inteiro: codesign --verify --deep --strict confere');
   const conteudo = conferirConteudo(appPath);
   log('conteúdo: ' + JSON.stringify(conteudo));
   const fuses = await conferirFuses(executavel);

@@ -1,0 +1,70 @@
+{
+  "barra": [
+    "Meu dia",
+    "Criar",
+    "Trabalho",
+    "Chat",
+    "WhatsApp",
+    "Reunião",
+    "Terminais",
+    "Projetos",
+    "Acervo",
+    "Equipe",
+    "Loja",
+    "Oficina",
+    "Seu perfil",
+    "Meu dia",
+    "onde estão?",
+    "Meu dia",
+    "Demandas",
+    "Chat",
+    "Criar",
+    "Mais"
+  ],
+  "avatares": [
+    {
+      "cls": "avatar on",
+      "w": 22,
+      "sh": "oklab(0.811047 -0.0845243 -0.0904549 / 0.72) 0px 0px 5.07077px -0.843563px, oklab(0.811047 -0.0845243 -0.0904549 / 0.184417) 0px 0px 2.70073px 0px inset",
+      "anim": "av-respira",
+      "borda": "oklab(0.813029 -0.0836381 -0.0895064)",
+      "pai": "ativ-perfil"
+    }
+  ],
+  "paleta": [
+    "Procurar \"tema\" no acervoacervo",
+    "Tema noite na Estação (padrão)em uso",
+    "Tema ametista na Estação",
+    "Tema claro na Estação (Latte)",
+    "Tema roxo na TV (grafo v5)em uso",
+    "Tema azul na TV (Babel Terminal)",
+    "Tema ametista na TV"
+  ],
+  "maquina": {
+    "lateral": "Máquina · backend visualO backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto:Nenhum projeto ainda: crie um e a Máquina dele aparece aqui.Presets da equipe0Nada guardado ainda. Quando algo for construído e o teste passar, clique \"Salvar como preset\".Presets são o que a e",
+    "conteudo": "Máquinao backend de cada projeto, em peças com nome de genteAinda não há projeto na equipe, então não há Máquina para mostrar.Crie um projeto e a Máquina dele nasce vazia, pronta para as peças. Ou peça ao agente no terminal: \"cria o projeto X e monta a Máquina dele a partir do código\".＋ Criar projetoPedir ao agente no terminal",
+    "canvas": 0,
+    "botoes3d": []
+  },
+  "tv": {
+    "texto": "babel-coop SEM CAMPANHA NO AR 23:43 qua, 23 set NO RITMO 00 concluídas hoje 00 rodando 00 livres para pegar 0 s medidas hoje MAPA DA SALA · 1 PRESENÇA SINAL · EM REPOUSO CRIAR 1 TH Theus → backend Theus a sala CORPO DO PROJETO nenhuma Máquina publicada ainda · quando alguém publicar, as peças ganham corpo aqui AGENTES TRABALHANDO nenhum agente trabalhando agora METAS DO MÊS nenhuma meta do mês ainda CAMPANHA sem campanha no ar quando a equipe puser uma no ar, o placar aparece aqui PERGUNTA DA SEMANA Que trabalho acontece hoje fora de qualquer sistema, e ninguém vê? responda na sua Estação, em Meu dia 1 online · 0 na caixa · ◌ memória da sala · TV · conectada à Estação · ● terminal ao vivo atualizado às 23:43:41",
+    "nan": false,
+    "rodape": "1 online · 0 na caixa · ◌ memória da sala · TV · conectada à Estação · ● terminal ao vivoatualizado às 23:43:41",
+    "videos": [
+      {
+        "src": "chao-vivo.mp4",
+        "paused": false,
+        "vis": "block",
+        "ready": 4
+      },
+      {
+        "src": "b-entrada.mp4",
+        "paused": false,
+        "vis": "block",
+        "ready": 4
+      }
+    ]
+  },
+  "erros": [],
+  "prints": "/var/folders/0r/j4m46d2x45q7m9wydptmkf2r0000gn/T/babel-e2e-auditar-O81G88"
+}

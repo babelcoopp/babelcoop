@@ -122,6 +122,16 @@
   background: linear-gradient(90deg, color-mix(in srgb, var(--cor, #2ad5e5) calc(8% + 14% * var(--luz, 0)), transparent), transparent 70%); border-bottom: 1px solid var(--linha-fraca, rgba(215,228,251,.09)); }
 .tr-selo-linha .tr-selo-anel { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--cor, #2ad5e5); display: inline-grid; place-items: center; font: 600 7.5px/1 var(--fonte-mono, monospace); color: var(--cor, #2ad5e5); flex: none; }
 .tr-selo-linha.pedido .tr-selo-anel { border-style: dashed; }
+/* o selo é organismo, não texto parado: o anel de quem está no meu terminal brilha na cor dela (mais forte com a --luz
+   que o motor escreve e esfria em meia-vida média) e solta um anel de luz que se abre e apaga enquanto ela estiver lá.
+   Só transform/opacity no laço; o pedido (tracejado) não pulsa: ainda não entrou ninguém. */
+.tr-selo-linha .tr-selo-anel { position: relative; box-shadow: 0 0 calc(4px + 8px * var(--luz, 0)) color-mix(in srgb, var(--cor, #2ad5e5) 70%, transparent), inset 0 0 5px color-mix(in srgb, var(--cor, #2ad5e5) 30%, transparent); }
+.tr-selo-linha:not(.pedido) .tr-selo-anel::after {
+  content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 1.5px solid var(--cor, #2ad5e5); pointer-events: none;
+  animation: tr-selo-pulso 2.4s var(--ease-saida, ease-out) infinite;
+}
+.tr-selo-linha:not(.pedido) { box-shadow: inset 2px 0 0 var(--cor, #2ad5e5); }
+@keyframes tr-selo-pulso { 0% { opacity: .85; transform: scale(1); } 70% { opacity: 0; transform: scale(2.1); } 100% { opacity: 0; transform: scale(2.1); } }
 .tr-selo-linha .tr-selo-txt { flex: 1; min-width: 0; }
 .tr-selo-linha .tr-selo-txt b { font-weight: 500; color: var(--texto, #d7e4fb); }
 .tr-selo-linha button { font: 500 var(--t-11, 11px)/1 var(--fonte-mono, monospace) !important; color: var(--t0, #2ad5e5); padding: 4px 4px !important; white-space: nowrap; }
@@ -237,6 +247,8 @@
 @media (prefers-reduced-motion: reduce) {
   .tr-bloco { animation: none; }
   .tr-cab::after, .tr-check li i, .tr-b-entrada { transition: none; }
+  .tr-selo-linha:not(.pedido) .tr-selo-anel::after { animation: none; opacity: 0; } /* o anel brilha parado */
 }
 html.bc-org-parado .tr-bloco { animation: none; }
+html.bc-org-parado .tr-selo-linha:not(.pedido) .tr-selo-anel::after { animation: none; opacity: 0; }
 @keyframes tr-nasce { from { opacity: 0; } to { opacity: 1; } }

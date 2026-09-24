@@ -32,7 +32,8 @@
     'iniciarReuniao', 'jogarNaReuniao', 'destacar', 'pauta', 'marcarPauta', 'decisao', 'proximo',
     'ideia', 'apoiar', 'responderPergunta', 'guardarMomento', 'sonhar',
     'novoProjeto', 'entrarProjeto', 'proximoPasso', 'mensagemProjeto', 'chamarParaTela', 'fazendo',
-    'quadroItem', 'quadroMudar'
+    'quadroItem', 'quadroMudar',
+    'maquinaPeca', 'maquinaLigar'
   ];
   var permitida = {};
   PERMITIDAS.forEach(function (a) { permitida[a] = true; });
@@ -335,6 +336,91 @@
         '\nLivres: ' + (livres.length ? livres.map(function (d) { return d.titulo; }).join(' · ') : 'nenhuma') + '.',
       dados: { pessoa: alvo ? alvo.id : null, abertas: minhas.map(fmt), livres: livres.map(fmt) }
     };
+  };
+
+  /* ---------- a Máquina (prototipo/maquina.js): o estado da equipe guarda as peças de cada projeto; a tela aplica ---------- */
+  function maquinaOuRecusa() {
+    var M = BC.maquina;
+    if (!M || typeof M.doEstado !== 'function') throw recusa('a Máquina não está carregada nesta tela.');
+    return M;
+  }
+  function projetoOuRecusa(txt) {
+    var lista = (L.estado && L.estado.projetos) || [];
+    if (!lista.length) throw recusa('a equipe ainda não tem projeto: crie um com coop_acao {"acao":"novoProjeto","args":[{"nome":"…"}]} e depois monte a Máquina dele.');
+    if (txt == null || String(txt).trim() === '') return lista[0];
+    var id = String(txt).trim(), q = normalizar(txt);
+    var pj = lista.filter(function (p) { return p.id === id; })[0] || lista.filter(function (p) { return normalizar(p.nome) === q; })[0] || lista.filter(function (p) { return normalizar(p.nome).indexOf(q) !== -1; })[0];
+    if (!pj) throw recusa('não achei o projeto "' + curto(txt, 80) + '". Projetos: ' + lista.map(function (p) { return p.nome; }).join(', ') + '.');
+    return pj;
+  }
+  function nomeTipo(M, t) { return (M.TIPOS && M.TIPOS[t]) || t; }
+  function pecasDaMaquina(M, pj) { var d = M.doEstado(pj.id); return d.pecas.length ? d.pecas.map(function (p) { return nomeTipo(M, p.tipo) + ' "' + p.nome + '"'; }).join(', ') : 'nenhuma ainda'; }
+  function pecaOuRecusa(M, pj, ref) {
+    var p = M.pecaDoEstado(pj.id, ref);
+    if (!p) throw recusa('não achei a peça "' + curto(ref, 80) + '" na Máquina de ' + pj.nome + '. Peças: ' + pecasDaMaquina(M, pj) + '.');
+    return p;
+  }
+  /* a Máquina deste projeto aparece no meio enquanto o agente monta (como o arquivo que nasce, §10) */
+  function mostrarMaquina(M, pj) {
+    try { var t = BC.estacao && BC.estacao.abaAtual && BC.estacao.abaAtual(); if (!t || t.tipo !== 'maquina' || t.ref !== pj.id) M.abrir(pj.id); } catch (e) { /* a Estação é de outra peça */ }
+  }
+
+  F.coop_maquina = function (a, c) {
+    var M = maquinaOuRecusa(), pj = projetoOuRecusa(a.projeto), d = M.doEstado(pj.id), nomes = {};
+    d.pecas.forEach(function (p) { nomes[p.id] = p.nome; });
+    var pecas = d.pecas.map(function (p) {
+      return { id: p.id, tipo: p.tipo, nome: p.nome, frase: p.frase || '', campos: p.campos || [], chave: p.chave || null, verbo: p.verbo || null, publicada: !!p.publicada, por: L.nome(p.por), assinatura: p.assinatura || null };
+    });
+    var fios = d.fios.map(function (f) { return { de: nomes[f[0]] || f[0], para: nomes[f[1]] || f[1] }; });
+    var pub = pecas.filter(function (p) { return p.publicada; }).length;
+    c.consulta('leu a Máquina de ' + pj.nome);
+    return {
+      texto: 'Máquina de ' + pj.nome + ' · v' + d.versao + ' · ' + pecas.length + ' peça(s)' + (pecas.length ? ' (' + pub + ' publicada(s), ' + (pecas.length - pub) + ' no local)' : '') + ' · ' + fios.length + ' fio(s)' +
+        (pecas.length ? ':\n' + pecas.map(function (p) { return '- ' + nomeTipo(M, p.tipo) + ' "' + p.nome + '"' + (p.publicada ? '' : ' (no local, tracejada)') + (p.frase ? ' · ' + p.frase : '') + (p.campos.length ? ' · campos: ' + p.campos.join(', ') : '') + (p.chave ? ' · chave: ' + p.chave : ''); }).join('\n') +
+          (fios.length ? '\nFios: ' + fios.map(function (f) { return f.de + ' → ' + f.para; }).join('; ') : '') : '. Vazia: leia o código do projeto e monte com coop_maquina_peca.'),
+      dados: { projeto: { id: pj.id, nome: pj.nome }, versao: d.versao, pecas: pecas, fios: fios }
+    };
+  };
+
+  F.coop_maquina_peca = function (a, c) {
+    var M = maquinaOuRecusa(), pj = projetoOuRecusa(a.projeto), tipo = String(a.tipo || '');
+    if ((M.TIPOS_REAIS || []).indexOf(tipo) === -1) throw recusa('tipo de peça desconhecido: ' + curto(tipo, 20) + '. Use: ' + (M.TIPOS_REAIS || []).join(', ') + '.');
+    var nome = curto(a.nome, 60);
+    if (!nome) throw recusa('dê um nome à peça.');
+    var existe = M.pecaDoEstado(pj.id, nome);
+    if (existe && existe.tipo === tipo) throw recusa(nomeTipo(M, tipo) + ' "' + existe.nome + '" já está na Máquina de ' + pj.nome + '.');
+    var de = a.de ? pecaOuRecusa(M, pj, a.de) : null, para = a.para ? pecaOuRecusa(M, pj, a.para) : null;
+    if ((de && de.tipo === 'tela' && tipo === 'gaveta') || (tipo === 'tela' && para && para.tipo === 'gaveta')) throw recusa('uma Tela não grava direto numa Gaveta: monte uma Porta entre as duas.');
+    var id = 'mq' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    var peca = { id: id, tipo: tipo, nome: nome, agente: c.agente, assinatura: c.assinatura };
+    if (a.frase) peca.frase = curto(a.frase, 200);
+    if (Array.isArray(a.campos) && a.campos.length) peca.campos = a.campos.slice(0, 30).map(function (x) { return curto(x, 80); }).filter(Boolean);
+    if (a.chave) peca.chave = a.chave;
+    if (a.verbo) peca.verbo = a.verbo;
+    if (a.login === false) peca.login = false;
+    if (a.quando) peca.quando = curto(a.quando, 60);
+    var fios = [];
+    if (de) fios.push([de.id, id]);
+    if (para) fios.push([id, para.id]);
+    var tn = nomeTipo(M, tipo);
+    c.fazer('maquinaPeca', [{ projeto: pj.id, peca: peca, fios: fios, texto: c.assinatura + ' montou ' + tn + ' "' + nome + '"' }], 'montou ' + tn + ' "' + nome + '" na Máquina de ' + pj.nome, 'a Máquina recusou a peça "' + nome + '" (confira o tipo e o nome).');
+    mostrarMaquina(M, pj);
+    var salva = M.pecaDoEstado(pj.id, id) || peca;
+    return {
+      texto: tn + ' "' + nome + '" montada na Máquina de ' + pj.nome + ': entra tracejada (no local) e ganha corpo quando a pessoa publicar' +
+        (fios.length ? ' · ligada: ' + fios.map(function (f) { return (f[0] === id ? nome : de.nome) + ' → ' + (f[1] === id ? nome : para.nome); }).join('; ') : '') + ' · assinada ' + c.assinatura + '.',
+      dados: { projeto: { id: pj.id, nome: pj.nome }, peca: { id: id, tipo: tipo, nome: nome, chave: salva.chave || null, publicada: false }, fios: fios }
+    };
+  };
+
+  F.coop_maquina_ligar = function (a, c) {
+    var M = maquinaOuRecusa(), pj = projetoOuRecusa(a.projeto), de = pecaOuRecusa(M, pj, a.de), para = pecaOuRecusa(M, pj, a.para);
+    var motivo = M.motivoSemFio(pj.id, de.id, para.id);
+    if (motivo) throw recusa(motivo + ' (' + de.nome + ' → ' + para.nome + ').');
+    var txt = nomeTipo(M, de.tipo) + ' "' + de.nome + '" a ' + nomeTipo(M, para.tipo) + ' "' + para.nome + '"';
+    c.fazer('maquinaLigar', [{ projeto: pj.id, de: de.id, para: para.id, texto: c.assinatura + ' ligou ' + txt }], 'ligou ' + txt + ' na Máquina de ' + pj.nome);
+    mostrarMaquina(M, pj);
+    return { texto: 'Fio novo na Máquina de ' + pj.nome + ': ' + de.nome + ' → ' + para.nome + ' · assinado ' + c.assinatura + '.', dados: { projeto: { id: pj.id, nome: pj.nome }, de: de.id, para: para.id } };
   };
 
   F.coop_acao = function (a, c) {

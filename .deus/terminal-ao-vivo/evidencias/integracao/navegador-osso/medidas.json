@@ -1,6 +1,6 @@
 {
   "esperar": {
-    "atrasadoMs": 761
+    "atrasadoMs": 765
   },
   "codigo": {
     "recursos": 3,
@@ -10,7 +10,7 @@
       "Stylesheet": 1
     },
     "jsBytes": 678,
-    "ms": 14
+    "ms": 52
   },
   "rede": {
     "pedidos": 4,

@@ -94,8 +94,21 @@
   /* ---------- ligação com o servidor ---------- */
   function conectar() {
     WS = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws');
-    WS.onmessage = function (ev) { var m; try { m = JSON.parse(ev.data); } catch (e) { return; } receber(m); };
+    WS.onmessage = function (ev) { var m; try { m = JSON.parse(ev.data); } catch (e) { return; } chegou(m); };
     WS.onclose = function () { setTimeout(conectar, 2000); };
+  }
+
+  /* a ponte carrega antes do app.js: numa abertura lenta (a primeira da cópia instalada, com o macOS conferindo o pacote)
+     o 'bemvindo' chegava antes de L.iniciar criar o estado, garantirPessoa lia L.estado null e a Estação ficava sem equipe.
+     Até o estado existir, as mensagens esperam numa fila, na ordem em que chegaram. */
+  var fila = [];
+  function chegou(m) {
+    if (L.estado && !fila.length) return receber(m);
+    fila.push(m);
+    if (fila.length === 1) (function esvaziar() {
+      if (!L.estado) return setTimeout(esvaziar, 50);
+      while (fila.length) { var p = fila.shift(); try { receber(p); } catch (e) { console.warn('[ponte] mensagem ' + p.tipo + ' falhou:', e); } }
+    })();
   }
 
   /* cada mensagem passa primeiro pela ponte (equipe, diário) e depois pelas peças de interface/ (terminal real, parede) */

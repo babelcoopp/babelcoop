@@ -82,7 +82,7 @@ window.BC = window.BC || {};
     if (V.T) { fn(); return; }
     if (V.carregando) { V.carregando.push(fn); return; }
     V.carregando = [fn];
-    var base = 'https://cdn.jsdelivr.net/npm/three@0.160.0/';
+    var base = window.COOP_REAL ? '/vendor/three/' : 'https://cdn.jsdelivr.net/npm/three@0.160.0/'; /* no app o three vem de dentro dele (funciona sem internet) */
     Promise.all([import(base + 'build/three.module.js'), import(base + 'examples/jsm/controls/OrbitControls.js'), import(base + 'examples/jsm/renderers/CSS3DRenderer.js')])
       .then(function (m) { V.T = m[0]; V.OrbitControls = m[1].OrbitControls; V.CSS3DRenderer = m[2].CSS3DRenderer; V.CSS3DObject = m[2].CSS3DObject; var fila = V.carregando; V.carregando = null; fila.forEach(function (f) { f(); }); })
       .catch(function (e) { V.carregando = null; console.error(e); });
@@ -290,6 +290,8 @@ window.BC = window.BC || {};
   function semearCorpo() {
     var e = L().estado;
     if (e.corpo && e.corpo.projetos) return e.corpo;
+    /* app real (COOP_REAL sem exemplos): nada de projeto de exemplo na parede; o corpo nasce do que a equipe publicar */
+    if (window.COOP_REAL && !window.COOP_REAL.exemplos) { e.corpo = { atual: null, projetos: {} }; return e.corpo; }
     var t = Date.now(), H = U.HORA, D = U.DIA;
     var pecas = [
       ['carteiro', 'carteiro', 'Carteiro', 'carla', 6 * D], ['portaria', 'portaria', 'Portaria', 'carla', 6 * D], ['clinicas', 'gaveta', 'Clínicas', 'carla', 6 * D], ['pacientes', 'gaveta', 'Pacientes', 'bruno', 5 * D],
@@ -445,7 +447,7 @@ window.BC = window.BC || {};
     if (T3.falhou) { erro(); return; }
     if (T3.carregando) { T3.carregando.push([ok, erro]); return; }
     T3.carregando = [[ok, erro]];
-    var base = 'https://cdn.jsdelivr.net/npm/three@0.160.0/';
+    var base = window.COOP_REAL ? '/vendor/three/' : 'https://cdn.jsdelivr.net/npm/three@0.160.0/'; /* no app o three vem de dentro dele (funciona sem internet) */
     Promise.all([import(base + 'build/three.module.js'), import(base + 'examples/jsm/loaders/GLTFLoader.js'), import(base + 'examples/jsm/libs/meshopt_decoder.module.js').catch(function () { return {}; })])
       .then(function (m) { T3.T = m[0]; T3.GLTFLoader = m[1].GLTFLoader; T3.meshopt = m[2].MeshoptDecoder || null; var f = T3.carregando; T3.carregando = null; f.forEach(function (x) { x[0](); }); })
       .catch(function (e) { console.warn('[corpo] three.js não carregou:', e && e.message); T3.falhou = true; var f = T3.carregando; T3.carregando = null; f.forEach(function (x) { x[1](); }); });

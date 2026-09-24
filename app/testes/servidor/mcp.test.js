@@ -81,13 +81,13 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     assert.equal(r.texto, '');
   });
 
-  await t.test('tools/list: 35 ferramentas, navegador_* e coop_*, esquema objeto, ordem fixa', async () => {
+  await t.test('tools/list: 40 ferramentas, navegador_* e coop_* (Máquina incluída), esquema objeto, ordem fixa', async () => {
     const r = await post(s.porta, rpc('tools/list', {}), { 'MCP-Protocol-Version': '2025-06-18' });
     assert.equal(r.status, 200);
     const nomes = r.json.result.tools.map((f) => f.name);
-    assert.equal(nomes.length, 37);
+    assert.equal(nomes.length, 40);
     for (const n of ['navegador_abrir', 'navegador_clicar', 'navegador_digitar', 'navegador_ler', 'navegador_raio_x', 'navegador_clonar', 'navegador_copy', 'navegador_print',
-      'coop_tv', 'coop_projetar', 'coop_aviso', 'coop_mural', 'coop_demanda', 'coop_campanha', 'coop_meta', 'coop_buscar', 'coop_aprendi', 'coop_pessoas', 'coop_projetos', 'coop_acao']) assert.ok(nomes.includes(n), 'falta ' + n);
+      'coop_tv', 'coop_projetar', 'coop_aviso', 'coop_mural', 'coop_demanda', 'coop_campanha', 'coop_meta', 'coop_buscar', 'coop_aprendi', 'coop_pessoas', 'coop_projetos', 'coop_acao', 'coop_maquina', 'coop_maquina_peca', 'coop_maquina_ligar']) assert.ok(nomes.includes(n), 'falta ' + n);
     r.json.result.tools.forEach((f) => { assert.equal(f.inputSchema.type, 'object', f.name); assert.ok(f.description.length > 20, f.name); });
     assert.equal(r.json.result.resultType, undefined, 'era legada não leva resultType');
     assert.equal(r.json.result.ttlMs, undefined, 'nem dica de cache');
@@ -126,6 +126,36 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     assert.equal(s.chamadas.length, antes, 'nada chegou à tela');
   });
 
+  await t.test('Máquina: coop_maquina é consulta; coop_maquina_peca e coop_maquina_ligar viram mcp-chamada com os argumentos; tipo e chave fora da lista não chegam à tela', async () => {
+    const f = Object.fromEntries(FERRAMENTAS.map((x) => [x.name, x]));
+    assert.equal(f.coop_maquina.annotations.readOnlyHint, true, 'ler a Máquina é consulta');
+    assert.ok(!f.coop_maquina_peca.annotations.readOnlyHint && !f.coop_maquina_ligar.annotations.readOnlyHint, 'montar e ligar mudam o app');
+    assert.deepEqual(f.coop_maquina_peca.inputSchema.required, ['tipo', 'nome']);
+    const antes = s.chamadas.length;
+    const ruim = await post(s.porta, rpc('tools/call', { name: 'coop_maquina_peca', arguments: { tipo: 'banco', nome: 'x' } }));
+    assert.match(ruim.json.result.content[0].text, /"tipo" tem de ser um de: gaveta, porta, robo/);
+    const semNome = await post(s.porta, rpc('tools/call', { name: 'coop_maquina_peca', arguments: { tipo: 'gaveta' } }));
+    assert.match(semNome.json.result.content[0].text, /faltou "nome"/);
+    const chave = await post(s.porta, rpc('tools/call', { name: 'coop_maquina_peca', arguments: { tipo: 'gaveta', nome: 'pacientes', chave: 'qualquer um' } }));
+    assert.match(chave.json.result.content[0].text, /"chave" tem de ser um de/);
+    const ligar = await post(s.porta, rpc('tools/call', { name: 'coop_maquina_ligar', arguments: { de: 'tela agenda' } }));
+    assert.match(ligar.json.result.content[0].text, /faltou "para"/);
+    assert.equal(s.chamadas.length, antes, 'nada inválido chegou à tela');
+    const args = { projeto: 'Clínica', tipo: 'gaveta', nome: 'pacientes', campos: ['nome (texto)', 'nascimento (data)'], chave: 'cada empresa vê só o seu', de: 'novo paciente' };
+    const ok = await post(s.porta, rpc('tools/call', { name: 'coop_maquina_peca', arguments: args }));
+    assert.equal(ok.json.result.isError, undefined);
+    assert.equal(ok.json.result.content[0].text, 'feito na tela: coop_maquina_peca');
+    const c = s.chamadas[s.chamadas.length - 1];
+    assert.equal(c.ferramenta, 'coop_maquina_peca');
+    assert.deepEqual(c.args, args);
+    assert.deepEqual(c.agente, AGENTE);
+    const l = await post(s.porta, rpc('tools/call', { name: 'coop_maquina_ligar', arguments: { de: 'novo paciente', para: 'pacientes' } }));
+    assert.equal(l.json.result.content[0].text, 'feito na tela: coop_maquina_ligar');
+    const q = await post(s.porta, rpc('tools/call', { name: 'coop_maquina', arguments: {} }));
+    assert.equal(q.json.result.content[0].text, 'feito na tela: coop_maquina');
+    assert.equal(s.chamadas.length, antes + 3);
+  });
+
   await t.test('ferramenta desconhecida → erro JSON-RPC -32602; método desconhecido → -32601', async () => {
     const a = await post(s.porta, rpc('tools/call', { name: 'rm_rf', arguments: {} }));
     assert.equal(a.json.error.code, -32602);
@@ -149,7 +179,7 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     assert.equal(c.status, 200);
     assert.equal(c.json.length, 2);
     assert.deepEqual(c.json[0].result, {});
-    assert.equal(c.json[1].result.tools.length, 37);
+    assert.equal(c.json[1].result.tools.length, 40);
   });
 
   await t.test('GET e DELETE → 405 (sem SSE, sem sessão); Origin de fora → 403; versão estranha no cabeçalho → 400', async () => {
@@ -178,7 +208,7 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     m = moderno('tools/list');
     const lista = await post(s.porta, m.corpo, m.headers);
     assert.equal(lista.json.result.resultType, 'complete');
-    assert.equal(lista.json.result.tools.length, 37);
+    assert.equal(lista.json.result.tools.length, 40);
     assert.equal(lista.json.result.ttlMs, 300000);
     assert.equal(lista.json.result.cacheScope, 'public');
     m = moderno('tools/call', { name: 'coop_mural', arguments: { texto: 'bom dia' } });

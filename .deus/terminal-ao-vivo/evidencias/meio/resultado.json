@@ -1,5 +1,5 @@
 {
-  "quando": "2026-09-23T21:27:00.337Z",
+  "quando": "2026-09-24T02:51:43.880Z",
   "porta": 4980,
   "injecao": {
     "nasc": true,
@@ -20,58 +20,60 @@
   },
   "nascimento": {
     "linhas": 22,
-    "span": 1891,
+    "span": 1888,
     "gaps": [
-      91,
-      90,
-      90,
-      88,
-      90,
-      90,
-      90,
-      93,
-      90,
-      90,
-      86,
-      90,
-      91,
+      85,
       89,
-      90,
-      90,
-      91,
-      91,
+      94,
       88,
+      89,
+      93,
+      87,
       90,
-      91
+      92,
+      88,
+      92,
+      90,
+      89,
+      94,
+      87,
+      90,
+      88,
+      92,
+      93,
+      87,
+      93
     ],
-    "tarefasLongas": [],
+    "tarefasLongas": [
+      55
+    ],
     "tempoInterno": {
       "linhas": 22,
       "tempos": [
-        0,
-        91,
+        1,
+        92,
         181,
         272,
-        360,
-        450,
-        540,
-        631,
-        724,
-        814,
-        904,
-        990,
-        1080,
+        362,
+        451,
+        541,
+        632,
+        721,
+        811,
+        901,
+        991,
+        1082,
         1171,
-        1260,
-        1350,
-        1440,
-        1531,
-        1621,
-        1710,
-        1800,
-        1891
+        1263,
+        1352,
+        1442,
+        1530,
+        1620,
+        1714,
+        1802,
+        1892
       ],
-      "fim": 1892
+      "fim": 1895
     },
     "msAteAbrir": null,
     "registro": [
@@ -80,19 +82,19 @@
         "rel": "Propostas/proposta-clinica-vida.md",
         "linhas": 22,
         "animar": true,
-        "t": 462
+        "t": 1584
       },
       {
         "tipo": "nasceu",
         "rel": "Propostas/proposta-clinica-vida.md",
         "linhas": 22,
-        "ms": 1892,
+        "ms": 1895,
         "motivo": "completo",
-        "t": 2353
+        "t": 3478
       }
     ],
     "gapMediano": 90,
-    "msDoPedidoAoFim": 1913
+    "msDoPedidoAoFim": 2035
   },
   "edicao": {
     "acesas": [
@@ -107,8 +109,8 @@
     ],
     "total": 23,
     "texto": "# Proposta · Clínica Vida\n\nAgenda com confirmação automática pelo WhatsApp, lembretes 24 h antes e prontuário simples.\n\n## 1 · O problema (com números)\nA Clínica Vida perde cerca de 18 % dos horários por esquecimento.\n> \"O que a gente mais perde é paciente que esquece.\" (reunião de 22/09)\n\n## 2 · A solução\n- agenda online ligada ao WhatsApp\n- confirmação e lembrete automáticos\n- painel da recepção com os horários do dia e as faltas\n\n## 3 · Fases e prazo\n1. Fase 1 (2 semanas): agenda e lembretes\n2. Fase 2 (1 semana): prontuário e relatórios\n3. Fase 3 (opcional): integração com o convênio\n\n## 4 · Preço\nFase 1: **R$ 4.800** · Fase 2: **R$ 2.400** · manutenção `R$ 390/mês`.\n\n## 5 · Próximo passo\nAprovação da Dra. Ana até sexta; início na segunda seguinte.",
-    "status": "editado por Aurora · 18:27 · 3 linhas mudaram",
-    "luzDepoisDe3s": 0.69
+    "status": "editado por Aurora · 23:51 · 3 linhas mudaram",
+    "luzDepoisDe3s": 0.672
   },
   "plano": {
     "eventos": [
@@ -149,7 +151,7 @@
       10,
       11
     ],
-    "subtitulo": "3 itens · 11 pontos · Aurora · agente de Theus · 18:27",
+    "subtitulo": "3 itens · 11 pontos · Aurora · agente de Theus · 23:51",
     "registroRito": [
       {
         "tipo": "rito",
@@ -158,7 +160,7 @@
         "sem": false,
         "som": true,
         "depoisDaPresenca": false,
-        "t": 6523
+        "t": 8414
       }
     ],
     "repeticao": {
@@ -173,14 +175,14 @@
     "hoje": 13,
     "ultimo": {
       "tipo": "ok",
-      "chave": "ok:theus/ag-aurora:p-1:1790198830481",
+      "chave": "ok:theus/ag-aurora:p-1:1790218316510",
       "sessao": "theus/ag-aurora",
       "agente": "Aurora",
       "pts": 2,
       "origem": "você decidiu um pedido de Aurora · permitiu",
       "conta": "2 · a segurança funcionou (a pessoa viu antes de o agente agir)",
       "prova": "Bash: npm publish --dry-run",
-      "t": 1790198830482
+      "t": 1790218316515
     },
     "recusados": [
       "repetido",
@@ -190,11 +192,11 @@
       "sem-pedido"
     ],
     "lista": [
-      "+2você decidiu um pedido de Aurora · permitiu2 · a segurança funcionou (a pessoa viu antes de o agente agir) · Aurora · 18:27prova: Bash: npm publish --dry-run",
-      "+8plano concluído · 3 itens8 × esforço 1 × surpresa 1 · Aurora · 18:27prova: Escrever o problema e o contexto · Montar fases, prazo e preço · Revisar e fechar a proposta",
-      "+1item do plano feito · Revisar e fechar a proposta1 × esforço 1 × surpresa 1 · Aurora · 18:27prova: item 3 de 3 do plano de Aurora",
-      "+1item do plano feito · Montar fases, prazo e preço1 × esforço 1 × surpresa 1 · Aurora · 18:27prova: item 2 de 3 do plano de Aurora",
-      "+1item do plano feito · Escrever o problema e o contexto1 × esforço 1 × surpresa 1 · Aurora · 18:27prova: item 1 de 3 do plano de Aurora"
+      "+2você decidiu um pedido de Aurora · permitiu2 · a segurança funcionou (a pessoa viu antes de o agente agir) · Aurora · 23:51prova: Bash: npm publish --dry-run",
+      "+8plano concluído · 3 itens8 × esforço 1 × surpresa 1 · Aurora · 23:51prova: Escrever o problema e o contexto · Montar fases, prazo e preço · Revisar e fechar a proposta",
+      "+1item do plano feito · Revisar e fechar a proposta1 × esforço 1 × surpresa 1 · Aurora · 23:51prova: item 3 de 3 do plano de Aurora",
+      "+1item do plano feito · Montar fases, prazo e preço1 × esforço 1 × surpresa 1 · Aurora · 23:51prova: item 2 de 3 do plano de Aurora",
+      "+1item do plano feito · Escrever o problema e o contexto1 × esforço 1 × surpresa 1 · Aurora · 23:51prova: item 1 de 3 do plano de Aurora"
     ]
   },
   "guardado": {
@@ -206,11 +208,11 @@
   },
   "cartao": {
     "n": 1,
-    "texto": "Plano concluído1 item · 9 pontos · Cris · agente de Theus · 18:27",
+    "texto": "Plano concluído1 item · 9 pontos · Cris · agente de Theus · 23:51",
     "fonte": "\"Cormorant Garamond\", \"Iowan Old Style\", Georgia, serif"
   },
   "fora": {
-    "abas": 2,
+    "abas": 1,
     "aviso": "Aurora escreveu fora.md fora da pasta compartilhada: o meio só mostra o que a equipe pode ver.",
     "reg": [
       "fora-da-pasta",
@@ -222,7 +224,7 @@
     3
   ],
   "comPainel": {
-    "sessao": "theus-ag1",
+    "sessao": "assistente",
     "ritosPainel": 1,
     "duas": 1,
     "ultimo": {
@@ -232,7 +234,7 @@
       "sem": false,
       "som": false,
       "depoisDaPresenca": true,
-      "t": 11260
+      "t": 11710
     },
     "eventos": [
       "item do plano feito · Escrever a nota do painel",
@@ -248,7 +250,7 @@
       "rel": "Propostas/ata-22-09.md",
       "linhas": 9,
       "animar": false,
-      "t": 12903
+      "t": 13661
     },
     "rito": {
       "transicao": "0s",
@@ -257,7 +259,7 @@
         "tipo": "faiscas",
         "ok": false,
         "motivo": "sem-movimento",
-        "t": 13727
+        "t": 14699
       }
     }
   },

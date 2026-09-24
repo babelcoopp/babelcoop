@@ -1,5 +1,5 @@
 {
-  "quando": "2026-09-23T22:49:16.263Z",
+  "quando": "2026-09-24T02:51:29.212Z",
   "erros": [],
   "medidas": {
     "vazio": {
@@ -12,6 +12,9 @@
       "projetos": 0,
       "arquivosExemplo": [],
       "arquivosReais": [
+        "theus/ACERVO.md",
+        "theus/APRENDIZADOS.md",
+        "theus/CLAUDE.md",
         "theus/README.md"
       ],
       "conversas": [
@@ -41,15 +44,18 @@
     "print_equipe": "limpo-1-equipe-so-theus.png",
     "print_arvore": "limpo-2-arvore-readme.png",
     "print_salvo": "limpo-3-arquivo-salvo.png",
-    "disco_para_arvore_ms": 102,
+    "disco_para_arvore_ms": 118,
     "arquivos_reais": [
+      "theus/ACERVO.md",
+      "theus/APRENDIZADOS.md",
+      "theus/CLAUDE.md",
       "theus/Projetos/README.md",
       "theus/README.md",
       "theus/do-disco.md",
       "theus/ideia.md"
     ],
     "print_pasta": "limpo-3-pasta-e-disco.png",
-    "rita_na_arvore_ms": 7,
+    "rita_na_arvore_ms": 40,
     "rita": {
       "eu": "rita",
       "pessoas": [
@@ -61,7 +67,13 @@
       "projetos": 0,
       "arquivosExemplo": [],
       "arquivosReais": [
+        "rita/ACERVO.md",
+        "rita/APRENDIZADOS.md",
+        "rita/CLAUDE.md",
         "rita/README.md",
+        "theus/ACERVO.md",
+        "theus/APRENDIZADOS.md",
+        "theus/CLAUDE.md",
         "theus/Projetos/README.md",
         "theus/README.md",
         "theus/do-disco.md",
@@ -91,8 +103,8 @@
       "verComoVisivel": false
     },
     "print_arvore_rita": "limpo-4-arvore-com-a-rita.png",
-    "demanda_theus_para_rita_ms": 20,
-    "demanda_id": "d-qh4zglup-5-1",
+    "demanda_theus_para_rita_ms": 97,
+    "demanda_id": "d-8xck0izk-5-1",
     "print_rita": "limpo-5-demanda-na-rita.png",
     "barra_theus": {
       "ids": [

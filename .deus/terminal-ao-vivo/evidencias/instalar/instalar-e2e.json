@@ -1,17 +1,17 @@
 {
-  "quando": "2026-09-23T22:48:24.281Z",
+  "quando": "2026-09-24T03:02:17.626Z",
   "plataforma": "darwin-arm64",
   "versao": "0.1.0",
   "copia": {
     "como": "cp -Rc (clone APFS)",
-    "ms": 67,
+    "ms": 61,
     "destino": "pasta temporária/Aplicativos/babel-coop.app"
   },
   "pacote": {
     "arquivosPrototipo": 109,
     "glb": 17,
     "mp4": 4,
-    "asar": 113,
+    "asar": 114,
     "midiaInterfaceForaDoAsar": 6,
     "runAsNode": {
       "node": "24.21.0",
@@ -19,43 +19,43 @@
     }
   },
   "theus": {
-    "abrirMs": 789,
+    "abrirMs": 626,
     "id": "theus",
     "papel": "gestao",
     "terminalReal": true,
     "dadosDoElectronNaRaiz": true
   },
   "convite": {
-    "tamanhoToken": 781,
+    "tamanhoToken": 780,
     "prefixo": "babel-"
   },
   "rita": {
-    "abrirMs": 782,
-    "entrarMs": 418,
+    "abrirMs": 659,
+    "entrarMs": 497,
     "id": "rita",
     "papel": "membro",
     "equipe": "babel"
   },
   "rede": {
-    "theusVeRitaMs": 2,
-    "ritaVeTheusMs": 3
+    "theusVeRitaMs": 3,
+    "ritaVeTheusMs": 5
   },
   "parede": {
-    "saidaMs": 113
+    "saidaMs": 114
   },
   "midia": {
     "videos": [
       {
         "src": "/coop/midia/b-entrada.mp4",
         "tocou": true,
-        "currentTime": 0.3,
+        "currentTime": 0.31,
         "largura": 960,
         "duracao": 4
       },
       {
         "src": "/midia/b-entrada.mp4",
         "tocou": true,
-        "currentTime": 0.3,
+        "currentTime": 0.31,
         "largura": 960,
         "duracao": 4
       },

@@ -1,23 +1,23 @@
 {
-  "abrir_ms": 140,
-  "clicar_ms": 568,
-  "digitar_ms": 539,
+  "abrir_ms": 142,
+  "clicar_ms": 531,
+  "digitar_ms": 546,
   "digitar_modo": [
     "teclado",
     "teclado"
   ],
-  "ler_ms": 4,
+  "ler_ms": 5,
   "ler_caracteres": 1017,
-  "raiox_ms": 17,
+  "raiox_ms": 32,
   "print": {
-    "ms": 328,
+    "ms": 384,
     "largura": 2200,
     "altura": 5752,
     "alturaPagina": 2876,
-    "bytes": 639903
+    "bytes": 639863
   },
   "clonar": {
-    "ms": 44,
+    "ms": 71,
     "arquivos": 5,
     "bytes": 459082,
     "porTipo": {

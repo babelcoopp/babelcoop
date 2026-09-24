@@ -153,6 +153,13 @@ describe('pacote do Mac (A19)', () => {
         const servido = Buffer.from(await (await fetch(ORIGEM + '/' + f)).arrayBuffer());
         assert.ok(servido.equals(fs.readFileSync(path.join(RES, 'prototipo', f))), f + ' servido difere do que está no pacote');
       }
+      /* o three.js do 3D sai de dentro do pacote (Resources/three), sem internet: o módulo e os complementos que a Máquina e as peças importam */
+      for (const f of ['build/three.module.js', 'examples/jsm/controls/OrbitControls.js', 'examples/jsm/renderers/CSS3DRenderer.js', 'examples/jsm/loaders/GLTFLoader.js', 'examples/jsm/utils/BufferGeometryUtils.js', 'examples/jsm/libs/meshopt_decoder.module.js']) {
+        const r = await fetch(ORIGEM + '/vendor/three/' + f);
+        assert.equal(r.status, 200, '/vendor/three/' + f);
+        assert.ok(Buffer.from(await r.arrayBuffer()).equals(fs.readFileSync(path.join(RES, 'three', f))), f + ' servido difere do Resources/three');
+      }
+      assert.ok(!/cdn\.jsdelivr\.net\/npm\/three/.test(await (await fetch(ORIGEM + '/')).text()), 'a página do app ainda aponta o three para a CDN');
       const eu = await (await fetch(ORIGEM + '/api/eu')).json();
       assert.equal(eu.motor.electron, principal.electron);
       assert.equal(eu.versao, pkg.version);

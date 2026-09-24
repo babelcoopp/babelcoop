@@ -441,3 +441,22 @@ html.bc-org-parado .mq-faisca, html.bc-org-parado .mq-ponto { display: none; }
 }
 .mq2 .mq-campo-form input, .mq2 .mq-campo-form select { height: 30px; padding: 4px 8px; font-size: var(--t-125); }
 .mq2 .mq-teste-log + .mq-teste-form { margin-top: 6px; }
+
+/* ---------- app real: sem projeto / máquina vazia (uma frase + o que fazer) ---------- */
+.mq2 .mq-vazio-estado { display: grid; gap: 10px; align-content: center; justify-items: start; max-width: 560px; margin: auto; padding: 28px 24px; }
+.mq2 .mq-vazio-frase { margin: 0; font: 500 var(--t-16, 16px)/1.35 var(--fonte-ui, inherit); color: var(--texto); }
+.mq2 .mq-vazio-estado .mq-texto { margin: 0; color: var(--apagado); }
+.mq-sem-projeto { display: flex; flex-direction: column; min-height: 100%; }
+.mq2 .mq-palco-vazio { align-items: center; justify-content: center; }
+
+/* ---------- a Máquina inteira em 3D (zoom "3D"): o corpo do projeto de visual3d.js dentro do palco ---------- */
+.mq2 .mq-palco-3d { flex-direction: column; padding: 0; overflow: hidden; }
+.mq2 .mq-3d-lugar { position: relative; flex: 1; min-height: 280px; }
+.mq2 .mq-3d-corpo { position: absolute; inset: 0; }
+.mq2 .mq-3d-corpo .v3c-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.mq2 .mq-3d-corpo .v3c-rotulos { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.mq2 .mq-3d-corpo .v3c-rotulo { position: absolute; transform: translate(-50%, -110%); white-space: nowrap; padding: 2px 6px; font: 500 10.5px/1 var(--fonte-mono); color: var(--texto); border: 1px solid var(--linha-fraca); border-radius: var(--r-chip); background: color-mix(in srgb, var(--s0) 82%, transparent); }
+.mq2 .mq-3d-corpo .v3c-rotulo.tracejada { color: var(--t1); border-style: dashed; }
+.mq2 .mq-3d-corpo .v3c-rotulo.ganhou { color: var(--t0); }
+.mq2 .mq-3d-corpo .v3c-aviso, .mq2 .mq-3d-aviso { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 8px; font: 500 11px/1.3 var(--fonte-mono); color: var(--fraco); text-align: center; }
+.mq2 .mq-3d-legenda { flex: none; margin: 0; padding: 6px 12px; border-top: 1px solid var(--linha-fraca); font: 500 var(--t-11)/1.3 var(--fonte-mono); color: var(--apagado); }

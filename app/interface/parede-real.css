@@ -51,6 +51,21 @@
   border-top-color: var(--pr-vidro-borda); border-right-color: var(--pr-vidro-borda); border-bottom-color: var(--pr-vidro-borda);
   box-shadow: inset 0 0 0 1px rgba(42, 213, 229, .035), 0 12px 30px -20px rgba(42, 213, 229, .40);
 }
+/* a pessoa brilha no cartão (ordem do Theus): borda e glow na cor da pessoa, mais forte ao vivo (o vidro do HUD ganha o tom
+   dela). Sem laço: o evento acende o fio do topo e as laterais da foto; o único laço é a borda da foto online (casca-2030.css) */
+.pr-cartao {
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--pessoa) 14%, transparent), -6px 0 18px -10px color-mix(in oklch, var(--pessoa) 70%, transparent);
+}
+.pr-cartao[data-vivo="sim"] {
+  border-top-color: color-mix(in oklch, var(--pessoa) 34%, var(--pr-vidro-borda)); border-right-color: color-mix(in oklch, var(--pessoa) 34%, var(--pr-vidro-borda));
+  border-bottom-color: color-mix(in oklch, var(--pessoa) 34%, var(--pr-vidro-borda));
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--pessoa) 10%, transparent), -8px 0 22px -10px color-mix(in oklch, var(--pessoa) 80%, transparent),
+    0 12px 30px -18px color-mix(in oklch, var(--pessoa) 55%, transparent);
+}
+/* pausado e desligado esfriam: sem glow */
+.pr-cartao[data-vivo="nao"] { box-shadow: none; }
+/* a foto do cartão com folga para as luzes das laterais */
+.pr-av { padding: 0 4px; }
 .pr-cartao[data-estado="pausado"], .pr-cartao[data-estado="desligado"] { border-left-color: var(--sem-dado); }
 .pr-cartao[data-estado="desligado"] { border-style: dashed; cursor: default; }
 /* alguém no terminal: borda na cor de quem entrou a 55 % (a fita da esquerda continua a do dono) */
@@ -76,6 +91,13 @@
 .pr-selo.off i { background: transparent; border: 1px dashed currentColor; width: 7px; height: 7px; }
 .pr-selo.visita { color: var(--visita); }
 .pr-selo.visita i { box-shadow: 0 0 6px var(--visita); }
+/* "X aqui" (alguém no terminal): o ponto é luz de organismo, um anel que sai dele e esfria, enquanto a pessoa estiver lá */
+.pr-selo.visita i, .pr-selo-pulso { position: relative; }
+.pr-selo.visita i::after, .pr-selo-pulso::after {
+  content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 1.5px solid currentColor; pointer-events: none;
+  animation: pr-selo-pulso 2.4s var(--ease-saida, ease-out) infinite;
+}
+@keyframes pr-selo-pulso { 0% { opacity: .9; transform: scale(1); } 70% { opacity: 0; transform: scale(3.2); } 100% { opacity: 0; transform: scale(3.2); } }
 
 /* o último bloco da presença do agente (agente-bloco) */
 .pr-bloco { display: flex; align-items: baseline; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--linha-fraca); font: 400 var(--t-11)/1.35 var(--fonte-mono); color: var(--apagado); white-space: nowrap; overflow: hidden; }
@@ -165,6 +187,11 @@
 /* ---------- selos do rodapé ("X está no seu terminal Y", "X quer entrar"): luz na cor da pessoa, meia-vida média ---------- */
 #e-status .pr-selo-st { background: linear-gradient(90deg, color-mix(in oklch, var(--pr-cor) calc(8% + var(--luz, 0) * 14%), transparent), transparent 70%); border-radius: var(--r-chip, 4px); }
 #e-status .st-controle.pr-selo-st { color: color-mix(in oklch, var(--texto-90), var(--pr-cor) 70%) !important; }
+/* o ponto do selo ativo: luz na cor de quem está no meu terminal, com o anel que pulsa (o "●" de texto sai) */
+#e-status .pr-selo-pulso {
+  display: inline-block; width: 7px; height: 7px; margin: 0 7px 0 2px; border-radius: 50%; vertical-align: 0; flex: none;
+  color: var(--pr-cor); background: var(--pr-cor); box-shadow: 0 0 calc(4px + var(--luz, 0) * 6px) var(--pr-cor);
+}
 /* o Selo aberto do pedido: anel tracejado na cor de quem pede (CONCEITO lei 2) */
 #e-status .st-pedido.pr-selo-st::before {
   content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; vertical-align: -1px;
@@ -173,7 +200,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pr-cartao, .pr-bt, .pr-selo, .pr-escala { transition: none !important; }
+  /* o selo fica aceso, parado: o anel some, o brilho continua */
+  .pr-selo.visita i::after, .pr-selo-pulso::after { animation: none; opacity: 0; }
 }
+html.bc-org-parado .pr-selo.visita i::after, html.bc-org-parado .pr-selo-pulso::after { animation: none; opacity: 0; }
 @media (max-width: 720px) {
   .pr-grade { grid-template-columns: 1fr; }
   .pr-amp-acoes { margin-left: 0; }

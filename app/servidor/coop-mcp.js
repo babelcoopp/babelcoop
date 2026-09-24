@@ -57,7 +57,7 @@ const CACHE = { ttlMs: 300000, cacheScope: 'public' };
 const ERRO = { PARSE: -32700, PEDIDO: -32600, METODO: -32601, PARAMS: -32602, INTERNO: -32603, CABECALHO: -32020, VERSAO: -32022 };
 
 const INSTRUCOES = 'Conector do babel-coop. As ferramentas coop_* mexem no app da equipe (TV, avisos, mural, demandas, campanhas, ' +
-  'acervo, aprendizados) e cada ação fica assinada "<agente> · <pessoa>" para todo mundo ver. As ferramentas navegador_* controlam ' +
+  'acervo, aprendizados, a Máquina dos projetos) e cada ação fica assinada "<agente> · <pessoa>" para todo mundo ver. As ferramentas navegador_* controlam ' +
   'o navegador próprio do babel-coop, à vista da pessoa, na aba do meio: nunca abra o Google Chrome nem outro navegador. ' +
   'Senhas só a pessoa digita. Antes de criar algo, consulte (coop_buscar, coop_pessoas, coop_projetos).';
 
@@ -79,7 +79,8 @@ const ACOES_PERMITIDAS = [
   'iniciarReuniao', 'jogarNaReuniao', 'destacar', 'pauta', 'marcarPauta', 'decisao', 'proximo',
   'ideia', 'apoiar', 'responderPergunta', 'guardarMomento', 'sonhar',
   'novoProjeto', 'entrarProjeto', 'proximoPasso', 'mensagemProjeto', 'chamarParaTela', 'fazendo',
-  'quadroItem', 'quadroMudar'
+  'quadroItem', 'quadroMudar',
+  'maquinaPeca', 'maquinaLigar'
 ];
 
 const FERRAMENTAS = [
@@ -182,6 +183,28 @@ const FERRAMENTAS = [
   { name: 'coop_demandas', title: 'Demandas abertas', annotations: { readOnlyHint: true },
     description: 'Lista as demandas abertas (de uma pessoa, ou as da pessoa dona deste agente) e as livres.',
     inputSchema: { type: 'object', properties: { pessoa: PESSOA }, additionalProperties: false } },
+  /* ---- a Máquina (backend visual do projeto, prototipo/maquina.js): o agente lê o sistema real e monta as peças; a tela aplica ---- */
+  { name: 'coop_maquina', title: 'Ler a Máquina de um projeto', annotations: { readOnlyHint: true },
+    description: 'Mostra a Máquina (o backend visual) de um projeto: as peças (gaveta = tabela, porta = rota/função, robô = gatilho/agenda, tela, cano = tempo real, depósito = arquivos, portaria = login, cofre = segredos), os fios entre elas, o que está publicado e o que ainda está no local. Sem projeto: o primeiro projeto da equipe.',
+    inputSchema: { type: 'object', properties: { projeto: texto('Nome ou id do projeto (veja coop_projetos)', 120) }, additionalProperties: false } },
+  { name: 'coop_maquina_peca', title: 'Montar uma peça na Máquina', annotations: { destructiveHint: false },
+    description: 'Monta uma peça na Máquina de um projeto a partir do sistema real (leia o código antes: tabelas, rotas, gatilhos, telas). A peça entra tracejada na tela de todos, assinada "<agente> · <pessoa>", e ganha corpo quando a pessoa publicar. de/para ligam a peça nova a uma que já existe (pelo nome). Uma Tela não liga direto numa Gaveta: passa por uma Porta.',
+    inputSchema: { type: 'object', properties: {
+      projeto: texto('Nome ou id do projeto (padrão: o primeiro)', 120),
+      tipo: { type: 'string', enum: ['gaveta', 'porta', 'robo', 'tela', 'cano', 'deposito', 'portaria', 'cofre', 'carteiro', 'empresa'], description: 'gaveta = tabela · porta = rota, Edge Function ou RPC · robo = gatilho, cron ou webhook · tela = página · cano = tempo real ou fila · deposito = bucket · portaria = login · cofre = segredos (só nomes) · carteiro = e-mail/SMS · empresa = separação por empresa' },
+      nome: texto('Nome curto, como está no sistema (ex.: "pacientes", "novo agendamento")', 60),
+      frase: texto('O que a peça faz, numa frase simples', 200),
+      campos: { type: 'array', maxItems: 30, description: 'Gaveta: colunas "nome (tipo)", ex.: "nascimento (data)", "clinica (ligação com clinicas)". Porta: o que recebe.', items: { type: 'string' } },
+      chave: { type: 'string', enum: ['cada empresa vê só o seu', 'só o dono', 'todos leem, só o dono muda', '⚠ aberta para todos'], description: 'Gaveta: quem pode ver e mexer (a política de acesso real; sem política = aberta para todos)' },
+      verbo: { type: 'string', enum: ['RECEBE', 'DEVOLVE'], description: 'Porta: grava um registro (RECEBE) ou devolve uma lista (DEVOLVE)' },
+      login: { type: 'boolean', description: 'Porta: confere o login (padrão sim)' },
+      quando: texto('Robô: quando dispara, ex.: "quando entra", "todo dia às 08:00"', 60),
+      de: texto('Liga uma peça existente À nova (nome ou id), ex.: a tela que chama esta porta', 80),
+      para: texto('Liga a nova A uma peça existente (nome ou id), ex.: a gaveta onde esta porta grava', 80)
+    }, required: ['tipo', 'nome'], additionalProperties: false } },
+  { name: 'coop_maquina_ligar', title: 'Ligar duas peças da Máquina', annotations: { destructiveHint: false },
+    description: 'Liga duas peças que já estão na Máquina (fio de "de" para "para", pelo nome ou id). O pulso do teste anda nessa direção: tela → porta → gaveta → robô/cano.',
+    inputSchema: { type: 'object', properties: { projeto: texto('Nome ou id do projeto (padrão: o primeiro)', 120), de: texto('Peça de onde sai o fio', 80), para: texto('Peça onde o fio chega', 80) }, required: ['de', 'para'], additionalProperties: false } },
   { name: 'coop_acao', title: 'Outra ação do app', annotations: { destructiveHint: false },
     description: 'Qualquer outra ação do app da lista permitida, com os argumentos na ordem da ação (sem o "quem"). Prefira as ferramentas coop_* específicas.',
     inputSchema: { type: 'object', properties: { acao: { type: 'string', enum: ACOES_PERMITIDAS, description: 'Nome da ação' }, args: { type: 'array', maxItems: 6, description: 'Argumentos da ação, na ordem', items: {} } }, required: ['acao'], additionalProperties: false } }

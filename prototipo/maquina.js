@@ -140,12 +140,51 @@ BC.formularios = BC.formularios || {};
   }
 
   /* ================================================================== a máquina de exemplo */
-  var QUEM = {
+  var QUEM_EXEMPLO = {
     ana: { nome: 'Ana', empresa: 'Clínica Vida', papel: 'atendente' },
     outra: { nome: 'Beto', empresa: 'Clínica Sorriso', papel: 'atendente' }
   };
-  var EXEMPLO = 'Clínicas (exemplo)'; /* sem projeto na equipe: a máquina de exemplo mostra como fica */
+  /* no app real o teste usa duas pessoas de teste neutras (nunca gente inventada com nome de cliente) */
+  var QUEM_REAL = {
+    ana: { nome: 'Pessoa A', empresa: 'empresa A', papel: 'teste' },
+    outra: { nome: 'Pessoa B', empresa: 'empresa B', papel: 'teste' }
+  };
+  function QM() { return real() ? QUEM_REAL : QUEM_EXEMPLO; }
+  var EXEMPLO = 'Clínicas (exemplo)'; /* sem projeto na equipe: a máquina de exemplo mostra como fica (só no protótipo puro) */
   var DOMINIOS = { acesso: 'Acesso', cadastro: 'Cadastro', agenda: 'Agenda', novas: 'Peças novas' };
+
+  /* ================================================================== app real (COOP_REAL sem exemplos): a Máquina de verdade
+     Nada de peça, linha do tempo ou pessoa inventada. A máquina de cada projeto vive no estado da equipe
+     (estado.maquinas[<projeto>] = { pecas, fios, linha, versao }) e muda só por ação da loja (maquinaPeca, maquinaLigar,
+     maquinaPublicar): vai para o diário, as outras Estações e a TV aplicam a mesma coisa, e o agente monta pelo conector
+     coop (coop_maquina_*, app/interface/coop-ui.js). O protótipo puro continua com a máquina de exemplo (o roteiro depende dela). */
+  function real() { return !!(window.COOP_REAL && !window.COOP_REAL.exemplos); }
+  function projetoDe(pjId) { return (L().estado.projetos || []).filter(function (p) { return p.id === pjId; })[0] || null; }
+  function nomeMaquina(m) { return m.pj ? m.pj.nome : real() ? 'sem projeto' : EXEMPLO; }
+  var TIPOS_REAIS = ['carteiro', 'portaria', 'tela', 'porta', 'gaveta', 'empresa', 'robo', 'deposito', 'cofre', 'cano']; /* as que viram nó no palco */
+  var CHAVES = ['cada empresa vê só o seu', 'só o dono', 'todos leem, só o dono muda', '⚠ aberta para todos'];
+  function fonteReal(pjId, criar) {
+    var e = L().estado;
+    if (!e) return null;
+    if (!e.maquinas || typeof e.maquinas !== 'object') { if (!criar) return null; e.maquinas = {}; }
+    if (!e.maquinas[pjId] && criar) e.maquinas[pjId] = { pecas: [], fios: [], linha: [], versao: 1 };
+    return e.maquinas[pjId] || null;
+  }
+  /* a peça como fica guardada no estado (só dados; luz, teste e animação são desta janela) */
+  var CAMPOS_PECA = ['id', 'tipo', 'nome', 'frase', 'campos', 'chave', 'verbo', 'login', 'quando', 'alvo', 'usa', 'papeis', 'provedor', 'uso', 'usoPct', 'linhas', 'chaves', 'faltando', 'dom', 'por', 'agente', 'assinatura', 'criadaEm', 'publicada', 'publicadaEm', 'dePreset'];
+  function pecaParaEstado(p) {
+    var r = {};
+    CAMPOS_PECA.forEach(function (k) { if (p[k] !== undefined && p[k] !== null) r[k] = Array.isArray(p[k]) ? JSON.parse(JSON.stringify(p[k])) : p[k]; });
+    return r;
+  }
+  function pecaDoEstado(x, animar) {
+    var p = Object.assign({}, x, { pronta: !animar, publicada: !!x.publicada, corpo: x.publicada ? (x.publicadaEm || x.criadaEm || 1) : 0 });
+    if (Array.isArray(x.campos)) p.campos = x.campos.slice();
+    if (Array.isArray(x.chaves)) p.chaves = x.chaves.map(function (k) { return Object.assign({}, k); });
+    if (animar) { p.criadaEm = agora(); p.nova = true; p.mudouEm = agora(); }
+    if (!p.dom) p.dom = 'novas';
+    return p;
+  }
 
   function pecasIniciais(pj) {
     var dono = pj ? pj.membros[0] : 'theus', m2 = pj && pj.membros[1] || 'davi', m3 = pj && pj.membros[2] || 'bruno';
@@ -170,12 +209,15 @@ BC.formularios = BC.formularios || {};
   function maquinaDe(pjId) {
     var m = M.maquinas[pjId];
     if (m) return m;
-    var pj = (L().estado.projetos || []).filter(function (p) { return p.id === pjId; })[0];
+    var pj = projetoDe(pjId), eReal = real();
+    var src = eReal ? fonteReal(pjId, true) : null;
     m = M.maquinas[pjId] = {
-      id: pjId, pj: pj, pecas: pecasIniciais(pj), fios: FIOS.slice(), linha: [], sel: null, ambiente: 'local', teste: null, mudancas: [], porPessoa: false, modo: 'ver',
-      zoom: 'dominio', dominio: null, painel: 'ficha', tipoSel: null, versao: 1, rev: 1, pontos: [], chavesPontos: {}, fioLuz: {}, fioNasce: {}, cacheD: {}, escala: {}, tam: {},
-      testeComo: 'as-duas', testePorta: null, fichaAberta: false, rolagem: {}, okAna: null, okOutra: null, funcionandoAss: null, funcionandoEm: 0
+      id: pjId, pj: pj, pecas: eReal ? src.pecas.map(function (x) { return pecaDoEstado(x, false); }) : pecasIniciais(pj), fios: eReal ? src.fios.map(function (f) { return [f[0], f[1]]; }) : FIOS.slice(),
+      linha: eReal ? src.linha : [], sel: null, ambiente: 'local', teste: null, mudancas: [], porPessoa: false, modo: 'ver',
+      zoom: 'dominio', dominio: null, painel: 'ficha', tipoSel: null, versao: eReal ? src.versao || 1 : 1, rev: 1, pontos: [], chavesPontos: {}, fioLuz: {}, fioNasce: {}, cacheD: {}, escala: {}, tam: {},
+      testeComo: 'as-duas', testePorta: null, fichaAberta: false, rolagem: {}, okAna: null, okOutra: null, funcionandoAss: null, funcionandoEm: 0, real: eReal
     };
+    if (eReal) { m.mudancas = m.pecas.filter(function (p) { return !p.publicada; }).map(function (p) { return 'Cria ' + (TIPOS[p.tipo] || 'peça') + ' "' + p.nome + '"'; }); return m; }
     var t = agora(), ag = pj ? ((L().pessoa(pj.membros[0]) || {}).agentes || [])[0] : null;
     m.linha = [{ ts: t - 3 * U.HORA, texto: (ag ? ag.nome : 'Rita') + ' criou a gaveta Pacientes', quem: pj ? pj.membros[0] : 'theus', peca: 'pacientes' }, { ts: t - 170 * U.MIN, texto: 'fechou Pacientes por empresa', quem: pj ? pj.membros[0] : 'theus', peca: 'pacientes' }, { ts: t - 2 * U.HORA, texto: 'Dev criou a porta "novo agendamento"', quem: pj ? pj.membros[1] || pj.membros[0] : 'davi', peca: 'porta-novo' }, { ts: t - 40 * U.MIN, texto: 'Bruno-bot ligou o robô do WhatsApp', quem: pj ? pj.membros[2] || pj.membros[0] : 'bruno', peca: 'robo-zap' }];
     return m;
@@ -513,7 +555,7 @@ BC.formularios = BC.formularios || {};
     var c = document.getElementById('e-conteudo');
     if (!c || c.getAttribute('data-mq-gancho')) return;
     c.setAttribute('data-mq-gancho', '1');
-    if (window.MutationObserver) new MutationObserver(aposDesenho).observe(c, { childList: true });
+    if (window.MutationObserver) new MutationObserver(function () { aposDesenho(); }).observe(c, { childList: true });
     if (window.ResizeObserver) new ResizeObserver(function () { aposDesenho(); }).observe(c);
     /* o palco rola por dentro: a posição sobrevive aos redesenhos da Estação */
     c.addEventListener('scroll', function (ev) {
@@ -540,9 +582,12 @@ BC.formularios = BC.formularios || {};
     Object.assign(p, { criadaEm: t, pronta: false, publicada: false, corpo: 0, mudouEm: t, nova: true });
     if (!p.dom) p.dom = 'novas';
     m.pecas.push(p);
-    (fiosNovos || []).forEach(function (f) { if (peca(m, f[0]) && peca(m, f[1]) && !achaFio(m, f[0], f[1])) { m.fios.push([f[0], f[1]]); m.fioNasce[chaveFio(f[0], f[1])] = t; } });
+    var fiosFeitos = [];
+    (fiosNovos || []).forEach(function (f) { if (peca(m, f[0]) && peca(m, f[1]) && !achaFio(m, f[0], f[1])) { m.fios.push([f[0], f[1]]); m.fioNasce[chaveFio(f[0], f[1])] = t; fiosFeitos.push([f[0], f[1]]); } });
     m.rev++;
-    m.linha.push({ ts: t, texto: texto, quem: quem || L().eu, peca: p.id });
+    /* app real: a peça vai para o estado da equipe (diário); a linha do tempo é a do estado, a ação escreve nela */
+    if (m.real) L().fazer('maquinaPeca', { projeto: m.id, peca: pecaParaEstado(p), fios: fiosFeitos, texto: texto });
+    else m.linha.push({ ts: t, texto: texto, quem: quem || L().eu, peca: p.id });
     avisar({ tipo: 'encaixou', pj: m.id, peca: p.id, nome: p.nome, tipoPeca: p.tipo });
     return p;
   }
@@ -569,9 +614,12 @@ BC.formularios = BC.formularios || {};
     pontuar(m, 1, 'nó encaixado · ' + (TIPOS[p.tipo] || 'peça') + ' ' + p.nome, 'encaixe:' + m.id + ':' + p.id, p.id);
   }
 
+  /* app real: o id que não é projeto de verdade (o atalho "clinicas" de Criar) cai no primeiro projeto real, ou no estado vazio */
+  function refReal(pjId) { var pjs = L().estado.projetos || []; return projetoDe(pjId) ? pjId : (pjs[0] || {}).id || null; }
   M.abrir = function (pjId) {
-    var pj = (L().estado.projetos || []).filter(function (p) { return p.id === pjId; })[0];
-    BC.estacao.abrirAba({ id: 'maquina', tipo: 'maquina', ref: pjId, titulo: 'Máquina · ' + (pj ? pj.nome : EXEMPLO), atividade: 'maquina' });
+    if (real()) pjId = refReal(pjId);
+    var pj = projetoDe(pjId);
+    BC.estacao.abrirAba({ id: 'maquina', tipo: 'maquina', ref: pjId, titulo: 'Máquina' + (pj ? ' · ' + pj.nome : real() ? '' : ' · ' + EXEMPLO), atividade: 'maquina' });
   };
   M.pedido = function (texto, ag, terminal) {
     ag = ag || { nome: 'o agente' };
@@ -642,7 +690,9 @@ BC.formularios = BC.formularios || {};
     else if (achaFio(m, a.id, b.id)) msg = TIPOS[a.tipo] + ' "' + a.nome + '" já está ligada a ' + TIPOS[b.tipo] + ' "' + b.nome + '".';
     if (msg) { if (terminal) terminal.escrever(msg, 'dica'); else aviso(msg); return false; }
     m.fios.push([a.id, b.id]); m.fioNasce[chaveFio(a.id, b.id)] = agora(); m.rev++; a.mudouEm = b.mudouEm = agora();
-    m.linha.push({ ts: agora(), texto: 'ligou ' + TIPOS[a.tipo] + ' "' + a.nome + '" a ' + TIPOS[b.tipo] + ' "' + b.nome + '"', quem: L().eu, peca: a.id });
+    var txtLiga = 'ligou ' + TIPOS[a.tipo] + ' "' + a.nome + '" a ' + TIPOS[b.tipo] + ' "' + b.nome + '"';
+    if (m.real) L().fazer('maquinaLigar', { projeto: m.id, de: a.id, para: b.id, texto: txtLiga });
+    else m.linha.push({ ts: agora(), texto: txtLiga, quem: L().eu, peca: a.id });
     m.mudancas.push('Liga ' + TIPOS[a.tipo] + ' "' + a.nome + '" a ' + TIPOS[b.tipo] + ' "' + b.nome + '"');
     acender(a, 't0'); acender(b, 't0');
     redesenhar();
@@ -659,10 +709,13 @@ BC.formularios = BC.formularios || {};
     tela: function (n) { return { nome: 'Tela ' + n, frase: 'uma página nova do projeto' }; },
     cano: function (n) { return { nome: 'ao vivo ' + n, frase: 'avisa a tela quando Agendamentos muda' }; }
   };
+  /* no app real a peça montada pela vitrine não fala de gaveta que não existe: a frase é neutra até o agente escrever a de verdade */
+  var FRASE_REAL = { gaveta: 'guarda o que a equipe definir', porta: 'recebe um pedido e grava numa gaveta', robo: 'faz uma tarefa sozinho quando algo acontece', deposito: 'guarda os arquivos do projeto', tela: 'uma página nova do projeto', cano: 'avisa a tela quando uma gaveta muda' };
   M.montarTipo = function (m, tipo) {
     if (!MODELOS[tipo]) return null;
     var n = m.pecas.filter(function (p) { return p.tipo === tipo; }).length + 1, id = tipo.slice(0, 2) + Date.now().toString(36);
     var p = Object.assign({ id: id, tipo: tipo, dom: 'novas', por: L().eu }, MODELOS[tipo](n));
+    if (m.real) { p.frase = FRASE_REAL[tipo]; delete p.alvo; if (tipo === 'gaveta') p.chave = '⚠ aberta para todos'; if (tipo === 'porta') p.campos = ['dados']; }
     var tem = function (x) { return !!peca(m, x); }, fios = [];
     if (tipo === 'porta' && tem('agendamentos')) fios.push([id, 'agendamentos']);
     if (tipo === 'robo' && tem('agendamentos')) fios.push(['agendamentos', id]);
@@ -683,7 +736,8 @@ BC.formularios = BC.formularios || {};
   function portas(m) { return m.pecas.filter(function (p) { return p.tipo === 'porta' && p.pronta; }); }
   function portaPadrao(m) { var ps = portas(m); return (m.testePorta && peca(m, m.testePorta) && peca(m, m.testePorta).pronta ? peca(m, m.testePorta) : null) || (peca(m, 'porta-novo') && peca(m, 'porta-novo').pronta ? peca(m, 'porta-novo') : null) || ps.filter(function (p) { return verboDe(p) === 'RECEBE'; })[0] || ps[0] || null; }
   function camposPorta(p) { return (p.campos && p.campos.length ? p.campos : verboDe(p) === 'DEVOLVE' ? ['dia'] : ['nome', 'quando']).map(function (c) { return String(c).replace(/\s*\(.*$/, ''); }); }
-  function dadosPadrao(m, p) { var d = {}; camposPorta(p).forEach(function (c) { d[c] = (m.testeDados && m.testeDados[p.id] && m.testeDados[p.id][c]) || EXEMPLOS[U.normalizar(c)] || EXEMPLOS[c] || 'exemplo'; }); return d; }
+  var EXEMPLOS_REAIS = { quando: 'amanhã 14:30', dia: 'hoje', nome: 'Pessoa de teste', 'e-mail': 'teste@exemplo.com', senha: 'senha de teste' };
+  function dadosPadrao(m, p) { var ex = m.real ? EXEMPLOS_REAIS : EXEMPLOS, d = {}; camposPorta(p).forEach(function (c) { d[c] = (m.testeDados && m.testeDados[p.id] && m.testeDados[p.id][c]) || ex[U.normalizar(c)] || ex[c] || 'exemplo'; }); return d; }
   function dadosTexto(d) { return Object.keys(d).map(function (k) { return d[k]; }).join(' · '); }
   function ligadas(m, id, filtro) { return m.fios.filter(function (f) { return f[0] === id; }).map(function (f) { return peca(m, f[1]); }).filter(function (p) { return p && p.pronta && (!filtro || filtro(p)); }); }
   function caminho(m, porta) {
@@ -716,12 +770,12 @@ BC.formularios = BC.formularios || {};
     var outra = quem === 'outra', d = T.dados, dt = dadosTexto(d);
     switch (p.tipo) {
       case 'tela':
-        if (de && de.tipo === 'cano') return outra ? ['⚠ a tela ' + p.nome + ' da ' + QUEM.ana.empresa + ' recebe um agendamento que é da ' + QUEM.outra.empresa, '⚠ vazou'] : ['✓ a tela ' + p.nome + ' mostra a consulta nova na hora', '✓ atualizou'];
-        return [outra ? 'a tela ' + p.nome + ' envia o mesmo pedido, agora com o crachá da ' + QUEM.outra.empresa : 'a tela ' + p.nome + ' envia o formulário: ' + dt, 'enviou'];
+        if (de && de.tipo === 'cano') return outra ? ['⚠ a tela ' + p.nome + ' da ' + QM().ana.empresa + ' recebe um agendamento que é da ' + QM().outra.empresa, '⚠ vazou'] : ['✓ a tela ' + p.nome + ' mostra a consulta nova na hora', '✓ atualizou'];
+        return [outra ? 'a tela ' + p.nome + ' envia o mesmo pedido, agora com o crachá da ' + QM().outra.empresa : 'a tela ' + p.nome + ' envia o formulário: ' + dt, 'enviou'];
       case 'porta': return [outra ? 'a porta "' + p.nome + '" recebe e leva até a gaveta' : 'a porta "' + p.nome + '" ' + (verboDe(p) === 'DEVOLVE' ? 'pede ' + dt : 'recebe ' + camposPorta(p).join(' e ')) + ' e confere o login', '1 pedido'];
       case 'gaveta':
-        if (outra) return ['⚠ passou: a ' + QUEM.outra.empresa + ' ' + (verboDe(porta) === 'DEVOLVE' ? 'leu' : 'gravou na') + ' gaveta ' + p.nome + ' da ' + QUEM.ana.empresa + (/todos leem/.test(p.chave || '') ? ' (todos leem: é de propósito)' : '. A chave está aberta para todos.'), /todos leem/.test(p.chave || '') ? 'leu (de propósito)' : '⚠ vazou'];
-        if (verboDe(porta) === 'DEVOLVE') return ['a gaveta ' + p.nome + ' devolve 3 linhas do dia, só as da ' + QUEM.ana.empresa, '3 linhas'];
+        if (outra) return ['⚠ passou: a ' + QM().outra.empresa + ' ' + (verboDe(porta) === 'DEVOLVE' ? 'leu' : 'gravou na') + ' gaveta ' + p.nome + ' da ' + QM().ana.empresa + (/todos leem/.test(p.chave || '') ? ' (todos leem: é de propósito)' : '. A chave está aberta para todos.'), /todos leem/.test(p.chave || '') ? 'leu (de propósito)' : '⚠ vazou'];
+        if (verboDe(porta) === 'DEVOLVE') return ['a gaveta ' + p.nome + ' devolve 3 linhas do dia, só as da ' + QM().ana.empresa, '3 linhas'];
         return ['uma linha nova entra na gaveta ' + p.nome + ': ' + dt + ' · marcado (' + p.linhas + ' → ' + (p.linhas + 1) + ' linhas)', '+1 linha'];
       case 'robo':
         var cof = m.pecas.filter(function (x) { return x.tipo === 'cofre'; })[0], falta = (p.usa || []).filter(function (k) { return cof && (cof.faltando || []).indexOf(k) !== -1; });
@@ -738,7 +792,7 @@ BC.formularios = BC.formularios || {};
     T.atual = T.atual.concat([p.id]);
     T.status[p.id] = n[1];
     if (quem !== 'outra') T.passaram[p.id] = true;
-    if (p.tipo === 'gaveta' && quem !== 'outra' && verboDe(porta) === 'RECEBE' && !T.linhaNova) { p.linhas = (p.linhas || 0) + 1; p.abriuEm = t; T.linhaNova = { gaveta: p.id, texto: dadosTexto(T.dados) + ' · marcado · empresa: ' + QUEM.ana.empresa }; }
+    if (p.tipo === 'gaveta' && quem !== 'outra' && verboDe(porta) === 'RECEBE' && !T.linhaNova) { p.linhas = (p.linhas || 0) + 1; p.abriuEm = t; T.linhaNova = { gaveta: p.id, texto: dadosTexto(T.dados) + ' · marcado · empresa: ' + QM().ana.empresa }; }
     if (p.tipo === 'robo') { p.giros = (p.giros || 0) + 1; p.disparouEm = t; }
     if (p.tipo === 'cano') p.eventoEm = t;
     if (p.tipo === 'tela' && de && de.tipo === 'cano') p.atualizouEm = t;
@@ -749,7 +803,7 @@ BC.formularios = BC.formularios || {};
     tocar('tique');
   }
   async function rodada(m, T, porta, quem) {
-    var outra = quem === 'outra', P = QUEM[quem], c = caminho(m, porta);
+    var outra = quem === 'outra', P = QM()[quem], c = caminho(m, porta);
     T.rodada = quem;
     T.atual = [];
     registrar(T, (outra ? 'Agora como ' : 'Como ') + P.nome + ', da ' + P.empresa + (outra ? ' (a outra empresa)' : '') + ' · porta "' + porta.nome + '"', 'titulo');
@@ -785,7 +839,7 @@ BC.formularios = BC.formularios || {};
       if (!barrouEm) await esperar(passo(160));
     }
     if (T.cancelado) return;
-    var ass = assinatura(m), pjNome = m.pj ? m.pj.nome : EXEMPLO;
+    var ass = assinatura(m), pjNome = nomeMaquina(m);
     if (!outra) {
       /* tudo verde: todas as peças do caminho brilham juntas, faíscas nos pinos */
       var ids = Object.keys(T.passaram), t = agora();
@@ -814,7 +868,7 @@ BC.formularios = BC.formularios || {};
       gav.trancouEm = tb;
       T.status[gav.id] = 'barrou 1';
       T.bolhas[achaFio(m, barrouEm.de.id, gav.id) ? achaFio(m, barrouEm.de.id, gav.id).chave : k2] = '0 passaram · 1 barrado pela chave: ' + (gav.chave || 'cada empresa vê só o seu');
-      registrar(T, 'barrado pela chave "' + (gav.chave || '') + '": a ' + P.empresa + ' não ' + (verboDe(porta) === 'DEVOLVE' ? 'vê' : 'grava') + ' nada da ' + QUEM.ana.empresa, 'alarme', gav.id);
+      registrar(T, 'barrado pela chave "' + (gav.chave || '') + '": a ' + P.empresa + ' não ' + (verboDe(porta) === 'DEVOLVE' ? 'vê' : 'grava') + ' nada da ' + QM().ana.empresa, 'alarme', gav.id);
       m.linha.push({ ts: tb, texto: 'testou como a outra empresa: barrado no cadeado de ' + gav.nome, quem: L().eu, peca: gav.id });
       redesenhar();
       faiscasNaPeca(gav.id, 4, 'alarme', false);
@@ -864,7 +918,7 @@ BC.formularios = BC.formularios || {};
     var lista = m.pecas.filter(function (p) { return p.publicada && p.pronta && !p.corpo && p.tipo !== 'empresa'; });
     var ordem = ['carteiro', 'portaria', 'tela', 'porta', 'gaveta', 'robo', 'cano', 'deposito', 'cofre'];
     lista.sort(function (a, b) { return ordem.indexOf(a.tipo) - ordem.indexOf(b.tipo); });
-    var n = m.pecas.filter(function (p) { return p.publicada && p.pronta && p.tipo !== 'empresa'; }).length, pjNome = m.pj ? m.pj.nome : EXEMPLO;
+    var n = m.pecas.filter(function (p) { return p.publicada && p.pronta && p.tipo !== 'empresa'; }).length, pjNome = nomeMaquina(m);
     if (m.teste) { registrar(m.teste, 'Máquina funcionando: ' + n + ' peças com corpo', 'marca'); m.teste.pontos.push({ pts: 12, origem: 'Máquina funcionando · ' + n + ' peças com corpo' }); }
     m.ritoN = n;
     redesenhar();
@@ -887,9 +941,10 @@ BC.formularios = BC.formularios || {};
 
   /* ================================================================== publicar: a peça nova tracejada ganha corpo */
   M.publicar = async function (m) {
-    var novas = m.pecas.filter(function (p) { return !p.publicada; }), pjNome = m.pj ? m.pj.nome : EXEMPLO, qtd = m.mudancas.length;
+    var novas = m.pecas.filter(function (p) { return !p.publicada; }), pjNome = nomeMaquina(m), qtd = m.mudancas.length;
     m.versao++;
-    m.linha.push({ ts: agora(), texto: L().nome(L().eu) + ' publicou v' + m.versao + ': ' + qtd + ' mudança(s) em produção', quem: L().eu });
+    var txtPub = L().nome(L().eu) + ' publicou v' + m.versao + ': ' + qtd + ' mudança(s) em produção';
+    if (!m.real) m.linha.push({ ts: agora(), texto: txtPub, quem: L().eu });
     m.mudancas = []; m.modo = 'ver';
     redesenhar();
     for (var i = 0; i < novas.length; i++) {
@@ -904,6 +959,8 @@ BC.formularios = BC.formularios || {};
       await esperar(passo(260));
     }
     if (novas.length) tocar('duas');
+    /* app real: a publicação vai para o estado da equipe (as outras Estações e a TV veem as peças ganharem corpo) */
+    if (m.real) L().fazer('maquinaPublicar', { projeto: m.id, versao: m.versao, pecas: novas.map(function (p) { return p.id; }), texto: txtPub });
     L().fazer('recado', 'Máquina: ' + pjNome + ' publicada em produção (v' + m.versao + ')');
     evento(m, L().nome(L().eu) + ' publicou a Máquina de ' + pjNome + ' v' + m.versao + (novas.length ? ' · ' + novas.length + ' peça(s) ganharam corpo' : ''), 'publicou');
     avisar({ tipo: 'publicou', pj: m.id, versao: m.versao, pecas: novas.map(function (p) { return p.id; }) });
@@ -933,6 +990,91 @@ BC.formularios = BC.formularios || {};
   LA.maquinaEvento = function (quem, d) { if (!d || !d.texto) return; return [L()._evento('maquina', quem, d.texto, { tv: true, pj: d.pj || null, maquina: d.tipo || null })]; };
   LA.maquinaTv = function (quem, d) { if (!d || !d.pj) return; L().estado.maquinaTv = { pj: d.pj, nome: d.nome, ts: Date.now(), retrato: d.retrato || null }; return [L()._evento('maquina', quem, L().nome(quem) + ' levou a Máquina de ' + d.nome + ' para a TV', { tv: true, pj: d.pj, maquina: 'tv', maquinaRetrato: d.retrato || null })]; };
   function evento(m, texto, tipo) { try { L().fazer('maquinaEvento', { texto: texto, pj: m.id, tipo: tipo }); } catch (e) { /* a loja é de outra peça */ } }
+
+  /* ---------- app real: a máquina de cada projeto no estado da equipe (ações da loja: vão para o diário) ---------- */
+  function linhaCurta(s, max) { return String(s == null ? '' : s).replace(/[\u0000-\u001f]+/g, ' ').trim().slice(0, max); }
+  function pecaDaFonte(src, ref) {
+    if (!src || ref == null) return null;
+    var id = String(ref), n = U.normalizar(id).replace(/^(a|o)\s+/, '');
+    return src.pecas.filter(function (p) { return p.id === id; })[0] || src.pecas.filter(function (p) { return U.normalizar(p.nome) === n || U.normalizar((TIPOS[p.tipo] || '') + ' ' + p.nome) === n; })[0] || null;
+  }
+  /* uma Tela não grava direto numa Gaveta: passa por uma Porta (a mesma regra de M.ligar) */
+  function motivoSemFio(src, a, b) {
+    if (!a || !b) return 'peça não encontrada';
+    if (a.id === b.id) return 'a peça não se liga a ela mesma';
+    if (a.tipo === 'tela' && b.tipo === 'gaveta') return 'uma Tela não grava direto numa Gaveta: passa por uma Porta';
+    if (src.fios.some(function (f) { return (f[0] === a.id && f[1] === b.id) || (f[0] === b.id && f[1] === a.id); })) return 'já estão ligadas';
+    return '';
+  }
+  M.motivoSemFio = function (pjId, de, para) { var src = fonteReal(pjId, false); if (!src) return 'esta Máquina ainda não tem peças'; return motivoSemFio(src, pecaDaFonte(src, de), pecaDaFonte(src, para)); };
+  /* maquinaPeca {projeto, peca:{id?, tipo, nome, frase?, campos?, chave?, verbo?, login?, quando?, …}, fios?:[[de,para]], texto?} */
+  LA.maquinaPeca = function (quem, d) {
+    if (!d || !d.projeto || !d.peca || typeof d.peca !== 'object') return;
+    var pjId = String(d.projeto), pj = projetoDe(pjId), x = d.peca, tipo = String(x.tipo || ''), nome = linhaCurta(x.nome, 60);
+    if (!pj || TIPOS_REAIS.indexOf(tipo) === -1 || !nome) return;
+    var src = fonteReal(pjId, true), id = linhaCurta(x.id, 64).replace(/[^\w-]/g, '') || L()._novoId('mq');
+    if (src.pecas.some(function (p) { return p.id === id || (p.tipo === tipo && U.normalizar(p.nome) === U.normalizar(nome)); })) return;
+    var p = pecaParaEstado(x);
+    p.id = id; p.tipo = tipo; p.nome = nome; p.frase = linhaCurta(x.frase || INFO[tipo].oque, 200); p.por = x.por && L().pessoa(x.por) ? x.por : quem;
+    p.criadaEm = Date.now(); p.publicada = false; delete p.publicadaEm;
+    if (Array.isArray(p.campos)) p.campos = p.campos.slice(0, 30).map(function (c) { return linhaCurta(c, 80); }).filter(Boolean);
+    if (tipo === 'gaveta') { if (CHAVES.indexOf(p.chave) === -1) p.chave = '⚠ aberta para todos'; if (typeof p.linhas !== 'number') p.linhas = 0; }
+    if (tipo === 'porta') { if (p.verbo !== 'DEVOLVE' && p.verbo !== 'RECEBE') delete p.verbo; if (p.login !== false) p.login = true; }
+    src.pecas.push(p);
+    (Array.isArray(d.fios) ? d.fios : []).forEach(function (f) { var a = Array.isArray(f) && pecaDaFonte(src, f[0]), b = Array.isArray(f) && pecaDaFonte(src, f[1]); if (a && b && !motivoSemFio(src, a, b)) src.fios.push([a.id, b.id]); });
+    var texto = linhaCurta(d.texto, 200) || L().nome(quem) + ' montou ' + TIPOS[tipo] + ' "' + nome + '"';
+    src.linha.push({ ts: Date.now(), texto: texto, quem: quem, peca: id });
+    if (src.linha.length > 200) src.linha.splice(0, src.linha.length - 200);
+    return [L()._evento('maquina', quem, L().nome(quem) + ' montou ' + TIPOS[tipo] + ' "' + nome + '" na Máquina de ' + pj.nome, { discreto: true, pj: pjId, maquina: 'peca', peca: id })];
+  };
+  /* maquinaLigar {projeto, de, para, texto?}: de e para são id ou nome da peça */
+  LA.maquinaLigar = function (quem, d) {
+    if (!d || !d.projeto || !projetoDe(String(d.projeto))) return;
+    var src = fonteReal(String(d.projeto), false), a = pecaDaFonte(src, d.de), b = pecaDaFonte(src, d.para);
+    if (!src || motivoSemFio(src, a, b)) return;
+    src.fios.push([a.id, b.id]);
+    var texto = linhaCurta(d.texto, 200) || L().nome(quem) + ' ligou ' + TIPOS[a.tipo] + ' "' + a.nome + '" a ' + TIPOS[b.tipo] + ' "' + b.nome + '"';
+    src.linha.push({ ts: Date.now(), texto: texto, quem: quem, peca: a.id });
+    return [L()._evento('maquina', quem, L().nome(quem) + ' ligou ' + TIPOS[a.tipo] + ' "' + a.nome + '" a ' + TIPOS[b.tipo] + ' "' + b.nome + '"', { discreto: true, pj: String(d.projeto), maquina: 'fio' })];
+  };
+  /* maquinaPublicar {projeto, versao?, pecas?:[ids], texto?}: as peças ainda no local ganham corpo em todas as telas */
+  LA.maquinaPublicar = function (quem, d) {
+    if (!d || !d.projeto || !projetoDe(String(d.projeto))) return;
+    var src = fonteReal(String(d.projeto), false);
+    if (!src) return;
+    var t = Date.now(), ids = Array.isArray(d.pecas) && d.pecas.length ? d.pecas.map(String) : null, n = 0;
+    src.pecas.forEach(function (p) { if (!p.publicada && (!ids || ids.indexOf(p.id) !== -1)) { p.publicada = true; p.publicadaEm = t; n++; } });
+    src.versao = Math.max((src.versao || 1) + 1, +d.versao || 0);
+    src.linha.push({ ts: t, texto: linhaCurta(d.texto, 200) || L().nome(quem) + ' publicou v' + src.versao, quem: quem });
+    return [L()._evento('maquina', quem, L().nome(quem) + ' publicou a Máquina de ' + projetoDe(String(d.projeto)).nome + ' v' + src.versao + (n ? ' · ' + n + ' peça(s) com corpo' : ''), { discreto: true, pj: String(d.projeto), maquina: 'publicou-estado' })];
+  };
+  /* o que chegou pelo estado (outra Estação, o agente pelo conector, o diário ao abrir) entra na Máquina aberta nesta janela */
+  function sincronizarReal() {
+    if (!real()) return;
+    var e = L().estado, mudou = false;
+    if (!e || !e.maquinas) return;
+    Object.keys(M.maquinas).forEach(function (pjId) {
+      var m = M.maquinas[pjId], src = e.maquinas[pjId];
+      if (!m.real || !src) return;
+      if (m.linha !== src.linha) m.linha = src.linha;
+      if (!m.pj) m.pj = projetoDe(pjId);
+      src.pecas.forEach(function (x) {
+        var p = peca(m, x.id);
+        if (!p) {
+          p = pecaDoEstado(x, !x.publicada);
+          m.pecas.push(p); m.rev++; mudou = true;
+          if (!x.publicada) { m.mudancas.push('Cria ' + (TIPOS[p.tipo] || 'peça') + ' "' + p.nome + '"'); setTimeout(function () { ficouPronta(m, p); }, 1600); }
+          avisar({ tipo: 'encaixou', pj: m.id, peca: p.id, nome: p.nome, tipoPeca: p.tipo });
+          return;
+        }
+        if (x.publicada && !p.publicada) { p.publicada = true; p.pronta = true; p.nova = false; p.corpo = agora(); p.publicadaEm = x.publicadaEm; acender(p, 'marca', 8000); mudou = true; }
+      });
+      src.fios.forEach(function (f) { if (peca(m, f[0]) && peca(m, f[1]) && !achaFio(m, f[0], f[1])) { m.fios.push([f[0], f[1]]); m.fioNasce[chaveFio(f[0], f[1])] = agora(); m.rev++; mudou = true; } });
+      if ((src.versao || 1) > m.versao) m.versao = src.versao;
+    });
+    if (mudou && abaMaquina()) setTimeout(redesenharSeAberta, 0);
+  }
+  L().aoMudar(function () { try { sincronizarReal(); } catch (err) { console.warn('[máquina] sincronizar', err); } });
 
   /* ================================================================== desenho */
   function cadeadoHtml(p, t) {
@@ -1089,7 +1231,8 @@ BC.formularios = BC.formularios || {};
   }
   function trilhaHtml(m) {
     var partes = ['<button type="button" class="mq-trilha-item' + (m.zoom === 'inteira' ? ' atual' : '') + '" data-acao="mq-zoom" data-z="inteira">Máquina inteira</button>'];
-    if (m.zoom !== 'inteira') partes.push('<button type="button" class="mq-trilha-item' + (m.zoom === 'dominio' ? ' atual' : '') + '" data-acao="mq-zoom" data-z="dominio">' + esc(m.dominio ? nomeDom(m.dominio) : 'todas as peças') + '</button>');
+    if (m.zoom === '3d') partes.push('<span class="mq-trilha-item atual">3D · peças e fios</span>');
+    else if (m.zoom !== 'inteira') partes.push('<button type="button" class="mq-trilha-item' + (m.zoom === 'dominio' ? ' atual' : '') + '" data-acao="mq-zoom" data-z="dominio">' + esc(m.dominio ? nomeDom(m.dominio) : 'todas as peças') + '</button>');
     var s = m.zoom === 'peca' && m.sel && peca(m, m.sel);
     if (s) partes.push('<span class="mq-trilha-item atual">' + esc(s.nome) + '</span>');
     return '<nav class="mq-trilha" aria-label="Onde estou na Máquina">' + partes.join('<span class="mq-trilha-sep">›</span>') + '</nav>';
@@ -1099,19 +1242,28 @@ BC.formularios = BC.formularios || {};
     if (!m.funcionandoEm || t - m.funcionandoEm > 12000) return '';
     return '<div class="mq-rito" role="status"' + luzAttrs({ cor: 'marca', t: m.funcionandoEm, mv: 3000 }) + '><span class="mq-rito-titulo">Máquina funcionando</span><small>' + (m.ritoN || 0) + ' peças com corpo · 2 testes · ' + U.hora(m.funcionandoEm) + '</small></div>';
   }
+  /* a máquina ainda sem peça (app real): uma frase e o que fazer */
+  function vaziaHtml(m) {
+    return '<div class="mq-vazio-estado" role="note"><p class="mq-vazio-frase">A Máquina de ' + esc(nomeMaquina(m)) + ' ainda está vazia.</p>' +
+      '<p class="mq-texto">Peça ao agente no terminal: ele lê o código do projeto e monta as peças aqui (gavetas, portas, robôs), assinadas. Ou monte a primeira pela vitrine das 16 peças.</p>' +
+      '<div class="dem-acoes"><button class="botao primario" type="button" data-acao="mq-terminal">Pedir ao agente no terminal</button><button class="botao" type="button" data-acao="mq-painel" data-p="vitrine">Montar pela vitrine</button></div></div>';
+  }
   function palcoHtml(m) {
     var sel = m.sel && peca(m, m.sel), zoom = m.zoom === 'peca' && !sel ? 'dominio' : m.zoom;
-    var mesa = zoom === 'inteira' ? mesaInteira(m) : zoom === 'peca' ? mesaPeca(m, sel) : mesaDominio(m);
+    var vazia = !m.pecas.length, tres = zoom === '3d';
+    var mesa = vazia || tres ? '' : zoom === 'inteira' ? mesaInteira(m) : zoom === 'peca' ? mesaPeca(m, sel) : mesaDominio(m);
     var k = m.escala[zoom] || 0.86, tam = m.tam[zoom];
+    var com = m.pecas.filter(function (p) { return p.tipo !== 'empresa' && p.publicada && p.pronta; }).length, trac = m.pecas.filter(function (p) { return p.tipo !== 'empresa'; }).length - com;
+    var dentro = vazia ? vaziaHtml(m) : tres
+      ? '<div class="mq-3d-lugar" aria-label="A Máquina inteira em 3D"></div><p class="mq-3d-legenda">' + com + ' peça' + (com === 1 ? '' : 's') + ' com corpo' + (trac ? ' · ' + trac + ' tracejada' + (trac === 1 ? '' : 's') + ' (publique para ganhar corpo)' : '') + ' · ' + m.fios.length + ' fio' + (m.fios.length === 1 ? '' : 's') + '</p>'
+      : '<div class="mq-escala"' + (tam ? ' style="width:' + Math.ceil(tam[0] * k) + 'px;height:' + Math.ceil(tam[1] * k) + 'px"' : '') + '><div class="mq-mesa mq-mesa-' + zoom + '" style="transform:scale(' + k + ')">' + mesa + '</div></div>';
     return '<section class="mq-palco-caixa">' +
       '<div class="mq-barra">' + trilhaHtml(m) +
-        '<span class="alternar mq-zoom" role="group" aria-label="Altura do zoom">' + [['inteira', 'Inteira'], ['dominio', 'Domínio'], ['peca', 'Peça']].map(function (z) { return '<button type="button" class="' + (zoom === z[0] ? 'ativo' : '') + '" data-acao="mq-zoom" data-z="' + z[0] + '"' + (z[0] === 'peca' && !sel ? ' title="Escolha uma peça (duplo clique)"' : '') + '>' + z[1] + '</button>'; }).join('') + '</span>' +
+        '<span class="alternar mq-zoom" role="group" aria-label="Altura do zoom">' + [['inteira', 'Inteira'], ['dominio', 'Domínio'], ['peca', 'Peça'], ['3d', '3D']].map(function (z) { return '<button type="button" class="' + (zoom === z[0] ? 'ativo' : '') + '" data-acao="mq-zoom" data-z="' + z[0] + '"' + (z[0] === 'peca' && !sel ? ' title="Escolha uma peça (duplo clique)"' : z[0] === '3d' ? ' title="A Máquina inteira em 3D: as peças publicadas têm corpo, as novas ficam tracejadas"' : '') + '>' + z[1] + '</button>'; }).join('') + '</span>' +
         '<button class="botao discreto mq-pessoa' + (m.porPessoa ? ' ligado' : '') + '" type="button" data-acao="mq-pessoa" aria-pressed="' + !!m.porPessoa + '">por pessoa</button>' +
       '</div>' +
-      '<div class="mq-palco' + (m.porPessoa ? ' por-pessoa' : '') + '" data-zoom="' + zoom + '">' +
-        '<div class="mq-escala"' + (tam ? ' style="width:' + Math.ceil(tam[0] * k) + 'px;height:' + Math.ceil(tam[1] * k) + 'px"' : '') + '><div class="mq-mesa mq-mesa-' + zoom + '" style="transform:scale(' + k + ')">' + mesa + '</div></div>' +
-      '</div>' + ritoHtml(m) +
-      '<div class="mq-casa" title="' + esc(INFO.casa.oque) + '">' + glifo('casa', 12) + '<b>CASA DE MÁQUINAS</b><span>pequena · 2 GB · São Paulo · cópia diária por 7 dias · sem volta no tempo · 90 conexões</span></div>' +
+      '<div class="mq-palco' + (m.porPessoa ? ' por-pessoa' : '') + (tres && !vazia ? ' mq-palco-3d' : '') + (vazia ? ' mq-palco-vazio' : '') + '" data-zoom="' + zoom + '">' + dentro + '</div>' + ritoHtml(m) +
+      '<div class="mq-casa" title="' + esc(INFO.casa.oque) + '">' + glifo('casa', 12) + '<b>CASA DE MÁQUINAS</b><span>' + (m.real ? 'ainda não descrita · o agente preenche quando ler a configuração do projeto' : 'pequena · 2 GB · São Paulo · cópia diária por 7 dias · sem volta no tempo · 90 conexões') + '</span></div>' +
     '</section>';
   }
 
@@ -1164,7 +1316,7 @@ BC.formularios = BC.formularios || {};
       (als.length ? '<span class="rotulo">Alertas</span><ul class="mq-alertas">' + als.map(function (p) { return '<li><button type="button" class="mq-link" data-acao="mq-sel" data-id="' + esc(p.id) + '">' + glifo(p.tipo, 14) + '<b>' + esc(p.nome) + '</b> ' + esc(alertaDe(m, p)) + '</button></li>'; }).join('') + '</ul>' : '') +
       '<span class="rotulo">Pontos com origem · hoje ' + hoje + '</span>' +
       (m.pontos.length ? '<ul class="mq-pontos">' + m.pontos.slice(0, 6).map(function (x) { return '<li><b>+' + x.pts + '</b> ' + esc(x.origem) + ' · ' + U.hora(x.t) + '</li>'; }).join('') + '</ul>' : '<p class="form-ajuda">Nenhum ainda. Teste a máquina: +6 quando passa, +2 quando o cadeado barra a outra empresa, +12 quando ela fica funcionando. Nunca por tempo.</p>') +
-      '<span class="rotulo">Ferramentas ligadas</span><p class="mq-ferramentas">' + [['agenda (cron)', true], ['avisos ao vivo', true], ['busca por parecido', false], ['mapa', false]].map(function (f) { return '<span class="' + (f[1] ? 'on' : '') + '">' + glifo('ferramenta', 12) + esc(f[0]) + '</span>'; }).join('') + '</p>' +
+      (m.real ? '' : '<span class="rotulo">Ferramentas ligadas</span><p class="mq-ferramentas">' + [['agenda (cron)', true], ['avisos ao vivo', true], ['busca por parecido', false], ['mapa', false]].map(function (f) { return '<span class="' + (f[1] ? 'on' : '') + '">' + glifo('ferramenta', 12) + esc(f[0]) + '</span>'; }).join('') + '</p>') +
       '<p class="form-ajuda">Clique numa peça para ver o que ela é e onde fica guardado; duplo clique para ver de perto. Testar manda um pedido pelos fios.</p>' +
     '</div>';
   }
@@ -1175,7 +1327,7 @@ BC.formularios = BC.formularios || {};
     return '<form class="mq-teste-form" data-form="mq-testar">' +
       '<label class="mq-campo-form"><span>Pela porta</span><select id="mq-t-porta" data-acao-mudar="mq-t-porta">' + ps.map(function (p) { return '<option value="' + esc(p.id) + '"' + (p.id === porta.id ? ' selected' : '') + '>' + esc(p.nome) + '</option>'; }).join('') + '</select></label>' +
       camposPorta(porta).map(function (c, i) { return '<label class="mq-campo-form"><span>' + esc(c) + '</span><input type="text" id="mq-t-c-' + porta.id + '-' + i + '" data-campo="' + esc(c) + '" value="' + esc(d[c]) + '" autocomplete="off"></label>'; }).join('') +
-      '<fieldset class="mq-como"><legend>Como quem</legend>' + [['as-duas', 'Ana e depois a outra empresa'], ['ana', 'Ana · ' + QUEM.ana.empresa], ['outra', 'Beto · ' + QUEM.outra.empresa + ' (a outra empresa)']].map(function (o) { return '<label><input type="radio" name="mq-t-como" value="' + o[0] + '" data-acao-mudar="mq-t-como"' + ((m.testeComo || 'as-duas') === o[0] ? ' checked' : '') + '> ' + esc(o[1]) + '</label>'; }).join('') + '</fieldset>' +
+      '<fieldset class="mq-como"><legend>Como quem</legend>' + [['as-duas', QM().ana.nome + ' e depois a outra empresa'], ['ana', QM().ana.nome + ' · ' + QM().ana.empresa], ['outra', QM().outra.nome + ' · ' + QM().outra.empresa + ' (a outra empresa)']].map(function (o) { return '<label><input type="radio" name="mq-t-como" value="' + o[0] + '" data-acao-mudar="mq-t-como"' + ((m.testeComo || 'as-duas') === o[0] ? ' checked' : '') + '> ' + esc(o[1]) + '</label>'; }).join('') + '</fieldset>' +
       '<button class="botao primario" type="submit"' + (rodando || m.ambiente === 'produção' ? ' disabled' : '') + '>' + (m.ambiente === 'produção' ? 'Produção não tem teste' : rodando ? 'Testando…' : 'Enviar pelo fio') + '</button>' +
     '</form>';
   }
@@ -1246,30 +1398,41 @@ BC.formularios = BC.formularios || {};
   }
   function topoHtml(m) {
     var pj = m.pj, als = m.pecas.filter(function (p) { return alertaDe(m, p); }).length, func = m.funcionandoAss && m.funcionandoAss === assinatura(m);
-    return '<header class="mq-topo"><div class="mq-titulo"><h1 class="pagina-titulo">' + glifo('maquina', 18) + 'Máquina · ' + esc(pj ? pj.nome : EXEMPLO) + '</h1>' +
+    return '<header class="mq-topo"><div class="mq-titulo"><h1 class="pagina-titulo">' + glifo('maquina', 18) + 'Máquina · ' + esc(nomeMaquina(m)) + '</h1>' +
       '<p class="mq-sub"><span class="alternar mq-amb-alt" role="group" aria-label="Ambiente">' + ['local', 'branch', 'produção'].map(function (a) { return '<button type="button" class="mq-amb ' + a + (m.ambiente === a ? ' ativo' : '') + '" data-acao="mq-amb" data-a="' + a + '">' + a + (m.ambiente === a ? ' ●' : '') + '</button>'; }).join('') + '</span> v' + m.versao + ' · ' + m.pecas.length + ' peças · ' + als + ' alerta' + (als === 1 ? '' : 's') + (m.mudancas.length ? ' · <b class="mq-pendente">' + m.mudancas.length + ' mudança(s) não publicada(s)</b>' : '') + (func ? ' · <b class="mq-ok">funcionando</b>' : '') + '</p></div>' +
       '<div class="dem-acoes mq-acoes">' +
         '<button class="botao primario mq-testar" type="button" data-acao="mq-testar-abrir"' + (m.ambiente === 'produção' ? ' disabled title="Nunca em produção"' : '') + '>Testar</button>' +
         '<button class="botao" type="button" data-acao="mq-publicar">Publicar' + (m.mudancas.length ? ' · ' + m.mudancas.length : '') + '</button>' +
         '<button class="botao" type="button" data-acao="mq-muda">O que muda</button>' +
-        '<button class="botao" type="button" data-acao="mq-montar">▶ Ver o agente montando</button>' +
+        (m.real ? '' : '<button class="botao" type="button" data-acao="mq-montar">▶ Ver o agente montando</button>') +
         '<button class="botao discreto" type="button" data-acao="mq-tv">Projetar na TV</button>' +
       '</div></header>';
   }
 
+  function semProjetoHtml() {
+    return '<div class="mq mq2 mq-sem-projeto" data-pj=""><header class="mq-topo"><div class="mq-titulo"><h1 class="pagina-titulo">' + glifo('maquina', 18) + 'Máquina</h1><p class="mq-sub">o backend de cada projeto, em peças com nome de gente</p></div></header>' +
+      '<div class="mq-vazio-estado" role="note"><p class="mq-vazio-frase">Ainda não há projeto na equipe, então não há Máquina para mostrar.</p>' +
+      '<p class="mq-texto">Crie um projeto e a Máquina dele nasce vazia, pronta para as peças. Ou peça ao agente no terminal: "cria o projeto X e monta a Máquina dele a partir do código".</p>' +
+      '<div class="dem-acoes"><button class="botao primario" type="button" data-acao="pj-novo-form">＋ Criar projeto</button><button class="botao" type="button" data-acao="mq-terminal">Pedir ao agente no terminal</button></div></div></div>';
+  }
   BC.vistas.maquina = {
     lateral: function () {
-      var tab = BC.estacao.abaAtual(), m = tab.tipo === 'maquina' && tab.ref ? maquinaDe(tab.ref) : null;
+      var tab = BC.estacao.abaAtual(), eReal = real(), m = tab.tipo === 'maquina' && tab.ref && (!eReal || projetoDe(tab.ref)) ? maquinaDe(tab.ref) : null;
       var pjs = L().estado.projetos || [];
       var linha = m ? m.linha.slice().reverse() : [], filtro = m && m.sel && peca(m, m.sel);
       if (filtro) linha = linha.filter(function (l) { return l.peca === filtro.id || l.texto.indexOf(filtro.nome) !== -1; });
-      return '<div class="lat-titulo"><span class="rotulo">Máquina · backend visual</span></div><p class="lat-nota">O backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto:</p><ul class="lat-lista">' + (pjs.length ? '' : '<li><button class="lat-item" type="button" data-acao="pj-maquina" data-id="clinicas" aria-current="' + !!(m && !m.pj) + '"><span class="rotulo-texto mq-lat-pj">' + glifo('maquina', 14) + esc(EXEMPLO) + '</span></button></li>') + pjs.map(function (p) { return '<li><button class="lat-item" type="button" data-acao="pj-maquina" data-id="' + p.id + '" aria-current="' + !!(m && m.pj && m.pj.id === p.id) + '"><span class="rotulo-texto mq-lat-pj">' + glifo('maquina', 14) + esc(p.nome) + '</span></button></li>'; }).join('') + '</ul>' +
-        (m ? '<div class="lat-titulo"><span class="rotulo">Linha do tempo' + (filtro ? ' · ' + esc(filtro.nome) : '') + '</span>' + (filtro ? '<button class="botao discreto" type="button" data-acao="mq-sel" data-id="">todas</button>' : '<span class="conta">' + m.linha.length + '</span>') + '</div><ul class="mq-linha">' + linha.slice(0, 8).map(function (l) { return '<li>' + U.avatar(L().pessoa(l.quem), 16) + '<span>' + esc(l.texto) + '</span><time>' + U.relativo(l.ts) + '</time></li>'; }).join('') + (linha.length ? '' : '<li><span class="lat-nota">Nada ainda nesta peça.</span></li>') + '</ul>' : '') +
+      return '<div class="lat-titulo"><span class="rotulo">Máquina · backend visual</span></div><p class="lat-nota">O backend de cada projeto em peças de montar, com nome de gente. Escolha o projeto:</p><ul class="lat-lista">' + (pjs.length ? '' : eReal ? '<li><span class="lat-nota">Nenhum projeto ainda: crie um e a Máquina dele aparece aqui.</span></li>' : '<li><button class="lat-item" type="button" data-acao="pj-maquina" data-id="clinicas" aria-current="' + !!(m && !m.pj) + '"><span class="rotulo-texto mq-lat-pj">' + glifo('maquina', 14) + esc(EXEMPLO) + '</span></button></li>') + pjs.map(function (p) { return '<li><button class="lat-item" type="button" data-acao="pj-maquina" data-id="' + p.id + '" aria-current="' + !!(m && m.pj && m.pj.id === p.id) + '"><span class="rotulo-texto mq-lat-pj">' + glifo('maquina', 14) + esc(p.nome) + '</span></button></li>'; }).join('') + '</ul>' +
+        (m ? '<div class="lat-titulo"><span class="rotulo">Linha do tempo' + (filtro ? ' · ' + esc(filtro.nome) : '') + '</span>' + (filtro ? '<button class="botao discreto" type="button" data-acao="mq-sel" data-id="">todas</button>' : '<span class="conta">' + m.linha.length + '</span>') + '</div><ul class="mq-linha">' + linha.slice(0, 8).map(function (l) { return '<li>' + U.avatar(L().pessoa(l.quem), 16) + '<span>' + esc(l.texto) + '</span><time>' + U.relativo(l.ts) + '</time></li>'; }).join('') + (linha.length ? '' : '<li><span class="lat-nota">' + (filtro ? 'Nada ainda nesta peça.' : 'Nada ainda: a linha do tempo começa quando a primeira peça entrar.') + '</span></li>') + '</ul>' : '') +
         M.presetsHtml(m) +
-        '<p class="lat-nota">A Máquina é o construtor de backend da equipe: o código é a verdade, ela lê e desenha, quem escreve é o agente. Testa no local ou na branch; "Publicar" vem depois de "O que muda". Peça no terminal: "cria uma gaveta de retornos separada por clínica com um robô de lembrete".</p>';
+        '<p class="lat-nota">A Máquina é o construtor de backend da equipe: o código é a verdade, ela lê e desenha, quem escreve é o agente. Testa no local ou na branch; "Publicar" vem depois de "O que muda". ' + (eReal ? 'Peça ao agente no terminal: "monta a Máquina deste projeto a partir do código".' : 'Peça no terminal: "cria uma gaveta de retornos separada por clínica com um robô de lembrete".') + '</p>';
     },
     conteudo: function (tab) {
-      if (!tab.ref) { tab.ref = ((L().estado.projetos || [])[0] || {}).id || 'clinicas'; }
+      if (real()) {
+        /* app real: só projeto de verdade; sem projeto, o estado vazio (nada de máquina de exemplo) */
+        var ref = refReal(tab.ref);
+        if (ref !== tab.ref) { tab.ref = ref; tab.titulo = 'Máquina' + (ref ? ' · ' + projetoDe(ref).nome : ''); }
+        if (!ref) return semProjetoHtml();
+      } else if (!tab.ref) { tab.ref = ((L().estado.projetos || [])[0] || {}).id || 'clinicas'; }
       var m = maquinaDe(tab.ref);
       /* a rolagem do palco é lida antes de o conteúdo ser trocado (evento de rolagem pode nem chegar com a janela escondida) */
       var velho = document.querySelector('#e-conteudo .mq2[data-pj="' + String(tab.ref).replace(/"/g, '') + '"] .mq-palco');
@@ -1363,7 +1526,7 @@ BC.formularios = BC.formularios || {};
       setTimeout(function () { ficouPronta(m, nova); }, 1400 + i * 500);
     });
     L().fazer('presetUso', p.id);
-    if (terminal) terminal.cartao('Preset <b>' + esc(p.nome) + '</b> entrou na Máquina de ' + esc(m.pj ? m.pj.nome : EXEMPLO) + ': ' + p.pecas.length + ' peça(s) encaixando.', null, '');
+    if (terminal) terminal.cartao('Preset <b>' + esc(p.nome) + '</b> entrou na Máquina de ' + esc(nomeMaquina(m)) + ': ' + p.pecas.length + ' peça(s) encaixando.', null, '');
     BC.estacao.render();
   };
   A['mq-preset-usar'] = function (el) {
@@ -1389,7 +1552,7 @@ BC.formularios = BC.formularios || {};
       (lista.length ? '<ul class="lat-lista mq-presets">' + lista.map(function (p) {
         var dono = L().pessoa(p.por), d = p.testadoEm ? new Date(p.testadoEm) : null;
         return '<li class="mq-preset"><span class="mq-preset-cab">' + (dono ? U.avatar(dono, 16) : '') + '<b>' + esc(p.nome) + '</b><span class="chip">' + (p.tipo === 'tela' ? 'tela' : (p.pecas || []).length + ' peças') + '</span></span><small>' + esc(p.descricao || '') + (p.usos ? ' · usado ' + p.usos + '×' : '') + (p.projeto ? ' · veio de ' + esc(p.projeto) : '') + (d ? ' · ✓ testou e passou em ' + String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + ' ' + U.hora(p.testadoEm) : '') + ' · v' + (p.versao || 1) + '</small>' +
-          (p.tipo === 'tela' ? '<button class="botao discreto" type="button" data-acao="preset-tela" data-id="' + p.id + '">Começar desta tela</button>' : '<button class="botao' + (m ? ' primario' : '') + '" type="button" data-acao="mq-preset-usar" data-id="' + p.id + '">Usar' + (m ? ' em ' + esc(m.pj ? m.pj.nome : EXEMPLO) : '') + '</button>') + '</li>';
+          (p.tipo === 'tela' ? '<button class="botao discreto" type="button" data-acao="preset-tela" data-id="' + p.id + '">Começar desta tela</button>' : '<button class="botao' + (m ? ' primario' : '') + '" type="button" data-acao="mq-preset-usar" data-id="' + p.id + '">Usar' + (m ? ' em ' + esc(nomeMaquina(m)) : '') + '</button>') + '</li>';
       }).join('') + '</ul>' : '<p class="lat-nota">Nada guardado ainda. Quando algo for construído e o teste passar, clique "Salvar como preset".</p>') +
       '<p class="lat-nota">Presets são o que a equipe já construiu e funcionou: backends e telas. Entram em qualquer projeto com um clique ou por "usa o preset X" no terminal.</p>';
   };
@@ -1410,7 +1573,7 @@ BC.formularios = BC.formularios || {};
   A['mq-sql'] = function () { aviso('create table retornos (id uuid primary key default gen_random_uuid(), tenant_id uuid references tenants(id), …); alter table retornos enable row level security; …'); };
   A['mq-tv'] = function () {
     var m = mAtual(); if (!m) return;
-    L().fazer('maquinaTv', { pj: m.id, nome: m.pj ? m.pj.nome : EXEMPLO, retrato: M.retrato(m.id) });
+    L().fazer('maquinaTv', { pj: m.id, nome: nomeMaquina(m), retrato: M.retrato(m.id) });
     aviso('A Máquina foi para a TV: a parede recebe o retrato (peças, corpo e o último teste).');
   };
   A['mq-chave'] = function (el) {
@@ -1431,7 +1594,7 @@ BC.formularios = BC.formularios || {};
   BC.formularios['mq-publicar'] = function () {
     var m = mAtual(), v = (document.getElementById('mq-confirma') || {}).value || '';
     if (!m) return;
-    if (U.normalizar(v) !== U.normalizar(m.pj ? m.pj.nome : EXEMPLO)) { aviso('Digite o nome do projeto exatamente para confirmar.'); return; }
+    if (U.normalizar(v) !== U.normalizar(nomeMaquina(m))) { aviso('Digite o nome do projeto exatamente para confirmar.'); return; }
     M.publicar(m);
   };
   /* ver em 3D: a vitrine do PEÇAS (midia/pecas/pecas.js) numa camada própria, fora do conteúdo que redesenha */
@@ -1453,6 +1616,44 @@ BC.formularios = BC.formularios || {};
   };
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') { var d = document.getElementById('mq-3d'); if (d && d.parentNode) d.parentNode.removeChild(d); } });
 
+  /* a Máquina inteira em 3D (zoom "3D"): o corpo do projeto de visual3d.js (BC.visual3d.corpo) com as peças e os fios desta máquina.
+     Publicada = corpo; ainda no local = tracejada, e ao Publicar a peça sobe do chão dentro do contorno (o mesmo "ganhar corpo" da TV).
+     O quadro vive num nó próprio que troca de lugar a cada redesenho da Estação (o WebGL não recomeça a cada render). */
+  var V3 = { host: null, vista: null, pj: null, assin: '' };
+  function dados3d(m) {
+    var ids = {}, pecas = m.pecas.filter(function (p) { return p.tipo !== 'empresa'; }).map(function (p) {
+      ids[p.id] = true;
+      return { id: p.id, tipo: p.tipo, nome: p.nome, estado: p.publicada && p.pronta ? 'corpo' : 'tracejada', ts: p.publicadaEm || p.criadaEm || 0, por: p.por };
+    });
+    return { nome: nomeMaquina(m), pecas: pecas, fios: m.fios.filter(function (f) { return ids[f[0]] && ids[f[1]]; }).map(function (f) { return [f[0], f[1]]; }) };
+  }
+  function montar3d(m, lugar) {
+    if (!BC.visual3d || typeof BC.visual3d.corpo !== 'function') { lugar.innerHTML = '<p class="mq-3d-aviso">O 3D ainda não chegou nesta Estação.</p>'; return; }
+    if (!V3.host) { V3.host = document.createElement('div'); V3.host.className = 'mq-3d-corpo'; }
+    var mudouLugar = V3.host.parentNode !== lugar;
+    if (mudouLugar) lugar.appendChild(V3.host);
+    if (!V3.vista || V3.pj !== m.id) {
+      if (V3.vista) { try { V3.vista.destruir(); } catch (e) { /* já */ } }
+      V3.host.innerHTML = ''; V3.host.className = 'mq-3d-corpo';
+      V3.vista = BC.visual3d.corpo(V3.host); V3.pj = m.id; V3.assin = '';
+    }
+    var d = dados3d(m), a = JSON.stringify(d.pecas.map(function (p) { return [p.id, p.estado]; })) + '|' + JSON.stringify(d.fios);
+    if (a !== V3.assin) { V3.assin = a; V3.vista.atualizar(d); }
+    else if (mudouLugar && V3.vista.pedir) V3.vista.pedir('tamanho');
+  }
+  var aposDesenho2d = aposDesenho;
+  aposDesenho = function () {
+    aposDesenho2d();
+    var c = document.getElementById('e-conteudo'), raiz = c && c.querySelector('.mq2'), lugar = raiz && raiz.querySelector('.mq-3d-lugar');
+    var m = raiz && M.maquinas[raiz.getAttribute('data-pj')];
+    if (lugar && m) montar3d(m, lugar);
+  };
+  /* sem projeto ou com a máquina vazia: o terminal abre para pedir ao agente */
+  A['mq-terminal'] = function () {
+    try { if (BC.estacao && typeof BC.estacao.alternarTerminal === 'function') BC.estacao.alternarTerminal(true); } catch (e) { /* segue */ }
+    aviso('Peça no terminal: "monta a Máquina do projeto a partir do código". O agente usa o conector coop e as peças entram aqui, assinadas.');
+  };
+
   /* ================================================================== API para as outras peças (TV, terminal, parede) */
   M.PECAS = PECAS;
   M.imagem = imagemDe;
@@ -1461,7 +1662,7 @@ BC.formularios = BC.formularios || {};
   M.retrato = function (pjId) {
     var id = pjId || (abaMaquina() ? abaMaquina().ref : null) || ((L().estado.projetos || [])[0] || {}).id || 'clinicas', m = maquinaDe(id), T = m.teste;
     return {
-      pj: id, nome: m.pj ? m.pj.nome : EXEMPLO, versao: m.versao, ambiente: m.ambiente, funcionando: !!(m.funcionandoAss && m.funcionandoAss === assinatura(m)), funcionandoEm: m.funcionandoEm || null,
+      pj: id, nome: nomeMaquina(m), versao: m.versao, ambiente: m.ambiente, funcionando: !!(m.funcionandoAss && m.funcionandoAss === assinatura(m)), funcionandoEm: m.funcionandoEm || null,
       pecas: m.pecas.map(function (p) { return { id: p.id, tipo: p.tipo, nome: p.nome, dominio: p.dom || null, pronta: !!p.pronta, publicada: !!p.publicada, corpo: !!p.corpo, alerta: alertaDe(m, p) || null, suja: suja(p), imagem: imagemDe(p.tipo) || null, por: p.por }; }),
       fios: m.fios.map(function (f) { return { de: f[0], para: f[1], tipo: tipoFio(m, f) }; }),
       ultimoTeste: T ? { como: T.como, porta: T.porta, passou: !!T.passou, barrado: !!T.barrado, vazou: !!T.vazouFim, em: T.t0, rodando: !!T.rodando } : null
@@ -1470,6 +1671,16 @@ BC.formularios = BC.formularios || {};
   M.comando = function (texto, ag, terminal) { if (!/\b(gaveta|porta|robo|robô|cano|tela|maquina|máquina|preset|testa|publica|liga)\b/i.test(texto)) return false; M.pedido(texto, ag, terminal); return true; };
   M.pontos = function (pjId) { var m = pjId ? M.maquinas[pjId] : mAtual(); return m ? m.pontos.slice() : []; };
   M.maquinaDe = maquinaDe;
+  M.real = real;
+  /* o 3D da Máquina inteira (testes e a auditoria): a vista (canvas, cena, câmera) e as medidas dela */
+  M.vista3d = function () { return V3.vista; };
+  M.medidas3d = function () { return V3.vista && V3.vista.medidas ? Object.assign({ pj: V3.pj, ligado: !!(V3.host && V3.host.isConnected) }, V3.vista.medidas()) : null; };
+  /* o que o agente lê pelo conector (coop_maquina): peças, fios e a linha do tempo do estado da equipe */
+  M.doEstado = function (pjId) { var src = fonteReal(pjId, false); return src ? { pecas: src.pecas.slice(), fios: src.fios.slice(), linha: src.linha.slice(-20), versao: src.versao || 1 } : { pecas: [], fios: [], linha: [], versao: 1 }; };
+  M.pecaDoEstado = function (pjId, ref) { return pecaDaFonte(fonteReal(pjId, false), ref); };
+  M.TIPOS_REAIS = TIPOS_REAIS.slice();
+  M.CHAVES = CHAVES.slice();
+  M.TIPOS = TIPOS;
 
   BC.maquina = M;
   carregarCatalogo();

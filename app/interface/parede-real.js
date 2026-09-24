@@ -73,6 +73,8 @@
   /* troca o HTML só quando mudou (e quando ninguém mais escreveu por cima: a Estação refaz a lateral por conta própria) */
   function html(el, h) { if (!el || (el.__h === h && el.firstChild === el.__p)) return; el.innerHTML = h; el.__h = h; el.__p = el.firstChild; }
   function naEstacao() { return (document.documentElement.dataset.vista || 'estacao') === 'estacao'; }
+  /* a parede está desenhada agora (a raiz fica fora do DOM quando outra atividade está aberta) */
+  function naTela() { return !!(raiz && raiz.isConnected && raiz.getClientRects().length); }
   function limitar(v, a, b) { return v < a ? a : v > b ? b : v; }
   function el(tag, cls, h) { var e = document.createElement(tag); if (cls) e.className = cls; if (h) e.innerHTML = h; return e; }
 
@@ -653,6 +655,16 @@
         var alvo = nomeSessao(c.dono, c.sessao);
         no.data = c.estado === 'ativo' ? '● ' + nomeDe(c.quem) + ' está no seu terminal ' + alvo + ' ' : nomeDe(c.quem) + ' quer entrar no seu terminal ' + alvo + ' ';
       }
+      /* controle ativo: o "●" de texto vira a luz de organismo na cor de quem está no terminal (pulso lento enquanto
+         durar; parede-real.css). O selo continua dizendo o mesmo para quem lê a tela (o ponto é aria-hidden) */
+      if (c.estado === 'ativo' && !item.querySelector('.pr-selo-pulso')) {
+        var pul = document.createElement('i');
+        pul.className = 'pr-selo-pulso';
+        pul.setAttribute('aria-hidden', 'true');
+        item.insertBefore(pul, item.firstChild);
+      }
+      var tx = item.querySelector('.pr-selo-pulso');
+      if (tx && tx.nextSibling && tx.nextSibling.nodeType === 3) tx.nextSibling.data = tx.nextSibling.data.replace(/^●\s*/, '');
       if (respirarSelo[c.id]) { delete respirarSelo[c.id]; O.respirar(item, { cor: quemCor, duracao: 1200 }); }
     });
   }
@@ -712,7 +724,12 @@
     if (s.assistindo) { s.assistindo = false; if (s.pararT) { clearTimeout(s.pararT); s.pararT = null; } }
     pintarCartao(s);
   }
+  var ligadosAntes = {};      /* id → estava ligado no último 'pares' (quem acabou de chegar pisca na foto) */
   function aoPares() {
+    (R.pares() || []).forEach(function (p) {
+      if (p.ligado && !ligadosAntes[p.id] && U.avatarEvento) U.avatarEvento(p.id); /* ficou online: a luz pisca nas laterais da foto */
+      ligadosAntes[p.id] = !!p.ligado;
+    });
     var donos = {};
     S.forEach(function (s) { donos[s.dono] = true; });
     Object.keys(donos).forEach(function (d) { if (!parLigado(d)) sessoesDe(d).forEach(marcarDesligado); });
@@ -770,10 +787,13 @@
     s.pausada = m.estado === 'pausado';
     s.v.atividade(m);
     if (amp === s.k && ampV) ampV.atividade(m);
+    /* evento da pessoa (o terminal começou a rodar, terminou ou falhou): a luz pisca nas laterais de todas as fotos dela */
+    if (m.estado !== antes && (m.estado === 'rodando' || m.estado === 'terminou' || m.estado === 'falhou') && U.avatarEvento) U.avatarEvento(s.dono);
     if (m.estado === 'terminou' && antes !== 'terminou' && con) {
       var dur = +m.duracao || 0;
-      /* R2: comando rápido era o esperado (só a luz); acima de 2 s o pulso corre do anel da pessoa até o centro e o chão acende */
-      con.acender('p:' + s.dono, { pulso: dur >= 2000, forte: dur > 10000, cor: s.v.estado() === 'falhou' ? 'alarme' : 'marca' });
+      /* R2: comando rápido era o esperado (só a luz); acima de 2 s o pulso corre do anel da pessoa até o centro e o chão acende.
+         Parede fora da tela: o motor só acende (o pulso precisa dos dois pontos na tela) */
+      con.acender('p:' + s.dono, { pulso: dur >= 2000 && naTela(), forte: dur > 10000, cor: s.v.estado() === 'falhou' ? 'alarme' : 'marca' });
       if (dur >= 2000) O.acender(salaEl, 9000);
     }
     pintarCartao(s);

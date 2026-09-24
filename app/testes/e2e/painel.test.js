@@ -509,8 +509,16 @@ test('agentes: renomear manda term-renomear; × (dois cliques) apaga e fecha o p
   await simular({ tipo: 'controles', lista: [] });
   /* fit: o painel muda de largura → term-tamanho → o pty sabe (stty size) */
   await page.evaluate(() => { BC.terminalReal.face('terminal'); BC.estacao.ui.termW = 440; BC.estacao.alternarTerminal(true); });
-  await esperar(500);
-  const dim = (await sessoes()).find((s) => s.id === 'assistente');
+  /* o painel anima a largura e o fit acompanha: espera o tamanho parar (2 leituras iguais) e o term-tamanho dele já ter saído (sob carga 500 ms não bastam) */
+  let dim = null;
+  for (let i = 0, antes = ''; i < 40; i++) {
+    await esperar(150);
+    dim = (await sessoes()).find((s) => s.id === 'assistente');
+    const agora = dim.cols + 'x' + dim.rows;
+    const saiu = await page.evaluate(([c, r]) => window.__env2.filter((m) => m.tipo === 'term-tamanho' && m.id === 'assistente').slice(-1).some((m) => m.cols === c && m.rows === r), [dim.cols, dim.rows]);
+    if (agora === antes && saiu) break;
+    antes = agora;
+  }
   await page.evaluate(() => BC.terminalReal.digitar('assistente', 'stty size\r'));
   const stty = await esperarBuffer('assistente', new RegExp('^' + dim.rows + ' ' + dim.cols + '$', 'm'), 8000).then(() => true, () => false);
   const tamanhos = await page.evaluate(() => window.__env2.filter((m) => m.tipo === 'term-tamanho' && m.id === 'assistente').slice(-1));

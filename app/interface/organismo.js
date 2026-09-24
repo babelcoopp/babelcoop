@@ -93,6 +93,20 @@
     if (!r.width && !r.height) return null;
     return { x: r.left + r.width / 2, y: onde === 'topo' ? r.top + Math.min(8, r.height / 2) : r.top + r.height / 2 };
   }
+  /* o primeiro candidato que está na tela agora (desenhado, com tamanho): o pulso cai num alvo válido em vez de sumir */
+  function primeiroNaTela(lista) {
+    for (var i = 0; i < lista.length; i++) if (lista[i] && pontoDe(lista[i])) return lista[i];
+    return null;
+  }
+  /* nome curto de um alvo para o registro ("sem-alvo" diz qual lado faltou e quem era) */
+  function nomeAlvo(x) {
+    if (!x) return 'nada';
+    if (x.nodeType !== 1 && typeof x.x === 'number') return 'ponto';
+    var el = elementoDe(x);
+    if (!el) return 'sem-elemento';
+    var c = (el.getAttribute && el.getAttribute('class')) || '';
+    return (el.tagName || '').toLowerCase() + (c ? '.' + String(c).trim().split(/\s+/).slice(0, 2).join('.') : '') + (el.isConnected ? '' : ' (fora do DOM)');
+  }
 
   /* ------------------------------------------------------------------ registro (instrumentação para testes e para a pessoa ver) */
   var cont, reg = [];
@@ -315,14 +329,16 @@
     opcoes = opcoes || {};
     cont.pulso++;
     var resolver, prom = new Promise(function (r) { resolver = r; });
-    function direto(motivo) {
-      anotar({ tipo: 'pulso', ok: false, motivo: motivo });
+    function direto(motivo, extra) {
+      var o = { tipo: 'pulso', ok: false, motivo: motivo };
+      if (extra) Object.keys(extra).forEach(function (k) { o[k] = extra[k]; });
+      anotar(o);
       Promise.resolve().then(function () { try { if (opcoes.aoChegar) opcoes.aoChegar(); } catch (e) { console.warn('[organismo] aoChegar falhou:', e); } resolver(); });
       return prom;
     }
     if (semMovimento()) return direto('sem-movimento');
     var a = pontoDe(de), b = pontoDe(para);
-    if (!a || !b) return direto('sem-alvo');
+    if (!a || !b) return direto('sem-alvo', { de: a ? 'ok' : nomeAlvo(de), para: b ? 'ok' : nomeAlvo(para) });
     if (!garantirTela()) return direto('sem-tela');
     var ef = reservar('pulso');
     if (!ef) return direto('teto');
@@ -913,7 +929,9 @@
     var n = this.nos[id];
     if (!n) return;
     acender(n.g, 6000); acender(n.raio, 6000); n.raio.classList.add('aceso');
-    if (opcoes.pulso !== false) pulso(n.miolo, this.centroCirculo, { cor: opcoes.cor || n.cor || 'marca', forte: !!opcoes.forte });
+    /* o mapa fora da tela (a parede guarda a raiz fora do DOM quando outra atividade está aberta): fica só a luz,
+       que continua esfriando e aparece quando a pessoa volta. Pulso para lugar nenhum era o "sem-alvo" (FALTAS F6.2) */
+    if (opcoes.pulso !== false && pontoDe(n.miolo) && pontoDe(this.centroCirculo)) pulso(n.miolo, this.centroCirculo, { cor: opcoes.cor || n.cor || 'marca', forte: !!opcoes.forte });
   };
   C.laco = function (deId, paraId, cor) {
     var k = deId + '>' + paraId;
@@ -947,19 +965,21 @@
     dados = dados || {};
     var dur = +dados.duracao || 0, forte = dur > 10000, longo = dur > 60000;
     var n = dados.faiscas || (forte ? 8 : 4);
-    return pulso(de, para, {
-      cor: 'marca', forte: forte,
-      aoChegar: function () {
-        acender(para, 6000);
-        faiscas(para, limitar(n, 3, 12), forte);
-        som(longo ? 'duas' : 'tique');
-        if (longo && dados.respirar) respirar(dados.respirar);
-      }
-    });
+    function chegou() {
+      acender(para, 6000);
+      if (pontoDe(para)) faiscas(para, limitar(n, 3, 12), forte);
+      som(longo ? 'duas' : 'tique');
+      if (longo && dados.respirar && pontoDe(dados.respirar)) respirar(dados.respirar);
+    }
+    /* um dos lados fora da tela (painel recolhido, outra face aberta): sem caminho para correr, o rito fica em luz e som */
+    if (!pontoDe(de) || !pontoDe(para)) { chegou(); return Promise.resolve(); }
+    return pulso(de, para, { cor: 'marca', forte: forte, aoChegar: chegou });
   }
-  /* erro provável: pulso vermelho até o alvo e 'erro' */
+  /* erro provável: pulso vermelho até o alvo e 'erro' (sem caminho na tela: só a luz e o som) */
   function falhou(de, para) {
-    return pulso(de, para, { cor: 'alarme', aoChegar: function () { acender(para, 6000); som('erro'); } });
+    function chegou() { acender(para, 6000); som('erro'); }
+    if (!pontoDe(de) || !pontoDe(para)) { chegou(); return Promise.resolve(); }
+    return pulso(de, para, { cor: 'alarme', aoChegar: chegou });
   }
 
   /* ------------------------------------------------------------------ vincular: o maestro de UMA sessão de terminal
@@ -974,6 +994,8 @@
     function cada(fn) { [o.presenca, o.mini].forEach(function (p) { if (p && p.el) fn(p); }); }
     function mostrar(e, d) { cada(function (p) { p.estado(e, d); }); }
     function destinoPulso() { return o.aba && o.aba.isConnected ? o.aba : (o.mini && o.mini.el) || null; }
+    /* de onde o pulso sai: a presença grande se estiver na tela; senão a mini da aba; senão a presença (o rito vira luz e som) */
+    function origemPulso() { return primeiroNaTela([o.presenca, o.mini]) || o.presenca || o.mini; }
     var v = {
       /* term-saida: cada pedaço de saída alimenta a coluna (bytes por segundo) e o "b" em neon */
       saida: function (pedaco) {
@@ -1004,11 +1026,11 @@
         if (novo === 'terminou' && antes !== 'terminou') {
           var erro = false;
           try { erro = !!(o.erroProvavel && o.erroProvavel(d)); } catch (e) { erro = false; }
-          if (erro) { estado = 'falhou'; mostrar('falhou', d); if (meu) falhou(o.presenca || o.mini, destinoPulso()); else if (o.mini) acender(o.mini.el, 6000); return v; }
+          if (erro) { estado = 'falhou'; mostrar('falhou', d); if (meu) falhou(origemPulso(), destinoPulso()); else if (o.mini) acender(o.mini.el, 6000); return v; }
           mostrar('terminou', d);
           var dest = destinoPulso();
           if (d.duracao < 2000) { if (dest) acender(dest, 6000); } /* comando rápido era o esperado (R2): só a luz, sem pulso nem som */
-          else if (meu) concluido(o.presenca || o.mini, dest, { duracao: d.duracao, respirar: o.corpo });
+          else if (meu) concluido(origemPulso(), dest, { duracao: d.duracao, respirar: o.corpo });
           else { if (dest) acender(dest, 6000); if (o.mini) acender(o.mini.el, 6000); } /* terminal dos outros: luz, sem som (relevância) */
           return v;
         }
@@ -1046,7 +1068,7 @@
       /* term-fim {codigo}: o shell acabou; código ≠ 0 = falhou (pulso vermelho + 'erro' no meu) */
       fim: function (codigo) {
         var d = { codigo: codigo, fim: Date.now() };
-        if (codigo) { estado = 'falhou'; mostrar('falhou', d); if (meu) falhou(o.presenca || o.mini, destinoPulso()); }
+        if (codigo) { estado = 'falhou'; mostrar('falhou', d); if (meu) falhou(origemPulso(), destinoPulso()); }
         else { estado = 'desligado'; mostrar('desligado', d); }
         return v;
       },
