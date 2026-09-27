@@ -25,6 +25,15 @@
    - coop_*: a tela local (app/interface/coop-ui.js) executa com L.fazer e assina "<agente> · <pessoa>".
      Ida e volta: servidor → tela `mcp-chamada {cid, sessao, ferramenta, args, agente:{id,nome,dono}}`;
      tela → servidor `mcp-resposta {cid, ok, resultado|erro}` (entregue a aoMensagemUi); 30 s de prazo.
+   - coop_banco_*: também vão para a tela, que chama /api/banco/* (o Postgres local do projeto), monta as peças na Máquina
+     e espera a animação 3D antes de responder; por isso o prazo delas é maior (120 s: o primeiro uso liga o banco).
+   - coop_abrir, coop_fechar, coop_onde, coop_tela: o terminal comanda a Estação da própria pessoa (abre atividade, arquivo,
+     projeto, Máquina em 2D/3D ou perfil; fecha abas; diz onde cada um está e o que está na tela). Só a tela que recebeu a
+     chamada troca e nada vai assinado pelo agente, mas o que ela passa a ver é a posição da pessoa, como num clique dela:
+     a Estação grava a posição no diário (700 ms parada no objeto) e a equipe vê no endereço; arquivo de outra pessoa avisa
+     o dono ("vendoArquivo"); o Chat aberto marca a conversa como lida ("lida"); a Máquina em 3D publica o corpo das peças
+     ("corpoPeca"). Edição não salva não se perde: com texto digitado no modo Editar ou mudança visual pendente,
+     abrir outra coisa é recusado e fechar deixa essa aba aberta (a resposta diz qual).
 
    Uso no servidor.js (quem liga é o agente das rotas /mcp):
      const coop = require('./coop-mcp').criar({ cfg: () => cfg, enviarUi: paraLocais, pedirUi, navegador, agentes });
@@ -47,6 +56,7 @@ const VERSOES_LEGADAS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']
 const TODAS_AS_VERSOES = VERSOES_MODERNAS.concat(VERSOES_LEGADAS);
 const META_VERSAO = 'io.modelcontextprotocol/protocolVersion';
 const TEMPO_UI = 30000;
+const TEMPO_UI_BANCO = 120000;
 const MAX_CORPO = 1024 * 1024;
 const MAX_PENDENTES = 32;
 const MAX_TEXTO_RESULTADO = 100000;
@@ -59,7 +69,11 @@ const ERRO = { PARSE: -32700, PEDIDO: -32600, METODO: -32601, PARAMS: -32602, IN
 const INSTRUCOES = 'Conector do babel-coop. As ferramentas coop_* mexem no app da equipe (TV, avisos, mural, demandas, campanhas, ' +
   'acervo, aprendizados, a Máquina dos projetos) e cada ação fica assinada "<agente> · <pessoa>" para todo mundo ver. As ferramentas navegador_* controlam ' +
   'o navegador próprio do babel-coop, à vista da pessoa, na aba do meio: nunca abra o Google Chrome nem outro navegador. ' +
-  'Senhas só a pessoa digita. Antes de criar algo, consulte (coop_buscar, coop_pessoas, coop_projetos).';
+  'Senhas só a pessoa digita. Antes de criar algo, consulte (coop_buscar, coop_pessoas, coop_projetos). ' +
+  'Para montar o banco do projeto use coop_banco_sql (a Máquina anima ao vivo), e para dados de teste coop_banco_consulta. ' +
+  'Quando a pessoa pedir para abrir, mostrar ou ir para algo (uma tela da barra, um arquivo, um projeto, a Máquina, o perfil de alguém), use coop_abrir; ' +
+  'coop_tela diz o que ela está vendo, coop_onde diz onde cada um está e coop_fechar fecha abas. Essas quatro trocam só a tela da própria pessoa, ' +
+  'mas valem como um clique dela: o que ela passa a ver vira a posição dela, que a equipe vê no endereço. Abra só o que ela pediu.';
 
 /* ---------- as ferramentas (ordem fixa: o cliente pode guardar a lista) ---------- */
 const texto = (descricao, max) => ({ type: 'string', description: descricao, maxLength: max || 2000 });
@@ -86,8 +100,10 @@ const ACOES_PERMITIDAS = [
 const FERRAMENTAS = [
   /* ---- navegador próprio (§9) ---- */
   { name: 'navegador_abrir', title: 'Abrir endereço no navegador do babel-coop', annotations: { openWorldHint: true },
-    description: 'Abre um endereço (http ou https) no navegador do agente, dentro do babel-coop, na aba do meio que a pessoa vê. Nunca use o Google Chrome.',
-    inputSchema: { type: 'object', properties: { url: texto('Endereço, ex.: https://exemplo.com.br', 2048) }, required: ['url'], additionalProperties: false } },
+    description: 'Abre um endereço (http ou https) ou um arquivo HTML da pasta compartilhada no navegador do agente, dentro do babel-coop, na aba do meio que a pessoa vê. ' +
+      'Arquivo: passe o caminho (ex.: /Users/.../BabelCoop/theus/sites/lp/index.html, ~/..., ou file://); fora da pasta compartilhada, copie a pasta do site para dentro dela antes. ' +
+      'Nunca sirva arquivos com python nem outro servidor local: o navegador recusa localhost/127.0.0.1 vindo do agente. Nunca use o Google Chrome.',
+    inputSchema: { type: 'object', properties: { url: texto('Endereço (https://exemplo.com.br) ou caminho de um arquivo da pasta compartilhada', 2048) }, required: ['url'], additionalProperties: false } },
   { name: 'navegador_clicar', title: 'Clicar na página', annotations: { openWorldHint: true },
     description: 'Clica num elemento da página aberta, por seletor CSS ou pelo texto visível (um dos dois). O cursor do agente aparece na página.',
     inputSchema: { type: 'object', properties: { seletor: texto('Seletor CSS, ex.: button[type=submit]', 500), texto: texto('Texto visível do botão ou link', 200) }, additionalProperties: false } },
@@ -164,8 +180,8 @@ const FERRAMENTAS = [
     description: 'Busca no acervo da equipe (arquivos, aprendizados, atas, demandas, históricos de terminal, clones) sem LLM, por palavras e por semelhança, nas Estações ligadas. Use antes de responder ou criar algo e cite quem ensinou.',
     inputSchema: { type: 'object', properties: { termo: texto('O que procurar', 200), modo: { type: 'string', enum: ['tudo', 'palavras', 'semelhanca'], description: 'tudo (padrão), só palavras (BM25) ou só semelhança (vetores)' } }, required: ['termo'], additionalProperties: false } },
   { name: 'coop_aprendi', title: 'Registrar um aprendizado', annotations: { destructiveHint: false },
-    description: 'Registra algo que a equipe aprendeu (se já era conhecido, soma +1 no aprendizado parecido).',
-    inputSchema: { type: 'object', properties: { texto: texto('O aprendizado, uma frase', 500) }, required: ['texto'], additionalProperties: false } },
+    description: 'Registra algo que a equipe aprendeu (se já era conhecido, soma +1 no aprendizado parecido). Se um aprendizado da lista está errado, registre o certo e passe corrige com o cartão dele (ex.: apr-002): o errado sai de APRENDIZADOS.md.',
+    inputSchema: { type: 'object', properties: { texto: texto('O aprendizado, uma frase', 500), corrige: texto('Cartão do aprendizado errado que este substitui (ex.: apr-002)', 60) }, required: ['texto'], additionalProperties: false } },
   { name: 'coop_ler', title: 'Ler um item do acervo', annotations: { readOnlyHint: true },
     description: 'Lê um item inteiro do acervo (arquivo, aprendizado, ata, histórico de terminal…) pelo id que o coop_buscar devolveu, pelo cartão (ex.: apr-003) ou pelo caminho do arquivo.',
     inputSchema: { type: 'object', properties: { id: texto('Id do item (ex.: "apr:theus:12") ou o cartão (ex.: "apr-003")', 300), caminho: texto('Caminho do arquivo na pasta compartilhada, ex.: "propostas/clinica.md"', 500) }, additionalProperties: false } },
@@ -205,6 +221,49 @@ const FERRAMENTAS = [
   { name: 'coop_maquina_ligar', title: 'Ligar duas peças da Máquina', annotations: { destructiveHint: false },
     description: 'Liga duas peças que já estão na Máquina (fio de "de" para "para", pelo nome ou id). O pulso do teste anda nessa direção: tela → porta → gaveta → robô/cano.',
     inputSchema: { type: 'object', properties: { projeto: texto('Nome ou id do projeto (padrão: o primeiro)', 120), de: texto('Peça de onde sai o fio', 80), para: texto('Peça onde o fio chega', 80) }, required: ['de', 'para'], additionalProperties: false } },
+  /* ---- o banco de verdade do projeto (Postgres local deste computador): a tela chama /api/banco/* e a Máquina anima em 3D ---- */
+  { name: 'coop_banco_sql', title: 'Construir o banco do projeto', annotations: { destructiveHint: true },
+    description: 'Constrói o banco de verdade do projeto (Postgres local deste computador): cria/altera tabelas, vínculos, regras de acesso (RLS), funções e gatilhos. Cada comando vira peça viva na Máquina, em 3D, na hora; a migração fica gravada na pasta do projeto. ' +
+      'Roda numa transação, comando a comando: se o Postgres recusar, nada é gravado e a resposta traz o erro dele. Cada migração tem até 30 s; passou disso, o Postgres local para no meio e desfaz tudo. ' +
+      'A chave de cada gaveta (quem pode ver e mexer) sai da regra de verdade da política (USING/WITH CHECK), não do nome dela. É o banco local deste computador (cada Estação tem o seu; a Máquina diz de quem é cada peça); a nuvem vem depois. Para dados de teste, use coop_banco_consulta.',
+    inputSchema: { type: 'object', properties: {
+      projeto: texto('Nome ou id do projeto (veja coop_projetos)', 120),
+      sql: texto('O SQL da migração: CREATE TABLE, ALTER TABLE, CREATE POLICY, CREATE FUNCTION, CREATE TRIGGER…', 200000),
+      nome: texto('Nome curto da migração, vira o nome do arquivo (ex.: "cria pacientes")', 80)
+    }, required: ['projeto', 'sql'], additionalProperties: false } },
+  { name: 'coop_banco_consulta', title: 'Dados de teste no banco', annotations: { destructiveHint: true },
+    description: 'Insere, muda ou lê dados de teste no banco local do projeto (INSERT, UPDATE, DELETE, SELECT) e mostra os dados entrando nas gavetas da Máquina, com o número real de linhas. Devolve até 50 linhas e o total. Até 30 s por consulta: consulta sem fim é interrompida e desfeita. ' +
+      'Mudar a estrutura aqui (tabela, coluna, regra, função, gatilho, permissão, schema) é desfeito: use coop_banco_sql.',
+    inputSchema: { type: 'object', properties: {
+      projeto: texto('Nome ou id do projeto (veja coop_projetos)', 120),
+      sql: texto('Um comando de dados, ex.: INSERT INTO pacientes (nome) VALUES (\'Pessoa de teste\')', 100000)
+    }, required: ['projeto', 'sql'], additionalProperties: false } },
+  { name: 'coop_banco_estado', title: 'Ler o banco do projeto', annotations: { readOnlyHint: true },
+    description: 'Mostra o banco local do projeto como está agora: tabelas com colunas, regra de acesso (RLS) e número de linhas, vínculos, políticas com a regra de verdade, funções e gatilhos. Só leitura.',
+    inputSchema: { type: 'object', properties: { projeto: texto('Nome ou id do projeto (veja coop_projetos)', 120) }, required: ['projeto'], additionalProperties: false } },
+  /* ---- a Estação da pessoa: o terminal comanda o meio e a barra (só a tela que recebeu a chamada troca; o que ela vê vira a posição dela) ---- */
+  { name: 'coop_abrir', title: 'Abrir na Estação', annotations: { destructiveHint: false },
+    description: 'Abre algo no meio da Estação da pessoa, com a luz de chegada para ela ver que foi o agente. ' +
+      'o = "atividade" (ref: Meu dia, Criar, Trabalho, Chat, WhatsApp, Reunião, Terminais, Projetos, Acervo, Equipe, Loja ou Oficina; também Demandas, Tarefas, Inteligência, Metas e Mapa), ' +
+      '"arquivo" (ref: caminho na pasta compartilhada, ex.: "propostas/clinica.md", ou só o nome do arquivo), "projeto" (ref: nome do projeto), ' +
+      '"maquina" (ref: nome do projeto, sem ref o primeiro; modo "2d" ou "3d") ou "pessoa" (ref: nome; abre o perfil). ' +
+      'Use sempre que a pessoa pedir para abrir, mostrar ou ir para algo, e só o que ela pediu. Troca só a tela desta Estação, mas vale como um clique da pessoa: ' +
+      'o que abre vira a posição dela, que a equipe vê no endereço; arquivo de outra pessoa avisa o dono que ela está vendo; o Chat aberto marca a conversa como lida. ' +
+      'Se a pessoa está editando um arquivo sem salvar, recusa em vez de jogar fora o texto: peça para ela salvar ou cancelar.',
+    inputSchema: { type: 'object', properties: {
+      o: { type: 'string', enum: ['atividade', 'arquivo', 'projeto', 'maquina', 'pessoa'], description: 'O que abrir' },
+      ref: texto('A atividade, o caminho ou nome do arquivo, o projeto ou a pessoa (sem acento e sem maiúscula também vale)', 1000),
+      modo: { type: 'string', enum: ['2d', '3d'], description: 'Só na Máquina: em 2D (padrão) ou em 3D' }
+    }, required: ['o'], additionalProperties: false } },
+  { name: 'coop_fechar', title: 'Fechar abas na Estação', annotations: { destructiveHint: false },
+    description: 'Fecha abas do meio da Estação da pessoa: o = "tudo" fecha todas (o meio fica vazio); o = "aba" fecha a aba com esse título (ref, ex.: "proposta.md", "Projetos", "Máquina") ou, sem ref, a aba ativa. Nada é apagado: só sai da tela. ' +
+      'Aba com edição não salva (texto digitado no modo Editar ou mudança visual pendente) não fecha: a resposta diz qual ficou, para a pessoa salvar ou descartar.',
+    inputSchema: { type: 'object', properties: { o: { type: 'string', enum: ['tudo', 'aba'], description: 'Fechar todas ou uma aba' }, ref: texto('Título da aba (ou parte dele), quando o = aba', 200) }, required: ['o'], additionalProperties: false } },
+  { name: 'coop_onde', title: 'Onde está cada um', annotations: { readOnlyHint: true },
+    description: 'Onde está agora cada pessoa e cada agente da equipe, no endereço Sala › bancada › peça (ex.: "Clínicas › Máquina › pacientes"), com o que está fazendo e há quanto tempo. Com pessoa (nome de pessoa ou de agente), só ela e o rastro: por onde passou. Só leitura.',
+    inputSchema: { type: 'object', properties: { pessoa: texto('Nome de uma pessoa ou de um agente (opcional)', 80) }, additionalProperties: false } },
+  { name: 'coop_tela', title: 'O que está na tela', annotations: { readOnlyHint: true },
+    description: 'O que está aberto agora na Estação da pessoa: a aba ativa (com o endereço), as abas abertas e a atividade da barra. Leia antes de agir quando a pessoa falar de "isso aqui" ou "esse arquivo". Só leitura.', inputSchema: nada() },
   { name: 'coop_acao', title: 'Outra ação do app', annotations: { destructiveHint: false },
     description: 'Qualquer outra ação do app da lista permitida, com os argumentos na ordem da ação (sem o "quem"). Prefira as ferramentas coop_* específicas.',
     inputSchema: { type: 'object', properties: { acao: { type: 'string', enum: ACOES_PERMITIDAS, description: 'Nome da ação' }, args: { type: 'array', maxItems: 6, description: 'Argumentos da ação, na ordem', items: {} } }, required: ['acao'], additionalProperties: false } }
@@ -290,6 +349,8 @@ function criar(opcoes) {
   const navegador = opcoes.navegador || null;
   const agentes = opcoes.agentes || null;
   const tempoUi = +opcoes.tempoUi || TEMPO_UI;
+  /* o banco (ligar o Postgres na primeira vez, a migração, a animação da Máquina) espera mais que as outras */
+  const tempoBanco = +opcoes.tempoUiBanco || (+opcoes.tempoUi ? tempoUi : TEMPO_UI_BANCO);
   const aoRegistro = typeof opcoes.registrar === 'function' ? opcoes.registrar : null;
   const pendentes = new Map(); /* cid → {ok, t, ferramenta} */
   const registro = [];
@@ -480,9 +541,10 @@ function criar(opcoes) {
         return { valor: { texto: it.rotulo + (it.cartao ? ' · ' + it.cartao : '') + '\n' + it.titulo + '\n\n' + it.texto }, dados: Object.assign(um(it), { origem: it.origem, vizinhos: it.vizinhos }) };
       }
       if (nome === 'coop_aprendi') {
-        const r = ac.aprendi(a.texto, ag.dono, 'agente ' + ag.nome);
+        const r = ac.aprendi(a.texto, ag.dono, 'agente ' + ag.nome, a.corrige || null);
+        if (a.corrige && !r.corrigiu) return { erro: 'coop_aprendi: não achei o aprendizado "' + String(a.corrige).slice(0, 60) + '" para corrigir (use o cartão, ex.: apr-002). O novo foi registrado.' };
         return { valor: { texto: r.novo
-          ? 'novo: aprendizado registrado' + (r.cartao ? ' (' + r.cartao + ')' : '') + ', assinado ' + ag.nome + ' · ' + r.autor + '. A IA de todos vai ler isso.'
+          ? 'novo: aprendizado registrado' + (r.cartao ? ' (' + r.cartao + ')' : '') + (r.corrigiu ? ', no lugar do errado (' + a.corrige + ')' : '') + ', assinado ' + ag.nome + ' · ' + r.autor + '. A IA de todos vai ler isso.'
           : '+1 confirmado: a equipe já sabia "' + r.texto + '" (' + r.autor + (r.cartao ? ', ' + r.cartao : '') + ', confirmado ' + (r.confirmacoes + 1) + '×, usado ' + r.usos + '×).' },
           dados: { novo: r.novo, item: r.item, cartao: r.cartao, confirmacoes: r.confirmacoes, usos: r.usos } };
       }
@@ -497,6 +559,24 @@ function criar(opcoes) {
 
   /* o módulo do navegador grava em <destino>/Clones/<site>/: o destino padrão é a própria pasta compartilhada (antes ia
      <pasta>/Clones e o clone caía em Clones/Clones/<site>). "Clones" pedido pelo agente vale como o padrão. */
+  function arquivoLocal(s) {
+    if (/^file:\/\//i.test(s)) { try { return require('url').fileURLToPath(s); } catch (e) { return null; } }
+    if (/^~(\/|$)/.test(s)) return path.join(require('os').homedir(), s.slice(1));
+    if (/^\//.test(s) || /^[a-z]:[\\\/]/i.test(s)) return s;
+    return null;
+  }
+  function paraPasta(arquivo) {
+    const c = conf(), base = c.pasta ? path.resolve(c.pasta) : null, alvo = path.resolve(arquivo);
+    if (!base) return { erro: 'esta Estação ainda não tem pasta compartilhada' };
+    if (alvo !== base && !alvo.startsWith(base + path.sep)) {
+      const dir = path.dirname(alvo), destino = path.join(base, 'sites', path.basename(dir));
+      return { erro: 'o arquivo está fora da pasta compartilhada (' + base + '), e o navegador do babel-coop só abre arquivos dela. ' +
+        'Copie a pasta do site para dentro dela (cp -R "' + dir + '" "' + path.join(base, 'sites') + '/") e chame navegador_abrir de novo com "' + path.join(destino, path.basename(alvo)) + '". ' +
+        'Não sirva com python nem abra localhost/127.0.0.1: endereço interno vindo do agente é recusado.' };
+    }
+    const rel = path.relative(base, alvo).split(path.sep).map(encodeURIComponent).join('/');
+    return { url: 'http://localhost:' + (c.porta || 4711) + '/pasta/' + rel };
+  }
   function pastaDestino(sub) {
     const base = conf().pasta;
     if (!base) throw new Error('esta Estação ainda não tem pasta compartilhada');
@@ -521,6 +601,10 @@ function criar(opcoes) {
     let url = null;
     if (nome === 'navegador_abrir') {
       url = String(a.url).trim();
+      /* arquivo local (caminho, ~/ ou file://): dentro da pasta compartilhada vira /pasta/ da própria Estação (links relativos,
+         áudio e imagens do site funcionam); fora dela, a resposta diz o que fazer, em vez de o agente inventar um servidor local */
+      const local = arquivoLocal(url);
+      if (local) { const r = paraPasta(local); if (r.erro) return { erro: r.erro }; url = r.url; }
       if (!/^[a-z][a-z0-9+.-]*:/i.test(url)) url = 'https://' + url;
       if (!/^https?:\/\//i.test(url)) return { erro: 'navegador_abrir: só endereços http ou https.' };
     }
@@ -566,10 +650,11 @@ function criar(opcoes) {
     if (!pedirUi) return Promise.resolve({ erro: 'a tela do babel-coop não está ligada a este servidor.' });
     if (pendentes.size >= MAX_PENDENTES) return Promise.resolve({ erro: 'muitas chamadas ao mesmo tempo: tente de novo em instantes.' });
     const cid = 'mcp-' + crypto.randomBytes(8).toString('hex');
+    const prazo = /^coop_banco_/.test(ferramenta) ? tempoBanco : tempoUi;
     return new Promise((ok) => {
       const acabar = (r) => { if (!pendentes.has(cid)) return; clearTimeout(p.t); pendentes.delete(cid); ok(r); };
-      const segundos = tempoUi >= 1000 ? String(Math.round(tempoUi / 1000)) : (tempoUi / 1000).toFixed(1).replace('.', ',');
-      const p = { ferramenta, acabar, t: setTimeout(() => acabar({ erro: 'a tela do babel-coop não respondeu em ' + segundos + ' s: o app está aberto nesta Estação?' }), tempoUi) };
+      const segundos = prazo >= 1000 ? String(Math.round(prazo / 1000)) : (prazo / 1000).toFixed(1).replace('.', ',');
+      const p = { ferramenta, acabar, t: setTimeout(() => acabar({ erro: 'a tela do babel-coop não respondeu em ' + segundos + ' s: o app está aberto nesta Estação?' }), prazo) };
       pendentes.set(cid, p);
       ctx.res.on('close', () => { if (ctx.cancelado) acabar({ erro: 'cancelada pelo cliente' }); });
       let entregue;

@@ -167,7 +167,8 @@ class Acervo {
         fundido_em TEXT, fundido_data TEXT, item TEXT, ts INTEGER);
       CREATE TABLE IF NOT EXISTS inventario (caminho TEXT PRIMARY KEY, ext TEXT, bytes INTEGER, mtime INTEGER, hash TEXT, item TEXT);
       CREATE TABLE IF NOT EXISTS aplicados (ev TEXT PRIMARY KEY, item TEXT, novo INTEGER);
-      CREATE TABLE IF NOT EXISTS usos (item TEXT NOT NULL, quem TEXT NOT NULL, hora INTEGER NOT NULL, PRIMARY KEY (item, quem, hora));`);
+      CREATE TABLE IF NOT EXISTS usos (item TEXT NOT NULL, quem TEXT NOT NULL, hora INTEGER NOT NULL, PRIMARY KEY (item, quem, hora));
+      CREATE TABLE IF NOT EXISTS superados (item TEXT PRIMARY KEY, por TEXT NOT NULL, quem TEXT, ts INTEGER);`);
     const p = (sql) => this.db.prepare(sql);
     this.q = {
       item: p('SELECT * FROM itens WHERE id = ?'),
@@ -195,7 +196,8 @@ class Acervo {
       uso: p('INSERT OR IGNORE INTO usos (item, quem, hora) VALUES (?,?,?)'),
       usoMais: p('UPDATE itens SET usos = usos + 1 WHERE id = ?'),
       fts: p("SELECT rowid AS n, bm25(busca, 3.0, 1.0) AS s FROM busca WHERE busca MATCH ? ORDER BY s LIMIT ?"),
-      aprendizadosVet: p("SELECT i.n, i.id, v.v FROM itens i JOIN vetores v ON v.n = i.n WHERE i.tipo = 'aprendizado'"),
+      aprendizadosVet: p("SELECT i.n, i.id, v.v FROM itens i JOIN vetores v ON v.n = i.n WHERE i.tipo = 'aprendizado' AND i.id NOT IN (SELECT item FROM superados)"),
+      superar: p('INSERT OR REPLACE INTO superados (item, por, quem, ts) VALUES (?,?,?,?)'),
       confirmar: p('UPDATE itens SET confirmacoes = confirmacoes + 1, confirmadores = ?, atualizado = ? WHERE id = ?'),
       fundir: p('INSERT OR REPLACE INTO fundidos (id, afirmacao, prova, data, autor, tags, fontes, fundido_em, fundido_data, item, ts) VALUES (?,?,?,?,?,?,?,?,?,?,?)')
     };
@@ -221,7 +223,8 @@ class Acervo {
   gravar(it) {
     const tipo = TIPOS.includes(it.tipo) ? it.tipo : 'nota';
     const titulo = umaLinha(it.titulo, 200) || tipo;
-    const texto = String(it.texto == null ? '' : it.texto).slice(0, MAX_TEXTO);
+    const completo = String(it.texto == null ? '' : it.texto);
+    const texto = tipo === 'terminal' ? completo : completo.slice(0, MAX_TEXTO);
     const origem = JSON.stringify(it.origem || {});
     const autor = it.autor || this.eu() || '';
     const dono = it.dono || this.eu() || '';
@@ -325,7 +328,7 @@ class Acervo {
     let r = null;
     const item = (id, tipo, titulo, texto, extra) => { const g = this.gravar(Object.assign({}, base, { id, tipo, titulo, texto }, extra || {})); return { item: id, novo: g.novo }; };
     switch (ev.acao) {
-      case 'aprendizado': r = this.aprender(ev, str(a[0], 2000), str(a[1], 200)); break;
+      case 'aprendizado': r = this.aprender(ev, str(a[0], 2000), str(a[1], 200), str(a[3], 60)); break;
       case 'novaDemanda': {
         const d = a[0] && typeof a[0] === 'object' ? a[0] : {};
         if (!d.titulo) break;
@@ -384,13 +387,16 @@ class Acervo {
   }
 
   /* aprendizado (§8.2): parecido ≥ limiar → +1 confirmado e fundido; abaixo → cartão novo */
-  aprender(ev, texto, origem) {
+  /* corrige (cartão apr-NNN ou id): o aprendizado antigo estava errado; sai de APRENDIZADOS.md, da lista e da fusão, mas fica guardado */
+  aprender(ev, texto, origem, corrige) {
     texto = umaLinha(texto, 2000);
     if (texto.length < 8) return null;
     const autor = ev.quem || ev.autor;
+    const velhoErrado = corrige ? this.db.prepare("SELECT id FROM itens WHERE tipo = 'aprendizado' AND (cartao = ? OR id = ?)").get(corrige, corrige) : null;
+    if (velhoErrado) this.q.superar.run(velhoErrado.id, 'apr:' + ev.id, autor, ev.ts || Date.now());
     const par = this.parecido(texto);
     const data = dia(ev.ts || Date.now());
-    if (par && par.s >= this.limiar) {
+    if (par && par.s >= this.limiar && !velhoErrado) {
       const velho = this.q.item.get(par.id);
       const quem = json(velho.confirmadores, []);
       quem.push({ quem: autor, ts: ev.ts || Date.now(), evento: ev.id });
@@ -403,7 +409,8 @@ class Acervo {
     const id = 'apr:' + ev.id;
     this.gravar({ id, tipo: 'aprendizado', titulo: umaLinha(texto, 120), texto, autor, dono: ev.autor, criado: ev.ts || Date.now(),
       origem: { evento: ev.id, de: origem || '' }, prova: 'aprendido por ' + this.nome(autor) + (origem ? ' (' + origem + ')' : '') + ' em ' + data });
-    return { item: id, novo: true, semelhanca: par ? par.s : 0 };
+    if (velhoErrado) { this.q.superar.run(velhoErrado.id, id, autor, ev.ts || Date.now()); this.agendarGerar(); }
+    return { item: id, novo: true, semelhanca: par ? par.s : 0, corrigiu: velhoErrado ? velhoErrado.id : null };
   }
 
   parecido(texto) {
@@ -418,22 +425,25 @@ class Acervo {
 
   /* API do aprendizado (MCP coop_aprendi, POST /api/acervo/aprendi): vai para o diário (histórico cru, replica para a equipe
      e a tela mostra) e o acervo aplica o mesmo evento. Devolve {novo, item, confirmacoes, texto, cartao}. */
-  aprendi(texto, autor, origem) {
+  aprendi(texto, autor, origem, corrige) {
     texto = umaLinha(texto, 2000);
     if (texto.length < 8) throw new Error('escreva o aprendizado numa frase (8 letras ou mais)');
     let ev;
-    if (typeof this.o.anexar === 'function') ev = this.o.anexar(autor || this.eu(), 'aprendizado', [texto, origem || '', true]);
-    if (!ev || !ev.id) ev = { id: 'local:' + Date.now().toString(36) + crypto.randomBytes(3).toString('hex'), autor: this.eu(), quem: autor || this.eu(), ts: Date.now(), acao: 'aprendizado', args: [texto, origem || '', true] };
+    const args = corrige ? [texto, origem || '', true, String(corrige).slice(0, 60)] : [texto, origem || '', true];
+    if (typeof this.o.anexar === 'function') ev = this.o.anexar(autor || this.eu(), 'aprendizado', args);
+    if (!ev || !ev.id) ev = { id: 'local:' + Date.now().toString(36) + crypto.randomBytes(3).toString('hex'), autor: this.eu(), quem: autor || this.eu(), ts: Date.now(), acao: 'aprendizado', args };
     const r = this.evento(ev) || {};
     const it = r.item ? this.q.item.get(r.item) : null;
-    return { novo: !!r.novo, item: r.item || null, cartao: it ? it.cartao : null, texto: it ? it.texto : texto, autor: it ? this.nome(it.autor) : this.nome(autor), confirmacoes: it ? it.confirmacoes : 0, usos: it ? it.usos : 0, evento: ev.id };
+    /* o evento já pode ter sido aplicado pelo diário (anexar avisa o acervo): quem foi corrigido está em superados */
+    const sup = r.item ? this.db.prepare('SELECT item FROM superados WHERE por = ?').get(r.item) : null;
+    return { novo: !!r.novo, corrigiu: r.corrigiu || (sup && sup.item) || null, item: r.item || null, cartao: it ? it.cartao : null, texto: it ? it.texto : texto, autor: it ? this.nome(it.autor) : this.nome(autor), confirmacoes: it ? it.confirmacoes : 0, usos: it ? it.usos : 0, evento: ev.id };
   }
 
   /* resultado de um agente (Stop): só a SAÍDA (texto final e arquivos mexidos), nunca o que a pessoa digitou */
   terminal(r, opcoes) {
     if (!r) return null;
     const ts = +r.ts || Date.now();
-    const texto = String(r.texto || '').slice(0, 20000);
+    const texto = String(r.texto || '');
     const arquivos = (Array.isArray(r.arquivos) ? r.arquivos : []).filter((c) => typeof c === 'string').slice(0, 50);
     if (!texto.trim() && !arquivos.length) return null;
     const reg = { id: r.id || ('ter:' + String(r.sessao || 'sessao').slice(0, 48) + ':' + ts), sessao: String(r.sessao || '').slice(0, 48), agente: umaLinha(r.agente, 60), autor: r.autor || this.eu(), dono: r.dono || this.eu(), texto, arquivos, ts };
@@ -639,17 +649,18 @@ class Acervo {
 
   aprendizados(limite, ordem) {
     const sql = ordem === 'confirmados' ? 'confirmacoes DESC, usos DESC' : 'usos DESC, confirmacoes DESC';
-    return this.db.prepare("SELECT * FROM itens WHERE tipo = 'aprendizado' ORDER BY " + sql + ', criado DESC LIMIT ?').all(Math.max(1, Math.min(500, +limite || 20))).map((it) => this.publico(it, { texto: it.texto }));
+    return this.db.prepare("SELECT * FROM itens WHERE tipo = 'aprendizado' AND id NOT IN (SELECT item FROM superados) ORDER BY " + sql + ', criado DESC LIMIT ?').all(Math.max(1, Math.min(500, +limite || 20))).map((it) => this.publico(it, { texto: it.texto }));
   }
 
   /* o agente nasce sabendo (agentes.js): uma linha curta com os mais usados */
   resumoParaAgente(n) {
-    const total = this.db.prepare("SELECT COUNT(*) AS c FROM itens WHERE tipo = 'aprendizado'").get().c;
+    const total = this.db.prepare("SELECT COUNT(*) AS c FROM itens WHERE tipo = 'aprendizado' AND id NOT IN (SELECT item FROM superados)").get().c;
     const itens = this.db.prepare('SELECT COUNT(*) AS c FROM itens').get().c;
     const top = this.aprendizados(n || 20);
     const partes = ['Já li ' + total + ' coisa' + (total === 1 ? '' : 's') + ' que a equipe aprendeu (o acervo tem ' + itens + ' itens).'];
     if (top.length) partes.push('Os mais usados: ' + top.map((a, i) => (i + 1) + ') ' + umaLinha(a.texto, 150) + ' (' + a.autor + ', usado ' + a.usos + '×' + (a.confirmacoes ? ', +' + a.confirmacoes + ' confirmado' : '') + ')').join('; ') + '.');
-    partes.push('Antes de responder, consulte o acervo com a ferramenta coop_buscar e leia APRENDIZADOS.md; ao aprender algo, registre com coop_aprendi (e cite quem ensinou ao usar).');
+    partes.unshift('Antes de finalizar, registre cada conhecimento novo e reutilizável com coop_aprendi, incluindo a evidência e os limites. Consulte coop_buscar para evitar duplicação; hipóteses devem ser identificadas como hipóteses. A resposta final pública fica integralmente no acervo para consulta pela IA futura.');
+    partes.push('Antes de responder, consulte o acervo com a ferramenta coop_buscar e leia APRENDIZADOS.md; ao aprender algo, registre com coop_aprendi (e cite quem ensinou ao usar); se um aprendizado estiver errado, registre o certo com coop_aprendi e corrige: <cartão>.');
     return umaLinha(partes.join(' '), 3000);
   }
 
@@ -756,6 +767,7 @@ class Acervo {
     const bloco = [BLOCO_INI, '## Acervo da equipe (babel-coop)',
       '- Antes de responder, consulte o acervo com a ferramenta `coop_buscar` e leia `APRENDIZADOS.md` (nesta pasta).',
       '- Ao aprender algo, registre com `coop_aprendi` (se a equipe já sabia, vira "+1 confirmado"). Ao usar o que alguém ensinou, cite quem.',
+      '- Antes de finalizar, registre cada conhecimento novo e reutilizável com sua evidência e seus limites; identifique hipóteses. A resposta final pública fica integralmente no acervo para a IA futura, consultável por `coop_buscar` e `coop_ler`.',
       '- Um item inteiro: `coop_ler`. Os mais usados: `coop_aprendizados`. O índice do acervo (linha do tempo e temas): `ACERVO.md`.', BLOCO_FIM].join('\n');
     let atual = null; try { atual = fs.readFileSync(f, 'utf8'); } catch (e) { atual = null; }
     let novo;

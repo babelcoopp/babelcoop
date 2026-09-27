@@ -44,7 +44,7 @@ class Atualizacao {
 
   /* a gestão publica: copia a interface que esta Estação está servindo para v<N> e escreve o manifesto */
   publicar(notas, versaoBase) {
-    if (this.cfg.papel !== 'gestao') throw new Error('só a gestão publica');
+    if (this.cfg.papel !== 'gestao') throw new Error('só a gestão publica atualização do app');
     const versao = Math.max(this.ultima(), versaoBase || 0) + 1;
     const origem = this.pastaUi(), destino = path.join(this.raiz, 'v' + versao);
     fs.mkdirSync(destino, { recursive: true });

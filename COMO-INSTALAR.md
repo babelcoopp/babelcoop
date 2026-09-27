@@ -1,6 +1,6 @@
 # Como instalar o babel-coop
 
-Guia para quem vai entrar na equipe. O Theus manda duas coisas: **o instalador** e **o seu token** (um texto que começa com `babel-`). Todo mundo precisa estar **na mesma rede** (o mesmo Wi-Fi ou o mesmo cabo do escritório).
+Guia para quem vai entrar na equipe. O Theus manda **o instalador**. Todo mundo precisa estar **na mesma rede** (o mesmo Wi-Fi ou o mesmo cabo do escritório): é por ela que o app acha a equipe sozinho, sem copiar nada.
 
 ## 1. Baixar
 
@@ -33,9 +33,20 @@ Mac com processador Intel ainda não tem instalador: fale com o Theus.
 
 ## 4. Entrar na equipe
 
-Na primeira vez, o app abre a tela de boas-vindas. **Cole o token** que o Theus mandou e clique em **Entrar na equipe**. Pronto: o app já sabe quem você é e acha a equipe na rede.
+1. Na primeira vez, o app abre a tela de boas-vindas e procura a equipe no Wi-Fi. Em poucos segundos aparece **Equipe babel · Theus**.
+2. Escreva **seu nome** e clique em **Pedir para entrar**.
+3. A tela mostra um **código de 4 dígitos**, e o mesmo código aparece no topo da Estação do Theus. Olhem as duas telas juntos:
+   - **você** confere com a tela do Theus e clica em **O código bateu** (ou **Não bateu**, se for diferente);
+   - **o Theus** só clica em **Aceitar** se a sua tela mostra o mesmo código.
+4. Com o código conferido dos dois lados e o Theus tendo aceitado, o app entra sozinho na equipe, sem copiar nem colar nada.
 
-O token é a sua chave. Não passe o seu para outra pessoa e não publique em lugar nenhum: cada pessoa recebe o próprio token.
+Por que conferir: o código sai das duas pontas (do seu computador e da Estação do Theus). Se outro computador no Wi-Fi se meter no meio, fingindo ser o Theus para você ou você para o Theus, os códigos das duas telas saem diferentes, salvo 1 chance em 10.000. Por isso a conferência vale os dois lados, número por número. Código diferente: clique em **Não bateu** (o pedido é cancelado), avise o Theus e peça de novo ao lado dele.
+
+Se o Theus recusar, a tela avisa e você pode pedir de novo. Um pedido sem resposta vale 10 minutos. Se alguém da equipe já usa o seu nome, o pedido é recusado: peça com o nome completo.
+
+**Não achou a equipe?** Confira se o computador está no mesmo Wi-Fi da gestão e, no Mac, se o babel-coop pode usar a rede local (**Ajustes do Sistema → Privacidade e Segurança → Rede Local**). No Windows, o Firewall precisa permitir o app em **Redes privadas** (passo 3.4).
+
+**Plano B: o token.** Se a rede do escritório bloquear a busca, o Theus gera um token (**Equipe → Convidar pessoa**) e manda pelo WhatsApp. Cole o token no campo **Plano B** da tela de boas-vindas e clique em **Entrar com o token**. O token é a sua chave: não passe o seu para outra pessoa e não publique em lugar nenhum.
 
 ## 5. O que cada um vê
 
@@ -44,11 +55,12 @@ O token é a sua chave. Não passe o seu para outra pessoa e não publique em lu
 - **Pausar** o seu terminal esconde tudo o que sair durante a pausa, na hora e depois.
 - Os seus dados ficam na pasta **BabelCoop**, dentro da sua pasta pessoal. Instalar uma versão nova por cima não apaga nada.
 
-## 6. Para o Theus: fundar a equipe e gerar os tokens
+## 6. Para o Theus: fundar a equipe e aceitar quem chega
 
-1. No seu computador, na primeira vez: tela de boas-vindas → **Sou o primeiro computador da equipe** → seu nome → **Fundar a equipe e gerar tokens**.
-2. Para cada pessoa: **Equipe → Convidar pessoa** → nome → **Gerar token** → **Copiar**, e mande pelo WhatsApp junto com o instalador.
-3. Onde pegar os instaladores:
+1. No seu computador, na primeira vez: tela de boas-vindas → **Sou o primeiro computador da equipe** → seu nome → **Fundar a equipe**.
+2. Mande o instalador para a pessoa. Quando ela pedir para entrar, aparece no topo da sua Estação (e em **Equipe**): **"<nome> quer entrar na equipe · código NNNN"**. Confira o código com ela e clique em **Aceitar** (ou **Recusar**). O convite vai cifrado só para o computador dela: quem estiver escutando o Wi-Fi não pega nada.
+3. Plano B, se a busca não funcionar na rede: **Equipe → Convidar pessoa** → nome → **Gerar token** → **Copiar**, e mande pelo WhatsApp.
+4. Onde pegar os instaladores:
    - **GitHub**: aba **Actions** → "terminal · node-pty no Electron e instaladores" → a última execução verde → **Artifacts** (`babel-coop-mac` e `babel-coop-windows`). Cada um baixa como `.zip`: abra o zip para tirar o `.dmg` ou o `.exe`.
    - **No seu Mac**: `cd app && npm run empacotar` gera o `.app` e o `.dmg` em `app/dist/` (sem assinatura Apple, com selo ad hoc e sem marca de quarentena). O `.exe` sai do GitHub Actions, no runner Windows (`npm run dist:win`).
 

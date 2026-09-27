@@ -230,6 +230,15 @@
     '.bc-c-no[data-estado="pausado"] .anel,.bc-c-no[data-estado="pausado"] .miolo{stroke:var(--sem-dado,#5d6b78)}',
     '.bc-c-no[data-estado="desligado"] .anel,.bc-c-no[data-estado="desligado"] .miolo{stroke:var(--sem-dado,#5d6b78);stroke-dasharray:2 2.5}',
     '.bc-c-no[data-estado="desligado"] text,.bc-c-no[data-estado="pausado"] text{fill:var(--fraco,#6c7b96)}',
+    /* modo Vibe (claro, casca-2030.css §20): o anel gravado vira porcelana (marcas escuras sobre o claro), o centro da sala vira papel */
+    'html[data-vista="estacao"][data-tema-estacao="claro"] .bc-p-textura image{filter:invert(1) hue-rotate(180deg)}',
+    'html[data-vista="estacao"][data-tema-estacao="claro"] .bc-p-textura{opacity:calc(.82 + var(--bc-brilho) * .12 + var(--luz,0) * .06)}',
+    'html[data-vista="estacao"][data-tema-estacao="claro"] .bc-presenca.com-textura .bc-p-marcas-c{opacity:calc(.18 + var(--bc-brilho) * .35 + var(--luz,0) * .25)}',
+    'html[data-vista="estacao"][data-tema-estacao="claro"] .bc-presenca[data-estado="pausado"] .bc-p-textura,html[data-vista="estacao"][data-tema-estacao="claro"] .bc-presenca[data-estado="desligado"] .bc-p-textura{opacity:.3}',
+    'html[data-vista="estacao"][data-tema-estacao="claro"] .bc-c-centro circle{fill:var(--s1,#fff)}',
+    'html[data-vista="estacao"][data-tema-estacao="claro"] .bc-c-raio{stroke:color-mix(in srgb,var(--t0,#08707f) 32%,transparent)}',
+    /* aceso: a luz que corre até a sala volta a ter a cor cheia no papel */
+    'html[data-vista="estacao"][data-tema-estacao="claro"] .bc-c-raio.aceso{stroke:var(--t0,#08707f)}',
     /* sem movimento: cor, nada gira nem corre */
     '@media (prefers-reduced-motion: reduce){.bc-presenca .bc-p-laco,.bc-c-no .anel{animation:none!important}.bc-p-fecho,.bc-p-visita{transition:none!important}}',
     'html.bc-org-parado .bc-presenca .bc-p-laco,html.bc-org-parado .bc-c-no .anel{animation:none!important}',

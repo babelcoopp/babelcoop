@@ -267,3 +267,13 @@
   .navr-dica { transition: none; }
   .navr-pagina::after, .navr-canto { transition: none; }
 }
+
+/* ---------- modo Vibe (claro, casca-2030.css §20): a moldura vira papel; o site continua com as cores dele ---------- */
+html[data-vista="estacao"][data-tema-estacao="claro"] .navr-av { color: color-mix(in oklab, var(--navr-cor, var(--t0)) 58%, #000); border-color: color-mix(in oklab, var(--navr-cor, var(--t0)) 72%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .navr[data-quem="agente"] .navr-faixa,
+html[data-vista="estacao"][data-tema-estacao="claro"] .navr[data-quem="fim"] .navr-faixa {
+  background: linear-gradient(90deg, rgba(8, 112, 127, calc(.08 + var(--luz, 0) * .12)), rgba(109, 63, 184, calc(.05 + var(--luz, 0) * .06)) 58%, rgba(243, 236, 217, .86));
+  border-top-color: rgba(8, 112, 127, .28); border-bottom-color: rgba(8, 112, 127, calc(.28 + var(--luz, 0) * .3));
+}
+html[data-vista="estacao"][data-tema-estacao="claro"] .navr-dica { background: rgba(255, 248, 231, .92); border-color: rgba(8, 112, 127, .3); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .navr-cursor span { color: #060b16; }

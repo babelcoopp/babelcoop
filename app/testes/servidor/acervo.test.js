@@ -317,3 +317,24 @@ describe('acervo · rotas locais e busca federada com 2 Estações', { timeout: 
     assert.ok(f.resultados.every((i) => i.dono === 'theus'), 'o que é local continua');
   });
 });
+
+/* ------------------------------------------------------------------ aprendizado errado: corrige sem apagar */
+describe('acervo · corrigir um aprendizado errado', () => {
+  it('coop_aprendi com corrige: o errado sai de APRENDIZADOS.md, da lista e da fusão; continua guardado; o evento leva o cartão', () => {
+    const T = montar();
+    const errado = T.ac.aprendi('Para ver um HTML local, sirva a pasta com python3 -m http.server e cole o endereço na barra', 'theus', 'agente Assistente');
+    assert.equal(errado.novo, true);
+    const certo = T.ac.aprendi('Para ver um HTML local, abra o caminho do arquivo da pasta compartilhada com navegador_abrir; fora dela, copie para a pasta antes', 'theus', 'agente Assistente', errado.cartao);
+    assert.equal(certo.novo, true, 'o certo nasce como cartão novo');
+    assert.equal(certo.corrigiu, errado.item);
+    assert.deepEqual(T.eventos.filter((e) => e.acao === 'aprendizado').pop().args.slice(3), [errado.cartao], 'a equipe recebe a correção pelo diário');
+    const lista = T.ac.aprendizados(50).map((a) => a.texto);
+    assert.ok(lista.some((t) => /navegador_abrir/.test(t)) && !lista.some((t) => /python3/.test(t)), JSON.stringify(lista));
+    T.ac.gerarArquivos();
+    const ap = fs.readFileSync(path.join(T.pasta, 'APRENDIZADOS.md'), 'utf8');
+    assert.ok(!ap.includes('python3') && ap.includes('navegador_abrir'), ap);
+    assert.ok(T.ac.db.prepare('SELECT id FROM itens WHERE id = ?').get(errado.item), 'o errado continua guardado (corrigir, nunca apagar)');
+    const repetido = T.ac.aprendi('Para ver um HTML local, sirva a pasta com python3 -m http.server e cole o endereço na barra', 'rita', 'teste');
+    assert.equal(repetido.novo, true, 'o errado não recebe +1 confirmado: saiu da fusão');
+  });
+});

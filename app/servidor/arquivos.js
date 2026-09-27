@@ -8,6 +8,18 @@ const path = require('path');
 const IGNORADOS = /^(\.DS_Store|Thumbs\.db|~\$.*|\.env.*|.*\.pem|\.ssh|credentials.*|node_modules|\.git|\.coop)$/i;
 const TIPOS = { md: 'md', txt: 'txt', csv: 'csv', html: 'html', htm: 'html', js: 'js', ts: 'ts', py: 'py', sh: 'sh', css: 'css', json: 'json', pdf: 'pdf', png: 'imagem', jpg: 'imagem', jpeg: 'imagem', gif: 'imagem', webp: 'imagem', svg: 'imagem', mp4: 'video', mov: 'video', webm: 'video', quadro: 'quadro', mapa: 'mapa' };
 const TEXTO = { md: 1, txt: 1, csv: 1, html: 1, js: 1, ts: 1, py: 1, sh: 1, css: 1, json: 1, quadro: 1, mapa: 1 };
+/* apagar não apaga: o arquivo SAI da pasta compartilhada para <raiz>/.coop/lixeira/<id>/<carimbo>__<caminho com / trocado por __>
+   (ao lado de .coop/versoes: fora do que a equipe, o acervo e a IA leem) e o Desfazer devolve */
+const INDICE_LIXEIRA = 'itens.json'; /* id → caminho original ("__" no nome do arquivo não se confunde com a barra) */
+/* na raiz da pasta, o acervo escreve estes (GERADOS e garantirClaudeMd em acervo.js): não se apagam pela tela */
+const GERADOS = /^(ACERVO|APRENDIZADOS|CLAUDE)\.md$/i;
+const ID_LIXEIRA = /^(\d{13})(-\d+)?__./;
+
+/* mover sem apagar nada no caminho: a pasta pode ser um atalho para outro disco (rename entre discos dá EXDEV: copia e tira a origem) */
+function mover(de, para) {
+  try { fs.renameSync(de, para); }
+  catch (e) { if (e.code !== 'EXDEV') throw e; fs.copyFileSync(de, para, fs.constants.COPYFILE_EXCL); fs.unlinkSync(de); }
+}
 
 class Arquivos {
   constructor(pasta, dono) { this.pasta = pasta; this.dono = dono; }
@@ -65,6 +77,68 @@ class Arquivos {
     }
     fs.writeFileSync(alvo, conteudo);
     return true;
+  }
+
+  /* ---------- lixeira: apagar e restaurar ---------- */
+  dirLixeira() { return path.join(this.pasta, '..', '.coop', 'lixeira', this.dono); }
+  indiceLixeira() { try { const j = JSON.parse(fs.readFileSync(path.join(this.dirLixeira(), INDICE_LIXEIRA), 'utf8')); return j && typeof j === 'object' ? j : {}; } catch (e) { return {}; } }
+  gravarIndiceLixeira(itens) { try { fs.writeFileSync(path.join(this.dirLixeira(), INDICE_LIXEIRA), JSON.stringify(itens, null, 1)); } catch (e) { /* o nome do arquivo ainda leva o caminho */ } }
+
+  /* a pasta de verdade (sem atalho simbólico que leve para fora): nada de fora da pasta entra ou sai da lixeira */
+  dentroDeVerdade(dir) {
+    try { const r = fs.realpathSync(dir), raiz = fs.realpathSync(this.pasta); return r === raiz || r.startsWith(raiz + path.sep); } catch (e) { return false; }
+  }
+
+  /* devolve { ok, lixeira, caminho } ou { erro, status } */
+  apagar(rel) {
+    if (typeof rel !== 'string' || !rel.trim()) return { erro: 'faltou o caminho', status: 400 };
+    if (rel.split(/[\\/]/).includes('..')) return { erro: 'caminho com ".." não passa', status: 400 };
+    const alvo = this.seguro(rel);
+    if (!alvo) return { erro: 'fora da pasta compartilhada', status: 400 };
+    if (alvo === this.pasta) return { erro: 'a própria pasta não se apaga', status: 400 };
+    const limpo = path.relative(this.pasta, alvo).split(path.sep).join('/');
+    if (!limpo.includes('/') && GERADOS.test(limpo)) return { erro: '"' + limpo + '" é gerado pelo acervo do babel-coop: não se apaga', status: 403 };
+    let st; try { st = fs.lstatSync(alvo); } catch (e) { return { erro: 'não existe', status: 404 }; }
+    if (st.isDirectory()) return { erro: 'só arquivo: pasta não se apaga por aqui', status: 400 };
+    if (!this.dentroDeVerdade(path.dirname(alvo))) return { erro: 'fora da pasta compartilhada', status: 400 };
+    const dir = this.dirLixeira();
+    fs.mkdirSync(dir, { recursive: true });
+    const agora = Date.now();
+    let plano = limpo.replace(/\//g, '__');
+    if (Buffer.byteLength(plano) > 200) plano = path.basename(limpo); /* nome longo demais para o disco: o índice guarda o caminho */
+    let id = agora + '__' + plano;
+    for (let n = 2; fs.existsSync(path.join(dir, id)); n++) id = agora + '-' + n + '__' + plano;
+    try { mover(alvo, path.join(dir, id)); } catch (e) { return { erro: 'não deu para mover para a lixeira (' + (e.code || e.message) + ')', status: 409 }; }
+    const itens = this.indiceLixeira();
+    itens[id] = { caminho: limpo, em: agora };
+    this.gravarIndiceLixeira(itens);
+    return { ok: true, lixeira: id, caminho: limpo };
+  }
+
+  /* volta ao caminho original; se já existe outro lá, volta como "nome (restaurado).ext" */
+  restaurar(id) {
+    if (typeof id !== 'string' || !ID_LIXEIRA.test(id) || /[\\/\0]/.test(id) || id === INDICE_LIXEIRA) return { erro: 'item da lixeira inválido', status: 400 };
+    const dir = this.dirLixeira(), de = path.join(dir, id);
+    if (path.dirname(de) !== dir) return { erro: 'item da lixeira inválido', status: 400 };
+    let st; try { st = fs.lstatSync(de); } catch (e) { return { erro: 'não está mais na lixeira', status: 404 }; }
+    if (st.isDirectory()) return { erro: 'item da lixeira inválido', status: 400 };
+    const itens = this.indiceLixeira();
+    const original = (itens[id] && typeof itens[id].caminho === 'string') ? itens[id].caminho : id.replace(/^\d{13}(-\d+)?__/, '').split('__').join('/');
+    let alvo = this.seguro(original);
+    if (!alvo || alvo === this.pasta) return { erro: 'o caminho original saiu da pasta compartilhada', status: 400 };
+    if (fs.existsSync(alvo)) {
+      const p = path.parse(alvo);
+      alvo = path.join(p.dir, p.name + ' (restaurado)' + p.ext);
+      for (let n = 2; fs.existsSync(alvo); n++) alvo = path.join(p.dir, p.name + ' (restaurado ' + n + ')' + p.ext);
+    }
+    let existe = path.dirname(alvo);
+    while (existe !== this.pasta && !fs.existsSync(existe)) existe = path.dirname(existe);
+    if (!this.dentroDeVerdade(existe)) return { erro: 'o caminho original saiu da pasta compartilhada', status: 400 };
+    fs.mkdirSync(path.dirname(alvo), { recursive: true });
+    try { mover(de, alvo); } catch (e) { return { erro: 'não deu para tirar da lixeira (' + (e.code || e.message) + ')', status: 409 }; }
+    delete itens[id];
+    this.gravarIndiceLixeira(itens);
+    return { ok: true, caminho: path.relative(this.pasta, alvo).split(path.sep).join('/') };
   }
 
   vigiar(fn) {

@@ -33,6 +33,27 @@
 }
 .nasc-doc[data-vivo="sim"] .nasc-st { color: var(--t0, #2ad5e5); }
 
+/* contador vivo do que nasceu (linhas · seções · feitos · plano): discreto; o número pulsa (WAAPI, nascendo.js) só enquanto
+   o arquivo nasce à vista e com movimento */
+.nasc-conta {
+  margin-left: auto; flex: none; display: inline-flex; align-items: baseline; white-space: nowrap;
+  font: 400 var(--t-11, 11px)/1 var(--fonte-mono, "JetBrains Mono", ui-monospace, monospace); color: var(--fraco, #6c7b96);
+  font-variant-numeric: tabular-nums; letter-spacing: .01em;
+}
+.nasc-conta[hidden], .nasc-nc[hidden] { display: none !important; }
+.nasc-conta:not([hidden]) + .nasc-st { margin-left: 14px; }
+.nasc-nc:not([hidden]) ~ .nasc-nc::before { content: "·"; margin: 0 6px; color: var(--fraco, #6c7b96); }
+.nasc-nc b { display: inline-block; font-weight: 500; color: var(--apagado, #a8b8d5); }
+.nasc-nc i { font-style: normal; }
+.nasc-doc[data-vivo="sim"] .nasc-nc b { color: var(--texto, #d7e4fb); }
+.nasc-doc .nasc-nc[data-k="f"] b, .nasc-doc .nasc-nc[data-k="p"] b { color: var(--ok, #7fd6a6); }
+/* cabeçalho estreito (meio entre o explorador e o assistente): o nome do arquivo vem antes do contador, que cede por partes
+   (o plano primeiro, depois feitos e blocos; abaixo de 520 px o contador sai e o status já diz as linhas) */
+.nasc-cab { container-type: inline-size; }
+@container (max-width: 860px) { .nasc-nc[data-k="p"] { display: none; } }
+@container (max-width: 720px) { .nasc-nc[data-k="f"], .nasc-nc[data-k="b"] { display: none; } }
+@container (max-width: 520px) { .nasc-conta { display: none; } .nasc-cab .nasc-conta:not([hidden]) + .nasc-st { margin-left: auto; } }
+
 /* HUD (vivo): vidro, borda ciano de 1 px e glow discreto */
 .nasc-doc[data-vivo="sim"] .nasc-cab {
   background: rgba(22, 30, 45, .58);
@@ -144,3 +165,9 @@
 html.bc-org-parado .nasc-cursor { display: none; }
 html.bc-org-parado .nasc-vista, html.bc-org-parado .nasc-vista * { transition: none !important; animation: none !important; }
 html.bc-org-parado .nasc-concluido.on { transform: none; }
+
+/* ---------- modo Vibe (claro, casca-2030.css §20): o HUD do documento vivo em vidro claro, scanlines em tinta ---------- */
+html[data-vista="estacao"][data-tema-estacao="claro"] .nasc-doc[data-vivo="sim"] .nasc-cab { background: rgba(243, 236, 217, .72); border-bottom-color: rgba(8, 112, 127, .3); box-shadow: 0 1px 14px rgba(8, 112, 127, .08); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .nasc-doc[data-vivo="sim"] .nasc-rolo { box-shadow: inset 0 0 0 1px rgba(8, 112, 127, .26), inset 0 0 28px rgba(8, 112, 127, .05); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .nasc-scan { background: repeating-linear-gradient(to bottom, rgba(8, 112, 127, .035) 0 1px, transparent 1px 3px); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .nasc-cartao { background: rgba(255, 248, 231, .94); border-color: rgba(8, 112, 127, .3); box-shadow: 0 4px 22px rgba(6, 11, 22, .12); }

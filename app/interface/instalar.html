@@ -1,0 +1,90 @@
+<!doctype html>
+<!-- babel-coop · a página /instalar: servida pela Estação para qualquer aparelho da rede local (servidor/instalador.js preenche
+     os {{campos}}). Sem nada de fora (nem fonte da internet): tem de abrir num Wi-Fi sem internet. -->
+<html lang="pt-BR" data-sistema="{{SISTEMA}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Instalar o babel-coop</title>
+<link rel="icon" href="/babel-logo.png">
+<style>
+  :root {
+    --s0: #060b16; --s1: #0b1320; --s2: #161e2d; --s3: #212a3b;
+    --linha: #4d5564; --linha-fraca: rgba(215, 228, 251, .09);
+    --texto: #d7e4fb; --texto-90: #c3cfe5; --apagado: #a8b8d5; --fraco: #6c7b96;
+    --t0: #2ad5e5; --t1: #7ba4f0; --atencao: #f0b35a;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--s0); color: var(--texto); }
+  body { font: 16px/1.55 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 640px; margin: 0 auto; padding: 40px 16px 56px; animation: chegar .45s ease-out both; }
+  @keyframes chegar { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { main { animation: none; } }
+  header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  header img { height: 64px; width: auto; }
+  h1 { margin: 0; font-size: 26px; line-height: 1.2; font-weight: 600; letter-spacing: -.01em; }
+  header p { margin: 4px 0 0; color: var(--apagado); font-size: 15px; }
+  h2 { margin: 0 0 14px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .selo { font-size: 12px; font-weight: 500; color: var(--t0); border: 1px solid var(--t0); border-radius: 999px; padding: 1px 9px; }
+  .aviso { margin: 0 0 20px; padding: 12px 14px; border-left: 3px solid var(--atencao); background: var(--s1); color: var(--texto-90); border-radius: 0 8px 8px 0; }
+  .aviso:empty, .aviso[hidden] { display: none; }
+  .sistema { background: var(--s1); border: 1px solid var(--linha-fraca); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+  .sistema.seu { border-color: var(--t0); }
+  .baixar { display: grid; gap: 10px; margin-bottom: 16px; }
+  .botao { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border-radius: 10px; text-decoration: none; color: var(--texto); background: var(--s2); border: 1px solid var(--linha); }
+  .botao:hover { background: var(--s3); }
+  .botao:focus-visible { outline: 2px solid var(--t0); outline-offset: 2px; }
+  .botao.principal { background: var(--t0); color: var(--s0); border-color: var(--t0); }
+  .botao.principal:hover { filter: brightness(1.08); }
+  .acao { font-weight: 600; font-size: 16px; }
+  .detalhe { font-size: 13px; opacity: .8; overflow-wrap: anywhere; }
+  .passos { margin: 0; padding-left: 22px; color: var(--texto-90); }
+  .passos li { margin-bottom: 8px; }
+  .passos b, .falta b { color: var(--texto); font-weight: 600; }
+  .nota { margin: 12px 0 0; color: var(--apagado); font-size: 14px; }
+  .baixar + .nota { margin: -4px 0 14px; }
+  .falta p { margin: 0 0 10px; color: var(--texto-90); }
+  code { font: 13px/1.5 "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; background: var(--s0); border: 1px solid var(--linha-fraca); border-radius: 6px; padding: 1px 6px; overflow-wrap: anywhere; }
+  code.copiar { user-select: all; -webkit-user-select: all; }
+  .final { background: transparent; border: 1px solid var(--linha); }
+  .final p { margin: 0 0 10px; color: var(--texto-90); }
+  .final p:last-child { margin-bottom: 0; }
+  footer { margin-top: 24px; color: var(--fraco); font-size: 13px; }
+  footer code { color: var(--apagado); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="/babel-logo.png" alt="b" onerror="this.remove()">
+    <div>
+      <h1>Instalar o babel-coop</h1>
+      <p>Direto desta Estação, pela rede local. Nada passa pela internet.</p>
+    </div>
+  </header>
+
+  <p class="aviso">{{AVISO}}</p>
+  <p class="aviso ipad" hidden>No iPad não precisa instalar nada: a Estação abre direto no navegador, neste mesmo endereço sem o <code>/instalar</code>.</p>
+
+  {{SECOES}}
+
+  <section class="sistema final">
+    <h2>Depois de instalar</h2>
+    <p><b>Abra o babel-coop: ele acha a equipe no Wi-Fi sozinho.</b> Escreva o seu nome, peça para entrar e confira com a gestão o código de 4 dígitos que aparece nas duas telas.</p>
+    <p>Se ele não achar a equipe (tem rede que bloqueia a busca), peça à gestão um token (Equipe → Convidar pessoa) e cole na tela de boas-vindas. O token é a sua chave: não passe para ninguém.</p>
+  </section>
+
+  <footer>Para mandar a quem vai entrar (tem de estar no mesmo Wi-Fi): <code class="copiar">{{ENDERECO}}</code></footer>
+</main>
+<script>
+  /* iPad no modo computador diz que é Mac: o toque entrega */
+  if (document.documentElement.dataset.sistema === 'mac' && navigator.maxTouchPoints > 1) {
+    document.documentElement.dataset.sistema = 'celular';
+    var ipad = document.querySelector('.aviso.ipad'); if (ipad) ipad.hidden = false;
+    var seu = document.querySelector('.sistema.seu'); if (seu) { seu.classList.remove('seu'); var s = seu.querySelector('.selo'); if (s) s.remove(); }
+  }
+</script>
+</body>
+</html>

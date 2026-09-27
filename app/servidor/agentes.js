@@ -21,6 +21,7 @@ const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
 const { ehClaude } = require('./terminal');
+const { Codex } = require('./codex');
 
 const ID = /^[A-Za-z0-9_-]{1,48}$/;
 const LOOPBACK = new Set(['127.0.0.1', '::1', '::ffff:127.0.0.1']);
@@ -305,6 +306,7 @@ function limparBloco(b) {
 function limparDePar(m, dono) {
   if (!m || typeof m.tipo !== 'string' || typeof m.id !== 'string' || !ID.test(m.id)) return null;
   const base = { tipo: m.tipo, dono, id: m.id };
+  if (m.provedor === 'codex' || m.provedor === 'claude') base.provedor = m.provedor;
   if (typeof m.nome === 'string' && m.nome.trim()) base.nome = linha(m.nome, 60);
   switch (m.tipo) {
     case 'agente-estado':
@@ -344,15 +346,19 @@ class Agentes {
 
   /* ---------- a tela pede ---------- */
   iniciar(ws, m) {
+    const provedor = m.provedor == null ? 'claude' : m.provedor;
+    if (!['claude', 'codex'].includes(provedor)) throw new Error('provedor de agente desconhecido');
     const id = typeof m.id === 'string' && ID.test(m.id) ? m.id : null;
     if (!id || !this.t.existe(id)) throw new Error('abra o terminal antes de chamar o agente');
     const velho = this.sessoes.get(id);
     if (velho && !velho.fim) throw new Error('já tem um agente rodando neste terminal');
     if (!this.t.parado(id)) throw new Error('o terminal está ocupado: espere o comando atual terminar para chamar o agente');
     const cfg = this.cfg();
+    const contexto = typeof this.o.contexto === 'function' ? this.o.contexto(m) || {} : {};
     const info = this.t.info(id, false) || {};
     const nome = linha(m.nome, 40) || info.nome || id;
     const instrucoes = linha(m.instrucoes, 4000);
+    const prompt = textoDoPrompt({ nome, dono: cfg.nome, donoId: cfg.id, instrucoes, pasta: contexto.pasta || cfg.pasta, saber: this.saber() }) + (contexto.instrucoes ? '\n' + contexto.instrucoes : '');
     const segredo = crypto.randomBytes(24).toString('hex');
     const porta = this.o.porta();
     const pasta = path.join(cfg.raiz, '.coop', 'agentes', id);
@@ -361,25 +367,42 @@ class Agentes {
     const arq = { ganchos: path.join(pasta, 'coop-ganchos.json'), mcp: path.join(pasta, 'coop-mcp.json'), script: path.join(pasta, 'coop-gancho.js') };
     const base = 'http://127.0.0.1:' + porta;
     const gravar = (f, s) => { fs.writeFileSync(f, s, { mode: 0o600 }); try { fs.chmodSync(f, 0o600); } catch (e) { /* Windows */ } };
-    gravar(arq.script, scriptInicio(base + '/api/gancho/' + id, segredo));
-    gravar(arq.ganchos, JSON.stringify(configGanchos({ url: base + '/api/gancho/' + id, segredo, script: arq.script }), null, 2));
-    gravar(arq.mcp, JSON.stringify(configMcp({ url: base + '/mcp/' + id, segredo }), null, 2));
+    if (provedor === 'claude') {
+      gravar(arq.script, scriptInicio(base + '/api/gancho/' + id, segredo));
+      gravar(arq.ganchos, JSON.stringify(configGanchos({ url: base + '/api/gancho/' + id, segredo, script: arq.script }), null, 2));
+      gravar(arq.mcp, JSON.stringify(configMcp({ url: base + '/mcp/' + id, segredo }), null, 2));
+    }
     const modelo = linha(process.env.BABEL_COOP_MODELO, 80);
     const permissao = MODOS.includes(process.env.BABEL_COOP_PERMISSAO) ? process.env.BABEL_COOP_PERMISSAO : '';
-    const args = argumentos({ ganchos: arq.ganchos, mcp: arq.mcp, nome, prompt: textoDoPrompt({ nome, dono: cfg.nome, donoId: cfg.id, instrucoes, pasta: cfg.pasta, saber: this.saber() }), modelo, permissao, estrito: process.env.BABEL_COOP_MCP_ESTRITO === '1' });
+    const args = argumentos({ ganchos: arq.ganchos, mcp: arq.mcp, nome, prompt, modelo, permissao, estrito: process.env.BABEL_COOP_MCP_ESTRITO === '1' });
     const shell = this.t.shell().cmd;
-    const comando = linhaDeComando({ shell, claude: acharClaude(), args });
+    let comando = linhaDeComando({ shell, claude: acharClaude(), args });
+    if (contexto.pasta) comando = /powershell|pwsh/i.test(shell) ? 'Set-Location -LiteralPath ' + aspasPs(contexto.pasta) + '; if ($?) { ' + comando + ' }' : ' cd -- ' + aspasPosix(contexto.pasta) + ' && ' + comando;
     const a = {
-      id, nome, instrucoes, segredo, pasta, arq, tela: ws, inicio: agora(), fim: null, viu: false, sessaoClaude: null, modelo: modelo || null,
+      id, nome, provedor, instrucoes, segredo, pasta, arq, tela: ws, inicio: agora(), fim: null, viu: false, sessaoClaude: null, modelo: provedor === 'codex' ? null : modelo || null,
       est: null, blocos: [], blocosPub: [], plano: [], planoPub: [], planoBid: null, privados: new Set(), tarefas: new Map(), seq: 0,
       porFerramenta: new Map(), existia: new Map(), consultaAberta: null, turno: null, pendentes: new Map(), contagem: {}
     };
     this.sessoes.set(id, a);
+    a.contextoPedido = { id, provedor, oficina: m.oficina };
+    a.contexto = contexto;
+    if (provedor === 'codex') {
+      a.codexMensagens = new Map(); a.codexItens = new Map();
+      a.codex = new Codex({ pasta: contexto.pasta || cfg.pasta, instrucoes: prompt, url: base + '/mcp/' + id, segredo,
+        evento: (tipo, e) => this.eventoCodex(a, tipo, e),
+        uso: (uso) => this.publicarUsoCodex(a, uso),
+        requisicao: (tipo, e, responder) => this.permissaoCodex(a, tipo, e, responder),
+        falha: (e) => this.falhaCodex(a, e)
+      });
+      this.o.paraLocais({ tipo: 'agente-iniciado', dono: this.dono(), id, nome, provedor, ts: a.inicio });
+      a.codex.iniciar().then((r) => { if (!a.fim) { a.viu = true; a.modelo = r.modelo; this.estado(a, 'acordou'); } }).catch((e) => this.falhaCodex(a, e));
+      return a;
+    }
     a.arranque = setTimeout(() => { if (!a.viu) this.encerrar(id, 'o claude não abriu no terminal'); }, ARRANQUE);
     if (a.arranque.unref) a.arranque.unref();
     /* Ctrl+U limpa o que estivesse meio digitado na linha do zsh/bash; o PowerShell usa Esc */
     this.t.escrever(id, (/powershell|pwsh/i.test(shell) ? '\x1b' : '\x15') + comando + '\r');
-    this.o.paraLocais({ tipo: 'agente-iniciado', dono: this.dono(), id, nome, modelo: a.modelo, ts: a.inicio });
+    this.o.paraLocais({ tipo: 'agente-iniciado', dono: this.dono(), id, nome, provedor, modelo: a.modelo, ts: a.inicio });
     return a;
   }
 
@@ -388,6 +411,17 @@ class Agentes {
     const id = typeof m.id === 'string' && ID.test(m.id) ? m.id : null;
     if (!id || !this.t.existe(id)) throw new Error('terminal não existe');
     const a = this.sessoes.get(id);
+    if (a && !a.fim) this.validarContexto(a);
+    if (a && !a.fim && a.codex) {
+      const texto = str(m.texto, 100000).replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '');
+      if (!texto.trim()) return false;
+      if (!a.viu) throw new Error('o Codex está abrindo; espere ficar pronto');
+      if (a.codex.turno || a.codex.enviando) throw new Error('o Codex está trabalhando; interrompa ou espere terminar');
+      a.codexMensagens.clear(); a.codexItens.clear();
+      this.tratar(a, 'UserPromptSubmit', { prompt: texto });
+      a.turno.privado = !!this.t.pausada(a.id);
+      return a.codex.pedido(texto).catch((e) => { this.tratar(a, 'StopFailure', { error: e.message }); throw e; });
+    }
     const info = this.t.info(id, false) || {};
     const claudeNaFrente = !this.t.parado(id) && ((a && !a.fim) || ehClaude(info.processo));
     if (!claudeNaFrente) throw new Error('nenhum agente rodando neste terminal: chame o agente antes');
@@ -405,6 +439,8 @@ class Agentes {
     const a = typeof m.id === 'string' && this.sessoes.get(m.id);
     const p = a && typeof m.pid === 'string' && a.pendentes.get(m.pid);
     if (!p) return false;
+    this.validarContexto(a);
+    if (p.codex) return this.responderCodex(a, p, m);
     const decisao = m.decisao === 'permitir' ? 'permitir' : m.decisao === 'negar' ? 'negar' : null;
     if (!decisao) return false;
     const corpo = decisao === 'permitir'
@@ -413,6 +449,170 @@ class Agentes {
     this.fecharPendente(a, p, corpo, { decisao });
     this.estado(a, decisao === 'permitir' ? 'rodando' : 'pensando', decisao === 'permitir' ? p.ferramenta : undefined);
     return true;
+  }
+
+  interromper(m) {
+    const a = this.sessoes.get(m.id);
+    if (a && !a.fim && a.codex) return a.codex.interromper();
+    return this.t.escrever(m.id, '\x03');
+  }
+
+  validarContexto(a) {
+    if (typeof this.o.contexto !== 'function') return;
+    try {
+      const atual = this.o.contexto(a.contextoPedido) || {};
+      if ((atual.pasta || '') !== (a.contexto.pasta || '') || (atual.instrucoes || '') !== (a.contexto.instrucoes || '')) throw new Error('a autorização da Oficina mudou; chame o agente novamente');
+    } catch (e) {
+      this.encerrar(a.id, 'a autorização da Oficina mudou');
+      if (a.contextoPedido && a.contextoPedido.oficina) this.t.fechar(a.id);
+      throw e;
+    }
+  }
+
+  encerrarOficina() {
+    this.sessoes.forEach((a) => {
+      if (!a.fim && a.contextoPedido && a.contextoPedido.oficina) {
+        this.encerrar(a.id, 'a Oficina encerrou esta sessão');
+        this.t.fechar(a.id);
+      }
+    });
+  }
+
+  falhaCodex(a, erro) {
+    if (a.fim) return;
+    const texto = String(erro.message || erro).split(a.segredo || '\u0000').join('[segredo]');
+    this.tratar(a, 'StopFailure', { error: texto });
+    this.encerrar(a.id, 'o Codex parou');
+  }
+
+  /* Traduz somente conteúdo público do protocolo. Conteúdo de reasoning não é publicado. */
+  eventoCodex(a, tipo, e) {
+    if (a.fim) return;
+    if (tipo === 'account/rateLimits/updated') {
+      const anterior = a.codexUso && a.codexUso.rateLimits || {};
+      const novo = Object.assign({}, anterior, e.rateLimits || {});
+      ['primary', 'secondary', 'credits', 'individualLimit'].forEach((k) => {
+        if (e.rateLimits && e.rateLimits[k] == null && anterior[k] != null) novo[k] = anterior[k];
+        else if (e.rateLimits && e.rateLimits[k] && typeof e.rateLimits[k] === 'object' && anterior[k]) novo[k] = Object.assign({}, anterior[k], e.rateLimits[k]);
+      });
+      if (a.codex) a.codex.uso.rateLimits = novo;
+      a.codexUso = Object.assign({}, a.codexUso || {}, { rateLimits: novo, atualizadoEm: agora() });
+      return this.publicarUsoCodex(a, a.codexUso);
+    }
+    if (tipo === 'thread/tokenUsage/updated') {
+      if (e.threadId && a.codex && e.threadId !== a.codex.thread) return;
+      if (a.codex) a.codex.uso.tokenUsage = e.tokenUsage;
+      a.codexUso = Object.assign({}, a.codexUso || {}, { tokenUsage: e.tokenUsage, atualizadoEm: agora() });
+      return this.publicarUsoCodex(a, a.codexUso);
+    }
+    if (a.turno && this.t.pausada(a.id)) a.turno.privado = true;
+    if (tipo === 'turn/started') { this.estado(a, 'pensando'); return; }
+    if (tipo === 'turn/plan/updated') {
+      return this.plano(a, (e.plan || []).map((p) => ({ texto: linha(p.step, 300), estado: p.status === 'completed' ? 'feito' : p.status === 'inProgress' ? 'andamento' : 'pendente' })));
+    }
+    if (tipo === 'item/agentMessage/delta') {
+      const msg = a.codexMensagens.get(e.itemId) || { texto: '', privado: false };
+      msg.texto += typeof e.delta === 'string' ? e.delta : '';
+      if (this.t.pausada(a.id)) msg.privado = true;
+      a.codexMensagens.set(e.itemId, msg);
+      return;
+    }
+    if (tipo === 'item/started' || tipo === 'item/completed') {
+      const i = e.item || {}, completo = tipo === 'item/completed';
+      if (!i.id) return;
+      if (i.type === 'agentMessage') {
+        const msg = a.codexMensagens.get(i.id) || { texto: '', privado: false };
+        if (typeof i.text === 'string' && (completo || i.text)) msg.texto = i.text;
+        if (i.phase) msg.phase = i.phase;
+        msg.privado = msg.privado || this.t.pausada(a.id);
+        a.codexMensagens.set(i.id, msg);
+        if (completo && i.phase === 'commentary' && msg.texto) this.bloco(a, { tipo: 'acao', titulo: 'Codex', texto: str(msg.texto, 8000), privado_: msg.privado });
+        return;
+      }
+      if (i.type === 'plan') {
+        if (completo) this.bloco(a, { tipo: 'plano', titulo: 'plano', texto: str(i.text, 8000) });
+        return;
+      }
+      if (i.type === 'commandExecution' || i.type === 'mcpToolCall') {
+        const f = i.type === 'commandExecution' ? 'Bash' : 'mcp__' + i.server + '__' + i.tool;
+        const inp = i.type === 'commandExecution' ? { command: i.command } : i.arguments;
+        const ev = { tool_name: f, tool_input: inp, tool_use_id: i.id };
+        if (!a.codexItens.has(i.id)) { a.codexItens.set(i.id, true); this.antes(a, ev); }
+        if (completo) {
+          if (i.status === 'failed' || i.status === 'declined' || i.error || (i.exitCode != null && i.exitCode !== 0)) this.falhou(a, Object.assign(ev, { error: i.error && i.error.message || i.aggregatedOutput || 'operação falhou' }));
+          else this.depois(a, Object.assign(ev, { tool_response: i.type === 'commandExecution' ? { stdout: i.aggregatedOutput || '', interrupted: false } : i.result }));
+        }
+        return;
+      }
+      if (i.type === 'fileChange') {
+        const caminhos = (i.changes || []).map((c) => this.rel(c.path));
+        let bid = a.codexItens.get(i.id);
+        if (!bid) { bid = this.bloco(a, { tipo: 'acao', titulo: 'alterando arquivos', texto: caminhos.join(' · '), arquivos: caminhos, estado: 'rodando' }).bid; a.codexItens.set(i.id, bid); }
+        if (completo) {
+          const ok = i.status === 'completed';
+          this.atualizar(a, bid, { estado: ok ? 'feito' : 'falhou', titulo: ok ? 'arquivos alterados' : 'alteração não concluída' });
+          if (ok) (i.changes || []).forEach((c) => {
+            const acao = c.kind && c.kind.type === 'add' ? 'criado' : c.kind && c.kind.type === 'delete' ? 'removido' : 'editado';
+            const caminho = this.rel(c.path), dentro = this.dentro(c.path);
+            this.emitir(a, { tipo: 'agente-arquivo', dono: this.dono(), id: a.id, caminho, absoluto: c.path, dentro, acao }, dentro && !this.privado(a, bid) ? (m) => { const p = Object.assign({}, m); delete p.absoluto; delete p.dentro; return p; } : null);
+            if (a.turno) { a.turno.arquivos.set(caminho, acao); if (this.privado(a, bid)) a.turno.privados.add(caminho); }
+          });
+          this.estado(a, 'pensando');
+        }
+        return;
+      }
+      if (i.type === 'webSearch' && completo) this.bloco(a, { tipo: 'consulta', titulo: 'consultei a web', texto: str(i.query, 2000) });
+      return;
+    }
+    if (tipo === 'turn/completed') {
+      if (a.codex) a.codex.atualizarUso();
+      const turno = e.turn || {};
+      if (turno.status === 'failed') return this.tratar(a, 'StopFailure', { error: turno.error && turno.error.message || 'o Codex não concluiu o pedido' });
+      if (turno.status === 'interrupted') {
+        this.soltarPendentes(a, 'interrompido pela pessoa'); a.turno = null;
+        this.estado(a, 'terminou'); return this.bloco(a, { tipo: 'resultado', titulo: 'interrompido', texto: 'O pedido foi interrompido.' });
+      }
+      const mensagens = Array.from(a.codexMensagens.values());
+      const finais = mensagens.filter((m) => m.phase === 'final_answer');
+      const escolhidas = finais.length ? finais : mensagens.filter((m) => m.phase !== 'commentary').slice(-1);
+      if (a.turno && escolhidas.some((m) => m.privado)) a.turno.privado = true;
+      return this.tratar(a, 'Stop', { last_assistant_message: escolhidas.map((m) => m.texto).join('\n\n') });
+    }
+    if (tipo === 'error' && !e.willRetry) this.tratar(a, 'StopFailure', { error: e.error && e.error.message || 'erro do Codex' });
+  }
+
+  permissaoCodex(a, tipo, e, responder) {
+    if (a.fim || e.threadId && a.codex.thread && e.threadId !== a.codex.thread) return false;
+    const pergunta = tipo === 'item/tool/requestUserInput';
+    if (!pergunta && !['item/commandExecution/requestApproval', 'item/fileChange/requestApproval'].includes(tipo)) return false;
+    try { this.validarContexto(a); } catch (_) { return false; }
+    const pid = 'p-' + crypto.randomBytes(6).toString('hex');
+    const perguntas = pergunta ? (e.questions || []).slice(0, 12).map((q) => ({ id: String(q.id), header: linha(q.header, 100), question: str(q.question, 4000), isSecret: !!q.isSecret, options: Array.isArray(q.options) ? q.options.slice(0, 20).map((x) => ({ label: linha(x.label, 200), description: linha(x.description, 500) })) : [] })) : undefined;
+    const resumo = pergunta ? perguntas.map((q) => q.question).join('\n') : linha(e.reason || e.command || (tipo.includes('fileChange') ? 'Permitir alteração de arquivos?' : 'Permitir comando?'), 4000);
+    const p = { codex: true, pid, perguntas, ferramenta: pergunta ? 'pergunta' : tipo.includes('fileChange') ? 'arquivos' : 'comando', resumo, inicio: agora(), responder: (_status, corpo) => responder(corpo || (pergunta ? { answers: {} } : { decision: 'decline' })) };
+    p.bid = this.bloco(a, { tipo: 'espera', titulo: 'espera você', texto: resumo, comando: str(e.command, 4000) || undefined, pid }).bid;
+    a.pendentes.set(pid, p); this.estado(a, 'espera', p.ferramenta);
+    const telas = this.o.paraLocais({ tipo: 'agente-espera', dono: this.dono(), id: a.id, nome: a.nome, pid, ferramenta: p.ferramenta, resumo, perguntas, comando: str(e.command, 4000) || undefined, ts: p.inicio });
+    if (!telas) { this.fecharPendente(a, p, undefined, { decisao: 'negar', motivo: 'nenhuma tela aberta' }); return true; }
+    p.timer = setTimeout(() => this.fecharPendente(a, p, undefined, { decisao: 'negar', motivo: 'tempo para responder terminou' }), this.tempoPermissao); p.timer.unref();
+    return true;
+  }
+
+  responderCodex(a, p, m) {
+    this.validarContexto(a);
+    if (!['permitir', 'negar'].includes(m.decisao)) return false;
+    let corpo = { decision: m.decisao === 'permitir' ? 'accept' : 'decline' };
+    if (p.perguntas) {
+      const respostas = m.respostas && typeof m.respostas === 'object' ? m.respostas : {};
+      const answers = Object.create(null);
+      if (m.decisao === 'permitir') for (const q of p.perguntas) {
+        if (!Object.prototype.hasOwnProperty.call(respostas, q.id) || !Array.isArray(respostas[q.id]) || !respostas[q.id].length) return false;
+        answers[q.id] = { answers: respostas[q.id].slice(0, 20).map((v) => str(v, 10000)) };
+      }
+      corpo = { answers };
+    }
+    this.fecharPendente(a, p, corpo, { decisao: m.decisao });
+    this.estado(a, 'pensando'); return true;
   }
 
   /* ---------- quem o conector e o servidor consultam ---------- */
@@ -424,9 +624,9 @@ class Agentes {
   }
   resumoDe(a, publico) {
     return {
-      tipo: 'agente-resumo', dono: this.dono(), id: a.id, nome: a.nome, ativo: !a.fim, estado: a.est ? a.est.estado : null, ferramenta: a.est ? a.est.ferramenta : undefined,
+      tipo: 'agente-resumo', dono: this.dono(), id: a.id, nome: a.nome, provedor: a.provedor || 'claude', ativo: !a.fim, estado: a.est ? a.est.estado : null, ferramenta: a.est ? a.est.ferramenta : undefined,
       desde: a.est ? a.est.desde : null, plano: publico ? a.planoPub : a.plano, blocos: publico ? a.blocosPub.slice(-30) : a.blocos.slice(-30).map(semInternos),
-      pendentes: publico ? undefined : Array.from(a.pendentes.values()).map((p) => ({ pid: p.pid, ferramenta: p.ferramenta, resumo: p.resumo })),
+      pendentes: publico ? undefined : Array.from(a.pendentes.values()).map((p) => ({ pid: p.pid, ferramenta: p.ferramenta, resumo: p.resumo, perguntas: p.perguntas })),
       ganchos: publico ? undefined : Object.assign({}, a.contagem) /* quantos ganchos de cada evento chegaram (diagnóstico) */
     };
   }
@@ -501,13 +701,13 @@ class Agentes {
         const pubArq = arquivos.filter((x) => !t.privados.has(x.caminho));
         const pubCmd = t.comandos.slice(-5).filter((c) => !c.privado).map((c) => ({ comando: c.comando, ok: c.ok }));
         const b = this.bloco(a, {
-          tipo: 'resultado', titulo: 'pronto', texto: str(e.last_assistant_message, 8000), arquivos: arquivos.map((x) => x.caminho), prova,
+          tipo: 'resultado', titulo: 'pronto', texto: str(e.last_assistant_message, 8000), arquivos: arquivos.map((x) => x.caminho), prova, privado_: !!t.privado,
           pub_: pubArq.length === arquivos.length && pubCmd.length === comandos.length ? undefined : { arquivos: pubArq.map((x) => x.caminho), prova: Object.assign({}, prova, { arquivos: pubArq, comandos: pubCmd }) }
         });
         a.turno = null;
         /* o acervo guarda o resultado como histórico de terminal: só a saída (texto final e arquivos fora da pausa), nunca o que foi digitado */
         if (typeof this.o.aoResultado === 'function') {
-          try { this.o.aoResultado({ sessao: a.id, agente: a.nome, texto: str(e.last_assistant_message, 8000), arquivos: pubArq.map((x) => x.caminho), pausado: !!this.t.pausada(a.id), ts: agora() }); } catch (err) { /* o acervo nunca derruba o agente */ }
+          try { this.o.aoResultado({ sessao: a.id, agente: a.nome, texto: typeof e.last_assistant_message === 'string' ? e.last_assistant_message : '', arquivos: pubArq.map((x) => x.caminho), pausado: !!this.t.pausada(a.id) || !!t.privado, ts: agora() }); } catch (err) { console.error('[acervo] resultado não salvo: ' + err.message); }
         }
         return b;
       }
@@ -741,10 +941,17 @@ class Agentes {
   /* para as telas locais sempre; para quem assiste de fora só fora da pausa (nunca depois) */
   emitir(a, msg, paraPar) {
     if (msg && msg.nome == null) msg.nome = a.nome; /* o nome do agente em toda agente-* (placar, meio vivo, parede) */
+    if (msg && msg.provedor == null) msg.provedor = a.provedor || 'claude';
     this.o.paraLocais(msg);
     if (this.t.pausada(a.id)) return;
     if (paraPar === null) return; /* arquivo fora da pasta compartilhada: só aqui */
     this.o.publicar(a.id, paraPar ? paraPar(msg) : msg);
+  }
+  publicarUsoCodex(a, uso) {
+    if (a.fim || !a.codex) return;
+    a.codexUso = Object.assign({}, a.codexUso || {}, uso || {});
+    /* Métricas da conta e do contexto são privadas: ficam nesta Estação e não são replicadas à equipe. */
+    this.o.paraLocais({ tipo: 'agente-uso', dono: this.dono(), id: a.id, provedor: 'codex', uso: a.codexUso });
   }
   estado(a, estado, ferramenta) {
     if (a.est && a.est.estado === estado && a.est.ferramenta === ferramenta) return;
@@ -805,6 +1012,9 @@ class Agentes {
     this.sessoes.forEach((a, id) => {
       if (a.fim) return;
       if (!this.t.existe(id)) return this.encerrar(id, 'o terminal fechou');
+      if (a.turno && a.codex && this.t.pausada(id)) a.turno.privado = true;
+      if (a.contextoPedido && a.contextoPedido.oficina) { try { this.validarContexto(a); } catch (_) { return; } }
+      if (a.codex) return; /* Codex é processo próprio; shell do terminal continua parado. */
       const parado = this.t.parado(id);
       /* "viu" = o SessionStart chegou ou o processo da frente é o claude (outro programa na frente não conta) */
       if (!parado) { const i = this.t.info(id, false); if (i && ehClaude(i.processo)) a.viu = true; return; }
@@ -817,6 +1027,7 @@ class Agentes {
     a.fim = agora();
     clearTimeout(a.arranque);
     this.soltarPendentes(a, motivo);
+    if (a.codex) a.codex.fechar();
     a.segredo = null; /* ganchos e MCP desta sessão passam a receber 403 */
     this.apagar(a);
     this.emitir(a, { tipo: 'agente-fim', dono: this.dono(), id, motivo, ts: a.fim });

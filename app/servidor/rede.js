@@ -1,5 +1,6 @@
 /* Babel Coop · as Estações se acham na rede local e conversam só depois de provar quem são
    - Descoberta: anúncio por UDP broadcast a cada 2 s ("estou aqui, na porta X"); quem tem o id menor liga.
+     A gestão também diz o nome da equipe, o dela e que aceita pedidos de entrada (entrada.js). Nunca segredo.
    - Encontro: os endereços que vieram no token (a Estação de quem convidou) são ligados direto,
      mesmo se o broadcast estiver bloqueado no Wi-Fi.
    - Aperto de mão (PROTOCOLO §2): ao abrir o WebSocket os dois lados mandam `desafio`; cada um responde com `ola`
@@ -57,7 +58,10 @@ class Rede {
   /* ---------- achar os outros ---------- */
   anunciar() {
     if (!this.udp) return;
-    const msg = Buffer.from(JSON.stringify({ coop: 1, id: this.cfg.id, equipe: this.cfg.equipe, porta: this.cfg.porta }));
+    const anuncio = { coop: 1, id: this.cfg.id, equipe: this.cfg.equipe, porta: this.cfg.porta };
+    /* a gestão avisa que aceita pedidos de entrada (entrada.js): só o nome da equipe e o dela, nunca segredo */
+    if (this.cfg.papel === 'gestao' && this.cfg.privadaEquipe) { anuncio.nome = String(this.cfg.nome || '').slice(0, 60); anuncio.entrada = 1; }
+    const msg = Buffer.from(JSON.stringify(anuncio));
     const destinos = new Set(['255.255.255.255']);
     const ifs = os.networkInterfaces();
     Object.keys(ifs).forEach((k) => (ifs[k] || []).forEach((i) => { if (i.family === 'IPv4' && !i.internal && i.netmask) destinos.add(broadcastDe(i.address, i.netmask)); }));

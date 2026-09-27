@@ -79,3 +79,6 @@
   .pl-anel .pl-val, .pl-anel-g .pl-val { transition: none !important; }
 }
 html.bc-org-parado .pl-anel .pl-val, html.bc-org-parado .pl-anel-g .pl-val { transition: none; }
+
+/* modo Vibe (claro, casca-2030.css §20): o vidro do ganho vira papel */
+html[data-vista="estacao"][data-tema-estacao="claro"] .pl-voo { background: rgba(255, 248, 231, .94); border-color: rgba(8, 112, 127, .3); box-shadow: 0 2px 14px rgba(6, 11, 22, .10); }

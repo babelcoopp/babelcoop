@@ -20,11 +20,19 @@
     "teste:instalar": "node --test testes/e2e/instalar.test.js"
   },
   "dependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@fontsource/cormorant-garamond": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@highlightjs/cdn-assets": "11.9.0",
     "@xterm/addon-fit": "0.11.0",
     "@xterm/addon-serialize": "0.14.0",
     "@xterm/headless": "6.0.0",
     "@xterm/xterm": "6.0.0",
+    "dompurify": "3.4.16",
+    "marked": "12.0.2",
     "node-pty": "1.1.0",
+    "pdfjs-dist": "3.11.174",
     "three": "0.160.0",
     "ws": "^8.18.0"
   },
@@ -65,7 +73,14 @@
       "!node_modules/node-addon-api/**",
       "!node_modules/@xterm/*/{src,typings}/**",
       "!node_modules/**/*.test.js",
-      "!node_modules/three/**"
+      "!node_modules/three/**",
+      "!node_modules/pdfjs-dist/{legacy,web,types,image_decoders,cmaps,standard_fonts}/**",
+      "!node_modules/pdfjs-dist/build/!(pdf.min.js|pdf.worker.min.js)",
+      "!node_modules/pdfjs-dist/webpack.js",
+      "!node_modules/@highlightjs/cdn-assets/{languages,styles,es}/**",
+      "!node_modules/@highlightjs/cdn-assets/highlight.js",
+      "!node_modules/@fontsource/*/files/*.woff",
+      "!node_modules/{canvas,@mapbox,path2d-polyfill}/**"
     ],
     "extraResources": [
       {
@@ -131,7 +146,14 @@
         "!node_modules/@xterm/*/{src,typings}/**",
         "!node_modules/**/*.test.js",
         "!node_modules/node-pty/prebuilds/!(darwin-${arch})/**",
-        "!node_modules/three/**"
+        "!node_modules/three/**",
+        "!node_modules/pdfjs-dist/{legacy,web,types,image_decoders,cmaps,standard_fonts}/**",
+        "!node_modules/pdfjs-dist/build/!(pdf.min.js|pdf.worker.min.js)",
+        "!node_modules/pdfjs-dist/webpack.js",
+        "!node_modules/@highlightjs/cdn-assets/{languages,styles,es}/**",
+        "!node_modules/@highlightjs/cdn-assets/highlight.js",
+        "!node_modules/@fontsource/*/files/*.woff",
+        "!node_modules/{canvas,@mapbox,path2d-polyfill}/**"
       ]
     },
     "win": {
@@ -165,7 +187,14 @@
         "!node_modules/@xterm/*/{src,typings}/**",
         "!node_modules/**/*.test.js",
         "!node_modules/node-pty/prebuilds/!(win32-${arch})/**",
-        "!node_modules/three/**"
+        "!node_modules/three/**",
+        "!node_modules/pdfjs-dist/{legacy,web,types,image_decoders,cmaps,standard_fonts}/**",
+        "!node_modules/pdfjs-dist/build/!(pdf.min.js|pdf.worker.min.js)",
+        "!node_modules/pdfjs-dist/webpack.js",
+        "!node_modules/@highlightjs/cdn-assets/{languages,styles,es}/**",
+        "!node_modules/@highlightjs/cdn-assets/highlight.js",
+        "!node_modules/@fontsource/*/files/*.woff",
+        "!node_modules/{canvas,@mapbox,path2d-polyfill}/**"
       ]
     },
     "nsis": {

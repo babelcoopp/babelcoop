@@ -10,7 +10,7 @@
       e Python é proibido neste projeto (node_modules/dmg-builder/out/dmgUtil.js).
    Sem assinatura Apple (identity null): o pacote leva só a assinatura ad hoc ("-", sem certificado), para o macOS não dizer
    "danificado" no app baixado; Developer ID + notarização dependem do certificado do Theus.
-   Uso: node scripts/empacotar.js [--sem-dmg] [--arch arm64|x64]
+   Uso: node scripts/empacotar.js [--sem-dmg] [--arch arm64|x64] [--saida dist/oficina-ID]
    Saída: dist/mac-<arch>/babel-coop.app, dist/babel-coop-<versão>-<arch>.dmg e dist/pacote.json (resumo com tamanhos).
 */
 'use strict';
@@ -20,11 +20,15 @@ const crypto = require('crypto');
 const { execFileSync, spawnSync } = require('child_process');
 
 const APP = path.join(__dirname, '..');
-const DIST = path.join(APP, 'dist');
 const pkg = require(path.join(APP, 'package.json'));
 const NOME = pkg.build.productName;
 
 const args = process.argv.slice(2);
+const iSaida = args.indexOf('--saida');
+if (iSaida >= 0 && (!args[iSaida + 1] || args[iSaida + 1].startsWith('--'))) throw new Error('--saida precisa de uma subpasta de app/dist');
+const DIST_PADRAO = path.join(APP, 'dist');
+const DIST = iSaida < 0 ? DIST_PADRAO : path.resolve(APP, args[iSaida + 1]);
+if (iSaida >= 0 && !DIST.startsWith(DIST_PADRAO + path.sep)) throw new Error('--saida deve ficar dentro de app/dist, em uma subpasta própria');
 const semDmg = args.includes('--sem-dmg');
 const iArch = args.indexOf('--arch');
 const arch = iArch >= 0 && args[iArch + 1] ? args[iArch + 1] : process.arch;
@@ -152,7 +156,7 @@ async function main() {
   const builder = require('electron-builder');
   process.env.CSC_IDENTITY_AUTO_DISCOVERY = 'false'; /* nunca pegar um certificado do chaveiro por engano */
   log('electron-builder --mac dir (' + arch + ')…');
-  await builder.build({ projectDir: APP, targets: builder.Platform.MAC.createTarget(['dir'], builder.Arch[arch]), publish: 'never' });
+  await builder.build({ projectDir: APP, targets: builder.Platform.MAC.createTarget(['dir'], builder.Arch[arch]), publish: 'never', config: { directories: { output: DIST } } });
 
   const appPath = path.join(pastaDoApp(), NOME + '.app');
   if (!fs.existsSync(appPath)) throw new Error('o electron-builder não gerou ' + appPath);
@@ -187,7 +191,7 @@ async function main() {
   resumo.segundos = Math.round((Date.now() - t0) / 100) / 10;
   resumo.quando = new Date().toISOString();
   fs.writeFileSync(path.join(DIST, 'pacote.json'), JSON.stringify(resumo, null, 2) + '\n');
-  log('pronto em ' + resumo.segundos + ' s · resumo em dist/pacote.json');
+  log('pronto em ' + resumo.segundos + ' s · resumo em ' + path.relative(APP, path.join(DIST, 'pacote.json')));
   log('instalar: ditto "' + appPath + '" "/Applications/' + NOME + '.app" && open -a "/Applications/' + NOME + '.app"');
 }
 

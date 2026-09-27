@@ -36,6 +36,10 @@ contextBridge.exposeInMainWorld('coopElectron', {
   /* área de transferência pelo processo principal (o Raio-X copia bloco e Markdown mesmo com o foco dentro do webview) */
   copiar: (texto) => ipcRenderer.invoke('coop:copiar', String(texto == null ? '' : texto)),
   eu: () => ipcRenderer.invoke('coop:eu'),
+  oficina: (acao, args) => ipcRenderer.invoke('coop:oficina', acao, args || {}).then((r) => {
+    if (r && r.ok) return r.valor;
+    throw new Error((r && r.erro) || 'A Oficina não respondeu.');
+  }),
   plataforma: process.platform,
   navegador: {
     registrar: (webContentsId, agente, opcoes) => chamar('registrar', agente, Object.assign({}, opcoes || {}, { webContentsId })),

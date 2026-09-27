@@ -68,6 +68,7 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     assert.deepEqual(r.json.result.capabilities, { tools: { listChanged: false } });
     assert.equal(r.json.result.serverInfo.name, 'coop');
     assert.match(r.json.result.instructions, /Google Chrome/);
+    assert.match(r.json.result.instructions, /coop_banco_sql \(a Máquina anima ao vivo\).*coop_banco_consulta/, 'as instruções mandam montar o banco pelo conector');
     assert.equal(r.headers['mcp-session-id'], undefined, 'não cria sessão');
     const nova = await post(s.porta, rpc('initialize', { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'x' } }));
     assert.equal(nova.json.result.protocolVersion, '2025-11-25');
@@ -81,13 +82,16 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     assert.equal(r.texto, '');
   });
 
-  await t.test('tools/list: 40 ferramentas, navegador_* e coop_* (Máquina incluída), esquema objeto, ordem fixa', async () => {
+  await t.test('tools/list: 47 ferramentas, navegador_* e coop_* (Máquina, banco e Estação incluídos), esquema objeto, ordem fixa', async () => {
     const r = await post(s.porta, rpc('tools/list', {}), { 'MCP-Protocol-Version': '2025-06-18' });
     assert.equal(r.status, 200);
     const nomes = r.json.result.tools.map((f) => f.name);
-    assert.equal(nomes.length, 40);
+    assert.equal(nomes.length, 47);
     for (const n of ['navegador_abrir', 'navegador_clicar', 'navegador_digitar', 'navegador_ler', 'navegador_raio_x', 'navegador_clonar', 'navegador_copy', 'navegador_print',
-      'coop_tv', 'coop_projetar', 'coop_aviso', 'coop_mural', 'coop_demanda', 'coop_campanha', 'coop_meta', 'coop_buscar', 'coop_aprendi', 'coop_pessoas', 'coop_projetos', 'coop_acao', 'coop_maquina', 'coop_maquina_peca', 'coop_maquina_ligar']) assert.ok(nomes.includes(n), 'falta ' + n);
+      'coop_tv', 'coop_projetar', 'coop_aviso', 'coop_mural', 'coop_demanda', 'coop_campanha', 'coop_meta', 'coop_buscar', 'coop_aprendi', 'coop_pessoas', 'coop_projetos', 'coop_acao', 'coop_maquina', 'coop_maquina_peca', 'coop_maquina_ligar',
+      'coop_banco_sql', 'coop_banco_consulta', 'coop_banco_estado', 'coop_abrir', 'coop_fechar', 'coop_onde', 'coop_tela']) assert.ok(nomes.includes(n), 'falta ' + n);
+    /* as do banco e depois as da Estação entram no fim, antes de coop_acao; as de antes não mudam de lugar */
+    assert.deepEqual(nomes.slice(-9), ['coop_maquina_ligar', 'coop_banco_sql', 'coop_banco_consulta', 'coop_banco_estado', 'coop_abrir', 'coop_fechar', 'coop_onde', 'coop_tela', 'coop_acao']);
     r.json.result.tools.forEach((f) => { assert.equal(f.inputSchema.type, 'object', f.name); assert.ok(f.description.length > 20, f.name); });
     assert.equal(r.json.result.resultType, undefined, 'era legada não leva resultType');
     assert.equal(r.json.result.ttlMs, undefined, 'nem dica de cache');
@@ -156,6 +160,85 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     assert.equal(s.chamadas.length, antes + 3);
   });
 
+  await t.test('banco: coop_banco_sql e coop_banco_consulta mudam, coop_banco_estado é consulta; vão para a tela com os argumentos; sem projeto ou sql não chegam', async () => {
+    const f = Object.fromEntries(FERRAMENTAS.map((x) => [x.name, x]));
+    assert.equal(f.coop_banco_estado.annotations.readOnlyHint, true, 'ler o banco é consulta');
+    assert.ok(!f.coop_banco_sql.annotations.readOnlyHint && !f.coop_banco_consulta.annotations.readOnlyHint, 'migração e dados de teste mudam o banco');
+    assert.equal(f.coop_banco_sql.annotations.destructiveHint, true, 'uma migração pode apagar tabela');
+    assert.deepEqual(f.coop_banco_sql.inputSchema.required, ['projeto', 'sql']);
+    assert.deepEqual(Object.keys(f.coop_banco_sql.inputSchema.properties), ['projeto', 'sql', 'nome']);
+    assert.deepEqual(f.coop_banco_consulta.inputSchema.required, ['projeto', 'sql']);
+    assert.deepEqual(f.coop_banco_estado.inputSchema.required, ['projeto']);
+    assert.match(f.coop_banco_sql.description, /^Constrói o banco de verdade do projeto \(Postgres local deste computador\): cria\/altera tabelas, vínculos, regras de acesso \(RLS\), funções e gatilhos\. Cada comando vira peça viva na Máquina, em 3D, na hora; a migração fica gravada na pasta do projeto\./);
+    const antes = s.chamadas.length;
+    const semSql = await post(s.porta, rpc('tools/call', { name: 'coop_banco_sql', arguments: { projeto: 'Clínica' } }));
+    assert.equal(semSql.json.result.isError, true);
+    assert.match(semSql.json.result.content[0].text, /faltou "sql"/);
+    const semProjeto = await post(s.porta, rpc('tools/call', { name: 'coop_banco_estado', arguments: {} }));
+    assert.match(semProjeto.json.result.content[0].text, /faltou "projeto"/);
+    const intruso = await post(s.porta, rpc('tools/call', { name: 'coop_banco_consulta', arguments: { projeto: 'Clínica', sql: 'SELECT 1', limite: 5 } }));
+    assert.match(intruso.json.result.content[0].text, /argumento desconhecido: "limite"/);
+    assert.equal(s.chamadas.length, antes, 'nada inválido chegou à tela');
+    const args = { projeto: 'Clínica', sql: 'CREATE TABLE pacientes (id uuid PRIMARY KEY, nome text NOT NULL);', nome: 'cria pacientes' };
+    const ok = await post(s.porta, rpc('tools/call', { name: 'coop_banco_sql', arguments: args }));
+    assert.equal(ok.json.result.isError, undefined);
+    assert.equal(ok.json.result.content[0].text, 'feito na tela: coop_banco_sql');
+    const c = s.chamadas[s.chamadas.length - 1];
+    assert.equal(c.ferramenta, 'coop_banco_sql');
+    assert.deepEqual(c.args, args);
+    assert.deepEqual(c.agente, AGENTE);
+    assert.equal((await post(s.porta, rpc('tools/call', { name: 'coop_banco_consulta', arguments: { projeto: 'Clínica', sql: "INSERT INTO pacientes (id, nome) VALUES (gen_random_uuid(), 'Pessoa de teste')" } }))).json.result.content[0].text, 'feito na tela: coop_banco_consulta');
+    assert.equal((await post(s.porta, rpc('tools/call', { name: 'coop_banco_estado', arguments: { projeto: 'Clínica' } }))).json.result.content[0].text, 'feito na tela: coop_banco_estado');
+    assert.equal(s.chamadas.length, antes + 3);
+  });
+
+  await t.test('Estação: coop_abrir e coop_fechar mudam só a tela, coop_onde e coop_tela são consulta; o/modo fora da lista não chegam; as instruções mandam usar coop_abrir', async () => {
+    const f = Object.fromEntries(FERRAMENTAS.map((x) => [x.name, x]));
+    assert.equal(f.coop_onde.annotations.readOnlyHint, true, 'onde está cada um é consulta');
+    assert.equal(f.coop_tela.annotations.readOnlyHint, true, 'o que está na tela é consulta');
+    assert.ok(!f.coop_abrir.annotations.readOnlyHint && !f.coop_fechar.annotations.readOnlyHint, 'abrir e fechar mexem na tela');
+    assert.equal(f.coop_abrir.annotations.destructiveHint, false);
+    assert.deepEqual(f.coop_abrir.inputSchema.required, ['o']);
+    assert.deepEqual(f.coop_abrir.inputSchema.properties.o.enum, ['atividade', 'arquivo', 'projeto', 'maquina', 'pessoa']);
+    assert.deepEqual(f.coop_abrir.inputSchema.properties.modo.enum, ['2d', '3d']);
+    assert.deepEqual(f.coop_fechar.inputSchema.properties.o.enum, ['tudo', 'aba']);
+    assert.deepEqual(Object.keys(f.coop_onde.inputSchema.properties), ['pessoa']);
+    assert.deepEqual(Object.keys(f.coop_tela.inputSchema.properties), []);
+    for (const n of ['Meu dia', 'Criar', 'Trabalho', 'Chat', 'WhatsApp', 'Reunião', 'Terminais', 'Projetos', 'Acervo', 'Equipe', 'Loja', 'Oficina']) assert.ok(f.coop_abrir.description.includes(n), 'a descrição cita a atividade ' + n);
+    const init = await post(s.porta, rpc('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'x' } }));
+    assert.match(init.json.result.instructions, /pedir para abrir, mostrar ou ir para algo.*use coop_abrir/, 'as instruções mandam abrir pelo conector');
+    /* o que o modelo ouve é o que acontece: a troca vale como um clique (posição, vendoArquivo, Chat lido) e a edição não salva fica */
+    assert.match(init.json.result.instructions, /valem como um clique dela: o que ela passa a ver vira a posição dela, que a equipe vê/);
+    assert.match(f.coop_abrir.description, /vale como um clique da pessoa: .*posição dela.*avisa o dono que ela está vendo.*marca a conversa como lida/);
+    assert.match(f.coop_abrir.description, /editando um arquivo sem salvar, recusa em vez de jogar fora o texto/);
+    assert.match(f.coop_fechar.description, /Aba com edição não salva .* não fecha/);
+    for (const x of [init.json.result.instructions, f.coop_abrir.description]) assert.doesNotMatch(x, /ninguém mais vê|nada vai para o diário/, 'nada de prometer que a troca é privada');
+    const antes = s.chamadas.length;
+    const semO = await post(s.porta, rpc('tools/call', { name: 'coop_abrir', arguments: { ref: 'Projetos' } }));
+    assert.equal(semO.json.result.isError, true);
+    assert.match(semO.json.result.content[0].text, /faltou "o"/);
+    const oRuim = await post(s.porta, rpc('tools/call', { name: 'coop_abrir', arguments: { o: 'disco', ref: '/' } }));
+    assert.match(oRuim.json.result.content[0].text, /"o" tem de ser um de: atividade, arquivo, projeto, maquina, pessoa/);
+    const modoRuim = await post(s.porta, rpc('tools/call', { name: 'coop_abrir', arguments: { o: 'maquina', modo: '4d' } }));
+    assert.match(modoRuim.json.result.content[0].text, /"modo" tem de ser um de: 2d, 3d/);
+    const fecharRuim = await post(s.porta, rpc('tools/call', { name: 'coop_fechar', arguments: { o: 'janela' } }));
+    assert.match(fecharRuim.json.result.content[0].text, /"o" tem de ser um de: tudo, aba/);
+    const telaIntrusa = await post(s.porta, rpc('tools/call', { name: 'coop_tela', arguments: { pessoa: 'Carla' } }));
+    assert.match(telaIntrusa.json.result.content[0].text, /argumento desconhecido: "pessoa"/);
+    assert.equal(s.chamadas.length, antes, 'nada inválido chegou à tela');
+    const args = { o: 'maquina', ref: 'Clínica', modo: '3d' };
+    const ok = await post(s.porta, rpc('tools/call', { name: 'coop_abrir', arguments: args }));
+    assert.equal(ok.json.result.content[0].text, 'feito na tela: coop_abrir');
+    const c = s.chamadas[s.chamadas.length - 1];
+    assert.equal(c.ferramenta, 'coop_abrir');
+    assert.deepEqual(c.args, args);
+    assert.deepEqual(c.agente, AGENTE);
+    for (const [nome, a] of [['coop_fechar', { o: 'tudo' }], ['coop_onde', { pessoa: 'Carla' }], ['coop_tela', {}]]) {
+      assert.equal((await post(s.porta, rpc('tools/call', { name: nome, arguments: a }))).json.result.content[0].text, 'feito na tela: ' + nome);
+    }
+    assert.equal(s.chamadas.length, antes + 4);
+  });
+
   await t.test('ferramenta desconhecida → erro JSON-RPC -32602; método desconhecido → -32601', async () => {
     const a = await post(s.porta, rpc('tools/call', { name: 'rm_rf', arguments: {} }));
     assert.equal(a.json.error.code, -32602);
@@ -179,7 +262,7 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     assert.equal(c.status, 200);
     assert.equal(c.json.length, 2);
     assert.deepEqual(c.json[0].result, {});
-    assert.equal(c.json[1].result.tools.length, 40);
+    assert.equal(c.json[1].result.tools.length, 47);
   });
 
   await t.test('GET e DELETE → 405 (sem SSE, sem sessão); Origin de fora → 403; versão estranha no cabeçalho → 400', async () => {
@@ -208,7 +291,7 @@ test('conector coop · protocolo MCP (JSON-RPC por HTTP)', async (t) => {
     m = moderno('tools/list');
     const lista = await post(s.porta, m.corpo, m.headers);
     assert.equal(lista.json.result.resultType, 'complete');
-    assert.equal(lista.json.result.tools.length, 40);
+    assert.equal(lista.json.result.tools.length, 47);
     assert.equal(lista.json.result.ttlMs, 300000);
     assert.equal(lista.json.result.cacheScope, 'public');
     m = moderno('tools/call', { name: 'coop_mural', arguments: { texto: 'bom dia' } });
@@ -278,6 +361,22 @@ test('conector coop · a tela: sem tela, tela muda, cancelamento, recusa', async
       assert.equal(s.mcp.pendentes(), 0);
     } finally { await s.fechar(); }
   });
+  await t.test('as do banco esperam a tela por mais tempo (120 s no app; 0,6 s aqui contra 0,2 s das outras)', async () => {
+    const s = await subir(4921, { tela: () => true, criarCom: { tempoUi: 200, tempoUiBanco: 600 } });
+    try {
+      let inicio = Date.now();
+      const outra = await post(s.porta, rpc('tools/call', { name: 'coop_pessoas', arguments: {} }));
+      const msOutra = Date.now() - inicio;
+      assert.match(outra.json.result.content[0].text, /não respondeu em 0,2 s/);
+      inicio = Date.now();
+      const banco = await post(s.porta, rpc('tools/call', { name: 'coop_banco_sql', arguments: { projeto: 'Clínica', sql: 'SELECT 1' } }));
+      const msBanco = Date.now() - inicio;
+      assert.match(banco.json.result.content[0].text, /não respondeu em 0,6 s/);
+      assert.ok(msOutra >= 180 && msOutra < 550, 'as outras: ' + msOutra + ' ms');
+      assert.ok(msBanco >= 580 && msBanco < 2500, 'o banco: ' + msBanco + ' ms');
+      assert.equal(s.mcp.pendentes(), 0);
+    } finally { await s.fechar(); }
+  });
   await t.test('cliente desistiu (fechou a conexão) → a chamada pendente some; resposta atrasada é ignorada', async () => {
     let ultimo = null;
     const s = await subir(4921, { tela: (msg) => { ultimo = msg; return true; }, criarCom: { tempoUi: 20000 } });
@@ -341,6 +440,20 @@ test('conector coop · navegador (módulo falso com a API do §9)', async (t) =>
     assert.equal(ruim.isError, true);
     const arquivo = await chamar('navegador_abrir', { url: 'file:///etc/passwd' });
     assert.equal(arquivo.isError, true);
+  });
+  await t.test('arquivo da pasta (caminho ou file://) abre pela /pasta/ da Estação; de fora, a resposta manda copiar (sem python)', async () => {
+    const site = path.join(pasta, 'sites', 'lp reino');
+    fs.mkdirSync(site, { recursive: true });
+    const alvo = path.join(site, 'ATUAL - LP.html');
+    fs.writeFileSync(alvo, '<h1>LP</h1>');
+    const esperado = /^aberto: http:\/\/localhost:\d+\/pasta\/sites\/lp%20reino\/ATUAL%20-%20LP\.html$/;
+    assert.match((await chamar('navegador_abrir', { url: alvo })).content[0].text, esperado);
+    assert.match((await chamar('navegador_abrir', { url: require('url').pathToFileURL(alvo).href })).content[0].text, esperado);
+    const fora = await chamar('navegador_abrir', { url: '/Users/alguem/Desktop/babel-os/entregas/sites/lp-reino/ATUAL.html' });
+    assert.equal(fora.isError, true);
+    assert.match(fora.content[0].text, /fora da pasta compartilhada/);
+    assert.match(fora.content[0].text, /cp -R "\/Users\/alguem\/Desktop\/babel-os\/entregas\/sites\/lp-reino"/);
+    assert.match(fora.content[0].text, /Não sirva com python/);
   });
   await t.test('clicar pede seletor ou texto; digitar recusa senha (pelo seletor e pelo aviso do módulo)', async () => {
     assert.equal((await chamar('navegador_clicar', {})).isError, true);
@@ -436,6 +549,11 @@ test('conector coop · servidor e tela falam a mesma língua', () => {
   for (const proibida of ['ok', 'devolver', 'cancelar', 'pedirEntrar', 'aceitarEntrar', 'transmissao', 'gravarSala', 'waEnviar', 'foto', 'perfil', 'lojaChave', 'criarArquivo', 'salvarArquivo', 'oficinaPublicar']) {
     assert.ok(!ACOES_PERMITIDAS.includes(proibida), proibida + ' não pode estar na lista do agente');
   }
+  /* maquinaMudar tira e muda peça do banco local: só as ferramentas coop_banco_* da tela fazem, nunca um coop_acao solto */
+  assert.ok(!ACOES_PERMITIDAS.includes('maquinaMudar'), 'maquinaMudar não é do agente');
+  assert.match(ui, /var DA_TELA = \{ maquinaMudar: true \};/);
+  assert.match(ui, /if \(\(!permitida\[acao\] && !DA_TELA\[acao\]\) \|\| typeof L\.A\[acao\] !== 'function'\) return;/);
+  assert.match(ui, /F\.coop_acao = function \(a, c\) \{\n\s+if \(!permitida\[a\.acao\]/, 'coop_acao só aceita a lista permitida');
 });
 
 /* ------------------------------------------------------------------ (c) Claude Code de verdade */

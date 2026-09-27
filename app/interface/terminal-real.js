@@ -38,11 +38,22 @@
     black: '#0b1320', red: '#ff6b6b', green: '#7fd6a6', yellow: '#f0b35a', blue: '#7ba4f0', magenta: '#a376e9', cyan: '#2ad5e5', white: '#d7e4fb',
     brightBlack: '#6c7b96', brightRed: '#ff8f8f', brightGreen: '#a3e6c1', brightYellow: '#f5c76a', brightBlue: '#9dbcf5', brightMagenta: '#c7a2ff', brightCyan: '#6fe3ff', brightWhite: '#fff8e7'
   };
+  /* modo Vibe (claro, casca-2030.css §20): papel Latte, texto escuro; cada cor ANSI com contraste ≥ 4,5:1 sobre #fff8e7.
+     "white" vira grafite: programa que pinta de branco espera fundo escuro. minimumContrastRatio segura o truecolor dos programas. */
+  var TEMA_VIBE = {
+    background: '#fff8e7', foreground: '#1c2331', cursor: '#08707f', cursorAccent: '#fff8e7', selectionBackground: 'rgba(109,63,184,.18)',
+    black: '#2a2f3a', red: '#b3261e', green: '#17774b', yellow: '#8a5f00', blue: '#2f5bb7', magenta: '#6d3fb8', cyan: '#08707f', white: '#4a5568',
+    brightBlack: '#5d6675', brightRed: '#c8323a', brightGreen: '#1a7f50', brightYellow: '#9a5b00', brightBlue: '#3a63c2', brightMagenta: '#8a3fb8', brightCyan: '#0a7383', brightWhite: '#060b16'
+  };
+  function vibe() { var h = document.documentElement; return h.getAttribute('data-tema-estacao') === 'claro' && h.getAttribute('data-vista') === 'estacao'; }
+  function temaAgora() { return vibe() ? TEMA_VIBE : TEMA; }
   var ERRO_PROVAVEL = /error|erro|failed|falhou|✖|not found|Traceback/i;
   var TIPOS = ['nota', 'pedido', 'consulta', 'plano', 'acao', 'resultado', 'espera', 'falha'];
   var ROTULO = { nota: '', pedido: 'pedido', consulta: 'consulta', plano: 'plano', acao: 'ação', resultado: 'resultado', espera: 'espera', falha: 'falha' };
   var CHAVE = { neon: 'babel-coop:neon', face: 'babel-coop:face:', so: 'babel-coop:so-terminal:', b: 'babel-coop:b-entrada:', aba: 'babel-coop:aba-agente' };
   var MAX_BLOCOS = 200;
+  CHAVE.provedor = 'babel-coop:provedor:';
+  CHAVE.oficina = 'babel-coop:oficina:';
   var SVG_SOM = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6h2.5l3.5-3v10l-3.5-3H2.5z"/><path class="tr-onda" d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.8a6 6 0 0 1 0 8.4"/></svg>';
 
   /* ------------------------------------------------------------------ utilidades */
@@ -51,6 +62,31 @@
   function guardar(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* sem armazenamento: vale nesta página */ } }
   function normalizar(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
   function hora(ms) { return O.hora(ms || Date.now()); }
+  function inteiro(n) { return Number.isFinite(+n) ? new Intl.NumberFormat('pt-BR').format(Math.max(0, Math.round(+n))) : '—'; }
+  function duracaoJanela(min) { return min == null ? 'Janela' : min < 60 ? 'Janela de ' + min + ' min' : min % 60 ? 'Janela de ' + Math.floor(min / 60) + ' h ' + min % 60 + ' min' : 'Janela de ' + (min / 60) + ' h'; }
+  function faltaPara(ts) { if (!Number.isFinite(+ts)) return 'renovação não informada'; var ms = Math.max(0, +ts * 1000 - Date.now()); return ms ? 'renova em ' + O.duracaoTexto(ms) : 'renovação prevista agora'; }
+  function dinheiroUSD(micros) { return Number.isFinite(+micros) ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 4, maximumFractionDigits: 4 }).format(+micros / 1000000) : '—'; }
+  function usoCodexHTML(uso) {
+    uso = uso || {};
+    var r = uso.rateLimits || {}, janelas = [r.primary, r.secondary].filter(Boolean), h = '<div class="tr-uso-cab"><div><b>Uso do Codex</b><small>Dados da conta conectada</small></div>' + (uso.atualizadoEm ? '<time>atualizado ' + esc(hora(uso.atualizadoEm)) + '</time>' : '') + '</div>';
+    if (janelas.length) {
+      h += '<div class="tr-uso-grupo"><span class="tr-uso-titulo">JANELAS DE USO</span>';
+      janelas.forEach(function (j) { var pct = Math.max(0, Math.min(100, +j.usedPercent || 0)); h += '<div class="tr-uso-janela"><div><span>' + esc(duracaoJanela(j.windowDurationMins)) + '</span><b>' + pct + '% usado</b></div><div class="tr-uso-trilho" role="progressbar" aria-label="' + esc(duracaoJanela(j.windowDurationMins)) + ' consumida" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="--uso:' + pct + '%"></i></div><small>' + esc(faltaPara(j.resetsAt)) + '</small></div>'; });
+      h += '</div>';
+    } else h += '<div class="tr-uso-vazio">A janela de uso ainda não chegou do Codex.</div>';
+    var tu = uso.tokenUsage || {}, total = tu.total || {}, last = tu.last || {}, ctx = +tu.modelContextWindow || 0;
+    if (total.totalTokens != null || uso.threadUsage) {
+      h += '<div class="tr-uso-grupo"><span class="tr-uso-titulo">ESTA CONVERSA</span>';
+      if (total.totalTokens != null) h += '<div class="tr-uso-linha"><span>Tokens acumulados</span><b>' + inteiro(total.totalTokens) + '</b></div><div class="tr-uso-linha"><span>Entrada · saída</span><b>' + inteiro(total.inputTokens) + ' · ' + inteiro(total.outputTokens) + '</b></div><div class="tr-uso-linha"><span>Cache · raciocínio</span><b>' + inteiro(total.cachedInputTokens) + ' · ' + inteiro(total.reasoningOutputTokens) + '</b></div>';
+      if (ctx && last.totalTokens != null) { var cp = Math.max(0, Math.min(100, Math.round(+last.totalTokens / ctx * 100))); h += '<div class="tr-uso-linha"><span>Contexto do último turno</span><b>' + inteiro(last.totalTokens) + ' / ' + inteiro(ctx) + ' · ' + cp + '%</b></div>'; }
+      if (uso.threadUsage) {
+        if (uso.threadUsage.estimatedUsageUsdMicros != null) h += '<div class="tr-uso-linha"><span>Custo estimado desta conversa</span><b>' + esc(dinheiroUSD(uso.threadUsage.estimatedUsageUsdMicros)) + '</b></div>';
+        (uso.threadUsage.groups || []).forEach(function (g) { if (g.model) h += '<div class="tr-uso-modelo">' + esc(g.model) + (g.reasoningEffort ? ' · ' + esc(g.reasoningEffort) : '') + '</div>'; });
+      }
+      h += '</div>';
+    }
+    return h;
+  }
   function sid(agId) { var s = String(agId || ''); return ID_OK.test(s) ? s : (s.replace(/[^A-Za-z0-9_-]/g, '-').slice(0, 48) || 'agente'); }
   function temMidia(n) { return !Array.isArray(REAL.midia) || REAL.midia.indexOf(n) >= 0; }
   function neonLigado() { return ler(CHAVE.neon) !== '0'; }
@@ -128,7 +164,7 @@
     this.eu = null; this.nomeEu = ''; this.pasta = null; this.pronto = false;
     this.sessoes = {}; this.ordem = []; this.aba = null; this.abaDesejada = null;
     this.controles = []; this.assinatura = ''; this.criouPadrao = false; this.viuAgente = false;
-    this.dims = { cols: 100, rows: 30 };
+    this.dims = { cols: 100, rows: 30 }; this.usoAberto = false;
     this.relogio = 0; this.tAgente = 0; this.objetoChave = null; this.objeto = null;
     this.med = { termAberto: 0, saidas: 0, bytes: 0, pulsosPlano: 0, ritos: 0, bEntrada: 0, iniciar: 0, pedidos: 0, oks: 0, confianca: 0, blocos: 0 };
     painelAtual = this;
@@ -146,17 +182,21 @@
       '<div class="tr-sel" role="group" aria-label="Face do painel"><button type="button" data-tr="face" data-face="presenca" aria-pressed="true">Presença</button><button type="button" data-tr="face" data-face="terminal" aria-pressed="false">Terminal</button></div>' +
       '<span class="tr-kbd" title="Ctrl+J alterna as faces; dentro do terminal, Cmd+J ou Ctrl+Shift+J (Ctrl+J é do shell)">Ctrl J</span>' +
       '<div class="tr-acoes">' +
+      '<button class="term-toggle" type="button" data-tr="codex" title="Criar uma Presença com Codex">Codex</button>' +
       '<button class="term-toggle" type="button" data-tr="entrar" title="Entrar no terminal de alguém (Ctrl+Shift+E)"><span class="tr-rot-entrar">Entrar em…</span></button>' +
+      '<button class="term-toggle tr-uso-botao" type="button" data-tr="uso" aria-expanded="false" hidden title="Ver janelas de uso e contexto do Codex">Uso</button>' +
       '<button class="term-toggle" type="button" data-tr="neon" aria-pressed="true" title="O b em neon no canto do terminal">Neon</button>' +
       '<button class="term-toggle" type="button" data-tr="som" aria-pressed="true" title="Sons do organismo (nunca na TV)">' + SVG_SOM + 'Som</button>' +
       '<button class="tr-esconder" type="button" data-tr="esconder" title="Esconder (Ctrl + `)" aria-label="Esconder o painel">⟩</button>' +
       '</div></div>' +
+      '<section class="tr-uso" hidden aria-label="Métricas de uso do Codex"></section>' +
       '<div class="tr-novo" hidden></div>' +
       '<div class="tr-sessoes"><div class="tr-espera-servidor">ligando ao servidor desta Estação…</div></div>' +
       '</div>';
     this.el = this.raiz.firstChild;
     this.abasEl = this.el.querySelector('.tr-abas');
     this.novoEl = this.el.querySelector('.tr-novo');
+    this.usoEl = this.el.querySelector('.tr-uso');
     this.sessoesEl = this.el.querySelector('.tr-sessoes');
     this.esperaEl = this.el.querySelector('.tr-espera-servidor');
     var eu = this;
@@ -264,6 +304,14 @@
     Array.prototype.forEach.call(this.el.querySelectorAll('[data-tr="face"]'), function (b) { b.setAttribute('aria-pressed', b.dataset.face === face ? 'true' : 'false'); });
     var neon = this.el.querySelector('[data-tr="neon"]'); if (neon) neon.setAttribute('aria-pressed', neonLigado() ? 'true' : 'false');
     var som = this.el.querySelector('[data-tr="som"]'); if (som) { var on = O.somLigado(); som.setAttribute('aria-pressed', on ? 'true' : 'false'); som.title = on ? 'Sons do organismo ligados (clique para desligar; nunca na TV)' : 'Sons desligados (clique para ligar)'; }
+    var uso = this.el.querySelector('[data-tr="uso"]'); if (uso) { uso.hidden = !s || s.provedor !== 'codex'; uso.setAttribute('aria-expanded', this.usoAberto ? 'true' : 'false'); }
+    this.pintarUso();
+  };
+  P.pintarUso = function () {
+    if (!this.usoEl) return;
+    var s = this.ativa(), visivel = this.usoAberto && s && s.provedor === 'codex';
+    this.usoEl.hidden = !visivel;
+    if (visivel) this.usoEl.innerHTML = usoCodexHTML(s.usoCodex);
   };
 
   P.face = function (f, id) { var s = id ? this.sessoes[id] : this.ativa(); if (!s) return; s.definirFace(f === 'terminal' ? 'terminal' : 'presenca'); if (s === this.ativa()) this.pintarBarra(); };
@@ -293,7 +341,13 @@
     if (m.tipo === 'bemvindo') { if (m.eu && m.eu.pronto) this.aoBemvindo(m); return; }
     if (!this.pronto) return;
     if (m.tipo === 'controles') { this.controles = Array.isArray(m.lista) ? m.lista : []; this.pintarSelos(); return; }
-    if (m.tipo === 'erro') { var esperando = this.sessaoEsperando(); if (esperando) esperando.falhaAbrir(m.erro); return; }
+    if (m.tipo === 'erro') { var esperando = m.id ? this.sessoes[m.id] : this.sessaoEsperando(); if (esperando) { esperando.iniciandoAgente = false; esperando.pedidoPendente = null; if (esperando.esperandoTela) esperando.falhaAbrir(m.erro); else esperando.bloco({ tipo: 'falha', titulo: 'Não foi possível continuar', texto: String(m.erro || 'erro do servidor'), local: true, ts: Date.now() }); } return; }
+    if (m.tipo === 'agente-lista') {
+      if (m.dono && m.dono !== this.eu) return;
+      var painel = this;
+      (m.lista || []).forEach(function (a) { var s = a && painel.sessoes[a.id]; if (s) s.resumoAgente(a); });
+      return;
+    }
     if (m.tipo === 'term-lista') {
       if (m.dono && m.dono !== this.eu) return;
       var eu = this;
@@ -344,14 +398,18 @@
       case 'aba': this.ativar(b.dataset.id, true); return;
       case 'apagar': ev.stopPropagation(); this.apagar(b.closest('.tr-aba').dataset.id, b); return;
       case 'nova': this.novoAgenteForm(); return;
+      case 'codex': BC.terminalReal.novoAgente('Codex', { provedor: 'codex' }); return;
       case 'nova-cancelar': this.novoEl.hidden = true; return;
       case 'nova-criar': this.criarAgente(); return;
       case 'face': this.face(b.dataset.face); var at = this.ativa(); if (at) at.focar(); return;
       case 'entrar': if (E()) { E().abrirPaleta(); var pe = document.getElementById('paleta-entrada'); if (pe) { pe.value = 'Entrar no terminal de'; pe.dispatchEvent(new Event('input')); } } return;
       case 'neon': this.ligarNeon(!neonLigado()); return;
       case 'som': O.ligarSom(!O.somLigado()); this.pintarBarra(); return;
+      case 'uso': this.usoAberto = !this.usoAberto; this.pintarBarra(); return;
       case 'esconder': if (E()) E().alternarTerminal(false); return;
       case 'pausar': if (s) enviar({ tipo: 'term-pausar', id: s.id, sim: !s.pausada }); return;
+      /* parar o agente no meio da ação: Esc no pty, pelo mesmo caminho das teclas do xterm (só no terminal do próprio dono) */
+      case 'parar': if (s) s.parar(); return;
       case 'encerrar': enviar({ tipo: 'controle-encerrar', id: b.dataset.c }); return;
       case 'aceitar': enviar({ tipo: 'controle-aceitar', id: b.dataset.c }); return;
       case 'recusar': enviar({ tipo: 'controle-recusar', id: b.dataset.c }); return;
@@ -409,7 +467,8 @@
     box.innerHTML = '<div class="tr-novo-cab"><span>Novo agente</span><button type="button" class="tr-esconder" data-tr="nova-cancelar" aria-label="Cancelar">✕</button></div>' +
       '<input type="text" id="tr-ag-nome" placeholder="Nome humano (ex.: Rita)" maxlength="18" autocomplete="off" spellcheck="false">' +
       '<input type="text" id="tr-ag-faz" placeholder="O que ele faz (vira as instruções)" autocomplete="off">' +
-      '<label><input type="checkbox" id="tr-ag-so"> só terminal (não inicia o claude sozinho)</label>' +
+      '<label>Agente <select id="tr-ag-provedor"><option value="claude">Claude Code</option><option value="codex">Codex</option></select></label>' +
+      '<label><input type="checkbox" id="tr-ag-so"> só terminal (não inicia o agente sozinho)</label>' +
       '<div class="tr-novo-acoes"><button type="button" class="tr-botao primario" data-tr="nova-criar">Criar</button><span class="tr-kbd">cada agente é uma sessão do seu terminal, na sua pasta</span></div>';
     var n = box.querySelector('#tr-ag-nome');
     if (n) n.focus();
@@ -421,6 +480,7 @@
     if (!nome) { nomeEl.focus(); return; }
     var id = 'ag-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
     if (so) guardar(CHAVE.so + id, '1');
+    guardar(CHAVE.provedor + id, this.novoEl.querySelector('#tr-ag-provedor').value === 'codex' ? 'codex' : 'claude');
     this.abaDesejada = id;
     this.novoEl.hidden = true;
     L().fazer('novoAgente', { id: id, nome: nome, oQueFaz: faz.trim(), visivel: true });
@@ -500,11 +560,14 @@
     this.p = p; this.agId = ag.id; this.id = sid(ag.id); this.nome = ag.nome || 'Agente'; this.oQueFaz = ag.oQueFaz || ''; this.cor = ag.cor;
     this.aberta = false; this.esperandoTela = false; this.tAbrir = 0; this.info = null; this.fim = false; this.codigoFim = null;
     this.pausada = false; this.estadoTerm = 'shell'; this.processo = null; this.claudeNaFrente = false;
-    this.modoAgente = false; this.agente = { estado: null, ferramenta: null, desde: 0, ts: 0 }; this.turnoAtivo = false; this.turnoDesde = 0; this.forcarErro = false;
+    this.modoAgente = false; this.agente = { estado: null, ferramenta: null, desde: 0, ts: 0 }; this.usoCodex = null; this.turnoAtivo = false; this.turnoDesde = 0; this.forcarErro = false; this.parouEm = 0;
     this.fimDaSaida = ''; this.blocos = []; this.porBid = {}; this.nBlocos = 0; this.seq = 0; this.planoItens = null; this.planoEl = null; this.nPlanos = 0; this.cadeia = Promise.resolve();
     this.tempo = []; this.confiancaVista = false; this.tConf = 0; this.historico = []; this.pos = 0; this.enderecoTirado = null;
     this.estadoVisto = null; this.tEstado = 0; this.visitas = ''; this.bPendente = false;
     this.soTerminal = ler(CHAVE.so + ag.id) === '1';
+    this.provedor = ler(CHAVE.provedor + ag.id) === 'codex' || ag.provedor === 'codex' ? 'codex' : 'claude';
+    this.oficina = ler(CHAVE.oficina + ag.id) === '1';
+    this.iniciandoAgente = false; this.pedidoPendente = null;
     this.face = ler(CHAVE.face + ag.id) || (this.soTerminal ? 'terminal' : 'presenca');
     this.xtermAberto = false; this.enviado = { cols: 0, rows: 0 };
     this.montar();
@@ -529,7 +592,8 @@
       '<header class="tr-cab"><div class="tr-cab-linha"><span class="tr-pres"></span>' +
       '<div class="tr-cab-txt"><div class="tr-alvo"><span class="tr-seta">→</span> <span class="tr-alvo-txt"></span></div>' +
       '<div class="tr-linha2"><span class="tr-nome"></span> · <span class="tr-est"></span></div><ol class="tr-tempo" aria-label="O que aconteceu"></ol></div></div>' +
-      '<button type="button" class="tr-vivo" data-tr="pausar"></button></header>' +
+      '<button type="button" class="tr-vivo" data-tr="pausar"></button>' +
+      '<button type="button" class="tr-botao tr-parar" data-tr="parar" hidden title="Parar o agente agora (manda Esc, como no Claude Code)">■ Parar</button></header>' +
       '<div class="tr-selo" hidden></div>' +
       '<div class="tr-faces">' +
       '<div class="tr-face tr-face-presenca"><div class="tr-blocos" role="log" aria-live="polite"></div>' +
@@ -563,7 +627,7 @@
     this.v = O.vincular(this.vo);
 
     /* o terminal de verdade: xterm (aberto quando a aba aparece pela primeira vez; a tela funciona antes disso) */
-    var t = this.term = new window.Terminal({ fontFamily: FONTE, fontSize: 12.5, lineHeight: 1.35, cursorBlink: true, cursorStyle: 'block', scrollback: 5000, theme: TEMA, drawBoldTextInBrightColors: true, macOptionIsMeta: false, allowProposedApi: false });
+    var t = this.term = new window.Terminal({ fontFamily: FONTE, fontSize: 12.5, lineHeight: 1.35, cursorBlink: true, cursorStyle: 'block', scrollback: 5000, theme: temaAgora(), minimumContrastRatio: vibe() ? 4.5 : 1, drawBoldTextInBrightColors: true, macOptionIsMeta: false, allowProposedApi: false });
     this.fit = new window.FitAddon.FitAddon();
     t.loadAddon(this.fit);
     t.attachCustomKeyEventHandler(function (ev) { return !teclaDoApp(ev); });
@@ -614,8 +678,15 @@
       case 'term-atividade': this.atividade(m); return;
       case 'term-pausa': this.pausar(!!m.pausada); return;
       case 'term-fim': this.aoFim(m.codigo); return;
+      case 'agente-iniciado':
+        this.modoAgente = true; this.resumoAgente(m); this.iniciandoAgente = this.provedor === 'codex';
+        if (!this.iniciandoAgente && this.pedidoPendente) { var pedido = this.pedidoPendente; this.pedidoPendente = null; enviar({ tipo: 'agente-pedido', id: this.id, texto: pedido }); }
+        this.pintar(); return;
+      case 'agente-resumo': this.resumoAgente(m); return;
+      case 'agente-fim': this.iniciandoAgente = false; this.pedidoPendente = null; this.modoAgente = false; this.turnoAtivo = false; this.agente.estado = null; this.v.atividade({ estado: 'shell', processo: this.provedor, desde: Date.now() }); this.fecharEsperasAbertas(); this.marcarTempo(m.motivo || 'agente encerrado'); this.pintar(); return;
       case 'agente-estado': this.agenteEstado(m); return;
-      case 'agente-bloco': if (m.bloco && typeof m.bloco === 'object') { this.modoAgente = true; this.blocoServidor(blocoDoServidor(m.bloco)); } return;
+      case 'agente-uso': this.usoCodex = m.uso || null; this.p.pintarUso(); return;
+      case 'agente-bloco': if (m.bloco && typeof m.bloco === 'object') { this.modoAgente = true; this.blocoServidor(blocoDoServidor(m.bloco)); this.pedidoDepoisDeParar(m.bloco); } return;
       case 'agente-plano': this.modoAgente = true; this.plano(m); return;
       case 'agente-espera': this.espera(m); return;
       default: return;
@@ -634,10 +705,10 @@
     if (!!info.pausada !== this.pausada) this.pausar(!!info.pausada);
     if (info.processo) this.processo = info.processo;
     if (nova) {
-      this.v.aberto();
+      if (!(this.provedor === 'codex' && this.modoAgente)) this.v.aberto();
       this.marcarTempo('nasceu na sua pasta');
       /* primeira abertura da aba: o agente inicia sozinho (só com o servidor pronto para agentes e sem "só terminal") */
-      if (this.p.servidorComAgentes() && !this.soTerminal) setTimeout(function () { if (eu.aberta && !eu.claudeNaFrente) eu.iniciarAgente(true); }, 400);
+      if (this.p.servidorComAgentes() && !this.soTerminal) setTimeout(function () { if (eu.aberta && !eu.claudeNaFrente && !eu.modoAgente && !eu.iniciandoAgente) eu.iniciarAgente(true); }, 400);
     }
     this.pintar();
   };
@@ -652,7 +723,7 @@
   S.saida = function (dados) {
     if (this.esperandoTela || typeof dados !== 'string') return; /* o term-aberto que vem traz esta saída na tela inteira */
     this.term.write(dados); /* primeiro a tela; o efeito vem depois e nunca atrasa */
-    this.v.saida(dados);
+    if (!(this.provedor === 'codex' && this.modoAgente)) this.v.saida(dados);
     this.p.med.saidas++; this.p.med.bytes += dados.length;
     this.fimDaSaida = (this.fimDaSaida + dados).slice(-4096);
     var t = performance.now();
@@ -705,6 +776,7 @@
     if (e === 'pausado') { this.pausar(true); return; }
     this.estadoTerm = e;
     this.processo = m.processo || this.processo;
+    if (this.provedor === 'codex' && (this.modoAgente || this.iniciandoAgente)) { this.pintar(); return; }
     var claude = /claude/i.test(m.processo || '');
     this.claudeNaFrente = claude && (e === 'rodando' || e === 'espera');
     if (e === 'shell' || (e === 'terminou' && !this.claudeNaFrente)) { this.confiancaVista = false; this.vencerConfianca(); }
@@ -749,23 +821,39 @@
   };
 
   /* ---------- o agente (ganchos do Claude Code, PROTOCOLO §7) ---------- */
+  S.resumoAgente = function (m) {
+    if (m.provedor === 'codex' || m.provedor === 'claude') { this.provedor = m.provedor; guardar(CHAVE.provedor + this.agId, m.provedor); }
+    if (typeof m.ativo === 'boolean') this.modoAgente = m.ativo;
+    var eu = this;
+    (m.blocos || []).forEach(function (b) { eu.blocoServidor(blocoDoServidor(b)); });
+    if (m.plano) this.plano(Array.isArray(m.plano) ? { itens: m.plano } : m.plano);
+    if (m.estado && m.ativo !== false) this.agenteEstado(m);
+    if (m.ativo !== false) (m.pendentes || []).forEach(function (p) { eu.espera(p); });
+    this.pintar();
+  };
   S.agenteEstado = function (m) {
+    if (m.provedor === 'codex' || m.provedor === 'claude') this.provedor = m.provedor;
     var e = m.estado, ts = +m.ts || Date.now();
     if (['acordou', 'pensando', 'rodando', 'espera', 'terminou', 'falhou'].indexOf(e) < 0) return;
+    if (this.provedor === 'codex' && e === 'acordou') {
+      this.iniciandoAgente = false;
+      if (this.pedidoPendente) { var pedido = this.pedidoPendente; this.pedidoPendente = null; enviar({ tipo: 'agente-pedido', id: this.id, texto: pedido }); }
+    }
+    if ((e === 'pensando' || e === 'rodando') && this.parouEm && ts <= this.parouEm) return; /* gancho que já vinha antes do Parar não religa o turno */
     this.modoAgente = true;
     this.agente = { estado: e, ferramenta: m.ferramenta || null, desde: +m.desde || ts, ts: ts };
     if (e === 'acordou') { this.bEntrada(false); this.v.enter(); this.marcarTempo('acordou'); }
     else if (e === 'pensando' || e === 'rodando') {
       if (!this.turnoAtivo) { this.turnoAtivo = true; this.turnoDesde = +m.desde || ts; this.marcarTempo('pensando'); }
-      this.v.atividade({ estado: 'rodando', processo: m.ferramenta || 'claude', desde: this.turnoDesde });
+      this.v.atividade({ estado: 'rodando', processo: m.ferramenta || this.provedor, desde: this.turnoDesde });
     } else if (e === 'espera') {
-      this.v.atividade({ estado: 'espera', processo: 'claude', desde: ts });
+      this.v.atividade({ estado: 'espera', processo: this.provedor, desde: ts });
       this.marcarTempo('espera o seu OK');
     } else {
       var dur = this.turnoAtivo ? Math.max(0, ts - this.turnoDesde) : 0;
       this.turnoAtivo = false;
       this.forcarErro = e === 'falhou';
-      this.v.atividade({ estado: 'terminou', processo: 'claude', duracao: dur, fim: ts });
+      this.v.atividade({ estado: 'terminou', processo: this.provedor, duracao: dur, fim: ts });
       this.forcarErro = false;
       this.marcarTempo((e === 'falhou' ? 'falhou' : 'terminou') + (dur ? ' · ' + O.duracaoTexto(dur) : ''));
       this.fecharEsperasAbertas();
@@ -780,9 +868,9 @@
     if (!pid) return;
     this.modoAgente = true;
     var ja = this.porBid['espera-' + pid];
-    this.bloco(Object.assign({}, ja ? ja.b : {}, { bid: 'espera-' + pid, tipo: 'espera', pid: pid, titulo: m.ferramenta ? 'quer usar ' + m.ferramenta : 'pede o seu OK', texto: m.resumo || '', ts: +m.ts || Date.now() }, m.comando ? { comando: m.comando } : {}));
+    this.bloco(Object.assign({}, ja ? ja.b : {}, { bid: 'espera-' + pid, tipo: 'espera', pid: pid, titulo: m.perguntas && m.perguntas.length ? 'precisa da sua resposta' : m.ferramenta ? 'quer usar ' + m.ferramenta : 'pede o seu OK', texto: m.resumo || '', perguntas: m.perguntas || [], ts: +m.ts || Date.now() }, m.comando ? { comando: m.comando } : {}));
     this.agente.estado = 'espera'; this.agente.ts = Date.now();
-    this.v.atividade({ estado: 'espera', processo: 'claude', desde: Date.now() });
+    this.v.atividade({ estado: 'espera', processo: this.provedor, desde: Date.now() });
     this.marcarTempo('espera o seu OK');
     this.pintar();
   };
@@ -805,7 +893,20 @@
     var r = this.porBid[bid];
     if (!r || r.decidido) return;
     if (r.b.confianca) { if (!this.confiar()) return; }
-    else enviar({ tipo: 'agente-ok', id: this.id, pid: r.b.pid, decisao: decisao });
+    else {
+      var respostas;
+      if (decisao !== 'negar' && Array.isArray(r.b.perguntas) && r.b.perguntas.length) {
+        respostas = Object.create(null);
+        var campos = r.el.querySelectorAll('[data-pergunta]');
+        for (var i = 0; i < campos.length; i++) {
+          var campo = campos[i], livre = campo.querySelector('input'), selecao = campo.querySelector('select');
+          var valor = livre && livre.value.trim() || selecao && selecao.value || '';
+          if (!valor) { (livre || selecao).focus(); return; }
+          respostas[campo.dataset.pergunta] = [valor];
+        }
+      }
+      enviar({ tipo: 'agente-ok', id: this.id, pid: r.b.pid, decisao: decisao, respostas: respostas });
+    }
     r.decidido = { decisao: decisao, quem: this.p.nomeEu, ts: Date.now() };
     this.bloco(r.b);
     O.acender(r.el, 6000);
@@ -815,9 +916,10 @@
   };
 
   S.iniciarAgente = function () {
-    if (!this.aberta) return;
+    if (!this.aberta || this.iniciandoAgente || this.modoAgente) return;
     this.p.med.iniciar++;
-    if (this.p.servidorComAgentes()) enviar({ tipo: 'agente-iniciar', id: this.id, nome: this.nome, instrucoes: this.oQueFaz || '' });
+    if (this.p.servidorComAgentes()) { this.iniciandoAgente = true; enviar({ tipo: 'agente-iniciar', id: this.id, nome: this.nome, instrucoes: this.oQueFaz || '', provedor: this.provedor, oficina: this.oficina }); }
+    else if (this.provedor === 'codex') { this.bloco({ tipo: 'falha', texto: 'Atualize o app para usar Codex na Presença.', local: true }); return; }
     else if (!this.claudeNaFrente) {
       /* servidor ainda sem ganchos: abre o claude no terminal (sem blocos na presença; o terminal mostra tudo) */
       var eu = this;
@@ -868,7 +970,7 @@
   /* ---------- blocos tipados ---------- */
   S.bocaVazia = function () {
     /* a apresentação do agente (CONCEITO §3.3: só enquanto não há nada) */
-    var txt = (this.oQueFaz ? this.oQueFaz + '\n' : '') + 'Peça em português: eu trabalho no seu terminal de verdade, em ' + this.p.pastaCurta() + '. Cada passo aparece aqui com prova.';
+    var txt = (this.oQueFaz ? this.oQueFaz + '\n' : '') + (this.oficina ? 'Peça em português: eu trabalho na cópia autorizada pela Oficina. Cada passo aparece aqui com prova.' : 'Peça em português: eu trabalho no seu terminal de verdade, em ' + this.p.pastaCurta() + '. Cada passo aparece aqui com prova.');
     if (!this.saudacaoEl) { this.saudacaoEl = document.createElement('div'); this.saudacaoEl.className = 'tr-bloco tr-saudacao'; this.saudacaoEl.dataset.tipo = 'nota'; this.blocosEl.insertBefore(this.saudacaoEl, this.blocosEl.firstChild); }
     this.saudacaoEl.innerHTML = '<div class="tr-rot"><span>' + esc(this.nome) + '</span></div><div class="tr-txt">' + esc(txt) + '</div>';
   };
@@ -876,7 +978,7 @@
   /* bloco vindo do servidor (texto do modelo): nunca HTML, nunca as marcas locais (confiança manda Enter ao pty) */
   function blocoDoServidor(b) {
     var c = {};
-    ['bid', 'tipo', 'titulo', 'texto', 'comando', 'arquivos', 'prova', 'ts', 'pid', 'decisao', 'navegador'].forEach(function (k) { if (b[k] != null) c[k] = b[k]; });
+    ['bid', 'tipo', 'titulo', 'texto', 'comando', 'arquivos', 'prova', 'ts', 'pid', 'decisao', 'navegador', 'perguntas'].forEach(function (k) { if (b[k] != null) c[k] = b[k]; });
     if (b.senha === true) c.senha = true;
     if (Array.isArray(b.itens)) c.comItens = true; /* plano do TodoWrite: o checklist vem pelo agente-plano */
     if (c.bid != null) c.bid = 's-' + String(c.bid).slice(0, 80);
@@ -946,6 +1048,13 @@
       } else if (b.senha) {
         /* o agente parou no campo de senha do navegador: a pessoa digita lá, na aba "Navegador · <agente>" */
         h += '<div class="tr-bloco-acoes"><button type="button" class="tr-botao primario" data-tr="nav-ver">ir ao navegador · sua vez</button></div>';
+      } else if (Array.isArray(b.perguntas) && b.perguntas.length) {
+        h += b.perguntas.map(function (q) {
+          var opcoes = Array.isArray(q.options) ? q.options : [];
+          return '<fieldset class="tr-pergunta" data-pergunta="' + esc(String(q.id)) + '"><legend>' + esc(q.header || q.question || 'Resposta') + '</legend><p>' + esc(q.question || '') + '</p>' +
+            (opcoes.length ? '<select aria-label="' + esc(q.question || 'Escolha') + '"><option value="">Escolha uma opção</option>' + opcoes.map(function (op) { var label = typeof op === 'string' ? op : op.label; return '<option value="' + esc(label || '') + '">' + esc(label || '') + (op.description ? ' — ' + esc(op.description) : '') + '</option>'; }).join('') + '</select>' : '') +
+            '<input type="' + (q.isSecret ? 'password' : 'text') + '" autocomplete="off" aria-label="Sua resposta" placeholder="' + (opcoes.length ? 'Ou escreva sua resposta' : 'Sua resposta') + '"></fieldset>';
+        }).join('') + '<div class="tr-bloco-acoes"><button type="button" class="tr-botao primario" data-tr="ok" data-d="permitir">Responder</button><button type="button" class="tr-botao" data-tr="ok" data-d="negar">Cancelar</button></div>';
       } else if (!b.pid && !b.local) {
         h += '<div class="tr-bloco-acoes"><button type="button" class="tr-botao" data-tr="ver-terminal">responder no terminal</button></div>';
       } else {
@@ -1016,7 +1125,14 @@
         var aVista = eu.p.aba === eu.id && eu.face === 'presenca' && visivel(li);
         var origem = eu.p.aba === eu.id ? eu.presenca : eu.mini, alvo = aVista ? li : eu.abaEl;
         eu.p.med.pulsosPlano++;
-        return O.pulso(origem, alvo, { cor: 'marca', aoChegar: function () { O.acender(li, 6000); O.acender(eu.abaEl, 6000); O.faiscas(alvo, 4, false); O.som('tique'); } });
+        return O.pulso(origem, alvo, { cor: 'marca', aoChegar: function () {
+          O.acender(li, 6000); O.acender(eu.abaEl, 6000);
+          /* cada check do plano é um poder (ordem do Theus: "cada check que da pulsa poderes"): explosão verde + "+1"; sem poderes.js, as faíscas de antes */
+          var P = window.BC && BC.poderes;
+          if (P && aVista) { P.explodir(li, { cor: 'ok', forca: 0.6 }); P.flutuar(li, '+1', { cor: 'ok', tam: 15, topo: true }); }
+          else O.faiscas(alvo, 4, false);
+          O.som('tique'); /* o som do check continua um só: o tique */
+        } });
       }).catch(function () { /* efeito nunca derruba a lógica */ });
     });
     if (rito) this.cadeia = this.cadeia.then(function () { eu.rito(planoEl, total); }).catch(function () { /* segue */ });
@@ -1063,7 +1179,10 @@
     this.mencionar();
     this.p.med.pedidos++;
     var eu = this;
-    if (this.p.pedidoPeloServidor()) enviar({ tipo: 'agente-pedido', id: this.id, texto: final });
+    if (this.p.pedidoPeloServidor()) {
+      if (!this.modoAgente || this.iniciandoAgente) { this.pedidoPendente = final; this.iniciarAgente(); }
+      else enviar({ tipo: 'agente-pedido', id: this.id, texto: final });
+    }
     else {
       /* servidor ainda sem ganchos: o pedido vai direto ao claude do terminal (ou abre o claude com ele); o Enter vai separado da colagem */
       this.bloco({ tipo: 'pedido', texto: final, ts: Date.now(), local: true });
@@ -1205,6 +1324,7 @@
         case 'pensando': return 'pensando há ' + O.duracaoTexto(agora - (this.turnoDesde || agora));
         case 'rodando': return (a.ferramenta ? a.ferramenta + ' · ' : '') + 'rodando há ' + O.duracaoTexto(agora - (a.desde || agora));
         case 'espera': return 'espera o seu OK';
+        case 'parado': return 'parado por você · ' + hora(a.ts);
         default: return this.v.frase();
       }
     }
@@ -1213,7 +1333,7 @@
   S.alvo = function () {
     if (this.modoAgente) {
       for (var i = this.blocos.length - 1; i >= 0 && i >= this.blocos.length - 8; i--) { var arqs = arquivosDe(this.blocos[i].b); if (arqs.length) return arqs[0]; }
-      return this.agente.ferramenta || 'claude';
+      return this.agente.ferramenta || this.provedor;
     }
     var e = this.v.estado(), shell = !this.processo || this.estadoTerm === 'shell';
     if (!shell && (e === 'rodando' || e === 'espera' || e === 'terminou' || e === 'falhou')) return this.processo;
@@ -1233,8 +1353,8 @@
     /* iniciar: só com o shell livre (nunca digita "claude" dentro de um programa rodando) */
     var livre = this.aberta && !this.fim && !this.modoAgente && !this.claudeNaFrente && (this.estadoTerm === 'shell' || this.estadoTerm === 'terminou');
     this.iniciarEl.hidden = !livre;
-    var bi = this.iniciarEl.querySelector('[data-tr="iniciar"]'); bi.textContent = '▶ Iniciar ' + this.nome;
-    var so = this.iniciarEl.querySelector('[data-tr="so-terminal"]'); so.setAttribute('aria-pressed', this.soTerminal ? 'true' : 'false'); so.title = this.soTerminal ? 'este agente abre só o terminal (clique para iniciar sozinho de novo)' : 'abrir este agente só como terminal, sem iniciar o claude';
+    var bi = this.iniciarEl.querySelector('[data-tr="iniciar"]'); bi.textContent = (this.iniciandoAgente ? 'Iniciando ' : '▶ Iniciar ') + (this.provedor === 'codex' ? 'Codex' : this.nome); bi.disabled = this.iniciandoAgente;
+    var so = this.iniciarEl.querySelector('[data-tr="so-terminal"]'); so.setAttribute('aria-pressed', this.soTerminal ? 'true' : 'false'); so.title = this.soTerminal ? 'este agente abre só o terminal (clique para iniciar sozinho de novo)' : 'abrir este agente só como terminal, sem iniciar o agente';
     this.pintarCab();
     this.pintarVazio();
     this.p.agenteGlobal();
@@ -1242,13 +1362,41 @@
   S.pintarCab = function () {
     var q = function (s) { return this.el.querySelector(s); }.bind(this);
     q('.tr-alvo-txt').textContent = this.alvo();
-    q('.tr-nome').textContent = this.nome;
+    q('.tr-nome').textContent = this.nome + ' · ' + (this.provedor === 'codex' ? 'Codex' : 'Claude Code') + (this.oficina ? ' · Oficina' : '');
     q('.tr-est').textContent = this.frase();
     var vivo = q('.tr-vivo');
     vivo.textContent = this.pausada ? '⏸ pausado' : '● ao vivo';
     vivo.dataset.pausada = this.pausada ? 'sim' : 'nao';
     vivo.title = this.pausada ? 'Transmissão deste terminal pausada: ninguém vê (clique para retomar)' : 'Quem assiste vê este terminal ao vivo (clique para pausar a transmissão deste terminal)';
     vivo.hidden = !this.aberta;
+    q('.tr-parar').hidden = !this.podeParar();
+    q('.tr-parar').title = this.provedor === 'codex' ? 'Interromper o turno do Codex' : 'Parar o agente agora (Esc)';
+  };
+  /* o botão Parar só existe enquanto o agente pensa ou roda, no terminal aberto de quem é dono
+     (a pausa é só da transmissão: o claude segue rodando e o servidor aceita as teclas do dono, então o Parar fica) */
+  S.podeParar = function () {
+    if (!this.aberta || this.fim || !this.modoAgente) return false;
+    return this.agente.estado === 'pensando' || this.agente.estado === 'rodando';
+  };
+  /* Esc é como o Claude Code interrompe. Interrupção não dispara o gancho Stop, então o turno fecha aqui:
+     o botão some e um segundo clique não manda outro Esc (Esc duplo abre o rewind do Claude Code) */
+  S.parar = function () {
+    if (!this.podeParar()) return;
+    if (this.provedor === 'codex') enviar({ tipo: 'agente-interromper', id: this.id });
+    else this.tecla('\x1b');
+    var agora = Date.now(), dur = this.turnoAtivo ? Math.max(0, agora - this.turnoDesde) : 0;
+    this.turnoAtivo = false; this.parouEm = agora;
+    this.agente = { estado: 'parado', ferramenta: null, desde: agora, ts: agora };
+    if (!this.pausada) this.v.atividade({ estado: 'shell', processo: this.provedor, desde: agora }); /* calmo, sem som de concluído */
+    this.fecharEsperasAbertas();
+    this.marcarTempo('você pediu para parar' + (dur ? ' · ' + O.duracaoTexto(dur) : ''));
+    this.pintar();
+  };
+  /* o servidor não soube do Esc e ainda guarda 'pensando': o próximo pedido não repete o estado, só chega o bloco do pedido */
+  S.pedidoDepoisDeParar = function (b) {
+    var ts = +b.ts || 0;
+    if (b.tipo !== 'pedido' || this.agente.estado !== 'parado' || ts <= this.parouEm) return;
+    this.agenteEstado({ estado: 'pensando', desde: ts, ts: ts });
   };
   S.marcarTempo = function (texto) {
     this.tempo.unshift({ t: Date.now(), texto: String(texto || '').trim() });
@@ -1292,9 +1440,30 @@
 
   /* ================================================================== API (testes e as outras peças da interface) */
   function sessaoDe(id) { return painelAtual && (id ? painelAtual.sessoes[id] : painelAtual.ativa()) || null; }
+  /* troca de modo (Tech | Vibe na barra de cima, estacao.js E.tema): cada xterm troca de tema na hora, sem recriar nada */
+  var temaUsado = temaAgora();
+  new MutationObserver(function () {
+    var t = temaAgora();
+    if (t === temaUsado) return;
+    temaUsado = t;
+    if (!painelAtual) return;
+    Object.keys(painelAtual.sessoes).forEach(function (id) {
+      var s = painelAtual.sessoes[id];
+      if (s && s.term) { s.term.options.theme = t; s.term.options.minimumContrastRatio = t === TEMA_VIBE ? 4.5 : 1; }
+    });
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-tema-estacao', 'data-vista'] });
+
   BC.terminalReal = {
     versao: '1.0.0',
     pronto: function () { return !!(painelAtual && painelAtual.pronto); },
+    editarOficina: function (pasta) {
+      if (!painelAtual || !painelAtual.pronto) return null;
+      var s = painelAtual.ativa();
+      var id = BC.terminalReal.novoAgente('Oficina', { provedor: s ? s.provedor : 'codex', oficina: true, oQueFaz: 'Evoluir Babel Coop na cópia autorizada pela Oficina' + (pasta ? ': ' + pasta : '') + '. Aplicar as mudanças para revisão; empacotar somente quando a pessoa pedir.' });
+      if (E()) E().alternarTerminal(true);
+      painelAtual.face('presenca', id);
+      return id;
+    },
     eu: function () { return painelAtual ? painelAtual.eu : null; },
     ativa: function () { return painelAtual ? painelAtual.aba : null; },
     sessoes: function () {
@@ -1320,6 +1489,8 @@
       opcoes = opcoes || {};
       var id = opcoes.id || 'ag-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
       if (opcoes.soTerminal) guardar(CHAVE.so + id, '1');
+      guardar(CHAVE.provedor + id, opcoes.provedor === 'codex' ? 'codex' : 'claude');
+      if (opcoes.oficina) guardar(CHAVE.oficina + id, '1');
       painelAtual.abaDesejada = id;
       L().fazer('novoAgente', { id: id, nome: String(nome || 'Agente').slice(0, 18), oQueFaz: opcoes.oQueFaz || '', visivel: true });
       painelAtual.sincronizar();

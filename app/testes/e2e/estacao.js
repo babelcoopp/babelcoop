@@ -12,9 +12,10 @@ const APP = path.join(__dirname, '..', '..');
 
 function raizTemporaria(nome) { return fs.mkdtempSync(path.join(os.tmpdir(), 'babel-e2e-' + nome + '-')); }
 
-async function abrirEstacao({ nome = 'a', raiz = raizTemporaria(nome), porta = 4801, descoberta = 41301, env = {} } = {}) {
+async function abrirEstacao({ nome = 'a', raiz = raizTemporaria(nome), porta = 4801, descoberta = 41301, env = {}, executavel } = {}) {
   const app = await _electron.launch({
-    args: [APP],
+    args: executavel ? [] : [APP],
+    ...(executavel ? { executablePath: executavel } : {}),
     cwd: APP,
     /* BABEL_COOP_AGENTES=0: a presença não chama o claude sozinha (os e2e não gastam modelo); quem quer o agente real passa '1' em env.
        BABEL_COOP_NAV_INTERNO=1: o agente abre os sites de teste locais (em produção endereço interno é só pela pessoa; o e2e de SSRF desliga) */

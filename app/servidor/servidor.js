@@ -7,7 +7,7 @@
      o conector coop (MCP) responde em /mcp/<sessao> (coop-mcp.js, §8); os dois só com o segredo da sessão e só de loopback
    Confiança (PROTOCOLO §1):
    - navegador local = WebSocket de loopback com Origin http://localhost:<porta> (ou 127.0.0.1): só ele manda e recebe term-*, controle-*, projetos;
-   - navegador de outro aparelho (celular, iPad): diário e pares, nunca terminal; Origin tem de ser a do próprio endereço;
+   - navegador de outro aparelho (celular, iPad): diário e pares, nunca terminal; das ações, só as do quadro e da TV (REMOTO_PODE); Origin tem de ser a do próprio endereço;
    - par (/ws?par=1): nada antes do aperto de mão; id e papel vêm da carteira; o que chega dele leva dono = par.id.
    Sobe junto com o app (main.js) ou sozinho: `node servidor/servidor.js`.
 */
@@ -19,7 +19,7 @@ const path = require('path');
 const { WebSocketServer, WebSocket } = require('ws');
 const config = require('./config');
 const token = require('./token');
-const { Diario } = require('./diario');
+const { Diario, assinarEvento, motivoEvento } = require('./diario');
 const { Arquivos } = require('./arquivos');
 const { Terminais } = require('./terminal');
 const { Controle } = require('./controle');
@@ -27,6 +27,8 @@ const { Rede } = require('./rede');
 const { Atualizacao } = require('./atualizacao');
 const { Agentes, limparDePar: limparAgente } = require('./agentes');
 const { Acervo } = require('./acervo');
+const { Bancos } = require('./banco');
+const { Entrada } = require('./entrada');
 
 const PASTA_UI_PADRAO = fs.existsSync(path.join(__dirname, '..', '..', 'prototipo')) ? path.join(__dirname, '..', '..', 'prototipo') : path.join(process.resourcesPath || '', 'prototipo');
 const PASTA_INTERFACE = path.join(__dirname, '..', 'interface'); /* o que o app real acrescenta à interface do protótipo (terminal real, parede, organismo) */
@@ -42,6 +44,28 @@ const PASTA_THREE = (() => {
   if (empacotado && fs.existsSync(path.join(empacotado, 'build', 'three.module.js'))) return empacotado;
   try { return path.dirname(path.dirname(require.resolve('three'))); } catch (e) { return path.join(__dirname, '..', 'node_modules', 'three'); }
 })();
+/* sem internet: marked, DOMPurify, highlight.js, pdf.js e as três fontes também vêm de dentro do app (o protótipo puro usa a CDN
+   e o Google Fonts; semInternet troca esses endereços no HTML servido). Pacote que faltar: a página cai no que faz sem a biblioteca */
+[['marked.min.js', 'marked/marked.min.js'], ['purify.min.js', 'dompurify/dist/purify.min.js'], ['highlight.min.js', '@highlightjs/cdn-assets/highlight.min.js'], ['pdf.min.js', 'pdfjs-dist/build/pdf.min.js'], ['pdf.worker.min.js', 'pdfjs-dist/build/pdf.worker.min.js']]
+  .forEach(([nome, arquivo]) => { try { VENDOR[nome] = require.resolve(arquivo); } catch (e) { /* sem o pacote */ } });
+/* os mesmos pesos que o protótipo pede ao Google Fonts (e o 600 do JetBrains Mono, que o mapa mental pede); @fontsource traz cada peso em woff2 por alfabeto (unicode-range) */
+const FONTES = { 'ibm-plex-sans': ['400', '500', '600'], 'jetbrains-mono': ['400', '500', '600', '700'], 'cormorant-garamond': ['500', '600', '500-italic'] };
+const pastaFonte = (familia) => { try { return path.dirname(require.resolve('@fontsource/' + familia + '/package.json')); } catch (e) { return null; } };
+let cssFontes = null;
+function fontesCss() {
+  if (cssFontes === null) {
+    cssFontes = Object.keys(FONTES).map((f) => FONTES[f].map((peso) => {
+      try { return fs.readFileSync(path.join(pastaFonte(f), peso + '.css'), 'utf8').split('url(./files/').join('url(/vendor/fontes/' + f + '/'); } catch (e) { return ''; }
+    }).join('\n')).join('\n');
+  }
+  return cssFontes;
+}
+function semInternet(html) {
+  return html
+    .replace(/<link rel="preconnect" href="https:\/\/fonts\.(?:googleapis|gstatic)\.com"[^>]*>\s*/g, '')
+    .replace(/https:\/\/fonts\.googleapis\.com\/css2\?[^"']*/g, '/vendor/fontes.css')
+    .replace(/https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/[a-z0-9.-]+\/[0-9.]+\/([a-z0-9.-]+\.js)/g, (tudo, nome) => (VENDOR[nome] ? '/vendor/' + nome : tudo));
+}
 const MIME = { html: 'text/html; charset=utf-8', js: 'text/javascript; charset=utf-8', css: 'text/css; charset=utf-8', json: 'application/json; charset=utf-8', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', svg: 'image/svg+xml', ico: 'image/x-icon', md: 'text/markdown; charset=utf-8', txt: 'text/plain; charset=utf-8', pdf: 'application/pdf', mp4: 'video/mp4', webp: 'image/webp', gif: 'image/gif', woff2: 'font/woff2', woff: 'font/woff', mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg', m4a: 'audio/mp4', webm: 'video/webm', mov: 'video/quicktime', htm: 'text/html; charset=utf-8', ttf: 'font/ttf', otf: 'font/otf', eot: 'application/vnd.ms-fontobject', avif: 'image/avif', xml: 'application/xml; charset=utf-8', csv: 'text/csv; charset=utf-8', mjs: 'text/javascript; charset=utf-8', bmp: 'image/bmp', map: 'application/json; charset=utf-8' };
 /* a pasta compartilhada servida como site (/pasta/…): a página nunca ganha a origem da Estação (sandbox sem allow-same-origin =
    origem opaca "null"): o servidor recusa o Origin dela no /api/convite, /api/evento, /api/fundar e no WebSocket, e ela não lê
@@ -57,9 +81,11 @@ const SCRIPTS = ['/vendor/xterm.js', '/vendor/addon-fit.js', 'ponte.js', '/coop/
 function listarMidia() {
   try { return fs.readdirSync(path.join(PASTA_INTERFACE, 'midia')).filter((n) => !n.startsWith('.') && fs.statSync(path.join(PASTA_INTERFACE, 'midia', n)).isFile()).sort(); } catch (e) { return []; }
 }
-function INJETAR(terminalReal, midia) {
+/* remoto (celular, iPad, TV pelo IP): a página recebe a lista do que o servidor aceita dela (REMOTO_PODE, abaixo) e acoes.js
+   nem aplica o resto, senão a tela mostraria uma ação que o diário nunca guarda */
+function INJETAR(terminalReal, midia, remoto) {
   return ESTILOS.map((h) => '<link rel="stylesheet" href="' + h + '">').join('\n') + '\n' +
-    '<script>window.COOP_REAL = ' + JSON.stringify(Object.assign({ terminal: !!terminalReal, midia: Array.isArray(midia) ? midia : listarMidia() }, process.env.BABEL_COOP_EXEMPLOS === '1' ? { exemplos: true } : {})).replace(/</g, '\\u003c') + ';</script>\n' +
+    '<script>window.COOP_REAL = ' + JSON.stringify(Object.assign({ terminal: !!terminalReal, midia: Array.isArray(midia) ? midia : listarMidia() }, remoto ? { remoto: [...REMOTO_PODE.keys()] } : {}, process.env.BABEL_COOP_EXEMPLOS === '1' ? { exemplos: true } : {})).replace(/</g, '\\u003c') + ';</script>\n' +
     SCRIPTS.map((s) => '<script src="' + s + '"></script>').join('\n');
 }
 
@@ -75,6 +101,20 @@ function hostnameDe(host) {
 /* anti "DNS rebinding": só atende nome que não dá para apontar para cá de fora (IP, localhost, nome .local da rede) */
 function hostAceito(host) { const h = hostnameDe(host); return !!h && (h === 'localhost' || net.isIP(h) !== 0 || /\.local$/.test(h)); }
 const origensLocais = (porta) => ['http://localhost:' + porta, 'http://127.0.0.1:' + porta, 'http://[::1]:' + porta];
+/* celular, iPad e TV pela rede ainda não têm login (CHECKLIST: nome + PIN): o que mandam sai assinado como o dono desta Estação.
+   Por isso só passa o que o iPad usa de verdade (ipad.js, quadro.js): desenhar no quadro, criar quadro vazio e pô-lo ao vivo na TV.
+   A TV não faz ação nenhuma; o resto fica para a própria Estação. Map (e não objeto): 'toString' não vira ação permitida. */
+const QUADRO_VAZIO = JSON.stringify({ itens: [] });
+const eTexto = (v, max) => typeof v === 'string' && v.length > 0 && v.length <= max;
+const eObjeto = (v) => !!v && typeof v === 'object' && !Array.isArray(v);
+const REMOTO_PODE = new Map([
+  ['quadroItem', (a) => a.length === 2 && eTexto(a[0], 120) && eObjeto(a[1])],
+  ['quadroMudar', (a) => a.length === 3 && eTexto(a[0], 120) && eTexto(a[1], 120) && eObjeto(a[2])],
+  ['quadroApagar', (a) => a.length === 2 && eTexto(a[0], 120) && eTexto(a[1], 120)],
+  ['criarArquivo', (a) => a.length === 3 && eTexto(a[0], 200) && /^equipe\/Quadros\/[^/\\]+\.quadro$/.test(a[0]) && !a[0].includes('..') && a[1] === 'quadro' && a[2] === QUADRO_VAZIO],
+  ['tvModo', (a) => (a[0] === 'quadro' && a.length === 2 && eTexto(a[1], 120)) || (a[0] === 'painel' && a.length <= 2 && a[1] == null)]
+]);
+function remotoPode(acao, args) { const f = REMOTO_PODE.get(acao); return !!f && f(args); }
 /* navegador desta máquina: loopback + Origin (ou, sem Origin, um Host local: curl, testes, o próprio app) */
 function pedidoLocal(req, porta) {
   if (!ehLoopback(req.socket.remoteAddress)) return false;
@@ -89,6 +129,7 @@ function iniciar(opcoes) {
      BABEL_COOP_AGENTES=0 desliga (os e2e que não querem um claude de verdade rodando); o servidor continua aceitando agente-iniciar */
   const agentesLigados = process.env.BABEL_COOP_AGENTES !== '0';
   const navegador = opcoes.navegador || null;
+  const oficina = opcoes.oficina || null;
   let cfg = config.carregar();
   /* Estação de antes da carteira (token v1): a gestão ganha chaves; membro volta a pedir token */
   if (cfg.segredo && !cfg.carteira) {
@@ -96,6 +137,9 @@ function iniciar(opcoes) {
     else { delete cfg.segredo; cfg = config.salvar(cfg); }
   }
   const diario = new Diario(cfg.diario, cfg.id);
+  /* cada evento meu sai assinado pela minha carteira; evento de fora (ao vivo ou repassado) só entra com a assinatura do autor */
+  diario.assinar = (ev) => { if (cfg.carteira && cfg.privada && cfg.carteira.id === ev.autor) assinarEvento(ev, cfg); };
+  diario.conferir = (ev) => !motivoEvento(ev, cfg);
   const arquivos = new Arquivos(cfg.pasta, cfg.id);
   let vigiada = cfg.pasta; /* a pasta que o fs.watch acompanha */
   /* ---------- acervo (IDEIAS §8.1–8.2, servidor/acervo.js): SQLite derivado do histórico cru (diário, saída dos terminais, pasta).
@@ -119,6 +163,9 @@ function iniciar(opcoes) {
       if (!rede || !rede.enviar(parId, { tipo: 'acervo-buscar', pid, q: String(q || '').slice(0, 300), modo: (o && o.modo) || 'tudo', limite: (o && o.limite) || 10 })) { clearTimeout(t); perguntasAcervo.delete(pid); erro(new Error('fora da rede')); }
     });
   }
+  /* ---------- banco real de cada projeto (servidor/banco.js, PGlite): dados em <raiz>/.coop/bancos, migrações na pasta ----------
+     o banco é deste computador e a pasta é da equipe: o cabeçalho de cada migração diz de qual Estação é o banco */
+  const bancos = new Bancos({ raiz: () => cfg.raiz, pasta: () => cfg.pasta, eu: () => ({ id: cfg.id, nome: cfg.nome }) });
   const terminais = new Terminais(cfg);
   const controle = new Controle(cfg);
   const atualizacao = new Atualizacao(cfg, PASTA_UI_PADRAO, path.join(__dirname, '..', 'ponte.js'));
@@ -151,6 +198,12 @@ function iniciar(opcoes) {
   /* ---------- agentes (o claude no pty, observado por ganchos: PROTOCOLO §7) e o conector coop (MCP: §8) ---------- */
   const agentes = new Agentes({
     cfg: () => cfg, terminais, paraLocais, porta: () => cfg.porta,
+    contexto: (m) => {
+      if (!m.oficina) return null;
+      if (!oficina) throw new Error('Abra a Oficina no aplicativo desta Estação.');
+      oficina.cfg = cfg;
+      return oficina.contextoAgente();
+    },
     /* o agente nasce sabendo o que a equipe aprendeu; o resultado dele (só a saída, fora da pausa) vira histórico de terminal */
     saber: () => (acervo ? acervo.resumoParaAgente(20) : ''),
     aoResultado: (r) => { if (acervo && !r.pausado) acervo.terminal(Object.assign({ autor: cfg.id, dono: cfg.id }, r)); },
@@ -192,7 +245,9 @@ function iniciar(opcoes) {
   function ligarRede() {
     if (rede) rede.parar();
     rede = null;
-    if (!pronto()) return;
+    if (!pronto()) return entrada.escutar(); /* sem equipe: escuta os anúncios da gestão para pedir para entrar (entrada.js) */
+    entrada.calar();
+    diario.assinarMeus(); /* o histórico de antes da assinatura vai aos pares assinado */
     rede = new Rede(cfg, diario, aoMensagemDePar);
     rede.aoMudar((pares) => paraTodos({ tipo: 'pares', lista: pares }));
     rede.aoLigar((par) => {
@@ -386,6 +441,23 @@ function iniciar(opcoes) {
     fs.createReadStream(alvo).on('error', () => res.destroy()).pipe(res);
   }
 
+  /* ---------- entrar na equipe pelo Wi-Fi (entrada.js): a Estação nova pede, a gestão aceita, o token chega cifrado ----------
+     usarToken é o mesmo caminho do /api/token, com o token que só a chave efêmera do pedido abriu */
+  function usarToken(texto) {
+    if (pronto()) throw new Error('esta Estação já está numa equipe');
+    const t = token.ler(texto);
+    const c = t.carteira;
+    cfg = config.salvar(Object.assign(cfg, { id: c.id, nome: c.nome, papel: c.papel, equipe: t.equipe, segredo: t.segredo, encontro: t.encontro, carteira: c, assinatura: t.assinatura, privada: t.privada, publicaEquipe: t.publicaEquipe, privadaEquipe: t.privadaEquipe || undefined }));
+    if (!t.privadaEquipe) delete cfg.privadaEquipe;
+    novaIdentidade();
+    ligarRede();
+    paraLocais({ tipo: 'entrada-dentro', eu: quem() });
+    return quem();
+  }
+  /* quem já está na equipe (a gestão, os pares, os autores do diário): pedido com o nome de alguém daqui é recusado */
+  const conhecidos = () => [cfg.id].concat(rede ? rede.lista().map((p) => p.id) : [], diario.todos().map((ev) => ev.autor)).filter(Boolean);
+  const entrada = new Entrada({ cfg: () => cfg, pronto, json, usarToken, conhecidos, paraLocais: (msg) => paraLocais(msg) });
+
   /* ---------- HTTP ---------- */
   const servidor = http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://x');
@@ -406,6 +478,11 @@ function iniciar(opcoes) {
       }
       const local = pedidoLocal(req, cfg.porta);
       const soLocal = () => { json(res, 403, { erro: 'só a própria Estação faz isto' }); return false; };
+      /* instalador pela rede (instalador.js): a página /instalar e os babel-coop-*.dmg/.exe da lista, para qualquer aparelho da
+         rede local, sem carteira; /api/instalar/info dá à tela Convidar o link com o IP da rede (só a própria Estação) */
+      if (p === '/instalar' || p.startsWith('/instalar/')) return require('./instalador').tratar(req, res, p, { raiz: cfg.raiz });
+      if (p === '/api/instalar/info') { if (!local) return soLocal(); return json(res, 200, require('./instalador').info({ raiz: cfg.raiz, porta: cfg.porta })); }
+      if (p.startsWith('/api/entrar/')) return await entrada.tratar(req, res, p, local); /* o pedido de entrada é a única rota aberta a quem não tem carteira */
       if (p === '/api/eu') return json(res, 200, Object.assign(quem(), { pares: rede ? rede.lista() : [], terminalReal: terminais.disponivel(), pasta: cfg.pasta, versao: require('../package.json').version, app: atualizacao.atual(), motor: { node: process.versions.node, electron: process.versions.electron || null } }));
       if (p === '/api/fundar' && req.method === 'POST') {
         if (!local) return soLocal();
@@ -445,6 +522,8 @@ function iniciar(opcoes) {
       }
       if (p === '/api/app/publicar' && req.method === 'POST') {
         if (!local) return soLocal();
+        /* o papel vem da carteira (cfg.papel): membro não publica versão do app para a equipe */
+        if (cfg.papel !== 'gestao') { req.resume(); return json(res, 403, { erro: 'só a gestão publica atualização do app' }); }
         const b = await corpo(req);
         try {
           const m = atualizacao.publicar(b.notas, b.versaoBase);
@@ -467,12 +546,23 @@ function iniciar(opcoes) {
         const sp = url.searchParams;
         if (p === '/api/acervo/buscar') return json(res, 200, await acervo.buscarEquipe(sp.get('q') || '', { modo: sp.get('modo') || 'tudo', quem: cfg.id, limite: +sp.get('limite') || 10 }));
         if (p === '/api/acervo/item') { const it = acervo.ler(sp.get('id') || sp.get('caminho') || '', { quem: cfg.id }); return it ? json(res, 200, it) : json(res, 404, { erro: 'não achei no acervo' }); }
-        if (p === '/api/acervo/aprendi' && req.method === 'POST') { const b = await corpo(req); try { return json(res, 200, acervo.aprendi(b.texto, cfg.id, texto(b.origem, 120) || 'Estação')); } catch (e) { return json(res, 400, { erro: e.message }); } }
+        if (p === '/api/acervo/aprendi' && req.method === 'POST') { const b = await corpo(req); try { return json(res, 200, acervo.aprendi(b.texto, cfg.id, texto(b.origem, 120) || 'Estação', texto(b.corrige, 60) || null)); } catch (e) { return json(res, 400, { erro: e.message }); } }
         if (p === '/api/acervo/aprendizados') return json(res, 200, acervo.aprendizados(+sp.get('limite') || 20));
         if (p === '/api/acervo/exportar') { const x = acervo.exportar(sp.get('dia')); res.writeHead(200, { 'Content-Type': 'application/x-ndjson; charset=utf-8', 'Content-Disposition': 'inline; filename="babel-coop-' + x.dia + '.jsonl"', 'Cache-Control': 'no-store' }); return res.end(x.jsonl); }
         if (p === '/api/acervo/estatisticas') return json(res, 200, acervo.estatisticas());
         if (p === '/api/acervo/reconstruir' && req.method === 'POST') return json(res, 200, acervo.reconstruir());
         return json(res, 404, { erro: 'rota do acervo desconhecida' });
+      }
+      /* banco real do projeto (a Máquina): só o navegador desta máquina. Erro de SQL volta 200 com ok:false e nada gravado */
+      if (p.startsWith('/api/banco/')) {
+        if (!local) { req.resume(); return soLocal(); }
+        try {
+          if (p === '/api/banco/estado' && req.method === 'GET') return json(res, 200, await bancos.estado(url.searchParams.get('projeto')));
+          if (p === '/api/banco/aplicar' && req.method === 'POST') { const b = await corpo(req); return json(res, 200, await bancos.aplicar(b.projeto, b.sql, b.nome)); }
+          if (p === '/api/banco/consulta' && req.method === 'POST') { const b = await corpo(req); return json(res, 200, await bancos.consulta(b.projeto, b.sql)); }
+        } catch (e) { return json(res, e.pedido ? 400 : 500, { ok: false, erro: { mensagem: e.message } }); }
+        req.resume();
+        return json(res, 404, { ok: false, erro: { mensagem: 'rota do banco desconhecida' } });
       }
       if (p === '/api/diario') return json(res, 200, diario.todos());
       if (p === '/api/evento' && req.method === 'POST') {
@@ -491,10 +581,24 @@ function iniciar(opcoes) {
           if (gravou && acervo) acervo.arquivoMudou(); /* não depende do fs.watch */
           return json(res, gravou ? 200 : 400, { ok: true });
         }
+        if (req.method === 'DELETE') {
+          /* apagar = tirar da pasta compartilhada para <raiz>/.coop/lixeira/<id> (o Desfazer devolve): só a própria Estação, só na minha pasta, nunca os gerados do acervo */
+          if (!local) return json(res, 403, { erro: 'só o dono apaga aqui' });
+          const r = arquivos.apagar(rel);
+          if (r.ok) aoMudarPasta(); /* árvore e acervo na hora, sem depender do fs.watch */
+          return json(res, r.ok ? 200 : r.status || 400, r.ok ? { ok: true, lixeira: r.lixeira, caminho: r.caminho } : { erro: r.erro });
+        }
         const a = arquivos.ler(rel);
         if (!a) return json(res, 404, { erro: 'não existe ou fora da pasta compartilhada' });
         if (a.caminhoReal) { res.writeHead(200, { 'Content-Type': MIME[a.caminhoReal.split('.').pop().toLowerCase()] || 'application/octet-stream' }); return fs.createReadStream(a.caminhoReal).pipe(res); }
         return json(res, 200, a);
+      }
+      if (p === '/api/arquivo/restaurar' && req.method === 'POST') {
+        if (!local) { req.resume(); return json(res, 403, { erro: 'só o dono restaura aqui' }); }
+        const b = await corpo(req);
+        const r = arquivos.restaurar(b.lixeira);
+        if (r.ok) aoMudarPasta();
+        return json(res, r.ok ? 200 : r.status || 400, r.ok ? { ok: true, caminho: r.caminho } : { erro: r.erro });
       }
       /* a pasta de outra pessoa: pergunta direto à Estação dela (computador desligado = 502, a Estação mostra a ficha pontilhada) */
       const outro = p.match(/^\/api\/de\/([a-z0-9-]+)(\/.*)$/);
@@ -506,7 +610,10 @@ function iniciar(opcoes) {
       }
       /* a interface */
       const rel = p === '/' ? '/index.html' : p;
-      const PASTA_UI = atualizacao.pastaUi(); /* a versão instalada pela Oficina, ou a que veio com o app */
+      if (oficina) oficina.cfg = cfg;
+      const previa = local && oficina ? oficina.pastasPrevia() : null;
+      const PASTA_UI = previa ? previa.ui : atualizacao.pastaUi();
+      const pastaInterface = previa ? previa.interface : PASTA_INTERFACE;
       /* three.js de dentro do app (o protótipo puro usa a CDN): só build/ e examples/jsm/ do pacote three */
       const tres = rel.match(/^\/vendor\/three\/((?:build|examples\/jsm)\/[A-Za-z0-9_./-]+\.js)$/);
       if (tres) {
@@ -515,24 +622,36 @@ function iniciar(opcoes) {
         res.writeHead(200, { 'Content-Type': MIME.js, 'Cache-Control': 'no-store' });
         return fs.createReadStream(f).pipe(res);
       }
+      /* as fontes de dentro do app (semInternet aponta o HTML para cá): o CSS junto e os woff2 de cada família */
+      if (rel === '/vendor/fontes.css') { res.writeHead(200, { 'Content-Type': MIME.css, 'Cache-Control': 'no-store' }); return res.end(fontesCss()); }
+      const fonte = rel.match(/^\/vendor\/fontes\/([a-z-]+)\/([a-z0-9-]+\.woff2?)$/);
+      if (fonte) {
+        const pasta = Object.prototype.hasOwnProperty.call(FONTES, fonte[1]) && pastaFonte(fonte[1]);
+        const f = pasta && path.join(pasta, 'files', fonte[2]);
+        if (!f || !fs.existsSync(f)) { res.writeHead(404); return res.end('não achei'); }
+        res.writeHead(200, { 'Content-Type': MIME[fonte[2].split('.').pop()], 'Cache-Control': 'max-age=3600' });
+        return fs.createReadStream(f).pipe(res);
+      }
       const vendor = rel.match(/^\/vendor\/([a-z0-9.-]+)$/);
       if (vendor) { const f = VENDOR[vendor[1]]; if (!f) { res.writeHead(404); return res.end('não achei'); } res.writeHead(200, { 'Content-Type': MIME[f.split('.').pop()], 'Cache-Control': 'no-store' }); return fs.createReadStream(f).pipe(res); }
       if (rel.startsWith('/coop/')) {
-        const f = path.normalize(path.join(PASTA_INTERFACE, decodeURIComponent(rel.slice(6))));
-        if (!f.startsWith(PASTA_INTERFACE + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); return res.end('não achei'); }
+        const f = path.normalize(path.join(pastaInterface, decodeURIComponent(rel.slice(6))));
+        if (!f.startsWith(pastaInterface + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); return res.end('não achei'); }
         res.writeHead(200, { 'Content-Type': MIME[f.split('.').pop().toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-store' });
         return fs.createReadStream(f).pipe(res);
       }
-      if (rel === '/ponte.js') { res.writeHead(200, { 'Content-Type': MIME.js, 'Cache-Control': 'no-store' }); return fs.createReadStream(atualizacao.pontePath()).pipe(res); }
+      if (rel === '/ponte.js') { res.writeHead(200, { 'Content-Type': MIME.js, 'Cache-Control': 'no-store' }); return fs.createReadStream(previa ? previa.ponte : atualizacao.pontePath()).pipe(res); }
       const alvo = path.normalize(path.join(PASTA_UI, decodeURIComponent(rel)));
       if (!alvo.startsWith(PASTA_UI + path.sep) || !fs.existsSync(alvo) || fs.statSync(alvo).isDirectory()) { res.writeHead(404); return res.end('não achei'); }
       if (rel === '/index.html') {
         /* injeta a ponte no fim da página: é ela que troca o simulado pelo real */
-        const html = fs.readFileSync(alvo, 'utf8').replace('<script src="app.js"></script>', INJETAR(terminais.disponivel(), listarMidia()) + '\n<script src="app.js"></script>')
+        const html = fs.readFileSync(alvo, 'utf8').replace('<script src="app.js"></script>', INJETAR(terminais.disponivel(), listarMidia(), !pedidoLocal(req, cfg.porta)) + '\n<script src="app.js"></script>')
           .split('https://cdn.jsdelivr.net/npm/three@0.160.0/').join('/vendor/three/');
         res.writeHead(200, { 'Content-Type': MIME.html, 'Cache-Control': 'no-store' });
-        return res.end(html);
+        return res.end(semInternet(html));
       }
+      /* as outras páginas da interface (o mapa mental no iframe) também pegam as fontes de dentro do app */
+      if (/\.html$/.test(rel)) { res.writeHead(200, { 'Content-Type': MIME.html, 'Cache-Control': 'no-store' }); return res.end(semInternet(fs.readFileSync(alvo, 'utf8'))); }
       res.writeHead(200, { 'Content-Type': MIME[rel.split('.').pop().toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-store' });
       fs.createReadStream(alvo).pipe(res);
     } catch (e) { json(res, 500, { erro: e.message }); }
@@ -574,7 +693,15 @@ function iniciar(opcoes) {
     ws.on('message', (buf) => {
       let m; try { m = JSON.parse(buf.toString()); } catch (e) { return; }
       if (!m || typeof m.tipo !== 'string') return;
-      if (m.tipo === 'fazer') { if (m.acao && pronto()) diario.anexar(cfg.id, String(m.acao), Array.isArray(m.args) ? m.args : [], m.origem); return; }
+      if (m.tipo === 'fazer') {
+        if (!m.acao || !pronto()) return;
+        const acao = String(m.acao), args = Array.isArray(m.args) ? m.args : [];
+        if (ehLocal) { diario.anexar(cfg.id, acao, args, m.origem); return; }
+        /* celular, iPad, TV: só a lista acima; o resto volta como erro (a ponte mostra o aviso) */
+        if (!remotoPode(acao, args)) { mandar(ws, { tipo: 'erro', erro: 'Pela rede só o quadro e a TV. "' + acao.slice(0, 40) + '" fica para a Estação.', contexto: 'fazer' }); return; }
+        diario.anexar(cfg.id, acao, args, typeof m.origem === 'string' ? m.origem.slice(0, 80) : undefined);
+        return;
+      }
       if (!ehLocal) return; /* celular e iPad: nada de terminal, controle nem projetos */
       aoMensagemLocal(ws, m);
     });
@@ -642,8 +769,9 @@ function iniciar(opcoes) {
       case 'projetos': controle.definirProjetos(m.lista); return;
       /* agentes (§7): só nos meus terminais, só a tela local */
       case 'agente-iniciar': try { agentes.iniciar(ws, m); } catch (e) { mandar(ws, { tipo: 'erro', erro: e.message, id, contexto: 'agente-iniciar' }); } return;
-      case 'agente-pedido': try { agentes.pedido(m); } catch (e) { mandar(ws, { tipo: 'erro', erro: e.message, id, contexto: 'agente-pedido' }); } return;
-      case 'agente-ok': agentes.ok(m); return;
+      case 'agente-pedido': Promise.resolve().then(() => agentes.pedido(m)).catch((e) => mandar(ws, { tipo: 'erro', erro: e.message, id, contexto: 'agente-pedido' })); return;
+      case 'agente-interromper': Promise.resolve().then(() => agentes.interromper(m)).catch((e) => mandar(ws, { tipo: 'erro', erro: e.message, id, contexto: 'agente-interromper' })); return;
+      case 'agente-ok': Promise.resolve().then(() => agentes.ok(m)).catch((e) => mandar(ws, { tipo: 'erro', erro: e.message, id, contexto: 'agente-ok' })); return;
       case 'agente-lista?': mandar(ws, { tipo: 'agente-lista', lista: agentes.lista() }); return;
       /* conector coop (§8): a tela respondeu uma mcp-chamada */
       case 'mcp-resposta': coop.aoMensagemUi(m); return;
@@ -661,12 +789,14 @@ function iniciar(opcoes) {
 
   return {
     porta: cfg.porta, cfg: () => cfg,
-    agentes, coop, acervo,
+    agentes, coop, acervo, bancos,
     parar: () => {
       if (navegador && typeof navegador.off === 'function') navegador.off('passo', aoPassoNavegador);
       agentes.parar(); /* apaga os arquivos de ganchos e solta os pedidos de permissão antes de matar os terminais */
       coop.parar();
+      entrada.parar();
       if (acervo) acervo.fechar();
+      bancos.fechar().catch((e) => console.error('[babel-coop] banco (fechar): ' + e.message)); /* espera a operação em curso de cada projeto */
       terminais.fecharTodos();
       if (rede) rede.parar();
       wss.clients.forEach((ws) => { try { ws.terminate(); } catch (e) { /* ok */ } });

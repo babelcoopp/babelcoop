@@ -208,3 +208,20 @@ html.bc-org-parado .pr-selo.visita i::after, html.bc-org-parado .pr-selo-pulso::
   .pr-grade { grid-template-columns: 1fr; }
   .pr-amp-acoes { margin-left: 0; }
 }
+
+/* ---------- modo Vibe (claro, casca-2030.css §20): a tela vira papel Latte (o xterm troca de tema no parede-real.js) ---------- */
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-tela,
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-amp-tela { background: #fff8e7; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-cartao[data-vivo="sim"] .pr-tela::after,
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-amp-tela::after { background: repeating-linear-gradient(180deg, rgba(6, 11, 22, .03) 0 1px, transparent 1px 3px); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-tela-aviso { background: linear-gradient(0deg, rgba(255, 248, 231, .96) 40%, rgba(255, 248, 231, 0)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-cartao[data-estado="pausado"]:not(.meu) .pr-escala,
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-cartao[data-estado="desligado"] .pr-escala,
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-amp-tela[data-estado="pausado"] .pr-amp-escala,
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-amp-tela[data-estado="desligado"] .pr-amp-escala { filter: saturate(0); }
+/* a cor de quem visita, como texto: metade com tinta para passar de 4,5:1 no papel */
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-selo.visita,
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-amp-faixa:not(.pedido) { color: color-mix(in oklab, var(--visita) 58%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] #e-status .st-controle.pr-selo-st { color: color-mix(in oklab, var(--texto-90), var(--pr-cor) 40%) !important; }
+/* o degradê do texto da parede desce para os tons escuros da escada do tempo (≥ 4,5:1 sobre o papel) */
+html[data-vista="estacao"][data-tema-estacao="claro"] .pr-xterm .xterm-rows > div { background-image: linear-gradient(90deg, #6d3fb8, #2f5bb7 55%, #08707f); }

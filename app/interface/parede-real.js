@@ -43,6 +43,15 @@
     yellow: '#f0b35a', brightYellow: '#f5c76a', blue: '#7ba4f0', brightBlue: '#9dbcf5', magenta: '#a376e9', brightMagenta: '#c7a2ff',
     cyan: '#2ad5e5', brightCyan: '#6fe3ff', white: '#d7e4fb', brightWhite: '#fff8e7'
   };
+  /* modo Vibe (claro, casca-2030.css §20): o mesmo papel Latte do terminal-real.js (cada cor ANSI ≥ 4,5:1 sobre #fff8e7) */
+  var TEMA_VIBE = {
+    background: '#fff8e7', foreground: '#1c2331', cursor: '#08707f', cursorAccent: '#fff8e7', selectionBackground: 'rgba(109,63,184,.18)',
+    black: '#2a2f3a', brightBlack: '#5d6675', red: '#b3261e', brightRed: '#c8323a', green: '#17774b', brightGreen: '#1a7f50',
+    yellow: '#8a5f00', brightYellow: '#9a5b00', blue: '#2f5bb7', brightBlue: '#3a63c2', magenta: '#6d3fb8', brightMagenta: '#8a3fb8',
+    cyan: '#08707f', brightCyan: '#0a7383', white: '#4a5568', brightWhite: '#060b16'
+  };
+  function vibe() { var h = document.documentElement; return h.getAttribute('data-tema-estacao') === 'claro' && h.getAttribute('data-vista') === 'estacao'; }
+  function temaAgora() { return vibe() ? TEMA_VIBE : TEMA; }
   var BLOCO = { pedido: ['❯', 'pedido'], consulta: ['◎', 'consultei'], plano: ['☰', 'plano'], acao: ['▸', 'ação'], resultado: ['✓', 'resultado'], espera: ['◌', 'espera você'], falha: ['✕', 'falha'] };
   var PRIO_ESTADO = { espera: 6, falhou: 5, rodando: 4, terminou: 3, shell: 2, pausado: 1, desligado: 0 };
 
@@ -145,6 +154,14 @@
     var st = document.getElementById('e-status');
     if (st) new MutationObserver(decorarStatus).observe(st, { childList: true });
     window.addEventListener('resize', function () { S.forEach(function (s) { medirDepois(s); }); });
+    /* troca de modo (Tech | Vibe): os terminais da parede trocam de tema na hora */
+    var temaUsado = temaAgora();
+    new MutationObserver(function () {
+      var t = temaAgora();
+      if (t === temaUsado) return;
+      temaUsado = t;
+      S.forEach(function (s) { if (s.term) { s.term.options.theme = t; s.term.options.minimumContrastRatio = t === TEMA_VIBE ? 4.5 : 1; } });
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-tema-estacao', 'data-vista'] });
     montar();
   }
   function montar() {
@@ -209,7 +226,7 @@
     if (!fontesProntas) { esperarFontes(); return false; }
     var noAmp = amp === s.k;
     var t = new window.Terminal({
-      cols: s.cols, rows: s.rows, fontFamily: FONTE, fontSize: noAmp ? FONTE_AMP : FONTE_CARTAO, lineHeight: 1.2, theme: TEMA,
+      cols: s.cols, rows: s.rows, fontFamily: FONTE, fontSize: noAmp ? FONTE_AMP : FONTE_CARTAO, lineHeight: 1.2, theme: temaAgora(), minimumContrastRatio: vibe() ? 4.5 : 1,
       disableStdin: !noAmp, cursorBlink: false, cursorStyle: 'block', scrollback: 1000, allowProposedApi: true, drawBoldTextInBrightColors: true
     });
     t.open(s.caixa);

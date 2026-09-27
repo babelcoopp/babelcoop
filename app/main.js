@@ -5,20 +5,33 @@
    Nenhum Google Chrome em lugar nenhum: link de fora abre numa janela do app; nada chama shell.openExternal.
 */
 'use strict';
-const { app, BrowserWindow, ipcMain, clipboard } = require('electron');
+const { app, BrowserWindow, ipcMain, clipboard, screen, dialog } = require('electron');
 const path = require('path');
-const { iniciar } = require('./servidor/servidor');
+const { Oficina } = require('./servidor/oficina');
+const config = require('./servidor/config');
 const { Navegadores } = require('./navegador/navegador');
 
 /* duas Estações na mesma máquina (testes): cada uma com a sua pasta de dados do Electron */
 if (process.env.BABEL_COOP_RAIZ) app.setPath('userData', path.join(process.env.BABEL_COOP_RAIZ, '.coop', 'electron'));
+const instanciaPrincipal = app.requestSingleInstanceLock();
+if (!instanciaPrincipal) app.quit();
+app.on('second-instance', () => {
+  if (janela && !janela.isDestroyed()) { if (janela.isMinimized()) janela.restore(); janela.show(); janela.focus(); }
+});
 
 /* testes automáticos: BABEL_COOP_OCULTO=1 abre as janelas escondidas, sem roubar a tela de quem está usando o Mac */
 const OCULTO = !!process.env.BABEL_COOP_OCULTO;
+/* ...e mudo: janela escondida tocava "acordar" + "espera" no alto-falante de quem usa o Mac (3 bips a cada teste) */
+if (OCULTO) app.on('web-contents-created', (_e, wc) => wc.setAudioMuted(true));
 
 let servidor = null;
 let janela = null;
 let tv = null;
+let oficina = null;
+let servidorPrevia = false;
+function reiniciarEstacao(execPath) {
+  setTimeout(() => { app.relaunch(execPath ? { execPath, args: [] } : {}); app.quit(); }, 500);
+}
 
 /* ---------- navegador dos agentes ---------- */
 const navegadores = new Navegadores({
@@ -109,11 +122,34 @@ function abrirNavegador(url) {
   return nav;
 }
 
+/* a TV vai para a outra tela: com a TV ligada como tela separada (HDMI, ou AirPlay em "Usar como tela separada"),
+   a janela abre nela em tela cheia e a Estação fica onde está. Com uma tela só (ou no modo Espelhar, que o sistema
+   mostra como uma tela), abre janela comum. Se a TV for ligada depois, a janela vai sozinha para ela. */
+function telaDaTv() {
+  const telas = screen.getAllDisplays();
+  if (telas.length < 2) return null;
+  const daEstacao = janela && !janela.isDestroyed() ? screen.getDisplayMatching(janela.getBounds()) : screen.getPrimaryDisplay();
+  const area = (t) => t.size.width * t.size.height;
+  const outras = telas.filter((t) => t.id !== daEstacao.id).sort((a, b) => (a.internal === b.internal ? area(b) - area(a) : a.internal ? 1 : -1));
+  return outras[0] || null;
+}
+function nomeDaTela(t) { return (t && t.label) || 'tela externa'; }
+function levarTvPara(t) {
+  if (!tv || tv.isDestroyed() || !t) return;
+  const ir = () => { tv.setBounds(t.bounds); tv.setFullScreen(true); };
+  if (tv.isFullScreen()) { tv.once('leave-full-screen', ir); tv.setFullScreen(false); } else ir();
+}
 function abrirTv(url) {
-  if (tv) { tv.focus(); return; }
-  tv = new BrowserWindow({ width: 1280, height: 720, title: 'babel-coop · TV', backgroundColor: '#060b16', autoHideMenuBar: true, webPreferences: { contextIsolation: true } });
+  const t = telaDaTv();
+  if (tv) { if (t && screen.getDisplayMatching(tv.getBounds()).id !== t.id) levarTvPara(t); tv.focus(); return { tela: t ? nomeDaTela(t) : null }; }
+  const onde = t ? { x: t.bounds.x, y: t.bounds.y, width: t.bounds.width, height: t.bounds.height, fullscreen: true } : { width: 1280, height: 720 };
+  tv = new BrowserWindow(Object.assign({ title: 'babel-coop · TV', backgroundColor: '#060b16', autoHideMenuBar: true, show: !OCULTO, webPreferences: { contextIsolation: true } }, onde));
   tv.loadURL(url || 'http://localhost:' + servidor.porta + '/#tv');
   tv.on('closed', () => { tv = null; });
+  return { tela: t ? nomeDaTela(t) : null };
+}
+function vigiarTelas() {
+  screen.on('display-added', () => setTimeout(() => { if (tv) levarTvPara(telaDaTv()); }, 500));
 }
 
 /* o cronômetro que persegue a pessoa: janelinha sem moldura, sempre por cima, em todas as mesas (Spaces) e por cima de apps em tela cheia */
@@ -131,9 +167,55 @@ function abrirCronometro(url) {
   cronometro.on('closed', () => { cronometro = null; });
 }
 
-ipcMain.handle('coop:tv', () => { abrirTv(); return true; });
+ipcMain.handle('coop:tv', () => abrirTv());
 ipcMain.handle('coop:cronometro', () => { abrirCronometro(); return true; });
 ipcMain.handle('coop:eu', () => servidor.cfg());
+
+/* A autorização de edição pertence a esta instalação e só pode ser alterada
+   na janela principal local; páginas da rede e webviews não recebem este IPC. */
+ipcMain.handle('coop:oficina', async (e, acao, args) => {
+  if (!telaDaEstacao(e) || !janela || e.sender !== janela.webContents || !oficina) return { ok: false, erro: 'Abra a Oficina na Estação deste computador.' };
+  args = args && typeof args === 'object' ? args : {};
+  try {
+    oficina.cfg = servidor.cfg();
+    let valor;
+    switch (acao) {
+      case 'estado': valor = oficina.estado(); break;
+      case 'liberar':
+        valor = oficina.liberar(args.sim, args.identidade);
+        if (!valor.autorizada) {
+          servidor.agentes.encerrarOficina();
+          if (servidorPrevia) reiniciarEstacao();
+        }
+        break;
+      case 'selecionar': {
+        if (!oficina.estado().autorizada) throw new Error('Marque esta versão como editável primeiro.');
+        const r = await dialog.showOpenDialog(janela, { title: 'Pasta fonte do Babel Coop', properties: ['openDirectory'] });
+        valor = r.canceled ? null : oficina.selecionar(r.filePaths[0]);
+        if (valor) servidor.agentes.encerrarOficina();
+        break;
+      }
+      case 'previa':
+        valor = oficina.ativarPrevia(args.sim);
+        if (!args.sim && servidorPrevia) reiniciarEstacao();
+        break;
+      case 'reiniciarPrevia':
+        oficina.ativarPrevia(true);
+        reiniciarEstacao();
+        valor = oficina.estado(); break;
+      case 'empacotar': {
+        oficina.contextoAgente();
+        servidor.agentes.encerrarOficina();
+        const pacote = await oficina.empacotar();
+        const executavel = path.join(pacote.app, 'Contents', 'MacOS', 'babel-coop');
+        reiniciarEstacao(executavel);
+        valor = pacote; break;
+      }
+      default: throw new Error('Ação desconhecida na Oficina.');
+    }
+    return { ok: true, valor };
+  } catch (erro) { return { ok: false, erro: erro.message }; }
+});
 
 /* só a página principal da Estação (http://localhost:<porta>) comanda o navegador; a TV e os webviews não têm preload */
 function telaDaEstacao(e) {
@@ -181,11 +263,41 @@ ipcMain.handle('coop:navegador', async (e, acao, agente, args) => {
 });
 
 app.whenReady().then(() => {
+  if (!instanciaPrincipal) return;
   if (OCULTO && app.dock) app.dock.hide(); /* testes escondidos não pulam no Dock do Theus */
-  servidor = iniciar({ navegador: navegadores });
+  oficina = new Oficina(config.carregar(), { appDir: __dirname, versao: app.getVersion() });
+  const previa = oficina.pastasPrevia();
+  let iniciar;
+  try {
+    iniciar = require(previa ? previa.servidor : './servidor/servidor').iniciar;
+    servidorPrevia = !!previa;
+    if (typeof iniciar !== 'function') throw new Error('O servidor da prévia não oferece iniciar().');
+  } catch (erro) {
+    if (!previa) throw erro;
+    oficina.ativarPrevia(false);
+    servidorPrevia = false;
+    if (!OCULTO) dialog.showErrorBox('A prévia precisa de correção', erro.message + '\nA versão instalada será aberta.');
+    iniciar = require('./servidor/servidor').iniciar;
+  }
+  const opcoesServidor = { navegador: navegadores, oficina, aoErro: (erro) => {
+    if (!OCULTO) dialog.showErrorBox('Babel Coop não iniciou', erro.code === 'EADDRINUSE' ? 'A porta desta Estação está ocupada. Feche a outra cópia do Babel Coop antes de abrir esta versão.' : erro.message);
+    if (servidorPrevia) oficina.ativarPrevia(false);
+    app.quit();
+  } };
+  try { servidor = iniciar(opcoesServidor); }
+  catch (erro) {
+    if (servidorPrevia) {
+      oficina.ativarPrevia(false);
+      if (!OCULTO) dialog.showErrorBox('A prévia precisa de correção', erro.message + '\nA versão instalada abrirá ao reiniciar.');
+      reiniciarEstacao();
+      return;
+    }
+    throw erro;
+  }
   abrirEstacao();
+  vigiarTelas();
   app.on('activate', () => { if (!janela) abrirEstacao(); });
-});
+}).catch((erro) => { if (!OCULTO) dialog.showErrorBox('Babel Coop não iniciou', erro.message); app.quit(); });
 
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
 app.on('before-quit', () => { navegadores.fechar(); if (servidor) servidor.parar(); });
