@@ -273,7 +273,7 @@ Preset = **grafo de peças + fios** (nunca imagem), com **portas publicadas** (l
 - **Telas**: `CSS3DObject` com iframe real, `sandbox="allow-scripts allow-forms"`, postMessage `babel-enter`/`babel-clique` (já existe). Elas **nunca recebem luz** (CSS3DRenderer: "not possible to use the material system"); quem acende é a `PlaneGeometry` de borda ao lado.
 - **Limites**: `pixelRatio ≤ 1,5`; loop pausa em `visibilitychange` e fora da viewport (`IntersectionObserver`); ≤ 3 luzes; damping desligado com `reduce`; câmera sem movimento automático; aviso quando o zoom do navegador ≠ 100 % (CSS3DRenderer "only supports 100% browser and display zoom").
 - **glTF**: só Portaria e Cofre vêm de IA; passam por `gltfpack -cc -tc` (three.js r122+ com `setMeshoptDecoder`) ou `gltf-transform optimize`; alvo ≤ 120 KB por peça e ≤ 300 KB o kit; carregado só quando o modo 3D abre (three 0.186 = 181 KB min+gzip, Bundlephobia).
-- **O que o 3D não é**: espetáculo. Todos os construtores maduros são 2D; cada efeito 3D é a metáfora de um fato do backend (luz acende = chegou; tubo pulsa = andando; cadeado fecha = barrou). Sem partículas, sem chão infinito animado, sem câmera passeando.
+- **O que o 3D é** (revisto em 25/09/2026): a Máquina no meio é 3D, como jogo (Lego, Minecraft): a cada ação do agente no banco a peça nasce com efeito (brilho, halo, faíscas, partículas, micro-explosão), sempre preso ao evento real e com fim; em repouso nada disso roda. O 2D em nós continua como vista alternativa. Cada efeito continua sendo a metáfora de um fato do backend (luz acende = chegou; tubo pulsa = andando; cadeado fecha = barrou). Sem chão infinito animado, sem câmera passeando sozinha. (Antes: "o 3D não é espetáculo; todos os construtores maduros são 2D; sem partículas". Valem as falas do Theus — 23/09: "backend totalmente visual 3D"; 25/09: "a tela do meio com os elementos 3d vai tornando visual as açoes do banco… pensa lego, minecraft… game"; 23/09 17:20, `.deus/terminal-ao-vivo/MISSAO.md:61`: "com os neons, com os brilhos… o organismo vivo".)
 
 ---
 
@@ -355,7 +355,7 @@ Regras: `opacity < 1`, `filter`, `overflow ≠ visible`, `clip-path` e `mix-blen
 
 ## 11. O que não fazer
 
-1. Isometria de cena para "parecer 3D" (texto a 30°, conotação de jogo). O 3D de verdade é um modo da Tela; a Máquina é frontal.
+1. Isometria de cena para "parecer 3D" (texto a 30°) na vista 2D. (Revisto em 25/09/2026: a Máquina no meio é 3D de verdade, como jogo — Lego, Minecraft —, com o 2D frontal em nós como vista alternativa; §8.)
 2. Vidro nas peças ou flutuando sobre o palco. Ficha e HUD moram na Mesa, opacos.
 3. Peça da cor do palco + sombra (neumorfismo): contraste 1:1 por construção. Hairline ≥ 3:1 sempre; estado sempre com texto.
 4. As duas hairlines em uso hoje (`#30334c` 1,61:1; `#42597d` 2,79:1) e o fio `#3b4a7a` (2,17:1) reprovam no 1.4.11: usar `#506b94`.
@@ -365,7 +365,7 @@ Regras: `opacity < 1`, `filter`, `overflow ≠ visible`, `clip-path` e `mix-blen
 8. Tracejado com dois sentidos (`.construindo` × `.mq-fio.vivo`): borda tracejada = não existe; fio tracejado parado = referência; andando = só Cano em evento.
 9. Emojis como glifo: leva única de SVG de traço, a mesma da casca.
 10. Três cores na mesma peça (pessoa + família + estado): família é forma, não cor.
-11. Pulso permanente ou decorativo; partículas; câmera passeando; chão animado no 3D.
+11. Pulso permanente ou decorativo; partículas em repouso ou sem evento real; câmera passeando sozinha; chão animado no 3D. (Revisto em 25/09/2026: partículas, faíscas e brilho entram quando a peça nasce por ação do agente, presos ao evento e com fim; §8.)
 12. `opacity < 1` ou `filter` num contêiner com `preserve-3d` (achata sem aviso).
 13. `prefers-reduced-motion` que zera tudo com `!important` (apaga a informação). Reduzir, não remover; `aria-live`.
 14. "Qualquer saída em qualquer entrada" (VCV): barrar na hora e sugerir a peça do meio.

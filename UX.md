@@ -21,7 +21,7 @@
 │ ● ● ●  b Babel Coop     [ Buscar arquivo, comando ou acervo   Ctrl K ]        │
 │                                        ver como ▾ · Tela da TV · 🔔 3         │
 ├───┬──────────────┬────────────────────────────────┬────────────────────────────┤
-│ ▤ │ EXPLORADOR   │ README.md × │ precos.html      │ RITA · BRUNO-BOT · +       │
+│ ▤ │ CRIAR        │ README.md × │ precos.html      │ RITA · BRUNO-BOT · +       │
 │ ⌂ │ ▾ EQUIPE     │                                │ ╭ theus@estacao ~/BabelCoop │
 │ ◷ │   Reuniões   │  (arquivo, tela ou projeto)    │ ╰ ❯ cria uma campanha de   │
 │ ◉ │   Quadros    │                                │   50 clientes para a       │
@@ -39,7 +39,7 @@
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Barra de atividades** (esquerda, de cima para baixo): Explorador · Meu dia · Demandas · Chat · Reunião · Acervo · Inteligência · Terminais ao vivo · Tarefas · Metas · Equipe · Mapa · **Projetos** · **WhatsApp** · **Loja da equipe**. Embaixo: Tela da TV e perfil. Sem botão de iPad: o iPad é um app à parte e só ele tem "Projetar na TV".
+- **Barra de atividades** (esquerda, de cima para baixo), 12 atividades: Meu dia · **Criar** · Trabalho (Demandas + Tarefas) · Chat · **WhatsApp** · Reunião · Terminais · **Projetos** · Acervo (+ Inteligência) · Equipe (+ Metas + Mapa) · **Loja** · Oficina; a Máquina vive dentro de Criar (revisto em 25/09/2026: eram 15, com Explorador — `docs/design/CONCEITO.md` §3.1; CHECK_DO_THEUS.md:71-72: "Trocar Explorar por Criar", "A Máquina vive dentro de Criar"). Embaixo: Tela da TV e perfil. Sem botão de iPad: o iPad é um app à parte e só ele tem "Projetar na TV".
 - **Lateral esquerda**: muda com a atividade (árvore, lista de conversas, lista de projetos…). Recolhe com Ctrl+B.
 - **Meio**: abas. Um arquivo, uma tela (Meu dia, Projeto Clínicas, WhatsApp) ou um documento. Cada aba tem seus botões no topo: Prévia · Editar · Levar para a reunião · Projetar na TV · Pedir ajuda · Chamar para cá · Versões.
 - **Direita: os agentes.** Cada aba é um terminal com nome humano. Recolhe com Ctrl+`. Largura arrasta.
@@ -118,10 +118,10 @@ Ao lado da página fica o **Raio-X**, recolhível: abas HTML · CSS · Copy · R
 └──────────────────────────┴───────────────────────────────────────────────┘
 ```
 
-**O Explorador em modo projeto.** No alto da lateral, o seletor "Sozinho · minha pasta ▾" lista os projetos de que sou membro. Escolhendo um:
+**Criar em modo projeto** (antes "Explorador"). No alto da lateral, o seletor "Sozinho · minha pasta ▾" lista os projetos de que sou membro. Escolhendo um:
 
 ```
-┌ EXPLORADOR · Clínicas em Campinas ▾ ─────────────┐
+┌ CRIAR · Clínicas em Campinas ▾ ──────────────────┐
 │ ◉◉◉ 3 pessoas com você agora                     │
 │ ▾ ◉ theus (eu)                                   │
 │     precos.xlsx        ◉ Carla está vendo        │
@@ -174,7 +174,7 @@ Aparece na TV por 5 segundos: "💡 Carla salvou uma ideia falada". Na Estação
 
 **Como se controla.** Da Estação de quem tem permissão (botão "Projetar", "Levar para a reunião", Equipe → Controle da TV), do celular (Controle da TV) e do terminal (`coop tv painel`, `coop tv site https://…`, `coop projetar proposta.pdf`, `coop tv visita`).
 
-**O que mostra.** Painel (padrão), reunião, quadro do iPad ao vivo, projeção (PDF, imagem, vídeo, documento, com "projetado por Ana" e aro âmbar), site em tela cheia, visita. Acontecimentos passam no rodapé. Selos no topo: "◌ sala com memória de 5 min", "● gravando", "● Theus no terminal da Carla".
+**O que mostra.** Painel (padrão), reunião, quadro do iPad ao vivo, projeção (PDF, imagem, vídeo, documento, com "projetado por Ana" e só uma luz de borda roxa na identidade da Babel; revisto em 25/09/2026: saiu o aro âmbar — [Theus, 23/09] CHECKLIST.md:177, docs/CHECK_DO_THEUS.md:49), site em tela cheia, visita. Acontecimentos passam no rodapé. Selos no topo: "◌ sala com memória de 5 min", "● gravando", "● Theus no terminal da Carla".
 
 **Ritmo.** A zona que gira troca a cada 20 segundos. Evento grande (meta 100%, campanha batida) interrompe com comemoração de 8 segundos e volta.
 
@@ -226,7 +226,7 @@ A primeira atividade é **Criar**. Abre com os cartões Tela, Máquina e Pesquis
 
 ## 10c. A Máquina (backend visual)
 
-Dentro de um projeto de código (o Babel OS), a atividade **Máquina** abre no meio o backend em peças com nome de gente: Gaveta, Campo, Fio, Chave, Empresa, Portaria, Porta, Robô, Depósito, Cofre, Tela, Cano. Três alturas de zoom (máquina inteira, domínio, peça). Enquanto o agente constrói no terminal à direita, as peças entram encaixando, na ordem, e a linha do tempo embaixo diz quem montou o quê. Clicar numa peça abre a ficha em português, com "onde fica guardado" e "Explicar com a Rita". Botões no topo: **Testar** (formulário por porta, "como quem", pedido animando pela máquina, linha entrando na gaveta, cadeado barrando a outra empresa), **O que muda** (diff em português) e **Publicar** (só quem pode, com confirmação escrita). Botão direito numa peça: "Pedir para o Davi". O desenho completo está em `docs/MAQUINA.md`.
+Dentro de Criar (a Máquina não é atividade à parte; revisto em 25/09/2026 — CHECK_DO_THEUS.md:72), num projeto de código (o Babel OS), a **Máquina** abre no meio o backend em peças com nome de gente: Gaveta, Campo, Fio, Chave, Empresa, Portaria, Porta, Robô, Depósito, Cofre, Tela, Cano. Três alturas de zoom (máquina inteira, domínio, peça). Enquanto o agente constrói no terminal à direita, as peças entram encaixando, na ordem, e a linha do tempo embaixo diz quem montou o quê. Clicar numa peça abre a ficha em português, com "onde fica guardado" e "Explicar com a Rita". Botões no topo: **Testar** (formulário por porta, "como quem", pedido animando pela máquina, linha entrando na gaveta, cadeado barrando a outra empresa), **O que muda** (diff em português) e **Publicar** (só quem pode, com confirmação escrita). Botão direito numa peça: "Pedir para o Davi". O desenho completo está em `docs/MAQUINA.md`.
 
 ## 11. Celular e iPad
 

@@ -12,7 +12,7 @@ Você vai construir o **Babel Coop**: o sistema da empresa com corpo, à vista d
 4. `UX.md` e `docs/FUNCOES.md` — telas e fluxos, linha por linha.
 5. `docs/design/PLANO.md` — o plano de design (identidade, recursos, fases F0–F5) e `docs/design/CONCEITO.md`, `docs/design/GERACAO_REPLICATE.md`, `docs/design/REGUA_ORGANISMO.md`.
 6. `prototipo/` — o protótipo v22 já faz 42/42 do roteiro (`docs/testes/roteiro.js`); reaproveite o que o `CHECKLIST.md` §"Do protótipo para o sistema real" manda.
-7. `app/` — a base real já esboçada (Electron + servidor Node + token + diário de eventos + node-pty). Complete-a.
+7. `app/` — a base real já esboçada (Electron + servidor Node + entrada pela rede local com código de 4 dígitos que a gestão aceita, token colado como plano B + diário de eventos + node-pty). Complete-a.
 
 ## 2. A regra de tempo (ordem do Theus)
 
@@ -22,7 +22,7 @@ Você vai construir o **Babel Coop**: o sistema da empresa com corpo, à vista d
 
 Quando precisar gerar materiais (ícones, keyframes, vídeos, peças 3D, som), use a **Replicate** pelo manual pronto: `docs/design/GERACAO_REPLICATE.md` (modelos confirmados, prompts prontos, orçamento US$ 20 com parada em 16, regra de baixar em ≤ 1 h, `MANIFESTO.json`).
 
-- O token está em `~/.config/babel/replicate.env` (variável `REPLICATE_API_TOKEN`). Carregue com `source ~/.config/babel/replicate.env` antes de chamar a API; o script `gera_svg.sh` (§5 do manual) já faz isso.
+- O token está em `~/.config/babel/replicate.env` (variável `REPLICATE_API_TOKEN`). Carregue no mesmo comando que chama a API, com `set -a && source ~/.config/babel/replicate.env && set +a && node app/scripts/gera-replicate.mjs <tarefa.json>` (§5 do manual). (Revisto em 25/09/2026: saiu o `gera_svg.sh` — scripts `.sh` são bloqueados pelas regras; o equivalente em Node é `app/scripts/gera-replicate.mjs`.)
 - **O token nunca entra em arquivo do repo, commit, log ou manifesto.** Se ele vazar no chat, o Theus troca.
 
 ## 4. Como trabalhar
@@ -34,4 +34,4 @@ Quando precisar gerar materiais (ícones, keyframes, vídeos, peças 3D, som), u
 
 ## 5. O que demonstrará a conclusão
 
-O `CHECKLIST.md` inteiro `[x]` com evidência por item, o app instalado e rodando em uma máquina Mac e uma Windows na rede local (token de entrada, terminais reais, TV, celular), e o `ENTREGA.md` com a tabela de aceites e os comandos de reprodução.
+O `CHECKLIST.md` inteiro `[x]` com evidência por item, o app instalado e rodando em uma máquina Mac e uma Windows na rede local (entrada pela rede local com código de 4 dígitos aceito pela gestão, token colado como plano B, terminais reais, TV, celular), e o `ENTREGA.md` com a tabela de aceites e os comandos de reprodução.

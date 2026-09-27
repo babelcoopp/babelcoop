@@ -6,7 +6,7 @@
 
 ## Como se locomover no protótipo
 
-- **Barra da esquerda (atividades), de cima para baixo:** Criar · Meu dia · Demandas · Chat · Reunião · Acervo · Inteligência da equipe · Terminais ao vivo · Tarefas com fluxo · Metas e campanhas · Equipe · Mapa da equipe · Projetos · WhatsApp · Loja da equipe · Oficina do app. Clicar troca a lateral; com o meio vazio, o meio só abre ao clicar num item da lateral.
+- **Barra da esquerda (atividades), de cima para baixo:** Meu dia · Criar · Trabalho · Chat · WhatsApp · Reunião · Terminais · Projetos · Acervo · Equipe · Loja · Oficina (12 atividades; a Máquina vive dentro de Criar). (Revisto em 25/09/2026: a barra do protótipo v18 tinha 16 — Criar · Meu dia · Demandas · Chat · Reunião · Acervo · Inteligência da equipe · Terminais ao vivo · Tarefas com fluxo · Metas e campanhas · Equipe · Mapa da equipe · Projetos · WhatsApp · Loja da equipe · Oficina do app; valem as 12 de `docs/design/CONCEITO.md` §3.1 e CHECK_DO_THEUS.md:71-72: "Trocar Explorar por Criar", "A Máquina vive dentro de Criar". Demandas e Tarefas ficam em Trabalho; Inteligência no Acervo; Metas e Mapa na Equipe.) Clicar troca a lateral; com o meio vazio, o meio só abre ao clicar num item da lateral.
 - **"Ver como"** (canto superior direito): troca a pessoa logada (Theus é a gestão; os outros são membros). Use para testar o que cada papel vê.
 - **"Tela da TV"** (canto superior direito): abre a TV numa janela própria. **F** na TV = tela cheia. A TV não tem botão nenhum: tudo é controlado da Estação.
 - **Atalhos pelo link:** `…#tv` (TV), `…#ipad` (iPad), `…#cronometro` (só o cronômetro), `…#maquina`, `…#perfil`, `…#projeto`, `…#oficina`, `…#loja`, `…#whatsapp`, `…#projetos`, `…#terminais`.
@@ -24,7 +24,7 @@ Legenda de estado: **faz** = funciona no protótipo · **simulado** = a tela fun
 | Barra de atividades | esquerda | clicar em cada ícone | lateral troca; com meio vazio, meio não abre | faz |
 | Lateral recolhe | Ctrl+B ou botão | apertar | lateral some/volta; borda arrasta a largura | faz |
 | Terminal recolhe | Ctrl+` ou "mostrar terminal" na barra de baixo | apertar | painel da direita some/volta; borda arrasta | faz |
-| Abas do meio | topo do meio | abrir vários itens, fechar no × | abas como VS Code; fechar todas (Ctrl+Shift+W ou ✕✕) deixa o meio vazio com marca-d'água; lateral continua | faz |
+| Abas do meio | topo do meio | abrir vários itens, fechar no × | abas como VS Code; fechar todas (Ctrl+Shift+W ou ✕✕) deixa o meio vazio e liso, só com "Nada aberto · Ctrl K" (revisto em 25/09/2026: sem marca-d'água — `.deus/missao-design/MISSAO.md:9`); lateral continua | faz |
 | Paleta de comandos | Ctrl+K | digitar "readme", "campanha", nome de pessoa | acha arquivos, comandos, acervo; Enter abre | faz |
 | Barra de status | rodapé | observar | presença, caixa de entrada, cronômetro rodando, tarefas livres, reunião, gravação da sala, projeção na TV (com ▲▼ rolar e ✕), selos de controle de terminal, "Atualizar vN", TV conectada, terminal ao vivo, acervo, "Salvo na equipe" | faz |
 | Trocar presença | botão de presença no rodapé | clicar, escolher | online/foco/ausente muda na Equipe e na TV | faz |
@@ -56,7 +56,7 @@ Legenda de estado: **faz** = funciona no protótipo · **simulado** = a tela fun
 | Mapa mental (MindForge) | abrir um `.mapa` ou "+ Mapa" | Tab filho, Enter irmão, duplo clique edita, arrastar move, roda dá zoom, ⌘ vista do mapa, buscar, tema, exportar, apresentar, minimapa, inspector de estilo (cor, forma, tamanho, negrito, nota), menu do botão direito | fundo na cor da Babel, resto igual ao MindForge; salva no arquivo; versiona; TV em modo apresentação | faz |
 | Mapa pelo terminal | terminal | "cria um mapa sobre lançamento com galhos: preço, público, canais" · "adiciona Instagram e TikTok em canais" · "expande preço" · "renomeia público para público-alvo" · "apaga TikTok" | o mapa abre e muda na hora, com o galho novo selecionado | faz (simulado: no app o agente consulta o acervo) |
 | Quadro (borda infinita) | abrir um `.quadro` ou "+ Quadro" | riscar, arrastar, zoom | salva sozinho; aparece na TV se projetado | faz |
-| Máquina (backend visual) | cartão Máquina em Criar, ou `#maquina` | ver as peças (gavetas, campos, fios, chaves, empresa, portas, robôs, cofre); clicar numa peça abre a ficha "onde fica guardado"; Testar; "O que muda"; Publicar; "Ver o agente montando"; Pedir para alguém; ambiente (local/branch/produção); chave faltando no cofre | tudo em português simples; teste mostra a linha entrando na gaveta e o cadeado barrando a outra empresa | faz (simulado: no app lê o Supabase de verdade) |
+| Máquina (backend visual) | cartão Máquina em Criar, ou `#maquina` | ver as peças (gavetas, campos, fios, chaves, empresa, portas, robôs, cofre); clicar numa peça abre a ficha "onde fica guardado"; Testar; "O que muda"; Publicar; "Ver o agente montando"; Pedir para alguém; ambiente (local/branch/produção); chave faltando no cofre | tudo em português simples; teste mostra a linha entrando na gaveta e o cadeado barrando a outra empresa | faz (a Máquina monta primeiro o banco local do projeto, Postgres local; o Supabase do projeto vem depois, com o ok do Theus) (revisto em 25/09/2026: era "simulado: no app lê o Supabase de verdade") |
 | Máquina pelo terminal | terminal | "cria uma tabela de pacientes com nome e telefone" | a Máquina se monta com a peça nova tracejada | faz (simulado) |
 | Presets (o que funcionou fica guardado) | Máquina → Testar → "✓ Funcionou · Salvar como preset"; lateral "Presets da equipe"; Criar → "Começar de um preset"; editor de `.html` → "★ Salvar como preset" | salvar um; "Usar em Clínicas"; "Começar desta tela"; terminal "usa o preset Login com empresa" / "salva como preset X" | preset com nome, quem fez, usos; peças encaixam na Máquina; tela copiada para a minha pasta | faz |
 
@@ -143,7 +143,7 @@ Legenda de estado: **faz** = funciona no protótipo · **simulado** = a tela fun
 | Função | Onde | Como testar | O que deve acontecer | Estado |
 |---|---|---|---|---|
 | Sem botão | janela `#tv` | procurar qualquer botão | nenhum; só F para tela cheia | faz |
-| Modos | Equipe → Controle da TV, ou `coop tv …` | painel · reunião · quadro ao vivo · projeção · site · visita | a TV troca na hora; tema roxo/azul/claro | faz |
+| Modos | Estação (ao lado de Tela da TV e no Ctrl K), celular, ou `coop tv …`; nada dentro da janela da TV | painel · reunião · quadro ao vivo · projeção · site · visita | a TV troca na hora; temas Noite, Ametista, Visita (revisto em 25/09/2026: era Equipe → Controle da TV e tema roxo/azul/claro) | faz |
 | Painel | modo painel | observar | zona que gira: avisos e mural, evolução da semana, pergunta da semana, sonho, tarefas livres, ideias, evolução dos projetos; placar de metas; cronômetros; relógio | faz |
 | Projeção | "Projetar na TV" em qualquer arquivo | projetar um PDF/imagem/md/html/mapa/quadro | conteúdo real; quem projetou rola (PageUp/Down, ▲▼, `coop rolar`); luz de borda roxa; ✕ encerra | faz |
 | Site na TV | `coop tv site babel-os.com` | comando | site em tela cheia | faz |
@@ -174,7 +174,7 @@ Legenda de estado: **faz** = funciona no protótipo · **simulado** = a tela fun
 
 ## L. O que é só do app instalado (não testar no protótipo) [IDEIAS 11, 15]
 
-Terminal real (node-pty) e teclas pela rede · cada computador servindo a própria pasta e o diário replicado · token de verdade e descoberta na rede · transcrição (ditado do Mac ou whisper.cpp) · WhatsApp Web em webview · navegador do agente sobre o Electron · Máquina lendo o Supabase · editar no visual com mapeamento arquivo:linha · voz WebRTC · atualização baixada da Estação de quem publicou · janela sempre-no-topo do cronômetro · acesso de fora do escritório.
+Terminal real (node-pty) e teclas pela rede · cada computador servindo a própria pasta e o diário replicado · token de verdade e descoberta na rede · transcrição (ditado do Mac ou whisper.cpp) · WhatsApp Web em webview · navegador do agente sobre o Electron · Máquina montando o banco local do projeto (Postgres local, feito em 25/09/2026) e, depois, com o ok do Theus, o Supabase do projeto · editar no visual com mapeamento arquivo:linha · voz WebRTC · atualização baixada da Estação de quem publicou · janela sempre-no-topo do cronômetro · acesso de fora do escritório.
 
 ---
 

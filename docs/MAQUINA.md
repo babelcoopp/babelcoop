@@ -12,8 +12,8 @@
 
 Três regras que evitam que ela vire mais uma ferramenta que mente:
 
-1. **O código é a fonte da verdade.** A Máquina nunca guarda nada que o código não saiba. Ela lê o repositório e o Supabase e desenha. Se alguém mexe na Máquina, quem escreve é o agente, no código; a Máquina redesenha.
-2. **Nada mexe em produção pela Máquina.** Testes rodam num Supabase local ou numa branch. "Publicar" é um passo à parte, com a lista do que muda em português.
+1. **O código é a fonte da verdade.** A Máquina nunca guarda nada que o código não saiba. Ela lê o repositório e o banco do projeto e desenha: primeiro o banco local do projeto (Postgres local, PGlite, feito em 25/09); depois, com o ok e as credenciais do Theus, o Supabase do projeto do cliente/equipe (a nuvem é a onda seguinte; rede local primeiro). O babel-coop não guarda os próprios dados no Supabase: usa a pasta compartilhada e o diário. Se alguém mexe na Máquina, quem escreve é o agente, no código; a Máquina redesenha. (Revisto em 25/09/2026: era "lê o repositório e o Supabase".)
+2. **Nada mexe em produção pela Máquina.** Testes rodam no banco local do projeto (PGlite) ou numa branch do Supabase do projeto. "Publicar" é um passo à parte, com a lista do que muda em português.
 3. **Cada peça fala português.** Nunca aparece `tenant_id uuid references tenants(id)`. Aparece "Pacientes · por empresa · cada empresa vê só os seus".
 
 ## 2. As peças (o vocabulário)

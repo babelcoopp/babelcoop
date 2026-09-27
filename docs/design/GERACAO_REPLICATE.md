@@ -35,7 +35,7 @@
 | — | **À mão, custo zero** (recusado gerar por IA de propósito): anel de estado, Selo, linha do agente, meia-vida, luzes do rodapé, hairline de projeção, coluna de intensidade, chip do Puxar, grade de pontos, b estático em SVG, b que se desenha, matcap (canvas), todas as 12 peças em DOM/SVG, fios, pulso, pinos, cadeado (gesto), frente keycap | CSS + SVG + three.js procedural | — | 0 KB de runtime; Lottie/Rive recusados | **0** |
 | | **Total** | | | | **≈ 9,6 (base) a 11,3 (com o teto do clipe e o som)** de 20; parada em 16 |
 
-**Cortados na v2** (e por quê): loop da logo na abertura (splash de 3 s numa ferramenta de 8 h; `--mov-heroi` toca uma vez, nunca em laço); campo profundo (nebulosa a 6 % é invisível numa TV real; wallpaper de espaço); loop da TV (efeito sem metáfora); seis sons (nenhuma linha do FUNCOES.md pede som; só "espera" tem função); tubo de neon fotorrealista e "ruído que resolve" (clichê 2019–2022; dois materiais para a mesma marca); `stability-ai/stable-fast-3d` e `camenduru/tripo-sr` (404 na Replicate).
+**Cortados na v2** (e por quê): loop da logo na abertura (splash de 3 s numa ferramenta de 8 h; `--mov-heroi` toca uma vez, nunca em laço); campo profundo (nebulosa a 6 % é invisível numa TV real; wallpaper de espaço); loop da TV (efeito sem metáfora); seis sons (nenhuma linha do FUNCOES.md pede som; só "espera" tem função) (revisto em 25/09/2026: os sons voltaram como osciladores Web Audio presos a evento, **ligados por padrão na Estação, com botão para desligar**, nunca na TV, no iPad nem na parede — `memoria/decisoes/2026-09-23-terminal-nasce-no-design-2030.md`; tabela em `TERMINAL_2030.md` §7.1); tubo de neon fotorrealista e "ruído que resolve" (clichê 2019–2022; dois materiais para a mesma marca); `stability-ai/stable-fast-3d` e `camenduru/tripo-sr` (404 na Replicate).
 
 ---
 
@@ -45,16 +45,16 @@
 
 **Portão**: `reuniao` (a round table seen from above with four seats) · `maquina` (three blocks connected by one line) · `tela-html` (a browser window with a top bar). Custo US$ 0,24.
 
-**Estado nesta sessão**: o script do portão está pronto (`scratchpad/gera_svg.sh`, reproduzido em §5), o diretório de destino existe (`docs/design/assets/raw/recraft-v4-svg/2026-09-23/`), **mas a execução foi negada pela permissão do Bash desta sessão**; nenhuma predição foi criada, custo US$ 0,00. O portão roda no próximo terminal com o token no ambiente:
+**Estado nesta sessão (23/09)**: o script do portão ficou pronto, o diretório de destino existe (`docs/design/assets/raw/recraft-v4-svg/2026-09-23/`), **mas a execução foi negada pela permissão do Bash desta sessão**; nenhuma predição foi criada, custo US$ 0,00. O portão roda com o script em Node (§5), um arquivo de tarefa por ícone (`tarefa-<nome>.json`, com o bloco 3.1 + o sujeito no `prompt`):
 
 ```zsh
-source /caminho/fora/do/projeto/replicate.env   # REPLICATE_API_TOKEN=...
-./gera_svg.sh reuniao "a round table seen from above with four seats"
-./gera_svg.sh maquina "three blocks connected by one line"
-./gera_svg.sh tela-html "a browser window with a top bar"
-grep -c '<path' docs/design/assets/raw/recraft-v4-svg/2026-09-23/*.svg
-grep -o 'stroke="[^"]*"\|fill="[^"]*"' docs/design/assets/raw/recraft-v4-svg/2026-09-23/reuniao.svg | sort | uniq -c
+set -a && source ~/.config/babel/replicate.env && set +a && node app/scripts/gera-replicate.mjs tarefa-reuniao.json
+set -a && source ~/.config/babel/replicate.env && set +a && node app/scripts/gera-replicate.mjs tarefa-maquina.json
+set -a && source ~/.config/babel/replicate.env && set +a && node app/scripts/gera-replicate.mjs tarefa-tela-html.json
+grep -c '<path' docs/design/assets/raw/recraft-ai_recraft-v4-svg/<AAAA-MM-DD>/*.svg
+grep -o 'stroke="[^"]*"\|fill="[^"]*"' docs/design/assets/raw/recraft-ai_recraft-v4-svg/<AAAA-MM-DD>/reuniao.svg | sort | uniq -c
 ```
+(Revisto em 25/09/2026: o `gera_svg.sh` saiu — scripts `.sh` são bloqueados pelas regras (`.claude/rules/seguranca.md`); o equivalente em Node é `app/scripts/gera-replicate.mjs`.)
 
 Aceite do portão: cada SVG tem `stroke` (não só `fill`), um grupo só, sem `<image>`, sem gradiente, sem texto; dois tamanhos ópticos (20 px barra; 16 px árvore/abas/chips) saem do mesmo desenho com glifo simplificado no menor.
 
@@ -102,29 +102,20 @@ Regra: nada fica só na Replicate; o que não foi baixado em 1 h não existe. Nu
 
 ---
 
-## 5. O script (`gera_svg.sh`, zsh + curl + jq; `gera.mjs` em Node fica para o app)
+## 5. O script (`app/scripts/gera-replicate.mjs`, Node puro, sem dependências)
+
+(Revisto em 25/09/2026: saiu o `gera_svg.sh` em zsh + curl + jq que estava aqui — scripts `.sh` são bloqueados pelas regras (`.claude/rules/seguranca.md`); o equivalente em Node já existe e cumpre as mesmas regras.)
 
 ```zsh
-#!/bin/zsh
-# uso: gera_svg.sh <nome> "<sujeito>" · 1 SVG no recraft-ai/recraft-v4-svg, baixa na hora, anota no MANIFESTO.jsonl
-set -e
-source "$HOME/.config/babel/replicate.env"     # fora do projeto; REPLICATE_API_TOKEN=...
-NOME="$1"; SUJ="$2"; OUT=docs/design/assets/raw/recraft-v4-svg/$(date +%F); mkdir -p "$OUT"
-BASE="Single UI icon, vector line art. Monoline stroke of exactly 1.5 px on a 20x20 grid with a 2 px inner margin, square miter corners, butt line caps, no fill, no shadow, no gradient, no texture, no background, no text. Pure black (#000000) stroke on transparent. Geometric, sober, precise, the register of an instrument panel in a control room: every line has a function, nothing decorative. Consistent optical weight with a family of 61 icons drawn in the same hand. Subject: $SUJ"
-BODY=$(jq -cn --arg p "$BASE" '{input:{prompt:$p,size:"1024x1024"}}')
-RESP=$(curl -s -X POST https://api.replicate.com/v1/models/recraft-ai/recraft-v4-svg/predictions \
-  -H "Authorization: Bearer $REPLICATE_API_TOKEN" -H "Content-Type: application/json" -H "Prefer: wait=60" -d "$BODY")
-ID=$(echo "$RESP" | jq -r .id); STATUS=$(echo "$RESP" | jq -r .status); URL=$(echo "$RESP" | jq -r '.output // empty')
-n=0; while [[ "$STATUS" != succeeded && "$STATUS" != failed && "$STATUS" != canceled && $n -lt 45 ]]; do
-  sleep 2; n=$((n+1)); RESP=$(curl -s https://api.replicate.com/v1/predictions/$ID -H "Authorization: Bearer $REPLICATE_API_TOKEN")
-  STATUS=$(echo "$RESP" | jq -r .status); URL=$(echo "$RESP" | jq -r '.output // empty'); done
-if [[ "$STATUS" == succeeded && -n "$URL" ]]; then curl -s "$URL" -o "$OUT/$NOME.svg"
-  jq -cn --arg n "$NOME" --arg id "$ID" --arg s "$SUJ" --arg f "$NOME.svg" --argjson b "$(stat -f%z "$OUT/$NOME.svg")" \
-    '{nome:$n,modelo:"recraft-ai/recraft-v4-svg",id:$id,status:"succeeded",sujeito:$s,custo_usd:0.08,arquivo:$f,bytes:$b,data:(now|todate)}' >> "$OUT/MANIFESTO.jsonl"
-else jq -cn --arg n "$NOME" --arg id "$ID" --arg st "$STATUS" --argjson e "$(echo "$RESP" | jq -c .error)" \
-    '{nome:$n,modelo:"recraft-ai/recraft-v4-svg",id:$id,status:$st,erro:$e,data:(now|todate)}' >> "$OUT/MANIFESTO.jsonl"; fi
+# da raiz do repositório; o token só no ambiente, nunca em arquivo
+set -a && source ~/.config/babel/replicate.env && set +a && node app/scripts/gera-replicate.mjs tarefa-reuniao.json
+node app/scripts/gera-replicate.mjs tarefa-reuniao.json --seco        # mostra o pedido, não chama a API
+set -a && source ~/.config/babel/replicate.env && set +a && node app/scripts/gera-replicate.mjs --esquema recraft-ai/recraft-v4-svg
 ```
-Para vídeo: mesmo esqueleto com `POST /v1/models/wan-video/wan-2.7-i2v/predictions`, sem `Prefer: wait`, cabeçalho `Cancel-After: 15m`, polling de 2 s até 15 min, entradas por data URI (`first_frame`, `last_frame`), download imediato e `ffmpeg -an`.
+
+Tarefa de um ícone (`tarefa-reuniao.json`): `{ "nome": "reuniao", "modelo": "recraft-ai/recraft-v4-svg", "entrada": { "prompt": "<bloco 3.1> Subject: a round table seen from above with four seats", "size": "1024x1024" }, "custo_usd": 0.08, "rodada": "icones-portao", "teto_usd": 0.3 }`.
+
+O que o script garante: lê o schema do modelo antes e recusa campo que não existe; o token vem só de `REPLICATE_API_TOKEN` e nunca é impresso nem gravado; baixa a saída na hora e anota cada predição no `MANIFESTO.jsonl` de `docs/design/assets/raw/<dono>_<modelo>/<AAAA-MM-DD>/` (sem token, sem URL assinada); teto de gasto por rodada; polling de 2 s até 10 min; 402 (sem saldo) para e anota. Para vídeo (`wan-video/wan-2.7-i2v`) o mesmo script: os keyframes sobem pelo campo `subir` (files API) e o áudio se descarta depois com `ffmpeg -an`. O uso completo está no cabeçalho do arquivo.
 
 ---
 

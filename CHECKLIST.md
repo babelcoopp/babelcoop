@@ -21,7 +21,7 @@
 - [ ] Instalador .dmg e .exe, assinados. Evidência: instalar limpo nos dois e abrir sem aviso de segurança.
 - [ ] Auto-update nos dois sistemas (Electron: electron-updater; a interface atualiza pela Oficina, abaixo).
 - [ ] Oficina do app [Theus]: quem a gestão liberar muda o Babel Coop pelo terminal (o agente edita a pasta Oficina/app da pessoa e roda os testes); a mudança fica aguardando; a gestão publica; todo mundo vê "⬆ Atualizar vN" e, ao clicar, a Estação baixa os arquivos da Estação de quem publicou, confere os hashes e recarrega. Evidência: publicar numa máquina e a outra atualizar sozinha. (protótipo v17 faz o fluxo inteiro simulado; código real em `app/servidor/atualizacao.js`, não executado)
-- [ ] Cara de VS Code: barra de atividades, explorador à esquerda, editor no meio, terminal à direita [Theus].
+- [ ] Cara de VS Code: barra de atividades, Criar (com a árvore de arquivos) à esquerda, editor no meio, terminal à direita [Theus].
 - [ ] Laterais recolhem (Ctrl+B e Ctrl+`) e as bordas arrastam.
 - [ ] Terminal de verdade (xterm.js + node-pty): zsh/bash no Mac, PowerShell no Windows.
 - [x] Mais de um terminal aberto ao mesmo tempo, em abas [Theus]. ✅ Evidência: e2e painel.test.js A2: duas abas com PIDs diferentes vivos ao mesmo tempo.
@@ -41,8 +41,8 @@
 - [ ] Nada preso ao IP local, para abrir para fora depois.
 
 **Login**
-- [ ] Entrada por token [Theus]: a gestão gera o token na Estação (Equipe → Convidar pessoa); a pessoa instala o app, cola o token e entra sem cadastro; ela vê a equipe e a equipe vê ela. Quem não tem o segredo da equipe não entra na rede. Evidência: segunda máquina entra com o token e as duas se veem. (código em `app/servidor/token.js` e `app/ponte.js`, ainda não executado)
-- [ ] Nome + PIN depois do token, sessão longa, limite de tentativas. Mesmo login no celular e no iPad.
+- [ ] Entrada sem cadastro [Theus]: na rede local a pessoa instala o app, acha a equipe, confere o código de 4 dígitos e a gestão aceita; ela vê a equipe e a equipe vê ela. Plano B: a gestão gera o token na Estação (Equipe → Convidar pessoa) e a pessoa cola. Quem não tem o aceite nem o segredo da equipe não entra na rede. Evidência: segunda máquina entra pela rede local (e pelo token) e as duas se veem. (revisto em 25/09/2026: antes só o token; a entrada pela rede local foi feita em 25/09 — marcar `[x]` com a evidência anotada; token em `app/servidor/token.js` e `app/ponte.js`)
+- [ ] Nome + PIN depois da entrada (rede local ou token), sessão longa, limite de tentativas. Mesmo login no celular e no iPad.
 - [ ] A TV não tem login: é uma janela da Estação do Theus.
 
 **Editor**
@@ -51,7 +51,7 @@
 - [ ] Editar e salvar com versões; "Voltar como estava". Salvar aparece na hora em todas as Estações.
 - [ ] Foto de quem salvou por último no cabeçalho do arquivo e ao lado do nome na árvore [Theus].
 - [ ] Dono, gestão e admin editam qualquer arquivo; pastas comuns e README da equipe todo mundo edita.
-- [ ] Fechar todas as abas deixa o meio vazio com marca d'água e "Nada aberto · Ctrl+K"; a lateral esquerda continua aberta na última atividade; com o meio vazio, o ícone da barra só troca a lateral e o meio abre só por um item da lateral [Theus].
+- [ ] Fechar todas as abas deixa o meio vazio e liso, só com "Nada aberto · Ctrl K" (revisto em 25/09/2026: sem marca d'água — Theus, 23/09, `.deus/missao-design/MISSAO.md:9`: tirar as logos do meio e da lateral); a lateral esquerda continua aberta na última atividade; com o meio vazio, o ícone da barra só troca a lateral e o meio abre só por um item da lateral [Theus].
 - [ ] Aviso ao dono quando a gestão corrige o arquivo dele; versão anterior guardada.
 - [ ] Status de gravação sempre à vista: "Salvando…", "Salvo", "Conflito".
 
@@ -131,7 +131,7 @@
 **Projetos**
 - [ ] Criar projeto: nome, membros, pasta de cada membro dedicada a ele.
 - [ ] Tela do projeto: árvore com as pastas de todos os membros, canal, demandas, quadro, agentes trabalhando nele.
-- [ ] Explorador com dois modos [Theus]: "Sozinho · minha pasta" e um por projeto. Em projeto, só as pastas do projeto, agrupadas por membro com nome e foto, a minha primeiro.
+- [ ] Criar (antes Explorador; revisto em 25/09/2026, CHECK_DO_THEUS.md §9) com dois modos [Theus]: "Sozinho · minha pasta" e um por projeto. Em projeto, só as pastas do projeto, agrupadas por membro com nome e foto, a minha primeiro.
 - [ ] Faixa "N pessoas com você agora" e, ao lado de cada membro, o que a pessoa está fazendo (só para quem aceitou aparecer).
 - [ ] Quem está vendo o meu arquivo aparece como foto pequena ao lado dele.
 - [ ] Arrastar arquivo para o nome de um membro copia para a pasta de projeto dele com o selo "recebido de X"; ele recebe aviso na hora. Evidência: arrastar em uma máquina e ver aparecer na outra.
@@ -219,7 +219,7 @@
 - [ ] Tela HTML com o alternador Site | Código | 3D [Theus].
 - [ ] Modo 3D: a página como painel plano num ambiente 3D; os próximos itens ligados a ela ao lado e atrás (outras telas como painéis, peças do backend como placas simples); nada de caixa de edição nas peças; só as telas são interativas.
 - [ ] Enter na tela manda o pulso pelo fio: verde libera e segue (Portaria, gavetas, próxima tela), vermelho barra. Evidência: login com senha errada fica vermelho na Portaria.
-- [ ] O agente cria a próxima tela ligada a esta pelo terminal; no app, os próximos itens vêm do código, do Supabase e das telas do site.
+- [ ] O agente cria a próxima tela ligada a esta pelo terminal; no app, os próximos itens vêm do código, do banco local do projeto (Postgres local, PGlite) e das telas do site; o Supabase do projeto do cliente/equipe entra depois, com o ok e as credenciais do Theus (revisto em 25/09/2026).
 
 ## 11a. A Bancada: a tela do meio como super Lovable [Theus]
 
@@ -232,14 +232,14 @@
 
 ## 11b. A Máquina: backend visual [Theus] (desenho em `docs/MAQUINA.md`)
 
-- [ ] Fatia 1, ler e desenhar: lê o repositório e o Supabase (local, branch ou projeto) e desenha gavetas, campos, fios, chaves, empresa, portas, robôs, depósitos, cofre, telas e canos, com o dicionário de português; clicar abre a ficha da peça com "onde fica guardado". Evidência: abrir o Babel OS e reconhecer todas as tabelas e políticas.
+- [ ] Fatia 1, ler e desenhar: lê o repositório e o banco local do projeto (Postgres local, PGlite, feito em 25/09); depois, com o ok e as credenciais do Theus, o Supabase do projeto do cliente/equipe (a nuvem é a onda seguinte; rede local primeiro) (revisto em 25/09/2026: era "o Supabase (local, branch ou projeto)"); desenha gavetas, campos, fios, chaves, empresa, portas, robôs, depósitos, cofre, telas e canos, com o dicionário de português; clicar abre a ficha da peça com "onde fica guardado". Evidência: abrir o Babel OS e reconhecer todas as tabelas e políticas.
 - [ ] Fatia 2, montar sozinha: observa migrações e código; redesenha com animação de encaixe a cada mudança do agente; peças em construção tracejadas; linha do tempo com o nome do agente.
 - [ ] Fatia 3, testar: formulário por porta, "como quem" (uma pessoa por empresa de exemplo), animação do pedido pela máquina, linhas entrando nas gavetas ao vivo (Realtime), cadeado barrando a outra empresa, "encher de exemplo". Nunca em produção.
 - [ ] Fatia 4, montar arrastando: gaveta na moldura Empresa, fio entre gavetas, cadeado com as quatro opções, robô com "quando"; tudo vira código pelo agente com cartão e desfazer.
 - [ ] Fatia 5, dividir em peças: "Pedir para o Davi" vira demanda ligada à peça; foto na peça; cofre com chaves faltando e "Pedir ao Theus".
 - [ ] Fatia 6, publicar: "O que muda" em português com "ver SQL"; antes e depois em cores; confirmação escrita; só quem pode.
 - [ ] Alertas na peça: gaveta aberta para todos, ligação sem índice, porta sem login, chave faltando no cofre.
-- [ ] Presets [Theus]: construiu e o teste passou → "Salvar como preset" (peças e fios, ou a tela); lista da equipe na Máquina e em Criar; "Usar em <projeto>" monta; telas viram preset pelo editor; "usa o preset X" no terminal. Sem Supabase: a Máquina lê o servidor do projeto (HD compartilhado). Evidência: protótipo v21, roteiro B.
+- [ ] Presets [Theus]: construiu e o teste passou → "Salvar como preset" (peças e fios, ou a tela); lista da equipe na Máquina e em Criar; "Usar em <projeto>" monta; telas viram preset pelo editor; "usa o preset X" no terminal. O babel-coop não guarda os próprios dados no Supabase (pasta compartilhada e diário); a Máquina monta primeiro o banco local do projeto (PGlite) e, com o ok e as credenciais do Theus, sobe para o Supabase do projeto do cliente/equipe (revisto em 25/09/2026: era "sem Supabase: a Máquina lê o servidor do projeto"). Evidência: protótipo v21, roteiro B.
 - [ ] Traduções desconhecidas gravadas no banco como comentário, para a verdade carregar a frase.
 
 ## 11. Tarefas com fluxo, metas, mapa, celular

@@ -81,7 +81,7 @@ Um espaço de trabalho para as 11 pessoas da equipe trabalharem juntas no escrit
 
 ```
 ┌───┬──────────────┬──────────────────────────────┬───────────────────┐
-│ ▤ │ EXPLORADOR   │ README.md │ precos.html ×    │ TERMINAL  bash +  │
+│ ▤ │ CRIAR        │ README.md │ precos.html ×    │ TERMINAL  bash +  │
 │ ⌂ │ ▾ EQUIPE     │ theus › README.md   [Prévia] │ ╭ ana@estacao     │
 │ ◷ │   ▸ Reuniões │                              │ ❯ coop buscar     │
 │ ◉ │   ▸ Mapas    │   # Como usamos o Babel Coop │   "reembolso"     │
@@ -95,8 +95,8 @@ Um espaço de trabalho para as 11 pessoas da equipe trabalharem juntas no escrit
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Barra de atividades** (esquerda): ▤ Explorador · ⌂ Meu dia · ◷ Demandas · ◉ Chat · ☰ Reunião · ⌕ Acervo · ✓ Tarefas · ◎ Metas · ☷ Equipe · ✱ Mapa. Embaixo ficam Tela da TV e perfil. Não há botão de iPad: o iPad é um app à parte e só ele tem o "Projetar na TV" **[Theus, 23/09/2026]**.
-- **Lateral esquerda**: o Explorador (a árvore do HD da equipe) ou a lista da atividade escolhida. Recolhe com Ctrl+B ou clicando de novo no ícone, e a largura muda arrastando a borda.
+- **Barra de atividades** (esquerda): ▤ Explorador · ⌂ Meu dia · ◷ Demandas · ◉ Chat · ☰ Reunião · ⌕ Acervo · ✓ Tarefas · ◎ Metas · ☷ Equipe · ✱ Mapa. (Revisto em 25/09/2026: valem 12 atividades — Meu dia · Criar · Trabalho · Chat · WhatsApp · Reunião · Terminais · Projetos · Acervo · Equipe · Loja · Oficina, com a Máquina dentro de Criar; `docs/design/CONCEITO.md` §3.1, CHECK_DO_THEUS.md:71-72.) Embaixo ficam Tela da TV e perfil. Não há botão de iPad: o iPad é um app à parte e só ele tem o "Projetar na TV" **[Theus, 23/09/2026]**.
+- **Lateral esquerda**: Criar, com a árvore do HD da equipe dentro, ou a lista da atividade escolhida. Recolhe com Ctrl+B ou clicando de novo no ícone, e a largura muda arrastando a borda.
 - **Meio**: o arquivo ou a tela aberta, em abas, com o caminho em cima (theus › notas › ideias.md) e os botões do arquivo: Prévia, Editar, Levar para a reunião, Projetar na TV, Pedir ajuda e Versões.
 - **Lateral direita: o terminal [decidido]**. Recolhe com Ctrl+` e a largura muda arrastando a borda.
 - **Barra de status**: presença, tarefas de hoje, cronômetro ativo, estado da pasta, conexão com o servidor, avisos e o status de gravação sempre à vista ("Salvando…", "Salvo", "Conflito"), como no Reino + Babel.
@@ -191,13 +191,13 @@ ENVIADA  ─ Começar ─▶  RODANDO  ⇄  PAUSADA        (Pausar / Retomar, co
 ### 5.5 HD da equipe (arquivos) [decidido]
 
 - Cada pessoa escolhe **uma pasta** no computador. Tudo o que está ali dentro fica visível para as 11 pessoas.
-- **Todo mundo entra e vê [decidido]**: a pasta de cada um aparece para todos na árvore do Explorador.
+- **Todo mundo entra e vê [decidido]**: a pasta de cada um aparece para todos na árvore de arquivos de Criar.
 - **Onde fica guardado [decidido em 23/09/2026]**: os arquivos ficam só no computador do dono, que os serve pela rede. Computador desligado = arquivo indisponível, e os outros veem a ficha no acervo. O acervo guarda o índice e o texto extraído para a busca, não o arquivo.
 - **A gestão corrige [decidido]**: o Theus, e quem ele autorizar, pode abrir a pasta de qualquer pessoa, ver os erros e consertar. O dono é avisado ("Theus corrigiu 'X'") e a versão anterior fica guardada.
 - **Versões**: toda gravação guarda a anterior, e "Voltar como estava" desfaz, inclusive o que a IA mudou.
 - **Salvar é imediato e tem rosto [Theus, 23/09/2026]**: o que eu salvo aparece na hora para todos; o arquivo mostra a foto de quem salvou por último (a minha se fui eu, a da outra pessoa se foi ela), no cabeçalho e ao lado do nome na árvore. Dono, gestão e admin editam qualquer arquivo; os das pastas comuns (Reuniões, Ideias, Mapas, Quadros, Aprendizados, README da equipe) todo mundo edita.
-- **A tela do meio pode ficar vazia [Theus]**: dá para fechar todas as abas; fica só a marca d'água e "Nada aberto · Ctrl+K para buscar". **A lateral esquerda não some**: continua aberta na última atividade usada. Com o meio vazio, clicar num ícone da barra da esquerda só troca a lateral; o meio só abre quando se clica num item da lateral [Theus, 23/09/2026].
-- **Explorador igual ao do VS Code**: uma raiz por pessoa (bolinha verde = computador ligado), mais "Recentes" e busca em tudo.
+- **A tela do meio pode ficar vazia [Theus]**: dá para fechar todas as abas; o meio fica liso, só com "Nada aberto · Ctrl K" (revisto em 25/09/2026: saiu a marca d'água — Theus, 23/09, `.deus/missao-design/MISSAO.md:9`: tirar as logos do meio e da lateral). **A lateral esquerda não some**: continua aberta na última atividade usada. Com o meio vazio, clicar num ícone da barra da esquerda só troca a lateral; o meio só abre quando se clica num item da lateral [Theus, 23/09/2026].
+- **Árvore de arquivos de Criar igual ao Explorador do VS Code**: uma raiz por pessoa (bolinha verde = computador ligado), mais "Recentes" e busca em tudo.
 - **Abrir**: visualizador no próprio app (PDF, imagem, vídeo, áudio, texto, código) ou "salvar uma cópia na minha pasta".
 - **Quem colocou e quando** aparece sempre. Um arquivo novo pode avisar no chat ou na TV ("Carla compartilhou 'Apresentação Q4.pdf'").
 - **Proteções** [proposta]:
@@ -257,7 +257,7 @@ Inspirado no grafo v5 da Vyra: a equipe vista como um organismo vivo.
 - **Na TV**: pode ser o fundo vivo do painel, mostrando os pulsos de passagem ao longo do dia.
 - **No celular**: precisa de pinça e arraste com o dedo, e a coluna vira um painel embaixo.
 
-### 5.10 Explorador e editor [decidido]
+### 5.10 Criar (árvore de arquivos) e editor [decidido]
 
 - **Árvore do HD da equipe, igual à do VS Code**: EQUIPE, com as pastas comuns (Reuniões, Ideias, Mapas, Quadros, Aprendizados), e uma pasta por pessoa. As pastas abrem e fecham. Arrastar um arquivo do computador para a árvore coloca ele na sua pasta.
 - **O meio abre o arquivo conforme o tipo**:
@@ -327,7 +327,7 @@ Um **projeto** é o jeito de duas ou mais pessoas trabalharem juntas sem ningué
 
 - **O que é**: um nome, os membros, e as pastas que cada membro dedicou a ele (uma pasta dentro da pasta compartilhada de cada um, ex.: `carla/Projetos/Clínicas` e `theus/Projetos/Clínicas`). Cada computador continua sustentando o seu armazenamento; o projeto é o que junta as partes.
 - **A tela do projeto** mostra tudo junto: os arquivos de todos os membros numa árvore só, o canal do projeto no chat, as demandas e tarefas do projeto, o quadro do projeto e os agentes de cada membro que estão trabalhando nele.
-- **O Explorador tem dois modos [Theus, 23/09/2026]**: **sozinho** (a minha pasta e o HD da equipe, como sempre) e **em projeto**. No alto do Explorador a pessoa escolhe o projeto; a árvore passa a mostrar só as pastas daquele projeto, agrupadas pelo nome e a foto de cada membro, com a minha primeiro. Trabalhar sozinho é uma coisa; trabalhar em equipe é outra, e a tela precisa deixar isso claro.
+- **Criar tem dois modos [Theus, 23/09/2026]** (revisto em 25/09/2026: o Explorador virou Criar, uma das 12 atividades — Meu dia · Criar · Trabalho · Chat · WhatsApp · Reunião · Terminais · Projetos · Acervo · Equipe · Loja · Oficina, com a Máquina dentro de Criar; `docs/design/CONCEITO.md` §3.1, CHECK_DO_THEUS.md §9): **sozinho** (a minha pasta e o HD da equipe, como sempre) e **em projeto**. No alto de Criar a pessoa escolhe o projeto; a árvore passa a mostrar só as pastas daquele projeto, agrupadas pelo nome e a foto de cada membro, com a minha primeiro. Trabalhar sozinho é uma coisa; trabalhar em equipe é outra, e a tela precisa deixar isso claro.
 - **Arrastar arquivo para uma pessoa [Theus]**: no modo projeto, arrasto um arquivo meu e solto no nome de outro membro; ele aparece na pasta de projeto dela com o selo "recebido de Theus". O contrário também: o que me mandarem aparece na minha árvore na hora, com aviso.
 - **Conversar dentro do projeto [Theus]**: no canal do projeto, escolho "com todos" ou "com Carla", "com Bruno". A conversa direta fica no contexto do projeto, e qualquer mensagem pode apontar para um arquivo do projeto.
 - **Parece que estamos juntos [Theus]**: no modo projeto, ao lado de cada membro aparece o que a pessoa está fazendo agora ("editando proposta.md", "no terminal Lu"), quem está vendo o meu arquivo aparece como uma foto pequena ao lado dele, e uma faixa diz "3 pessoas com você agora". O fluxo tem que parecer que as pessoas estão na mesma mesa.
@@ -617,12 +617,12 @@ Duas referências do Theus, da mesma família escura com roxo.
 | Texto | `#c7a2ff` |
 | Rampa roxa (do escuro ao claro) | `#230a3c` → `#f2eaff` |
 | Alarme (usado uma vez só) | `#ee343b` |
-| Destaque de modo (ex.: projetando) | `#d98a00` |
+| Destaque de modo (ex.: projetando) | `#d98a00` (só da referência; revisto em 25/09/2026: no Babel Coop, projetando = só uma luz de borda roxa, sem aro âmbar — [Theus, 23/09] CHECKLIST.md:177, docs/CHECK_DO_THEUS.md:49) |
 
 - **Layout**: o do VS Code (barra de atividades, painel lateral, abas, terminal à direita, barra de status e paleta de comandos).
 - **Letras**: monoespaçada no terminal, nos números e nos rótulos técnicos; sem serifa no resto da interface. O grafo v5 usa monoespaçada em minúsculas, com 11 px: serve para a Estação, mas é pequena demais para a TV.
 - **Movimento** (do grafo v5): o fundo respira devagar, nada pisca, o foco acende e o resto apaga. A animação pausa quando a tela não está à vista.
-- **Logo "b"** em neon pulsando como marca d'água, no terminal e na TV.
+- **Logo "b"** em neon pulsando como marca d'água, no terminal e na TV. (Revisto em 25/09/2026: sem marca d'água; o meio vazio fica liso, só com "Nada aberto · Ctrl K"; o "b" fica pequeno no topo e, em neon que liga e desliga, no canto do terminal — Theus, 23/09, `.deus/missao-design/MISSAO.md:9`.)
 
 ### Referências do Theus
 
@@ -644,7 +644,7 @@ Duas referências do Theus, da mesma família escura com roxo.
 - **Endereço e HTTPS [proposta]**: um domínio de verdade apontando para o IP do Mac no escritório (ex.: `coop.babel-os.com`), com certificado válido via Caddy. Sem HTTPS, o navegador desliga as notificações e o modo app no celular. Para isso:
   - reservar o IP do Mac no roteador;
   - conferir se o roteador bloqueia endereço de internet que aponta para IP interno (proteção contra "DNS rebinding").
-- **Login [decidido]**: nome + PIN, com sessão longa e limite de tentativas. A TV não tem login (é a janela do Theus). O celular e o iPad entram com o mesmo nome + PIN.
+- **Login [decidido]**: entrada sem cadastro — na rede local a pessoa acha a equipe, confere o código de 4 dígitos e a gestão aceita; o token colado fica como plano B (revisto em 25/09/2026: antes só o token; entrada pela rede local feita em 25/09). Depois, nome + PIN, com sessão longa e limite de tentativas. A TV não tem login (é a janela do Theus). O celular e o iPad entram com o mesmo nome + PIN.
 - **Ponte de arquivos [proposta]**:
   1. a Estação de cada pessoa observa a pasta e publica a lista (nome, tamanho, data, tipo) para as outras;
   2. quando alguém abre um arquivo, pede direto à Estação do dono, que responde na hora;
@@ -790,9 +790,9 @@ A lista do que precisa existir em cada fatia, para conferir na entrega, está em
 - **Primeiro o local, depois o online.** A estrutura real vive em `app/`; a rede local é o teste. O online entra trocando `rede.js` (broadcast) por um ponto de encontro numa VPS; nada mais muda.
 - **Design antes de empacotar.** O instalador só embala; o design é HTML/CSS e muda sem reempacotar.
 - **Mapa mental = MindForge**, o clone do MindMeister feito pelo Theus, dentro da Estação, com o fundo na cor da identidade e o resto igual (quem vai usar mais já está acostumado). Cada mapa é um `.mapa` na pasta da pessoa; o agente do terminal cria e mexe no mapa por conversa.
-- **Entrada por token, sem cadastro.** O Theus gera um token na Estação dele (Equipe → Convidar pessoa); a pessoa instala o app, cola o token e entra: vê a equipe e a equipe vê ela. O token leva id, nome, papel, o segredo da equipe e o endereço da Estação do Theus na rede. Quem não tem o segredo não entra.
+- **Entrada sem cadastro.** Na rede local, a pessoa instala o app, acha a equipe, confere o código de 4 dígitos e a gestão aceita: vê a equipe e a equipe vê ela. Plano B, o token: o Theus gera um token na Estação dele (Equipe → Convidar pessoa) e a pessoa cola; o token leva id, nome, papel, o segredo da equipe e o endereço da Estação do Theus na rede. Quem não tem o aceite nem o segredo não entra. (Revisto em 25/09/2026: antes só existia o token; a entrada pela rede local foi feita em 25/09.)
 - **Oficina do app: o Babel Coop se muda por dentro.** O Theus, e quem ele liberar, pede ao agente no terminal ("muda no app: …"); o agente edita o código na pasta Oficina/app da pessoa e a mudança fica aguardando. O Theus publica: a Estação dele empacota a interface numa versão (manifesto com hash por arquivo) e o evento faz aparecer "⬆ Atualizar vN" em todas as Estações; quem clica baixa da Estação do Theus, confere e recarrega. O Electron em si atualiza por electron-updater, mais raro; a interface é 95% do app.
 - **O navegador do app é da pessoa e do agente.** A pessoa usa como navegador normal (endereço, voltar, abas) dentro da Estação; o agente vê a mesma página e age nela por pedido (navegar, clicar, preencher, ler, Raio-X, clonar, print), com o cursor à vista; "Assumir" e "Devolver" trocam quem está no controle. No app é o `<webview>` do Electron com o conector `coop` (5.7); no protótipo as páginas são de exemplo.
 - **Cada peça criada em equipe leva a marca de quem a criou.** Na Máquina, toda peça tem a cor e a foto de quem a criou, sempre ("Ver por pessoa" só acende mais). Na edição na tela, cada bloco mexido fica com `data-por` e a cor da pessoa na borda. Arquivos já mostram a foto de quem salvou. Mapas mentais mantêm o desenho do MindForge (a marca fica no histórico do arquivo).
-- **A Máquina é o construtor de backend da equipe, com presets.** Não há Supabase no Babel Coop: cada computador sustenta o próprio HD compartilhado e o diário replicado, e a Máquina desenha o backend do projeto que a equipe constrói no servidor desse projeto. Telas e backends são construídos em equipe; **toda vez que algo é construído e o teste passa, fica salvo como preset** (peças e fios, ou a tela), com nome, quem fez e quantas vezes foi usado. Presets entram em qualquer projeto com um clique ou por "usa o preset X" no terminal, e aparecem em Criar como "Começar de um preset". Corrige o que o 5.17 dizia sobre "ler o Supabase".
+- **A Máquina é o construtor de backend da equipe, com presets.** O babel-coop não guarda os próprios dados no Supabase: cada computador sustenta o próprio HD compartilhado e o diário replicado, e a Máquina desenha o backend do projeto que a equipe constrói. (Revisto em 25/09/2026: a Máquina constrói primeiro um banco local por projeto — Postgres local, PGlite, feito em 25/09 — e, depois, com o ok e as credenciais do Theus, sobe para o Supabase do projeto do cliente/equipe; a nuvem é a onda seguinte, rede local primeiro. Era "não há Supabase no Babel Coop".) Telas e backends são construídos em equipe; **toda vez que algo é construído e o teste passa, fica salvo como preset** (peças e fios, ou a tela), com nome, quem fez e quantas vezes foi usado. Presets entram em qualquer projeto com um clique ou por "usa o preset X" no terminal, e aparecem em Criar como "Começar de um preset". Corrige o que o 5.17 dizia sobre "ler o Supabase".
 - **O cronômetro persegue a pessoa e volta sozinho da pausa.** Desliza pela tela; "⧉ destacar" abre uma janelinha só com ele que fica por cima de tudo, mesmo com o app minimizado ou em outra mesa (janela sempre-no-topo do Electron; Picture-in-Picture no Chrome). Enquanto a demanda roda, o app lembra as peças em que a pessoa mexeu; se ela pausar e, ao voltar, mexer numa delas (ou na demanda, ou num arquivo citado nela), o cronômetro sai da pausa sozinho, avisa e registra, para o tempo não se perder quando ela esquece de tirar a pausa. Graça de 45 s logo depois de pausar.

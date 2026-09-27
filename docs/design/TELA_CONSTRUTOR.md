@@ -15,7 +15,7 @@ O que ninguém lido faz (§10): arrastar, redimensionar e reordenar **direto no 
 ## 1. Como o agente gera (o "tipo Lovable")
 
 1. No painel de agentes: "cria a tela Agenda com lista de horários e botão de marcar". O agente escreve `davi/Projetos/Clínicas/agenda.html` (+ `agenda.css` se quiser), com **comentários de uma linha** por seção (`<!-- herói -->`, `<!-- depoimentos -->`), tokens em `:root` (`--cor-marca`, `--espaco`) e sem build.
-2. A aba abre atrás; a linha da árvore, a aba e o bloco do painel acendem juntos (lei 3 da casca). Se a pessoa está digitando, a Tela espera ("O agente terminou a tela Agenda · Enter abre").
+2. O arquivo/tela que o agente escreve nasce à vista no meio; a linha da árvore, a aba e o bloco do painel acendem juntos (lei 3 da casca). Se a pessoa está digitando, a tela entra sem roubar o foco (revisto em 25/09/2026: era "a aba abre atrás" e a Tela esperava com "Enter abre").
 3. **O agente edita ao vivo com a mesma física da mão** (§4): a pessoa vê o cursor dele levantar e assentar o bloco; nada muda por teletransporte.
 4. Cada geração e cada edição do agente vira **bloco ação** no painel (com desfazer = rompe com nome e hora) e **marca na régua de versões** (§6).
 5. A Tela sabe qual **Porta** da Máquina cada formulário chama: o fio formulário → Porta → Gaveta aparece no modo 3D e na Ficha (`docs/design/MAQUINA_PECAS.md` §4.11). "Testar" na Máquina faz o pulso sair da própria Tela.

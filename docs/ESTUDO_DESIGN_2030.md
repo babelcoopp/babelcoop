@@ -20,7 +20,7 @@ Resposta curta, sustentada abaixo: o que 2026 chama de futurista **não é** neo
 7. **Imposto da novidade**: o Arc era "too different… for too little reward"; só 5,52 % usavam Spaces. Gastar a novidade em **um** mecanismo; o resto, familiar. [The Browser Company, 2025]
 8. **Contraste medido com APCA, não WCAG 2**, porque perto do preto o WCAG aprova cinza ilegível; corpo ≥ Lc 75 (ideal 90), rótulos ≥ Lc 60, placeholder ≥ Lc 30. [APCA]
 9. **Alvo ≥ 24 px na Estação, 48 px no celular e iPad.** [WCAG 2.5.8; PROMPT_AGENTICO]
-10. **Tema segue o sistema**: só-escuro é exceção para mídia imersiva (a TV); a Estação precisa de claro. [NN/g 2020; Apple HIG Dark Mode]
+10. **Tema segue o sistema**: só-escuro é exceção para mídia imersiva (a TV); a Estação precisa de claro. [NN/g 2020; Apple HIG Dark Mode] (Revisto em 25/09/2026: a Estação tem dois modos com nome, **Tech** (escuro, padrão) e **Vibe** (claro bege Latte), escolhidos pela pessoa no seletor da barra de cima, não pelo sistema; ametista fica como variação do Tech — `memoria/decisoes/2026-09-25-dois-modos-tech-e-vibe.md`; Theus, 25/09: "dois modo, tech e vibe o tech é o escuro e o vibe o claro".)
 
 ## 2. Sete frentes, o que ficou provado
 
@@ -45,7 +45,7 @@ O que ninguém fez (desta frente): agentes de todos numa parede compartilhada co
 - **Wow! signal (1977)**: intensidade como coluna de caracteres mono, um a cada 12 s (espaço = 0, dígitos, letras); o único destaque é a marca humana (o círculo do Ehman). → Memória da sala como 25 caracteres na barra, sem transcrever; a ideia salva ganha um círculo fino na cor da pessoa. [bigear.org]
 - **Golden Record**: onboarding sem idioma; o círculo é a régua. → Primeira abertura em um passo com diagrama de traço único; o anel de foco e o de "pensando" são o mesmo círculo. [science.nasa.gov]
 - **Arrival**: logogramas em anel de tinta, "decifráveis", um traço só. → Estado do agente = anel que se desenha (stroke-dashoffset, 1,2 s), fecha ao terminar, fica aberto e parado na falha com o próximo passo ao lado. [Nerdist]
-- **Blade Runner 2049 (Territory)**: as interfaces da Wallace são "pure, minimal and geometric black and white" = poder; quanto mais poder, menos interface. → Estação no registro Wallace; zero glitch, scanline, grão. [territorystudio.com]
+- **Blade Runner 2049 (Territory)**: as interfaces da Wallace são "pure, minimal and geometric black and white" = poder; quanto mais poder, menos interface. → Estação no registro Wallace; zero glitch, grão. [territorystudio.com] (Revisto em 25/09/2026: scanline ≤ 5 % entra só no HUD do Babel OS, em superfície viva e presa a evento real; em repouso nada roda — Theus, 23/09 17:20, `.deus/terminal-ao-vivo/MISSAO.md:61`.)
 - **GMUNK, Oblivion**: grade de pontos como única textura, "keeping the Greeble under control". → Grade de 8 px só no palco da Máquina, no quadro e no vazio; no máximo 2 sinais vivos por tela. [gmunk.com]
 - **Interstellar (Kieffer)**: telas "built to run live"; credibilidade vem de estar ligada a dado. → **Nada anima sem dado.** [chriskieffer.com]
 - **Radar PPI**: o que vale não é o círculo verde, é a **persistência** (o rastro decai sozinho). → Indicador "ao vivo" de 12 px com varredura de 4 s e rastro; notificações nascem a 100 % e decaem a 0 % em 6 s sem botão. [Wikipedia PPI]
@@ -54,14 +54,14 @@ O que ninguém fez (desta frente): agentes de todos numa parede compartilhada co
 - **Project Blue Book**: ficha de campos fixos, carimbo reto de estado, cronologia; a categoria honesta "não identificado". → Demanda como ficha (PARA · PRAZO · ESTIMA · PRIOR.), estado como carimbo de 1 px sem rotação; busca sem resultado: "Não identificado · 0 de 76". [archives.gov]
 - **JWST**: cor como dado ordenado por comprimento de onda. → O degradê roxo → azul → ciano vira **escala de tempo**: ciano = agora, azul = hoje, roxo = antigo; nunca fundo de botão. [Science Focus]
 - **Cosmic Latte `#FFF8E7`**: a luz média do universo é bege quente, não neon. → Texto de leitura (ata, nota, ideia) em Cosmic Latte a 88 %; UI em texto frio. Duas temperaturas: quente = humano, frio = sistema. [Wikipedia]
-- **Pale Blue Dot**: "a bright speck within the sunbeam". → Meio vazio = um ponto de 3 px na cor da pessoa dentro de um feixe de 1 px a 4 %, em vez de marca-d'água. [science.nasa.gov]
+- **Pale Blue Dot**: "a bright speck within the sunbeam". → Meio vazio liso, só "Nada aberto · Ctrl K" (revisto em 25/09/2026: era um ponto de 3 px na cor da pessoa dentro de um feixe de 1 px a 4 %). [science.nasa.gov]
 - **CP 1919 / Unknown Pleasures**: pulsos empilhados com oclusão. → "Evolução da semana" na TV como 7 linhas, ≤ 120 px, sempre ao lado de um número. [Scientific American]
 - **Breakthrough Listen, blc1**: sinal só é sinal se persiste com o telescópio no alvo e some fora dele. → A faixa "parece que saiu uma ideia" só aparece se o padrão persistir por 2 janelas de 12 s; "Cuidando da gente" só sinaliza o que persiste por dias. [Springer Nature]
 - **ALMA**: 66 antenas "como um só telescópio". → Equipe como interferômetro: linhas de base só quando há correlação real agora (mesmo projeto, arquivo compartilhado, Entrar no terminal). [almaobservatory.org]
 - **Where Is Webb**: linha graduada, passo concluído em miniatura, passo atual grande, alternador tempo | %, a "órbita" só na chegada. → Trilha de tarefas e campanhas; comemoração de 100 % = o anel se fecha, 800 ms, uma vez. [webb.nasa.gov]
 - **Apollo DSKY**: verbo · substantivo; fileira de luzes apagadas por padrão. → Prompt com verbo e objeto sublinhados; barra de status como luzes apagadas: **nada aceso quando nada muda**. [Smithsonian]
 
-Proibido (parque temático): radar verde em tela cheia, hexágonos, HUD com mira, scanlines, grão, glitch, partículas, estrelas cintilando, disco voador, coroa, letra "alienígena", Eurostile/Orbitron, sete segmentos, neon pulsando, ruído de rádio como som.
+Proibido (parque temático): radar verde em tela cheia, hexágonos, HUD com mira, grão, glitch, estrelas cintilando, disco voador, coroa, letra "alienígena", Eurostile/Orbitron, sete segmentos, neon pulsando em repouso, ruído de rádio como som. (Revisto em 25/09/2026: brilho, halo, faíscas, partículas e o HUD do Babel OS — vidro, borda ciano, glow discreto, scanlines ≤ 5 % — entram, sempre presos a evento real e com fim; em repouso nada disso roda. Valem as falas mais novas do Theus: 23/09 17:20, `.deus/terminal-ao-vivo/MISSAO.md:61`, "com os neons, com os brilhos, com os elementos, com os sons, o organismo vivo"; 24–25/09, poderes de jogo e micro-explosões.)
 
 ### 2.3 Reino, guildas e heráldica moderna
 
@@ -129,7 +129,7 @@ Oito mecanismos com busca de anterioridade feita:
 - **M7 · Peek transversal**: segurar Espaço num cartão de ação do agente mostra o antes/depois no meio sem abrir aba.
 - **M8 · Duas vistas no eixo eu/nós** sobre o mesmo objeto (bancada/sala), com fluxo nos dois sentidos (arrastar + Tab = levar para a reunião).
 
-Combinações inéditas: M1+M7, M3+M6, M4+M8, M2+M5. Guarda-corpos: todo morph automático e com atalho; forma só muda por ação da pessoa, nunca por evento externo; ≤ 300–400 ms; nunca bloquear digitação; reduced-motion corta.
+Combinações inéditas: M1+M7, M3+M6, M4+M8, M2+M5. Guarda-corpos: todo morph automático e com atalho; forma só muda por ação da pessoa, nunca por evento externo; ≤ 300–400 ms; nunca bloquear digitação; reduced-motion corta. (Revisto em 25/09/2026: exceção — o arquivo que o agente escreve nasce à vista no meio, descendo; se a pessoa está digitando, a aba entra sem roubar o foco. Theus, 24/09: "quando pedir pro terminal gerar um arquivo, ai no meio da tela, aparece o arquivo e ai ele vai descendo".)
 
 ### 2.7 A mistura sem forçar e o veredito sobre a identidade atual
 
@@ -149,13 +149,13 @@ Veredito, peça a peça:
 | Peça atual | Veredito | Motivo |
 |---|---|---|
 | Fundo `#060b16` | **Fica**, vira chão único (TV inclusa; hoje a TV tem `#090413`) | uma física por sistema (Dune, Aesop) |
-| Degradê roxo → azul → ciano | **Evolui**: sai de texto, botão e fundo; vira luz (borda de projeção, traço ativo, cursor do agente) e escala de tempo (JWST) | tell nº 1 de "template de IA" |
+| Degradê roxo → azul → ciano | **Evolui**: sai de texto, botão e fundo (revisto em 25/09/2026: fica no texto de cor padrão do terminal, com opção de desligar; no resto da interface texto em degradê continua proibido — Theus, 23/09 16:59, visual do Babel Terminal, `.deus/terminal-ao-vivo/MISSAO.md:6`); vira luz (borda de projeção, traço ativo, cursor do agente) e escala de tempo (JWST) | tell nº 1 de "template de IA" |
 | "b" neon pulsando | **Evolui**: SVG pequeno no topo; o brilho vira **medidor de estado** (acende só quando a sala grava, o agente age ou há projeção) | Rams 5/6; Nothing (filtro de atenção); regra do próprio IDEIAS ("nada pisca") |
 | Cormorant Garamond | **Fica** com regra: só ≥ 24 px, só o que é humano/cerimonial (saudação, pergunta, ideia falada, ata, nome de guilda em versaletes) | display type; Burberry |
 | IBM Plex Sans | **Fica** (menos gasta que Inter/Geist); avaliar depois | voz corporativa de outra empresa, não urgente |
 | JetBrains Mono | **Fica** e ganha papel: só instrumento (terminal, números, latência, versões) | TE: mono = precisão |
 | Logo PNG 204 KB | **Sai**; vira SVG | regra do próprio Theus |
-| Vidro, halo radial, cartão dentro de cartão, ponto pulsante permanente | **Saem** | impeccable; Apple 2026 |
+| Vidro, halo radial, cartão dentro de cartão, ponto pulsante permanente | **Saem** em repouso (revisto em 25/09/2026: vidro, halo e brilho voltam no HUD do Babel OS e no organismo vivo, presos a evento real e com fim; cartão dentro de cartão e ponto pulsante permanente continuam fora) | impeccable; Apple 2026 |
 
 ## 3. Os quatro conceitos e as notas dos juízes
 
@@ -178,7 +178,7 @@ Decisão de método: o vencedor por soma é o Meia-vida, o conceito que **nasce 
 
 Sem antecipar o conceito (que sai de 4 propostas, 3 juízes, síntese e 4 críticos), as convergências entre as sete frentes:
 
-1. **Escada de luminância nas três colunas** (Linear 2026 + visionOS): laterais um degrau mais escuras que o meio; o meio pode ser claro (papel) com as laterais escuras (máquina), o que também resolve o "tema segue o sistema".
+1. **Escada de luminância nas três colunas** (Linear 2026 + visionOS): laterais um degrau mais escuras que o meio; o meio pode ser claro (papel) com as laterais escuras (máquina), o que também resolve o "tema segue o sistema". (Revisto em 25/09/2026: o tema não segue o sistema; valem os modos Tech (escuro, padrão) e Vibe (claro bege Latte), escolhidos no seletor da barra de cima — `memoria/decisoes/2026-09-25-dois-modos-tech-e-vibe.md`.)
 2. **Terminal de blocos tipados em português** (Warp) com desfazer, "o que consultei" e prova; estado do agente como anel de traço único (Arrival) que vira "parar".
 3. **Barra de status como luzes apagadas** (DSKY): nada aceso quando nada muda; presença · caixa · cronômetro · sala como os "quatro parâmetros sempre visíveis" (TE).
 4. **Cor por pessoa fixa por contrato**, derivada em LCH com luminância fixa; papel como glifo; o degradê como escala de tempo.

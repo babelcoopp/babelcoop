@@ -32,7 +32,7 @@ Contagem do inventário: 16 atividades, 3 logos grandes (topo, marca d'água do 
 | Cronômetro | Caixa flutuante **e** barra de status **e** cartão em Meu dia **e** TV | Padrão: pílula na barra de status; a caixa flutuante só quando a pessoa "destaca". Meu dia não repete | [Theus] cronômetro; a caixa sempre aberta é [definido] |
 | "＋ Nota · ＋ Mapa · ＋ Quadro · ↥ subir" | Lateral de Criar (linha de ícones) **e** meio de Criar (botões) **e** cartões Tela/Máquina/Pesquisa na lateral **e** no meio | Uma vez: só na lateral (é a árvore). O meio vazio de Criar vira só "Começar de um preset" + "Mudaram por último" | [Theus] Criar com Tela/Máquina/Pesquisa; a repetição é [LLM] |
 | Presets | Criar (meio) **e** Máquina (lateral) | Manter os dois: são contextos diferentes (começar vs. encaixar). Só a lista curta na Máquina | [Theus] |
-| Controle da TV | Equipe (seção inteira com modos e temas) **e** terminal `coop tv` **e** botões "Projetar" espalhados | Tirar a seção da Equipe. A TV se controla de onde a coisa está (projetar no arquivo, reunião na Reunião, quadro no iPad) e por `coop tv`. Modo visita e tema vão para uma engrenagem pequena na janela "Tela da TV" | [Theus] TV controlada pela Estação; a seção dentro de Equipe é [definido] |
+| Controle da TV | Equipe (seção inteira com modos e temas) **e** terminal `coop tv` **e** botões "Projetar" espalhados | Tirar a seção da Equipe. A TV se controla de onde a coisa está (projetar no arquivo, reunião na Reunião, quadro no iPad) e por `coop tv`. Modo visita, tema e controle da TV ficam na Estação (ao lado de Tela da TV e no Ctrl K), no celular e no terminal; nada dentro da janela da TV (revisto em 25/09/2026: saiu a engrenagem na janela "Tela da TV" — CHECK_DO_THEUS.md:46, "A TV é um espelho… não tem botão") | [Theus] TV controlada pela Estação; a seção dentro de Equipe é [definido] |
 | Projetos (atividade) **e** Criar em modo projeto | A árvore por membro e a conversa existem nos dois | Manter os dois papéis, mas a atividade Projetos vira a lista + criar; abrir um projeto leva para Criar no modo daquele projeto (mesma tela, sem duplicar árvore) | [Theus] |
 | Acervo **e** Inteligência da equipe | Duas atividades sobre "o que a equipe sabe" | Fundir em **Acervo**, com abas: Buscar · Aprendizados · Ideias · Sonho · Prompts. Um ícone a menos | [Theus] acervo e aprendizados; duas atividades separadas é [definido] |
 | Demandas **e** Tarefas com fluxo | Duas atividades de "trabalho a fazer" | Manter as duas (foram pedidas com lógicas diferentes), mas juntar num ícone **Trabalho** com duas abas | [Theus] |
@@ -51,7 +51,7 @@ Contagem do inventário: 16 atividades, 3 logos grandes (topo, marca d'água do 
 | "+1 cliente (demonstração)" | Metas | Botão de demo | [LLM] |
 | "Já escaneei (simulado)" | WhatsApp | Botão de demo; no app é o QR de verdade | [LLM] |
 | "Ver um exemplo em 3D" | Criar, meio | Atalho de demonstração | [LLM] |
-| "Tema roxo (grafo v5)" / "Tema azul (Babel Terminal)" | Equipe → Controle da TV | Nomes internos de versão de design; a escolha de tema vai para a engrenagem da TV com nomes humanos | [LLM] nos nomes |
+| "Tema roxo (grafo v5)" / "Tema azul (Babel Terminal)" | Estação (ao lado de Tela da TV e no Ctrl K), celular e terminal | Nomes internos de versão de design; o tema da TV se escolhe fora da janela da TV, com nomes humanos: Noite, Ametista, Visita (revisto em 25/09/2026: era a engrenagem da TV; nada dentro da janela da TV) | [LLM] nos nomes |
 | Mapa da equipe (grafo de quem passa o quê) | Atividade própria | Nunca foi pedido; entrou como [proposta] na seção 5.9. Bonito, mas ninguém precisa dele todo dia. Vira uma aba dentro de Equipe ou sai | [definido] |
 | "Primeiros passos com IA" como cartão fixo em Meu dia | Meu dia | O objetivo (5.13) é real; a forma, um checklist permanente, cansa. Vira um aviso único que some ao completar | [Theus] objetivo · [LLM] forma |
 | "Minha contribuição" em Meu dia | Meu dia | Já é o Perfil inteiro. Meu dia só aponta | [LLM] duplicação |
@@ -62,10 +62,10 @@ Contagem do inventário: 16 atividades, 3 logos grandes (topo, marca d'água do 
 
 ## 5. Sequência das telas (faz sentido?)
 
-- **Ordem da barra hoje:** Criar · Meu dia · Demandas · Chat · Reunião · Acervo · Inteligência · Terminais · Tarefas · Metas · Equipe · Mapa · Projetos · WhatsApp · Loja · Oficina. É a ordem em que foram criadas, não a ordem de uso.
+- **Ordem da barra hoje:** Criar (com a árvore de arquivos dentro) · Meu dia · Demandas · Chat · Reunião · Acervo · Inteligência · Terminais · Tarefas · Metas · Equipe · Mapa · Projetos · WhatsApp · Loja · Oficina. É a ordem em que foram criadas, não a ordem de uso.
 - **Proposta, por frequência e por papel:** Meu dia · Criar · Trabalho (Demandas + Tarefas) · Chat · WhatsApp · Reunião · Terminais · Projetos · Acervo · Equipe (com Metas dentro) · Loja · Oficina. De 16 para 12 ícones, sem tirar nenhuma função pedida.
 - **Criar como primeira** foi pedido [Theus]. Mantenho Criar no topo do grupo de "fazer"; Meu dia fica em cima porque é onde a pessoa começa o dia. Se você preferir Criar em primeiro absoluto, é uma troca de posição.
-- **Primeira abertura:** hoje cai em Criar com uma tela de boas-vindas e três cartões. Com o token, a primeira tela deveria ser Meu dia com uma linha: "Você entrou. A equipe te vê. Comece por…". Um passo, não uma página.
+- **Primeira abertura:** hoje cai em Criar (a atividade que era o Explorador) com uma tela de boas-vindas e três cartões. Com o token, a primeira tela deveria ser Meu dia com uma linha: "Você entrou. A equipe te vê. Comece por…". Um passo, não uma página.
 - **Perfil** abre pela foto no topo: certo. **TV** abre por botão: certo. **iPad** não tem botão: certo.
 
 ## 6. Onde o agente está bem e onde falta transparência (régua agentic)
