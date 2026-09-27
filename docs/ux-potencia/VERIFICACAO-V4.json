@@ -1,0 +1,323 @@
+{
+  "at": "2026-09-26T03:24:06.259Z",
+  "scope": "Maquete V4; não testa o aplicativo instalado",
+  "views": [
+    {
+      "id": "plano",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "construir",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "dia",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "projetos",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "tarefas",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "agentes",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "laboratorio",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "mapa",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "maquina",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "navegador",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "conversas",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "whatsapp",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "reuniao",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "ipad",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "biblioteca",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "aprender",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "pets",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "concluir",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "ponteiro",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "criador",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "vyra",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "ritmo",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "equipe",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "metas",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "loja",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "oficina",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "perfil",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "preferencias",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "metricas",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "terminais",
+      "width": 1440,
+      "terminalRight": true
+    },
+    {
+      "id": "plano",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "construir",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "dia",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "projetos",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "tarefas",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "agentes",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "laboratorio",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "mapa",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "maquina",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "navegador",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "conversas",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "whatsapp",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "reuniao",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "ipad",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "biblioteca",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "aprender",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "pets",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "concluir",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "ponteiro",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "criador",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "vyra",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "ritmo",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "equipe",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "metas",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "loja",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "oficina",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "perfil",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "preferencias",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "metricas",
+      "width": 1223,
+      "terminalRight": true
+    },
+    {
+      "id": "terminais",
+      "width": 1223,
+      "terminalRight": true
+    }
+  ],
+  "checks": [
+    "Pedido e aba ativa persistem entre telas e reload",
+    "Contexto, abas e terminal recolhem e restauram",
+    "Foco mantém terminal; Escape conserva o mapa",
+    "Fechar aba volta a outra aba existente",
+    "Divisor redimensiona terminal por teclado",
+    "Comando navega para Laboratório de IAs",
+    "3D carregou, lista selecionou mesma peça, XYZ conservado e câmera arrastada",
+    "Tech/Vibe conservam a estação"
+  ],
+  "errors": [],
+  "screenshots": [
+    "V4-laboratorio.png",
+    "V4-maquina.png",
+    "V4-estacao.png"
+  ],
+  "passed": true
+}

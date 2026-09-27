@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="tech">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>babel-coop · proposta de UX para Theus</title>
+  <link rel="stylesheet" href="maquete.css">
+  <link rel="stylesheet" href="maquete-adendo.css">
+  <link rel="stylesheet" href="maquete-criador.css">
+  <link rel="stylesheet" href="maquete-fechamento.css">
+  <link rel="stylesheet" href="maquete-terminal.css">
+  <script src="maquete.js" defer></script>
+  <script src="maquete-ui.js" defer></script>
+  <script src="maquete-projetos.js" defer></script>
+  <script src="maquete-criador.js" defer></script>
+  <script src="maquete-fechamento.js" defer></script>
+</head>
+<body>
+  <div class="reviewbar">
+    <span class="reviewbrand">DOMINIC <span>/</span> ESTUDO 01</span>
+    <button class="review-home" data-go="plano">Apresentação</button>
+    <button class="review-home" data-go="ritmo">Música <span class="music-mini">●</span></button>
+    <span class="reviewnote">Maquete navegável · dados fictícios · não opera o app</span>
+    <label class="screen-picker">Tela <select id="screen-picker" aria-label="Escolher tela da proposta">
+      <option value="plano">00 · Apresentação do plano</option>
+      <option value="construir">04 · Construir juntos</option>
+      <option value="dia">01 · Meu dia</option>
+      <option value="projetos">02 · Projetos</option>
+      <option value="tarefas">03 · Tarefas e etapas</option>
+      <option value="agentes">06 · Agentes em cooperação</option>
+      <option value="laboratorio">S20 · Laboratório de Agentes (proposta)</option>
+      <option value="mapa">07 · Mapa em tela inteira</option>
+      <option value="maquina">08 · Universo da Máquina</option>
+      <option value="navegador">09 · Navegador</option>
+      <option value="conversas">10 · Conversas</option>
+      <option value="whatsapp">10 · WhatsApp</option>
+      <option value="reuniao">11 · Reunir e transmitir</option>
+      <option value="ipad">12 · Desenhar no iPad</option>
+      <option value="biblioteca">13 · Biblioteca</option>
+      <option value="aprender">14 · Aprender construindo</option>
+      <option value="pets">16 · Cinco companheiros 3D</option>
+      <option value="concluir">03 · Levar o projeto ao fim</option>
+      <option value="ponteiro">Efeitos · Ponteiro vivo</option>
+      <option value="criador">17 · Espelho do Criador</option>
+      <option value="vyra">18 · Laboratório Vyra</option>
+      <option value="ritmo">19 · Música e seleção</option>
+    </select></label>
+    <a href="PLANO-DAS-TELAS.md" title="Ler a especificação completa">Plano ↗</a>
+  </div>
+  <header class="appbar">
+    <button class="brand" data-go="dia" aria-label="babel-coop, Meu dia"><span class="brand-symbol">b</span><span>babel-coop</span></button>
+    <button class="project-switch" data-action="project"><span class="project-color"></span><span id="project-name">Órbita</span><span class="dim">⌄</span></button>
+    <button class="search" data-action="search">Buscar arquivo, pessoa ou comando <kbd>⌘ K</kbd></button>
+    <div class="app-actions">
+      <button class="primary" data-action="create">+ Criar</button>
+      <button class="icon-label" data-go="navegador" title="Navegador"><span data-icon="globe"></span><span class="wide-label">Navegador</span></button>
+      <button class="avatars" data-action="invite" aria-label="Três pessoas no projeto, abrir equipe"><span>T</span><span>A</span><span>B</span></button>
+      <button class="transmit" data-action="transmit"><span data-icon="broadcast"></span>Transmitir</button>
+      <button class="icon-btn" data-action="theme" aria-label="Alternar Tech e Vibe" title="Alternar Tech e Vibe"><span data-icon="sun"></span></button>
+    </div>
+  </header>
+  <div class="shell" id="shell">
+    <nav class="rail" aria-label="Navegação principal">
+      <button data-go="dia"><span data-icon="home"></span><span>Meu dia</span></button>
+      <button data-go="projetos"><span data-icon="project"></span><span>Projetos</span></button>
+      <button data-go="conversas"><span data-icon="chat"></span><span>Conversas</span></button>
+      <button data-go="biblioteca"><span data-icon="library"></span><span>Biblioteca</span></button>
+      <button data-go="aprender"><span data-icon="learn"></span><span>Aprender</span></button>
+      <div class="rail-bottom"><button data-action="preferences"><span data-icon="settings"></span><span>Ajustes</span></button><span class="avatar self">T</span></div>
+    </nav>
+    <main id="screen" tabindex="-1" aria-label="Tela da proposta"></main>
+  </div>
+  <footer class="statusbar"><span><i class="online"></i>Órbita · projeto de exemplo</span><span>3 pessoas · 2 agentes</span><span class="status-right">Proposta de layout e interação <span class="status-dot">·</span> nenhuma alteração no app</span></footer>
+  <dialog id="dialog"><div id="dialog-body"></div><button class="dialog-close icon-btn" data-action="close" aria-label="Fechar diálogo">×</button></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><p>Ative JavaScript para percorrer a maquete. A especificação completa está em PLANO-DAS-TELAS.md.</p></noscript>
+</body>
+</html>

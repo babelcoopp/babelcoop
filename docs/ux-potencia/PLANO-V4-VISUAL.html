@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="tech">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>babel-coop · Plano V4 consolidado</title>
+  <link rel="stylesheet" href="maquete.css">
+  <link rel="stylesheet" href="maquete-adendo.css">
+  <link rel="stylesheet" href="maquete-criador.css">
+  <link rel="stylesheet" href="maquete-fechamento.css">
+  <link rel="stylesheet" href="maquete-terminal.css">
+  <link rel="stylesheet" href="maquete-v3.css">
+  <link rel="stylesheet" href="maquete-v4.css">
+  <script src="maquete.js" defer></script>
+  <script src="maquete-ui.js" defer></script>
+  <script src="maquete-projetos.js" defer></script>
+  <script src="maquete-criador.js" defer></script>
+  <script src="maquete-fechamento.js" defer></script>
+  <script src="maquete-v3.js" defer></script>
+  <script src="/three.min.js" defer></script>
+  <script src="maquete-v4.js" defer></script>
+</head>
+<body>
+  <div class="reviewbar">
+    <span class="reviewbrand">DOMINIC <span>/</span> PLANO V4</span>
+    <button class="review-home" data-go="plano">Apresentação</button>
+    <button class="review-home" data-v3-more>Mais áreas</button>
+    <span class="reviewnote">ESTAÇÃO V4 · comparação completa · demonstração com dados fictícios</span>
+    <label class="screen-picker">Tela <select id="screen-picker" aria-label="Escolher tela da proposta">
+      <option value="plano">00 · Apresentação do plano</option>
+      <option value="construir">04 · Construir juntos</option>
+      <option value="dia">01 · Meu dia</option>
+      <option value="projetos">02 · Projetos</option>
+      <option value="tarefas">03 · Tarefas e etapas</option>
+      <option value="agentes">06 · Agentes em cooperação</option>
+      <option value="laboratorio">S20 · Laboratório de Agentes (proposta)</option>
+      <option value="mapa">07 · Mapa em tela inteira</option>
+      <option value="maquina">08 · Universo da Máquina</option>
+      <option value="navegador">09 · Navegador</option>
+      <option value="conversas">10 · Conversas</option>
+      <option value="whatsapp">10 · WhatsApp</option>
+      <option value="reuniao">11 · Reunir e transmitir</option>
+      <option value="ipad">12 · Desenhar no iPad</option>
+      <option value="biblioteca">13 · Biblioteca</option>
+      <option value="aprender">14 · Aprender construindo</option>
+      <option value="pets">16 · Cinco companheiros 3D</option>
+      <option value="concluir">03 · Levar o projeto ao fim</option>
+      <option value="ponteiro">Efeitos · Ponteiro vivo</option>
+      <option value="criador">17 · Espelho do Criador</option>
+      <option value="vyra">18 · Laboratório Vyra</option>
+      <option value="ritmo">19 · Música e seleção</option>
+    </select></label>
+    <a href="PLANO-V4.md" title="Ler o plano consolidado">Plano V4 ↗</a>
+  </div>
+  <header class="appbar">
+    <button class="brand" data-go="dia" aria-label="babel-coop, Meu dia"><span class="brand-symbol">b</span><span>babel-coop</span></button>
+    <button class="project-switch" data-action="project"><span class="project-color"></span><span id="project-name">Órbita</span><span class="dim">⌄</span></button>
+    <button class="search" data-action="search">Buscar arquivo, pessoa ou comando <kbd>⌘ K</kbd></button>
+    <div class="app-actions">
+      <button class="primary" data-action="create">+ Criar</button>
+      <button class="icon-label" data-go="navegador" title="Navegador"><span data-icon="globe"></span><span class="wide-label">Navegador</span></button>
+      <button class="avatars" data-action="invite" aria-label="Três pessoas no projeto, abrir equipe"><span>T</span><span>A</span><span>B</span></button>
+      <button class="transmit" data-action="transmit"><span data-icon="broadcast"></span>Transmitir</button>
+      <button class="icon-btn" data-action="theme" aria-label="Alternar Tech e Vibe" title="Alternar Tech e Vibe"><span data-icon="sun"></span></button>
+    </div>
+  </header>
+  <div class="shell" id="shell">
+    <nav class="rail" aria-label="Navegação principal">
+      <button data-go="dia"><span data-icon="home"></span><span>Meu dia</span></button>
+      <button data-go="construir"><span data-icon="code"></span><span>Construir</span></button>
+      <button data-go="tarefas"><span data-icon="check"></span><span>Trabalho</span></button>
+      <button data-go="conversas"><span data-icon="chat"></span><span>Conversas</span></button>
+      <button data-go="agentes"><span data-icon="terminal"></span><span>Agentes</span></button>
+      <button data-go="projetos"><span data-icon="project"></span><span>Projetos</span></button>
+      <button data-go="biblioteca"><span data-icon="library"></span><span>Biblioteca</span></button>
+      <button data-go="aprender"><span data-icon="learn"></span><span>Aprender</span></button>
+      <div class="rail-bottom"><button data-v3-more><span data-icon="people"></span><span>Mais</span></button><button data-action="preferences"><span data-icon="settings"></span><span>Ajustes</span></button><span class="avatar self">T</span></div>
+    </nav>
+    <main id="screen" tabindex="-1" aria-label="Tela da proposta"></main>
+    <aside id="v3-terminal" class="agent-dock terminal-dock v3-dock" aria-label="Terminal universal permanente">
+      <div class="v3-dock-header"><div><span class="eyebrow">ESTAÇÃO DE COMANDO</span><strong>Meu terminal</strong></div><span class="terminal-live"><i class="online"></i>Órbita</span></div>
+      <div class="v3-agent-tabs"><span class="v3-tab active"><i class="v3-human-dot"></i>Theus · shell</span><span class="v3-tab"><i class="v3-presence-ring"><b></b></i>Dominic · Codex</span><button data-action="agent" aria-label="Adicionar ou configurar agente">＋</button></div>
+      <div class="v3-modebar" role="tablist" aria-label="Modo de entrada"><button class="active" data-v3-mode="app">Comandar Babel</button><button data-v3-mode="agent">Agente</button><button data-v3-mode="shell">Shell</button></div>
+      <div class="v3-command-context"><span>Órbita</span><span>·</span><span>Projeto ativo</span><span class="v3-context-right">⌘ K</span></div>
+      <section class="v3-usage" aria-label="Resumo demonstrativo do uso Codex"><div class="v3-usage-heading"><span>USO CODEX</span><b>EXEMPLO FICTÍCIO</b></div><div class="v3-usage-grid"><div><span>Janela principal</span><strong>36%</strong><i><em style="width:36%"></em></i><small>renova em 2 h 18 min</small></div><div><span>Janela semanal</span><strong>71%</strong><i class="weekly"><em style="width:71%"></em></i><small>renova em 3 d 6 h</small></div></div><div class="v3-usage-foot"><span>Contexto 22% · exemplo</span><span>tokens/custo: mostrar quando fornecidos</span></div></section>
+      <div id="v3-terminal-output" class="v3-terminal-output" aria-live="polite">
+        <div class="v3-event-time">14:32:08 · COMANDO BABEL</div>
+        <div class="v3-command-line">abrir o mapa do projeto</div>
+        <div class="v3-command-result"><b>✓</b><span>Mapa da construção aberto<br><small>Órbita · mesma tarefa · mesmo terminal à direita</small></span></div>
+        <div class="v3-event-time">14:32:11 · CONTEXTO</div>
+        <div class="v3-command-result quiet-result"><b>↳</b><span>Projeto, tarefa e agente continuam vinculados.<br><small>Exemplo ilustrativo; nenhum comando executado.</small></span></div>
+      </div>
+      <form id="v3-command-form" class="v3-command-form">
+        <label for="v3-command-input">Comando ou pedido</label>
+        <div class="v3-input-row"><span class="v3-prompt-mark">›</span><textarea id="v3-command-input" rows="2" placeholder="Ex.: abra tarefas e mostre o que falta…"></textarea><button type="submit" class="primary" aria-label="Enviar comando">↑</button></div>
+        <div class="v3-input-footer"><span>Enter envia · Shift+Enter quebra linha</span><button type="button" data-v3-more>Ver tudo que posso comandar</button></div>
+      </form>
+      <div class="v3-dock-status"><span><i class="online"></i> Sessão local</span><span>Codex uso: exemplo</span></div>
+    </aside>
+  </div>
+  <footer class="statusbar"><span><i class="online"></i>Órbita · projeto de exemplo</span><span>3 pessoas · 2 agentes</span><span class="status-right">Proposta de layout e interação <span class="status-dot">·</span> nenhuma alteração no app</span></footer>
+  <dialog id="dialog"><div id="dialog-body"></div><button class="dialog-close icon-btn" data-action="close" aria-label="Fechar diálogo">×</button></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><p>Ative JavaScript para percorrer a maquete. A especificação completa está em PLANO-V4.md.</p></noscript>
+</body>
+</html>

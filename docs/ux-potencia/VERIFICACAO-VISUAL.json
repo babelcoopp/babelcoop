@@ -1,0 +1,312 @@
+{
+  "at": "2026-09-26T00:38:28.947Z",
+  "browser": "Chrome local via Playwright",
+  "views": [
+    {
+      "id": "plano",
+      "label": "00 · Apresentação do plano",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "construir",
+      "label": "04 · Construir juntos",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "dia",
+      "label": "01 · Meu dia",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "projetos",
+      "label": "02 · Projetos",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "tarefas",
+      "label": "03 · Tarefas e etapas",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "agentes",
+      "label": "06 · Agentes em cooperação",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "mapa",
+      "label": "07 · Mapa em tela inteira",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "maquina",
+      "label": "08 · Universo da Máquina",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "navegador",
+      "label": "09 · Navegador",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "conversas",
+      "label": "10 · Conversas",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "whatsapp",
+      "label": "10 · WhatsApp",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "reuniao",
+      "label": "11 · Reunir e transmitir",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "ipad",
+      "label": "12 · Desenhar no iPad",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "biblioteca",
+      "label": "13 · Biblioteca",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "aprender",
+      "label": "14 · Aprender construindo",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "pets",
+      "label": "16 · Cinco companheiros 3D",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "concluir",
+      "label": "03 · Levar o projeto ao fim",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "ponteiro",
+      "label": "Efeitos · Ponteiro vivo",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "criador",
+      "label": "17 · Espelho do Criador",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "vyra",
+      "label": "18 · Laboratório Vyra",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "ritmo",
+      "label": "19 · Música e seleção",
+      "width": 1440,
+      "rendered": true
+    },
+    {
+      "id": "plano",
+      "label": "00 · Apresentação do plano",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "construir",
+      "label": "04 · Construir juntos",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "dia",
+      "label": "01 · Meu dia",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "projetos",
+      "label": "02 · Projetos",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "tarefas",
+      "label": "03 · Tarefas e etapas",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "agentes",
+      "label": "06 · Agentes em cooperação",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "mapa",
+      "label": "07 · Mapa em tela inteira",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "maquina",
+      "label": "08 · Universo da Máquina",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "navegador",
+      "label": "09 · Navegador",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "conversas",
+      "label": "10 · Conversas",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "whatsapp",
+      "label": "10 · WhatsApp",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "reuniao",
+      "label": "11 · Reunir e transmitir",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "ipad",
+      "label": "12 · Desenhar no iPad",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "biblioteca",
+      "label": "13 · Biblioteca",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "aprender",
+      "label": "14 · Aprender construindo",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "pets",
+      "label": "16 · Cinco companheiros 3D",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "concluir",
+      "label": "03 · Levar o projeto ao fim",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "ponteiro",
+      "label": "Efeitos · Ponteiro vivo",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "criador",
+      "label": "17 · Espelho do Criador",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "vyra",
+      "label": "18 · Laboratório Vyra",
+      "width": 1223,
+      "rendered": true
+    },
+    {
+      "id": "ritmo",
+      "label": "19 · Música e seleção",
+      "width": 1223,
+      "rendered": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "Quatro IAs no diálogo",
+      "providers": [
+        "Codex · exemplo",
+        "Claude Code · exemplo",
+        "OpenCode · integração planejada",
+        "Vyra · Gemma local / integração planejada"
+      ]
+    },
+    {
+      "name": "Rascunho preservado ao trocar de vista",
+      "passed": true
+    },
+    {
+      "name": "Criar abre e Escape fecha",
+      "passed": true
+    },
+    {
+      "name": "Seleção de peça e colagem real via ⌘V",
+      "passed": true
+    },
+    {
+      "name": "Seleção por arrasto e colagem exata Unicode/multilinha",
+      "passed": true
+    },
+    {
+      "name": "Desligar cópia preserva clipboard",
+      "passed": true
+    },
+    {
+      "name": "MP3 indicado toca e alimenta energia da borda",
+      "time": 1.520048,
+      "duration": 14406.054603,
+      "level": 0.13280000087402277,
+      "paused": false
+    },
+    {
+      "name": "Música persiste entre vistas; movimento reduzido encerra pulso",
+      "passed": true
+    },
+    {
+      "name": "Pausa zera o pulso",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "VERIFICADO-plano.png",
+    "VERIFICADO-construir.png",
+    "VERIFICADO-ritmo.png",
+    "VERIFICADO-maquina.png",
+    "VERIFICADO-criador.png"
+  ]
+}
