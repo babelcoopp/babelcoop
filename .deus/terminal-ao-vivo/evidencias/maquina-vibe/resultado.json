@@ -1,0 +1,917 @@
+{
+  "casos": {
+    "tech0": {
+      "inteira": {
+        "palco": {
+          "l": 0.006,
+          "cor": "rgb(11, 19, 32)",
+          "el": "div.mq-palco"
+        },
+        "nomes": [
+          {
+            "texto": "Peças novas",
+            "cofre": false,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 13.02
+          }
+        ],
+        "contraste": [
+          {
+            "texto": "ainda não testado · 5/7 com corpo",
+            "el": "span.mq-dominio-estado",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10.5
+          }
+        ],
+        "escuros": [
+          {
+            "el": "div.mq.mq2",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 775,
+            "pontos": 191
+          },
+          {
+            "el": "div.mq-palco",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 292,
+            "pontos": 386
+          },
+          {
+            "el": "button.mq-dominio",
+            "cor": "rgb(22, 30, 45)",
+            "w": 201,
+            "h": 184,
+            "pontos": 77
+          },
+          {
+            "el": "aside.mq-ficha",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 281,
+            "pontos": 388
+          }
+        ]
+      },
+      "dominio": {
+        "palco": {
+          "l": 0.006,
+          "cor": "rgb(11, 19, 32)",
+          "el": "div.mq-palco"
+        },
+        "nomes": [
+          {
+            "texto": "Cadastro",
+            "cofre": false,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 13.02
+          },
+          {
+            "texto": "novo paciente",
+            "cofre": false,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 13.02
+          },
+          {
+            "texto": "pacientes",
+            "cofre": false,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 13.02
+          },
+          {
+            "texto": "boas-vindas",
+            "cofre": false,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 13.02
+          },
+          {
+            "texto": "fotos",
+            "cofre": false,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 13.02
+          },
+          {
+            "texto": "chaves do zap",
+            "cofre": true,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 15.56
+          },
+          {
+            "texto": "ao vivo",
+            "cofre": false,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 13.02
+          }
+        ],
+        "contraste": [
+          {
+            "texto": "¶",
+            "el": "i",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "texto",
+            "el": "small",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "▭",
+            "el": "i",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "data",
+            "el": "small",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "¶",
+            "el": "i",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "texto",
+            "el": "small",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "TABELA · pacientes · sem banco ainda",
+            "el": "span.mq-rodape-peca",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          }
+        ],
+        "escuros": [
+          {
+            "el": "div.mq.mq2",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 775,
+            "pontos": 191
+          },
+          {
+            "el": "div.mq-palco",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 292,
+            "pontos": 336
+          },
+          {
+            "el": "aside.mq-ficha",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 281,
+            "pontos": 388
+          }
+        ]
+      },
+      "px": {
+        "media": 24,
+        "escuros": 1,
+        "claros": 0,
+        "opacos": 0.126,
+        "w": 1005,
+        "h": 397,
+        "clearAlpha": 0
+      },
+      "foto": {
+        "fundo": "000000",
+        "alfa": 0,
+        "grade": false,
+        "luzes": {
+          "ceu": "a9bbff",
+          "terra": "0a0f1e",
+          "hemi": 1.25,
+          "sol": "ffffff",
+          "solI": 1.5,
+          "contra": "7ba4f0",
+          "contraI": 0.55
+        },
+        "fios": [
+          "506b94",
+          "506b94",
+          "506b94",
+          "506b94",
+          "506b94"
+        ],
+        "itens": {
+          "pacientes": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "c6ac41b5-39cd-4603-8e51-70f2db0b084e",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "novo paciente": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "c50af56c-3659-440c-9376-3a3b6d5e4d99",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "Cadastro": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "d06cf1a0-32ff-4794-824a-086a1822ef6f",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "boas-vindas": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "d8b4ac95-3911-4cc5-81b6-3f9c8f52dcf1",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "chaves do zap": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "2572279a-19eb-4cd9-a598-81ea9fbacf20",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "ao vivo": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "8bd13f71-7292-4bb5-ac6a-6e7a834d38a3",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "fotos": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "60e9ff22-8ba2-4b45-8445-d952136b78cf",
+                "em": "2ad5e5"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "vibe2d": {
+      "inteira": {
+        "palco": {
+          "l": 1,
+          "cor": "rgb(255, 255, 255)",
+          "el": "div.mq-palco"
+        },
+        "nomes": [
+          {
+            "texto": "Peças novas",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          }
+        ],
+        "contraste": [],
+        "escuros": []
+      },
+      "dominio": {
+        "palco": {
+          "l": 1,
+          "cor": "rgb(255, 255, 255)",
+          "el": "div.mq-palco"
+        },
+        "nomes": [
+          {
+            "texto": "Cadastro",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "novo paciente",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "pacientes",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "boas-vindas",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "fotos",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "chaves do zap",
+            "cofre": true,
+            "cor": "rgb(255, 248, 231)",
+            "l": 0.942,
+            "razao": 14.37
+          },
+          {
+            "texto": "ao vivo",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          }
+        ],
+        "contraste": [],
+        "escuros": []
+      },
+      "vitrine": {
+        "palco": {
+          "l": 1,
+          "cor": "rgb(255, 255, 255)",
+          "el": "div.mq-palco"
+        },
+        "nomes": [
+          {
+            "texto": "Cadastro",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "novo paciente",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "pacientes",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "boas-vindas",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "fotos",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          },
+          {
+            "texto": "chaves do zap",
+            "cofre": true,
+            "cor": "rgb(255, 248, 231)",
+            "l": 0.942,
+            "razao": 14.37
+          },
+          {
+            "texto": "ao vivo",
+            "cofre": false,
+            "cor": "rgb(6, 11, 22)",
+            "l": 0.003,
+            "razao": 16.69
+          }
+        ],
+        "contraste": [],
+        "escuros": []
+      }
+    },
+    "vibe3d": {
+      "mesma": true,
+      "px": {
+        "media": 234,
+        "escuros": 0.062,
+        "claros": 0.869,
+        "opacos": 1,
+        "w": 1005,
+        "h": 397,
+        "clearAlpha": 1
+      },
+      "rotulos": [
+        {
+          "texto": "ao vivo",
+          "razao": 5.35
+        },
+        {
+          "texto": "fotos",
+          "razao": 5.35
+        }
+      ],
+      "legenda": {
+        "contraste": [],
+        "escuros": []
+      },
+      "efeitos": [
+        {
+          "tocou": true,
+          "motivo": ""
+        },
+        {
+          "tocou": true,
+          "motivo": ""
+        }
+      ]
+    },
+    "techDeNovo": {
+      "px": {
+        "media": 24,
+        "escuros": 1,
+        "claros": 0,
+        "opacos": 0.126,
+        "w": 1005,
+        "h": 397,
+        "clearAlpha": 0
+      },
+      "inteira": {
+        "palco": {
+          "l": 0.006,
+          "cor": "rgb(11, 19, 32)",
+          "el": "div.mq-palco"
+        },
+        "nomes": [
+          {
+            "texto": "Peças novas",
+            "cofre": false,
+            "cor": "rgb(215, 228, 251)",
+            "l": 0.769,
+            "razao": 13.02
+          }
+        ],
+        "contraste": [
+          {
+            "texto": "ainda não testado · 5/7 com corpo",
+            "el": "span.mq-dominio-estado",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10.5
+          },
+          {
+            "texto": "1 aqui",
+            "el": "span.mq-vitrine-n",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "3 aqui",
+            "el": "span.mq-vitrine-n",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "5 aqui",
+            "el": "span.mq-vitrine-n",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          },
+          {
+            "texto": "1 aqui",
+            "el": "span.mq-vitrine-n",
+            "razao": 3.9,
+            "cor": "rgb(108, 123, 150)",
+            "fundo": "rgb(22, 30, 45)",
+            "px": 10
+          }
+        ],
+        "escuros": [
+          {
+            "el": "div.mq.mq2",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 775,
+            "pontos": 191
+          },
+          {
+            "el": "div.mq-palco",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 292,
+            "pontos": 386
+          },
+          {
+            "el": "button.mq-dominio",
+            "cor": "rgb(22, 30, 45)",
+            "w": 201,
+            "h": 184,
+            "pontos": 77
+          },
+          {
+            "el": "aside.mq-ficha",
+            "cor": "rgb(11, 19, 32)",
+            "w": 670,
+            "h": 281,
+            "pontos": 126
+          }
+        ]
+      },
+      "foto": {
+        "fundo": "000000",
+        "alfa": 0,
+        "grade": false,
+        "luzes": {
+          "ceu": "a9bbff",
+          "terra": "0a0f1e",
+          "hemi": 1.25,
+          "sol": "ffffff",
+          "solI": 1.5,
+          "contra": "7ba4f0",
+          "contraI": 0.55
+        },
+        "fios": [
+          "506b94",
+          "506b94",
+          "506b94",
+          "506b94",
+          "506b94"
+        ],
+        "itens": {
+          "pacientes": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "c6ac41b5-39cd-4603-8e51-70f2db0b084e",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "novo paciente": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "c50af56c-3659-440c-9376-3a3b6d5e4d99",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "Cadastro": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "d06cf1a0-32ff-4794-824a-086a1822ef6f",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "boas-vindas": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "d8b4ac95-3911-4cc5-81b6-3f9c8f52dcf1",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "chaves do zap": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "2572279a-19eb-4cd9-a598-81ea9fbacf20",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "ao vivo": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "8bd13f71-7292-4bb5-ac6a-6e7a834d38a3",
+                "em": "2ad5e5"
+              }
+            ]
+          },
+          "fotos": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "60e9ff22-8ba2-4b45-8445-d952136b78cf",
+                "em": "2ad5e5"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "vistaNovaNoTech": {
+      "vibeX": true,
+      "vibeY": false,
+      "foto": {
+        "fundo": "000000",
+        "alfa": 0,
+        "grade": false,
+        "luzes": {
+          "ceu": "a9bbff",
+          "terra": "0a0f1e",
+          "hemi": 1.25,
+          "sol": "ffffff",
+          "solI": 1.5,
+          "contra": "7ba4f0",
+          "contraI": 0.55
+        },
+        "fios": [
+          "506b94",
+          "506b94",
+          "506b94",
+          "506b94",
+          "506b94"
+        ],
+        "itens": {
+          "pacientes": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "c6ac41b5-39cd-4603-8e51-70f2db0b084e",
+                "em": "08707f"
+              }
+            ]
+          },
+          "novo paciente": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "c50af56c-3659-440c-9376-3a3b6d5e4d99",
+                "em": "08707f"
+              }
+            ]
+          },
+          "Cadastro": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "d06cf1a0-32ff-4794-824a-086a1822ef6f",
+                "em": "08707f"
+              }
+            ]
+          },
+          "boas-vindas": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "d8b4ac95-3911-4cc5-81b6-3f9c8f52dcf1",
+                "em": "08707f"
+              }
+            ]
+          },
+          "chaves do zap": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "2572279a-19eb-4cd9-a598-81ea9fbacf20",
+                "em": "08707f"
+              }
+            ]
+          },
+          "ao vivo": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "8bd13f71-7292-4bb5-ac6a-6e7a834d38a3",
+                "em": "08707f"
+              }
+            ]
+          },
+          "fotos": {
+            "glb": true,
+            "banco": false,
+            "base": "161e2d",
+            "borda": "506b94",
+            "tracejo": "7ba4f0",
+            "sombra": false,
+            "mats": [
+              {
+                "c": "ffffff",
+                "me": 0,
+                "ro": 0.85,
+                "mapa": "60e9ff22-8ba2-4b45-8445-d952136b78cf",
+                "em": "08707f"
+              }
+            ]
+          }
+        }
+      },
+      "tema": null
+    }
+  },
+  "erros": []
+}

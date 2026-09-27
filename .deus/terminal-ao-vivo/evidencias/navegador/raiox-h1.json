@@ -312,8 +312,8 @@
       "mime": "text/html",
       "bytes": 1861,
       "transferido": 2069,
-      "ms": 16,
-      "hora": 1790218368903
+      "ms": 5,
+      "hora": 1790230600780
     },
     {
       "url": "http://localhost:4931/css/site.css",
@@ -323,8 +323,8 @@
       "mime": "text/css",
       "bytes": 759,
       "transferido": 951,
-      "ms": 18,
-      "hora": 1790218368925
+      "ms": 4,
+      "hora": 1790230600787
     },
     {
       "url": "http://localhost:4931/img/logo.png",
@@ -334,8 +334,8 @@
       "mime": "image/png",
       "bytes": 220781,
       "transferido": 220976,
-      "ms": 26,
-      "hora": 1790218368925
+      "ms": 7,
+      "hora": 1790230600787
     },
     {
       "url": "http://localhost:4931/js/site.js",
@@ -345,8 +345,8 @@
       "mime": "text/javascript",
       "bytes": 1619,
       "transferido": 1818,
-      "ms": 24,
-      "hora": 1790218368925
+      "ms": 5,
+      "hora": 1790230600787
     },
     {
       "url": "http://localhost:4931/img/fundo.png",
@@ -356,8 +356,8 @@
       "mime": "image/png",
       "bytes": 204504,
       "transferido": 204699,
-      "ms": 3,
-      "hora": 1790218368944
+      "ms": 2,
+      "hora": 1790230600792
     },
     {
       "url": "http://localhost:4931/fontes/teste.woff2",
@@ -367,8 +367,8 @@
       "mime": "font/woff2",
       "bytes": 31024,
       "transferido": 31219,
-      "ms": 34,
-      "hora": 1790218368945
+      "ms": 8,
+      "hora": 1790230600792
     },
     {
       "url": "http://localhost:4931/api/produtos",
@@ -378,8 +378,8 @@
       "mime": "application/json",
       "bytes": 58,
       "transferido": 257,
-      "ms": 13,
-      "hora": 1790218368970
+      "ms": 2,
+      "hora": 1790230600799
     },
     {
       "url": "http://localhost:4931/api/cadastro",
@@ -389,8 +389,8 @@
       "mime": "application/json",
       "bytes": 31,
       "transferido": 205,
-      "ms": 5,
-      "hora": 1790218371838
+      "ms": 1,
+      "hora": 1790230603264
     }
   ],
   "console": [
@@ -399,28 +399,28 @@
       "texto": "aviso de teste",
       "url": "http://localhost:4931/js/site.js",
       "linha": 17,
-      "hora": 1790218368970
+      "hora": 1790230600799
     },
     {
       "nivel": "erro",
       "texto": "erro de teste proposital",
       "url": "http://localhost:4931/js/site.js",
       "linha": 18,
-      "hora": 1790218368970
-    },
-    {
-      "nivel": "log",
-      "texto": "site de teste pronto 3 produtos",
-      "url": "http://localhost:4931/js/site.js",
-      "linha": 15,
-      "hora": 1790218368984
+      "hora": 1790230600799
     },
     {
       "nivel": "aviso",
       "texto": "Electron Security Warning (Insecure Content-Security-Policy) This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged.",
       "url": "node:electron/js2c/sandbox_bundle",
       "linha": 2,
-      "hora": 1790218368990
+      "hora": 1790230600803
+    },
+    {
+      "nivel": "log",
+      "texto": "site de teste pronto 3 produtos",
+      "url": "http://localhost:4931/js/site.js",
+      "linha": 15,
+      "hora": 1790230600803
     },
     {
       "nivel": "erro",
@@ -428,7 +428,7 @@
       "texto": "Error: exceção de teste\n    at http://localhost:4931/js/site.js:19:32",
       "url": "http://localhost:4931/js/site.js",
       "linha": 19,
-      "hora": 1790218369022
+      "hora": 1790230600852
     }
   ],
   "domRaiz": {

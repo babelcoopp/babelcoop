@@ -1,0 +1,428 @@
+{
+  "vistas": {
+    "dia": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-01-dia.png"
+    },
+    "explorador": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [
+        {
+          "texto": "▤",
+          "el": "span.criar-ic",
+          "razao": 4.27,
+          "cor": "oklch(0.549081 0.0893835 165.835)",
+          "fundo": "color(srgb 1 0.958588 0.859373)",
+          "px": 20
+        }
+      ],
+      "print": "vibe-02-explorador.png"
+    },
+    "demandas": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-03-demandas.png"
+    },
+    "tarefas": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-04-tarefas.png"
+    },
+    "chat": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-05-chat.png"
+    },
+    "whatsapp": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-06-whatsapp.png"
+    },
+    "reuniao": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-07-reuniao.png"
+    },
+    "terminais": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [
+        {
+          "el": "article.pr-cartao.meu",
+          "cor": "oklch(0.999994 0.0000497986 none / 0.8)",
+          "svg": false,
+          "w": 303,
+          "h": 266,
+          "pontos": 48
+        }
+      ],
+      "contraste": [],
+      "print": "vibe-08-terminais.png"
+    },
+    "projetos": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-09-projetos.png"
+    },
+    "acervo": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-10-acervo.png"
+    },
+    "inteligencia": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-11-inteligencia.png"
+    },
+    "equipe": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-12-equipe.png"
+    },
+    "metas": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-13-metas.png"
+    },
+    "mapa": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-14-mapa.png"
+    },
+    "loja": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-15-loja.png"
+    },
+    "oficina": {
+      "meio": {
+        "l": 1,
+        "cor": "rgb(255, 255, 255)",
+        "el": "main.e-editor.navr-hospeda"
+      },
+      "lateral": {
+        "l": 0.942,
+        "cor": "rgb(255, 248, 231)",
+        "el": "#e-lateral.e-lateral"
+      },
+      "escuros": [],
+      "contraste": [],
+      "print": "vibe-16-oficina.png"
+    }
+  },
+  "tech0": {
+    "tema": null,
+    "meio": {
+      "l": 0.006,
+      "cor": "rgb(11, 19, 32)",
+      "el": "main.e-editor.navr-hospeda"
+    },
+    "lateral": {
+      "l": 0.003,
+      "cor": "rgb(6, 11, 22)",
+      "el": "#e-lateral.e-lateral"
+    },
+    "xterm": {
+      "l": 0.003,
+      "cor": "rgb(6, 11, 22)",
+      "el": "div.xterm-viewport"
+    }
+  },
+  "salaCentro": {
+    "fill": "rgb(255, 255, 255)",
+    "l": 1,
+    "w": 55.679931640625,
+    "texto": 0.0033598959321003733
+  },
+  "terminalVibe": {
+    "viewport": {
+      "l": 0.942,
+      "cor": "rgb(255, 248, 231)",
+      "el": "div.xterm-viewport"
+    },
+    "caixa": 0.9416432506777218,
+    "face": 0.9416432506777218,
+    "degrade": "sim",
+    "cores": [
+      {
+        "t": "vermelho",
+        "c": "rgb(179, 38, 30)",
+        "cls": "xterm-fg-1",
+        "bg": "none"
+      },
+      {
+        "t": ", ",
+        "c": "rgba(0, 0, 0, 0)",
+        "cls": "",
+        "bg": "linear-gradient(90deg, rgb(109, 63, 184) 1014px, rgb(47, 91,"
+      },
+      {
+        "t": "verde",
+        "c": "rgb(23, 119, 75)",
+        "cls": "xterm-fg-2",
+        "bg": "none"
+      },
+      {
+        "t": ", ",
+        "c": "rgba(0, 0, 0, 0)",
+        "cls": "",
+        "bg": "linear-gradient(90deg, rgb(109, 63, 184) 1014px, rgb(47, 91,"
+      },
+      {
+        "t": "amarelo",
+        "c": "rgb(138, 95, 0)",
+        "cls": "xterm-fg-3",
+        "bg": "none"
+      },
+      {
+        "t": ", ",
+        "c": "rgba(0, 0, 0, 0)",
+        "cls": "",
+        "bg": "linear-gradient(90deg, rgb(109, 63, 184) 1014px, rgb(47, 91,"
+      },
+      {
+        "t": "azul",
+        "c": "rgb(47, 91, 183)",
+        "cls": "xterm-fg-4",
+        "bg": "none"
+      },
+      {
+        "t": ", ",
+        "c": "rgba(0, 0, 0, 0)",
+        "cls": "",
+        "bg": "linear-gradient(90deg, rgb(109, 63, 184) 1014px, rgb(47, 91,"
+      },
+      {
+        "t": "roxo",
+        "c": "rgb(109, 63, 184)",
+        "cls": "xterm-fg-5",
+        "bg": "none"
+      },
+      {
+        "t": ", ",
+        "c": "rgba(0, 0, 0, 0)",
+        "cls": "",
+        "bg": "linear-gradient(90deg, rgb(109, 63, 184) 1014px, rgb(47, 91,"
+      },
+      {
+        "t": "ciano",
+        "c": "rgb(8, 112, 127)",
+        "cls": "xterm-fg-6",
+        "bg": "none"
+      },
+      {
+        "t": "marcelomaximos@MacBo",
+        "c": "rgba(0, 0, 0, 0)",
+        "cls": "",
+        "bg": "linear-gradient(90deg, rgb(109, 63, 184) 1014px, rgb(47, 91,"
+      }
+    ],
+    "escuros": []
+  },
+  "presenca": {
+    "cab": {
+      "l": 0.862,
+      "cor": "color(srgb 0.952941 0.92549 0.85098 / 0.78)",
+      "el": "header.tr-cab"
+    },
+    "rodape": {
+      "l": 0.942,
+      "cor": "rgb(255, 248, 231)",
+      "el": "div.tr-rodape"
+    },
+    "escuros": [],
+    "contraste": []
+  },
+  "paleta": {
+    "escuros": [],
+    "contraste": []
+  },
+  "aviso": {
+    "fundo": 0.8405534588896278,
+    "texto": 0.0033598959321003733,
+    "cor": "rgb(6, 11, 22)",
+    "bg": "rgb(243, 236, 217)"
+  },
+  "navegador": {
+    "aba": "navegador",
+    "escuros": [],
+    "contraste": [
+      {
+        "texto": "AS",
+        "el": "span.navr-av",
+        "razao": 1.98,
+        "cor": "rgb(199, 162, 255)",
+        "fundo": "rgb(255, 248, 231)",
+        "px": 8.5
+      }
+    ]
+  },
+  "techDeNovo": {
+    "tema": null,
+    "meio": {
+      "l": 0.006,
+      "cor": "rgb(11, 19, 32)",
+      "el": "main.e-editor.navr-hospeda"
+    },
+    "lateral": {
+      "l": 0.003,
+      "cor": "rgb(6, 11, 22)",
+      "el": "#e-lateral.e-lateral"
+    },
+    "xterm": {
+      "l": 0.003,
+      "cor": "rgb(6, 11, 22)",
+      "el": "div.xterm-viewport"
+    }
+  },
+  "erros": []
+}

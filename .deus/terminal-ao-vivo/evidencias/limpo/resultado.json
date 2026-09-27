@@ -1,5 +1,5 @@
 {
-  "quando": "2026-09-24T02:51:29.212Z",
+  "quando": "2026-09-24T06:15:45.834Z",
   "erros": [],
   "medidas": {
     "vazio": {
@@ -12,9 +12,6 @@
       "projetos": 0,
       "arquivosExemplo": [],
       "arquivosReais": [
-        "theus/ACERVO.md",
-        "theus/APRENDIZADOS.md",
-        "theus/CLAUDE.md",
         "theus/README.md"
       ],
       "conversas": [
@@ -44,7 +41,7 @@
     "print_equipe": "limpo-1-equipe-so-theus.png",
     "print_arvore": "limpo-2-arvore-readme.png",
     "print_salvo": "limpo-3-arquivo-salvo.png",
-    "disco_para_arvore_ms": 118,
+    "disco_para_arvore_ms": 104,
     "arquivos_reais": [
       "theus/ACERVO.md",
       "theus/APRENDIZADOS.md",
@@ -55,7 +52,7 @@
       "theus/ideia.md"
     ],
     "print_pasta": "limpo-3-pasta-e-disco.png",
-    "rita_na_arvore_ms": 40,
+    "rita_na_arvore_ms": 3,
     "rita": {
       "eu": "rita",
       "pessoas": [
@@ -103,8 +100,8 @@
       "verComoVisivel": false
     },
     "print_arvore_rita": "limpo-4-arvore-com-a-rita.png",
-    "demanda_theus_para_rita_ms": 97,
-    "demanda_id": "d-8xck0izk-5-1",
+    "demanda_theus_para_rita_ms": 12,
+    "demanda_id": "d-013bdlum-4-1",
     "print_rita": "limpo-5-demanda-na-rita.png",
     "barra_theus": {
       "ids": [

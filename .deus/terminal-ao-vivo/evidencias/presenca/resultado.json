@@ -1,13 +1,13 @@
 {
-  "quando": "2026-09-24T02:55:12.114Z",
+  "quando": "2026-09-25T10:16:09.995Z",
   "aceites": {
     "A1": {
       "shell": "/bin/zsh",
       "comm": "/bin/zsh"
     },
     "A4": {
-      "pwd": "/var/folders/0r/j4m46d2x45q7m9wydptmkf2r0000gn/T/babel-e2e-painel-b0n1ra/teste-painel",
-      "esperado": "/var/folders/0r/j4m46d2x45q7m9wydptmkf2r0000gn/T/babel-e2e-painel-b0n1ra/teste-painel"
+      "pwd": "/var/folders/0r/j4m46d2x45q7m9wydptmkf2r0000gn/T/babel-e2e-painel-ILCMEj/teste-painel",
+      "esperado": "/var/folders/0r/j4m46d2x45q7m9wydptmkf2r0000gn/T/babel-e2e-painel-ILCMEj/teste-painel"
     },
     "A3": {
       "estilos": {
@@ -46,8 +46,8 @@
     },
     "A2": {
       "pids": {
-        "assistente": 76186,
-        "rita": 76194
+        "assistente": 54890,
+        "rita": 54908
       },
       "vivos": [
         true,
@@ -56,11 +56,11 @@
       "servidor": [
         {
           "id": "assistente",
-          "pid": 76186
+          "pid": 54890
         },
         {
-          "id": "ag-muexvrn072w",
-          "pid": 76194
+          "id": "ag-mugt2oq7iia",
+          "pid": 54908
         }
       ]
     },
@@ -70,32 +70,32 @@
         "cabecalho": "Assistente · rodando há 1 s"
       },
       "terminou": {
-        "cabecalho": "Assistente · terminou · 23:55 · 3 s",
+        "cabecalho": "Assistente · terminou · 07:16 · 3 s",
         "registro": [
           {
             "tipo": "acordar",
             "ok": true,
-            "ms": 252,
-            "t": 4408
+            "ms": 243,
+            "t": 3869
           },
           {
             "tipo": "pulso",
             "ok": true,
-            "ms": 608,
-            "t": 7925
+            "ms": 612,
+            "t": 7334
           },
           {
             "tipo": "som",
             "nome": "tique",
             "ok": true,
             "motivo": "tocou",
-            "t": 7926
+            "t": 7334
           },
           {
             "tipo": "faiscas",
             "ok": true,
-            "ms": 865,
-            "t": 8791
+            "ms": 868,
+            "t": 8202
           }
         ]
       },
@@ -127,21 +127,21 @@
       "sonsBloqueados": {},
       "eco": {
         "n": 50,
-        "p50": 44.7,
-        "p95": 46.9,
-        "max": 47.3
+        "p50": 45.3,
+        "p95": 47.8,
+        "max": 48.4
       },
       "maxEfeitosVivos": 1
     },
     "A13": {
-      "versao": "2.1.281",
+      "versao": "2.1.282",
       "comandoDoBotao": "marcelomaximos@MacBook-Air-de-Marcelo teste-painel % claude -n 'Assistente'",
       "telaDoClaude": [
         "marcelomaximos@MacBook-Air-de-Marcelo teste-painel % claude -n 'Assistente'",
         "───────────────────────────────────────────────────────────────────",
         " Accessing workspace:",
         " /private/var/folders/0r/j4m46d2x45q7m9wydptmkf2r0000gn/T/babel-e2",
-        " e-painel-b0n1ra/teste-painel",
+        " e-painel-ILCMEj/teste-painel",
         " Quick safety check: Is this a project you created or one you",
         " trust? (Like your own code, a well-known open source project, or",
         " work from your team). If not, take a moment to review what's in",
@@ -158,12 +158,12 @@
         "sim": "Yes, I trust this folder",
         "passos": 1
       },
-      "blocoConfianca": "espera23:55confiar nesta pasta?O Claude Code pergunta se você confia nos arquivos de babel-e2e-painel-b0n1ra/teste-painel. Confiar deixa o agente ler e rodar comandos aqui.Confiar nesta pastaresponder no terminal",
+      "blocoConfianca": "espera07:16confiar nesta pasta?O Claude Code pergunta se você confia nos arquivos de babel-e2e-painel-ILCMEj/teste-painel. Confiar deixa o agente ler e rodar comandos aqui.Confiar nesta pastaresponder no terminal",
       "esperaNaPresenca": true,
       "saiu": true,
       "confiancaDepoisDeSair": {
         "botoes": 0,
-        "texto": "espera23:55confiar nesta pasta?O Claude Code pergunta se você confia nos arquivos de babel-e2e-painel-b0n1ra/teste-painel. Confiar deixa o agente ler e rodar comandos aqui.respondido no terminal · 23:55"
+        "texto": "espera07:16confiar nesta pasta?O Claude Code pergunta se você confia nos arquivos de babel-e2e-painel-ILCMEj/teste-painel. Confiar deixa o agente ler e rodar comandos aqui.respondido no terminal · 07:16"
       }
     },
     "A20": {
@@ -182,10 +182,10 @@
       },
       "blocos": [
         {
-          "bid": "confianca-muexw3a1",
+          "bid": "confianca-mugt2zv4",
           "tipo": "espera",
           "titulo": "confiar nesta pasta?",
-          "texto": "O Claude Code pergunta se você confia nos arquivos de babel-e2e-painel-b0n1ra/teste-painel. Confiar deixa o agente ler e rodar comandos aqui.",
+          "texto": "O Claude Code pergunta se você confia nos arquivos de babel-e2e-painel-ILCMEj/teste-painel. Confiar deixa o agente ler e rodar comandos aqui.",
           "decidido": "terminal",
           "arquivos": [],
           "navegador": null,
@@ -328,7 +328,7 @@
       "rito": {
         "ritos": 1,
         "duas": 1,
-        "fim": "concluído · 4 de 4 · 23:55"
+        "fim": "concluído · 4 de 4 · 07:16"
       },
       "ok": [
         {
@@ -338,7 +338,7 @@
           "decisao": "permitir"
         }
       ],
-      "decisao": "OK · Teste Painel · 23:55",
+      "decisao": "OK · Teste Painel · 07:16",
       "pedidos": [
         {
           "tipo": "agente-pedido",
@@ -347,7 +347,7 @@
         }
       ],
       "fim": {
-        "cab": "Assistente · terminou · 23:55 · 7 s",
+        "cab": "Assistente · terminou · 07:16 · 7 s",
         "c": {
           "somPedido": {
             "tique": 5,
@@ -361,19 +361,19 @@
           },
           "somBloqueado": {},
           "pulso": 5,
-          "faiscas": 6,
-          "particulas": 20,
+          "faiscas": 2,
+          "particulas": 12,
           "respirar": 1,
           "acordar": 3,
           "acender": 62,
-          "descartados": 1,
+          "descartados": 0,
           "preemptados": 0,
           "maxVivos": 2
         }
       }
     }
   },
-  "pasta": "/var/folders/0r/j4m46d2x45q7m9wydptmkf2r0000gn/T/babel-e2e-painel-b0n1ra",
+  "pasta": "/var/folders/0r/j4m46d2x45q7m9wydptmkf2r0000gn/T/babel-e2e-painel-ILCMEj",
   "repouso": {
     "real": true,
     "abas": [
@@ -382,17 +382,17 @@
         "agente": "assistente",
         "nome": "Assistente",
         "aberta": true,
-        "pid": 76186,
+        "pid": 54890,
         "estado": "shell",
         "face": "presenca",
         "pausada": false,
         "modoAgente": false,
         "agenteEstado": null,
         "blocos": 0,
-        "cols": 67,
+        "cols": 56,
         "rows": 24,
         "frase": "em repouso",
-        "alvo": "babel-e2e-painel-b0n1ra/teste-painel"
+        "alvo": "babel-e2e-painel-ILCMEj/teste-painel"
       }
     ],
     "vivo": "nao",
@@ -410,36 +410,30 @@
         "tipo": "pulso",
         "ok": false,
         "motivo": "sem-movimento",
-        "t": 38767
+        "t": 37138
       },
       {
         "tipo": "faiscas",
         "ok": false,
         "motivo": "sem-movimento",
-        "t": 38767
-      },
-      {
-        "tipo": "faiscas",
-        "ok": false,
-        "motivo": "sem-movimento",
-        "t": 38768
+        "t": 37139
       },
       {
         "tipo": "faiscas",
         "ok": true,
-        "ms": 865,
-        "t": 38892
+        "ms": 866,
+        "t": 37368
       }
     ]
   },
   "recarregar": {
     "antes": [
-      76186,
-      76194
+      54890,
+      54908
     ],
     "depois": [
-      76186,
-      76194
+      54890,
+      54908
     ],
     "telaVoltou": true
   },
@@ -480,7 +474,7 @@
       "msg": [
         {
           "tipo": "term-renomear",
-          "id": "ag-muexvrn072w",
+          "id": "ag-mugt2oq7iia",
           "nome": "Rita Revisora"
         }
       ],
@@ -491,10 +485,10 @@
     "fechar": [
       {
         "tipo": "term-fechar",
-        "id": "ag-muexvrn072w"
+        "id": "ag-mugt2oq7iia"
       }
     ],
-    "ritaPid": 76194,
+    "ritaPid": 54908,
     "ritaVivo": false,
     "abas": [
       "Assistente"
@@ -502,7 +496,7 @@
     "iniciar": [
       {
         "tipo": "agente-iniciar",
-        "id": "ag-muexwkfoi56",
+        "id": "ag-mugt3gdx9pm",
         "nome": "Lia",
         "instrucoes": "cuida do WhatsApp da equipe"
       }
@@ -524,13 +518,13 @@
   },
   "organismo": {
     "somPedido": {
-      "tique": 1,
       "acordar": 1,
+      "tique": 1,
       "duas": 1
     },
     "somTocado": {
-      "tique": 1,
       "acordar": 1,
+      "tique": 1,
       "duas": 1
     },
     "somBloqueado": {},

@@ -1,5 +1,5 @@
 {
-  "inicio": "2026-09-24T02:52:25.600Z",
+  "inicio": "2026-09-24T06:16:27.314Z",
   "fonteWoff2": true,
   "errosDaTela": [],
   "injetadoPeloServidor": true,
@@ -9,12 +9,12 @@
     "modulo": true
   },
   "abrirAntesDaAba": {
-    "ms": 512,
+    "ms": 141,
     "doModulo": {
       "url": "http://localhost:4941/",
       "titulo": "Clínica Vida · teste",
       "status": 200,
-      "ms": 266
+      "ms": 81
     }
   },
   "registro": {
@@ -28,9 +28,9 @@
   },
   "hud": {
     "opacidade": "1",
-    "borda": "rgba(63, 227, 255, 0.576)",
+    "borda": "rgba(63, 227, 255, 0.58)",
     "fundo": "repeating-linear-gradient(rgba(42, 213, 229, 0.035) 0px, rgba(42, 213, 229, 0.035) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 3px)",
-    "canto": 0.972353,
+    "canto": 0.985918,
     "vidro": "blur(10px) saturate(1.25)",
     "bordaFaixa": "rgba(63, 227, 255, 0.22)"
   },
@@ -55,19 +55,19 @@
     "escudo": "none",
     "hud": "0"
   },
-  "raioxHtmlMs": 143,
+  "raioxHtmlMs": 116,
   "buscaCadastro": 5,
   "areaDeTransferencia": {
     "igual": true,
     "bytes": 368
   },
   "domVivo": {
-    "ms": 1195,
+    "ms": 1764,
     "antes": 2,
     "depois": 3,
-    "luz": 0.987
+    "luz": 1
   },
-  "raioxCssMs": 170,
+  "raioxCssMs": 37,
   "css": {
     "regras": [
       "h1",
@@ -111,15 +111,15 @@
   ],
   "copyMd": {
     "bytes": 848,
-    "inicio": "# Copy de localhost_4941\n\n> http://localhost:4941/ · \"Clínica Vida · teste\" · extraída pelo navegador do babel-coop em 23/09/2026 23:52\n\n## Topo\n\n- [imagem] Logo da Clínica Vida\n\n## Menu\n\n- [link] Planos\n- [link] Cadastro de fornecedor\n\n## "
+    "inicio": "# Copy de localhost_4941\n\n> http://localhost:4941/ · \"Clínica Vida · teste\" · extraída pelo navegador do babel-coop em 24/09/2026 03:16\n\n## Topo\n\n- [imagem] Logo da Clínica Vida\n\n## Menu\n\n- [link] Planos\n- [link] Cadastro de fornecedor\n\n## "
   },
   "rede": [
     "GET 200 /",
     "GET 200 /css/estilo.css",
     "GET 200 /img/logo.png",
     "GET 200 /js/app.js",
-    "GET 200 /fontes/teste.woff2",
-    "GET 200 /api/planos.json"
+    "GET 200 /api/planos.json",
+    "GET 200 /fontes/teste.woff2"
   ],
   "console": [
     "n-log coop-teste: log",
@@ -129,11 +129,11 @@
   ],
   "selecionar": {
     "via": "mouse da tela (Playwright → Electron)",
-    "ms": 182,
+    "ms": 112,
     "card": "Selecionadop.sub314 × 37#hero > pver HTMLver CSScopiar blocomostrar na página"
   },
   "clone": {
-    "ms": 370,
+    "ms": 153,
     "arquivos": [
       "assets/estilo-a4829c.css",
       "assets/logo-d60543.png",
@@ -149,13 +149,13 @@
     }
   },
   "print": {
-    "arquivo": "print-2026-09-23-235242.png",
+    "arquivo": "print-2026-09-24-031636.png",
     "bytes": 181222,
     "largura": 724,
     "altura": 1902
   },
   "abaFechada": {
-    "msClique": 522,
+    "msClique": 507,
     "depois": {
       "abas": [
         "dia",
@@ -184,7 +184,7 @@
     "texto": "NavegadorNavegador só no appO navegador do agente roda dentro da Estação, no computador (app babel-coop). Aqui você acompanha pelos avisos e pelo terminal."
   },
   "errosDaTelaTotal": 0,
-  "fim": "2026-09-24T02:52:45.932Z",
+  "fim": "2026-09-24T06:16:39.840Z",
   "prints": [
     "01-aba-do-agente.jpg",
     "02-sua-vez-senha.jpg",

@@ -1,0 +1,11 @@
+{
+ "identificador": "babel-coop/maquina-jogo",
+ "revisao": 4,
+ "dono": "Ryan, a serviço do Theus (somente prompt)",
+ "objetivo": "Máquina como construtor-jogo; parte 1: banco real local (PGlite) construído pelo agente no terminal, com as peças 3D nascendo, ligando e reagindo ao vivo",
+ "aceites_pendentes": "P1-P7 (MISSAO.md)",
+ "etapa": "parte 1 instalada no Mac do Theus (25/09 07:18), Vibe incluso",
+ "proxima": "mostrar ao Theus no app; medir CPU parado com banco aberto (P7); depois parte 2: menu e terminal conversando mais, nuvem/xerox com credenciais",
+ "caminhos": "app/servidor/banco.js (novo), app/servidor/coop-mcp.js, app/interface/coop-ui.js, prototipo/maquina.js, prototipo/visual3d.js",
+ "evitar": "python; credencial em arquivo; efeito contínuo sem fim; mexer na nuvem sem ok"
+}
