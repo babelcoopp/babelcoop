@@ -1,0 +1,785 @@
+/* =====================================================================
+   Babel Coop · camada "profundidade" (26/09/2026, pedido do Dominic, skill frontend-design)
+   Vale só no modo Tech da Estação (html[data-vista="estacao"] sem data-tema-estacao):
+   Vibe, Tech ametista, TV e iPad ficam como estavam.
+   Retirada: tirar de index.html a linha <link href="profundidade.css"> (e o <script> balao-tarefa.js).
+
+   Plano
+   · Cor: o azul-marinho vira preto fosco. breu #080808 (chão), carvão #0e0e0f (meio),
+     grafite #161617 (o que sobe), fumaça #1f1f21 (hover). Texto neutro, sem o tom azulado.
+     O ciano (--t0) e as cores de estado continuam: são a única luz da tela.
+   · Fosco de verdade: um grão fino por cima de tudo (ruído SVG a 5 %), para o preto não ficar plástico.
+   · Relevo diz o que faz:
+       sobe  = dá para apertar (botões, itens de tarefa, abas da barra);
+       afunda = guarda ou espera (campos, "nada aqui", botão pressionado, barra de progresso);
+       flutua = aparece por cima (a caixa da tarefa, menus, paleta).
+     Bordas de botão transparentes: o contorno vem da luz na aresta de cima e da sombra embaixo.
+   · Um só momento ousado: no Meu dia, passar o mouse numa tarefa inclina a linha na direção do
+     ponteiro e a tarefa inteira sai do título numa caixa flutuante (balao-tarefa.js).
+
+   Conflito conhecido: docs/design/CONCEITO.md §4 diz "a escada é a única elevação (sem box-shadow)".
+   Esta camada troca essa regra por sombras, a pedido. Os tokens-fonte (docs/design/tokens.css) não mudaram.
+   ===================================================================== */
+
+/* ---------- 0. A fonte de título: Big Shoulders (coleção da skill canvas-design, licença OFL em fontes/big-shoulders/)
+   Letras altas e estreitas, de placa industrial: empilhadas, parecem os andares de uma torre. É o Babel.
+   Substitui a Cormorant no site inteiro (Estação, TV, todos os temas): --fonte-fala passa a ser ela.
+   As faces itálicas apontam para o mesmo arquivo de pé, para o navegador não entortar as letras. ---------- */
+@font-face { font-family: "Babel Torre"; src: url("fontes/big-shoulders/BigShoulders-Regular.ttf") format("truetype"); font-weight: 100 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Babel Torre"; src: url("fontes/big-shoulders/BigShoulders-Bold.ttf") format("truetype"); font-weight: 600 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Babel Torre"; src: url("fontes/big-shoulders/BigShoulders-Regular.ttf") format("truetype"); font-weight: 100 500; font-style: italic; font-display: swap; }
+@font-face { font-family: "Babel Torre"; src: url("fontes/big-shoulders/BigShoulders-Bold.ttf") format("truetype"); font-weight: 600 900; font-style: italic; font-display: swap; }
+/* A assinatura do título ("Bom dia, <nome>."): script cursiva no espírito Coca-Cola / Canva, com fonte livre.
+   Pacifico (OFL): redonda e de traço cheio, segura bem a luz neon no contorno. Alternativa instalada: Yellowtail
+   (Apache 2.0, mais Coca-Cola, traço fino): para usar, troque --fonte-assinatura para "Babel Yellowtail". */
+@font-face { font-family: "Babel Pacifico"; src: url("fontes/pacifico/pacifico-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Babel Pacifico"; src: url("fontes/pacifico/pacifico-latin-ext-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: "Babel Yellowtail"; src: url("fontes/yellowtail/yellowtail-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Babel Yellowtail"; src: url("fontes/yellowtail/yellowtail-latin-ext-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+:root, html[data-tema-estacao] {
+  --fonte-assinatura: "Babel Pacifico", "Brush Script MT", cursive;
+  --fonte-titulo: "Babel Torre", "Arial Narrow", "Helvetica Neue Condensed", sans-serif;
+  --fonte-fala: var(--fonte-titulo);
+}
+
+html[data-vista="estacao"]:not([data-tema-estacao]) {
+  --s0: #080808;
+  --s1: #0e0e0f;
+  --s2: #161617;
+  --s3: #1f1f21;
+  --linha: #26262a;
+  --linha-fraca: rgba(255, 255, 255, 0.06);
+  --pontos: rgba(255, 255, 255, 0.022);
+  --hairline-peca: #4a4a50;
+  --texto: #ececef;
+  --texto-90: #d2d2d7;
+  --apagado: #a6a6ae;
+  --fraco: #6e6e76;
+  --sem-dado: #5f5f66;
+
+  /* relevo: luz na aresta de cima, sombra embaixo, em camadas */
+  --face: linear-gradient(180deg, #1c1c1e 0%, #141415 100%);
+  --face-hover: linear-gradient(180deg, #232326 0%, #18181a 100%);
+  --relevo:
+    inset 0 1px 0 rgba(255, 255, 255, 0.075),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 1px 1px rgba(0, 0, 0, 0.8),
+    0 3px 6px -1px rgba(0, 0, 0, 0.7),
+    0 10px 20px -8px rgba(0, 0, 0, 0.9);
+  --relevo-alto:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.65),
+    0 2px 2px rgba(0, 0, 0, 0.8),
+    0 8px 14px -4px rgba(0, 0, 0, 0.8),
+    0 22px 40px -14px rgba(0, 0, 0, 0.95);
+  --afundado:
+    inset 0 2px 5px rgba(0, 0, 0, 0.85),
+    inset 0 1px 1px rgba(0, 0, 0, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.045);
+  --flutua:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.9),
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 24px 48px -12px rgba(0, 0, 0, 0.95),
+    0 60px 100px -30px rgba(0, 0, 0, 1);
+  --painel:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.7),
+    0 14px 30px -16px rgba(0, 0, 0, 0.9);
+  --mov-relevo: 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ---------- 0b. O título do Meu dia: a assinatura sobe do preto; no nome, uma luz neon corre pelo contorno (neon-nome.js) ---------- */
+.saudacao { font-family: var(--fonte-assinatura); font-weight: 400; font-style: normal; letter-spacing: 0; }
+.saudacao .sn { position: relative; display: inline-block; }
+.saudacao .sn-neon { display: none; }
+html[data-vista="estacao"]:not([data-tema-estacao]) .saudacao {
+  font-size: clamp(42px, 1.8vw + 22px, 58px);
+  line-height: 1.25;
+  color: #f1f1f3;
+  text-shadow:
+    0 1px 0 #2a2a2d,
+    0 2px 0 #202023,
+    0 3px 0 #17171a,
+    0 6px 10px rgba(0, 0, 0, 0.9),
+    0 14px 24px rgba(0, 0, 0, 0.7);
+}
+/* as letras do nome: a mesma face clara, com o reflexo do neon na parede atrás */
+html[data-vista="estacao"]:not([data-tema-estacao]) .saudacao .sn-texto {
+  color: #fbfbfd;
+  text-shadow:
+    0 1px 0 #2a2a2d,
+    0 2px 0 #202023,
+    0 3px 0 #17171a,
+    0 6px 10px rgba(0, 0, 0, 0.9),
+    0 0 34px color-mix(in srgb, var(--t0) 35%, transparent);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .saudacao .sn-neon { display: block; position: absolute; overflow: visible; pointer-events: none; user-select: none; }
+/* o SVG não herda a sombra do título: no Chrome ela seria desenhada no formato das letras e apagaria o branco embaixo */
+html[data-vista="estacao"]:not([data-tema-estacao]) .sn-neon text { fill: none; stroke-linejoin: round; stroke-linecap: round; text-shadow: none; }
+/* o tubo: aceso fraco o tempo todo, desenha o contorno inteiro */
+html[data-vista="estacao"]:not([data-tema-estacao]) .sn-neon .sn-tubo { stroke: color-mix(in srgb, var(--t0) 55%, transparent); stroke-width: 1.3; }
+/* as luzes que correm: 240 px por volta; o violeta vem meia volta atrás do ciano */
+html[data-vista="estacao"]:not([data-tema-estacao]) .sn-neon .sn-luz {
+  stroke: #dffcff;
+  stroke-width: 2.6;
+  stroke-dasharray: 30 210;
+  animation: sn-corre 3.4s linear infinite;
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .sn-neon .sn-luz-2 {
+  stroke: color-mix(in oklch, var(--t2) 70%, white);
+  stroke-width: 2.2;
+  stroke-dasharray: 16 224;
+  animation-delay: -1.7s;
+}
+@keyframes sn-corre { to { stroke-dashoffset: -240; } }
+@media (prefers-reduced-motion: reduce) {
+  html[data-vista="estacao"]:not([data-tema-estacao]) .sn-neon .sn-luz { animation: none; stroke-dasharray: none; opacity: 0.55; }
+  html[data-vista="estacao"]:not([data-tema-estacao]) .sn-neon .sn-luz-2 { display: none; }
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .pagina-cab .pagina-sub { margin-top: 6px; }
+
+/* ---------- 1. O fosco: grão fino sobre a tela inteira ---------- */
+html[data-vista="estacao"]:not([data-tema-estacao]) body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ---------- 2. Botões: bordas transparentes, relevo no lugar ---------- */
+html[data-vista="estacao"]:not([data-tema-estacao]) button { border-color: transparent; }
+
+html[data-vista="estacao"]:not([data-tema-estacao]) :is(
+  .botao:not(.discreto),
+  .term-toggle, .criar-atalhos button, .mais-grade button, .cron-motivos button, .st-atualizar, .prompt-pos,
+  .term-receitas button, .end-onde
+) {
+  border-color: transparent;
+  background: var(--face);
+  box-shadow: var(--relevo);
+  transition: transform var(--mov-relevo), box-shadow var(--mov-relevo), background var(--mov-relevo), color var(--mov-relevo);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) :is(
+  .botao:not(.discreto),
+  .term-toggle, .criar-atalhos button, .mais-grade button, .cron-motivos button, .st-atualizar, .prompt-pos,
+  .term-receitas button, .end-onde
+):hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--face-hover);
+  box-shadow: var(--relevo-alto);
+  transform: translateY(-1px);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) :is(
+  .botao, .term-toggle, .criar-atalhos button, .mais-grade button, .cron-motivos button, .st-atualizar, .prompt-pos,
+  .lat-item, .e-atividades button, .term-receitas button, .end-onde, .alternar button
+):active:not(:disabled) {
+  transform: translateY(1px);
+  background: #101011;
+  box-shadow: var(--afundado);
+  transition-duration: 50ms;
+}
+
+/* primário: o ciano vira uma peça de luz, convexa, que ilumina a mesa embaixo dela */
+html[data-vista="estacao"]:not([data-tema-estacao]) .botao.primario {
+  border-color: transparent;
+  color: #041316;
+  background: linear-gradient(180deg, color-mix(in oklch, var(--t0) 78%, white) 0%, var(--t0) 45%, color-mix(in oklch, var(--t0) 80%, black) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.25),
+    0 1px 1px rgba(0, 0, 0, 0.8),
+    0 6px 14px -4px rgba(0, 0, 0, 0.8),
+    0 8px 24px -6px color-mix(in srgb, var(--t0) 45%, transparent);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .botao.primario:hover:not(:disabled) {
+  background: linear-gradient(180deg, color-mix(in oklch, var(--t0) 70%, white) 0%, color-mix(in oklch, var(--t0) 92%, white) 45%, var(--t0) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+    0 2px 2px rgba(0, 0, 0, 0.8),
+    0 12px 22px -6px rgba(0, 0, 0, 0.85),
+    0 10px 34px -6px color-mix(in srgb, var(--t0) 60%, transparent);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .botao.primario:active:not(:disabled) {
+  background: color-mix(in oklch, var(--t0) 82%, black);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 0 14px -4px color-mix(in srgb, var(--t0) 50%, transparent);
+}
+
+/* discreto: some até ser tocado; ao passar o mouse, ganha relevo */
+html[data-vista="estacao"]:not([data-tema-estacao]) .botao.discreto:hover {
+  background: var(--face-hover);
+  box-shadow: var(--relevo);
+}
+
+/* ligado (aria-pressed) = afundado, com a luz ciano por dentro */
+html[data-vista="estacao"]:not([data-tema-estacao]) :is(.botao, .term-toggle)[aria-pressed="true"] {
+  border-color: transparent;
+  background: #0b0b0c;
+  color: var(--t0);
+  box-shadow: var(--afundado), inset 0 0 12px -4px color-mix(in srgb, var(--t0) 55%, transparent);
+  transform: none;
+}
+
+/* ---------- 3. Barra de atividades e lista lateral ---------- */
+html[data-vista="estacao"]:not([data-tema-estacao]) .e-atividades button {
+  border-radius: 10px;
+  transition: transform var(--mov-relevo), box-shadow var(--mov-relevo), background var(--mov-relevo);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .e-atividades button:hover {
+  background: var(--face-hover);
+  box-shadow: var(--relevo);
+  transform: translateY(-1px);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .e-atividades button[aria-current="page"],
+html[data-vista="estacao"]:not([data-tema-estacao]) .e-atividades button[aria-current="true"],
+html[data-vista="estacao"]:not([data-tema-estacao]) .e-atividades button.ativo {
+  background: var(--face);
+  box-shadow: var(--relevo-alto), inset 2px 0 0 var(--t0);
+}
+
+/* a lista lateral: cada frase é uma peça saltada; o número mora num poço; a nota fica afundada */
+@media (min-width: 761px) {
+  html[data-vista="estacao"]:not([data-tema-estacao]) .e-lateral .lat-lista { display: grid; gap: 6px; padding: 2px 10px 4px; }
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .lat-item {
+  min-height: 34px;
+  padding: 6px 8px 6px 11px;
+  border-radius: 9px;
+  background: var(--face);
+  box-shadow: var(--relevo);
+  color: var(--texto-90);
+  transition: transform var(--mov-relevo), box-shadow var(--mov-relevo), background var(--mov-relevo), color var(--mov-relevo);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) button.lat-item:hover {
+  background: var(--face-hover);
+  box-shadow: var(--relevo-alto);
+  color: var(--texto);
+  transform: translateX(2px);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .lat-item[aria-current="true"] {
+  background: var(--face-hover);
+  color: var(--texto);
+  box-shadow: var(--relevo-alto), inset 2px 0 0 var(--t0);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .lat-item .conta {
+  min-width: 26px;
+  padding: 4px 7px;
+  border-radius: 7px;
+  background: #070707;
+  box-shadow: var(--afundado);
+  color: var(--texto-90);
+  text-align: center;
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .lat-item .conta:empty { display: none; }
+/* Meu dia: a frase em foco inclina para o ponteiro e acende; a caixa dela sai para o lado (balao-tarefa.js) */
+html[data-vista="estacao"]:not([data-tema-estacao]) .lat-item.bt-foco {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  transform: perspective(600px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(3px, -1px, 0);
+  background:
+    radial-gradient(180px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.085), transparent 65%),
+    var(--face-hover);
+  box-shadow:
+    inset 2px 0 0 var(--t0),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.7),
+    0 3px 3px rgba(0, 0, 0, 0.8),
+    0 12px 22px -8px rgba(0, 0, 0, 0.9),
+    8px 0 26px -14px var(--t0);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .lat-item.bt-foco .rotulo-texto { text-shadow: 0 0 16px color-mix(in srgb, var(--t0) 45%, transparent); }
+html[data-vista="estacao"]:not([data-tema-estacao]) .lat-nota {
+  margin: 14px 10px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #0a0a0b;
+  box-shadow: var(--afundado);
+  color: var(--apagado);
+}
+
+/* seletor Tech | Vibe: um sulco afundado com a tecla escolhida saltada */
+html[data-vista="estacao"]:not([data-tema-estacao]) .alternar {
+  border-color: transparent;
+  background: #070707;
+  box-shadow: var(--afundado);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .alternar button { transition: background var(--mov-relevo), box-shadow var(--mov-relevo); }
+html[data-vista="estacao"]:not([data-tema-estacao]) .alternar button.ativo {
+  background: var(--face-hover);
+  box-shadow: var(--relevo), inset 0 -2px 0 var(--t0);
+}
+
+/* ---------- 4. O que guarda afunda: campos, vazios, barras ---------- */
+html[data-vista="estacao"]:not([data-tema-estacao]) :is(input[type="text"], input[type="number"], input[type="date"], input[type="search"], select, textarea) {
+  border-color: transparent;
+  background: #070707;
+  box-shadow: var(--afundado);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) :is(input, select, textarea):focus {
+  border-color: transparent;
+  box-shadow: var(--afundado), 0 0 0 2px color-mix(in srgb, var(--t0) 55%, transparent);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .vazio {
+  border-color: transparent;
+  border-radius: 10px;
+  background: #0a0a0b;
+  box-shadow: var(--afundado);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .barra {
+  box-shadow: var(--afundado);
+}
+
+/* ---------- 5. Cartões sobem um pouco (painel), sem contorno ---------- */
+html[data-vista="estacao"]:not([data-tema-estacao]) :is(.cartao, .sala, .quadro-cartao, .mesa-item, .criar-cartao, .aprender, .cuidado-meu, .sobre-caixa) {
+  border-color: transparent;
+  background: linear-gradient(180deg, #171718 0%, #121213 100%);
+  box-shadow: var(--painel);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .numero {
+  border-color: transparent;
+  background: #0c0c0d;
+  box-shadow: var(--afundado);
+}
+
+/* ---------- 6. Itens de tarefa: peças que sobem; a cor do estado vira uma fita de luz ---------- */
+html[data-vista="estacao"]:not([data-tema-estacao]) #e-conteudo .item {
+  border-color: transparent;
+  border-radius: 10px;
+  background: var(--face);
+  box-shadow: inset 3px 0 0 var(--cor, var(--t0)), var(--relevo);
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 180ms, background 180ms;
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) #e-conteudo .item:hover {
+  border-color: transparent;
+  background: var(--face-hover);
+  box-shadow: inset 3px 0 0 var(--cor, var(--t0)), var(--relevo-alto);
+}
+
+/* Meu dia: a tarefa em foco inclina para o ponteiro e acende onde a luz bate (balao-tarefa.js escreve --rx, --ry, --mx, --my) */
+html[data-vista="estacao"]:not([data-tema-estacao]) #e-conteudo .item.bt-foco {
+  position: relative;
+  z-index: 2;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(0, -3px, 0);
+  background:
+    radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.075), transparent 62%),
+    var(--face-hover);
+  box-shadow:
+    inset 3px 0 0 var(--cor, var(--t0)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.7),
+    0 3px 3px rgba(0, 0, 0, 0.8),
+    0 14px 24px -8px rgba(0, 0, 0, 0.9),
+    0 30px 50px -20px rgba(0, 0, 0, 1),
+    -6px 0 22px -12px var(--cor, var(--t0));
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) #e-conteudo .item.bt-foco .item-titulo {
+  color: #fff;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--cor, var(--t0)) 45%, transparent);
+}
+
+/* ---------- 7. A caixa da tarefa (flutua) ---------- */
+.balao-tarefa {
+  --b-fundo: #1a1a1c;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147482000;
+  width: min(380px, calc(100vw - 24px));
+  padding: 16px 18px 14px;
+  border-radius: 14px;
+  background:
+    radial-gradient(120% 60% at var(--rabo-x, 40px) var(--rabo-y, 0px), color-mix(in srgb, var(--cor, #2ad5e5) 14%, transparent), transparent 70%),
+    linear-gradient(180deg, #1e1e20 0%, #151516 100%);
+  color: #ececef;
+  font: 400 13px/1.5 var(--fonte-ui, system-ui, sans-serif);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 0 0 1px rgba(0, 0, 0, 0.9),
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 24px 48px -12px rgba(0, 0, 0, 0.95),
+    0 60px 100px -30px rgba(0, 0, 0, 1),
+    0 0 40px -18px var(--cor, #2ad5e5);
+  pointer-events: none;
+  transform-origin: var(--rabo-x, 40px) var(--origem-y, 0px);
+  opacity: 0;
+  visibility: hidden;
+  transform: perspective(900px) translate3d(var(--sai-x, 0px), var(--sai-y, -10px), 0) rotateX(var(--sai-rx, 14deg)) rotateY(var(--sai-ry, 0deg)) scale(0.9);
+  filter: blur(3px);
+  transition:
+    opacity 170ms ease-out,
+    transform 280ms cubic-bezier(0.18, 0.95, 0.25, 1.12),
+    filter 200ms ease-out,
+    visibility 0s linear 280ms;
+}
+.balao-tarefa[data-aberto="sim"] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 170ms ease-out,
+    transform 280ms cubic-bezier(0.18, 0.95, 0.25, 1.12),
+    filter 200ms ease-out,
+    visibility 0s,
+    top 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    left 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.balao-tarefa[data-lado="acima"] { --sai-y: 10px; --sai-rx: -14deg; }
+.balao-tarefa[data-lado="direita"] { --sai-x: -14px; --sai-y: 0px; --sai-rx: 0deg; --sai-ry: -18deg; }
+/* o bico: sai exatamente do título que o ponteiro tocou */
+.balao-tarefa::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: calc(var(--rabo-x, 40px) - 7px);
+  width: 14px;
+  height: 14px;
+  border-radius: 3px 0 0 0;
+  background: #1e1e20;
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.13);
+  transform: rotate(45deg);
+}
+.balao-tarefa[data-lado="acima"]::before {
+  top: auto;
+  bottom: -7px;
+  border-radius: 0 0 3px 0;
+  background: #151516;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+}
+.balao-tarefa[data-lado="direita"]::before {
+  top: calc(var(--rabo-y, 20px) - 7px);
+  left: -7px;
+  border-radius: 0 0 0 3px;
+  background: #1c1c1e;
+  box-shadow: -1px 1px 0 rgba(255, 255, 255, 0.05);
+}
+.balao-tarefa .bt-topo { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.balao-tarefa .bt-prio { font-size: 12px; color: #a6a6ae; }
+.balao-tarefa .bt-prio.alta, .balao-tarefa .bt-prio.urgente { color: var(--atencao, #f0b35a); }
+.balao-tarefa .bt-titulo { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.3; color: #fff; }
+.balao-tarefa .bt-desc {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: #0c0c0d;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+  color: #d2d2d7;
+}
+.balao-tarefa .bt-gente { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; color: #d2d2d7; }
+.balao-tarefa .bt-gente .bt-seta { color: #6e6e76; }
+.balao-tarefa .bt-dados { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 12px 0 0; }
+.balao-tarefa .bt-dados div {
+  padding: 7px 9px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #202022, #18181a);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+.balao-tarefa dt { font-size: 11px; color: #8e8e96; }
+.balao-tarefa dd { margin: 0; font: 500 12.5px/1.35 var(--fonte-mono, ui-monospace, monospace); color: #ececef; }
+.balao-tarefa dd.atrasada { color: var(--alarme, #ff6b6b); }
+.balao-tarefa dd.hoje { color: var(--atencao, #f0b35a); }
+.balao-tarefa .bt-etapas { display: flex; gap: 4px; margin: 12px 0 0; padding: 0; list-style: none; }
+.balao-tarefa .bt-etapas li {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 7px;
+  border-radius: 7px;
+  background: #0c0c0d;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+  font-size: 11px;
+  color: #8e8e96;
+}
+.balao-tarefa .bt-etapas li b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: #a6a6ae; }
+.balao-tarefa .bt-etapas li.feita b { color: #d2d2d7; }
+.balao-tarefa .bt-etapas li.agora {
+  background: linear-gradient(180deg, #232326, #1a1a1c);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.8), inset 0 -2px 0 var(--cor, #8670ff);
+  color: #ececef;
+}
+.balao-tarefa .bt-etapas li.agora b { color: #fff; }
+.balao-tarefa .bt-check { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 3px; color: #d2d2d7; }
+.balao-tarefa .bt-check li::before { content: "○  "; color: #6e6e76; }
+.balao-tarefa .bt-check li.feito { color: #8e8e96; text-decoration: line-through; }
+.balao-tarefa .bt-check li.feito::before { content: "✓  "; color: var(--ok, #7fd6a6); text-decoration: none; }
+.balao-tarefa .bt-rodape { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 12px 0 0; font-size: 12px; color: #8e8e96; }
+.balao-tarefa .bt-rodape span:last-child { flex: none; white-space: nowrap; color: #a6a6ae; }
+
+.balao-tarefa .bt-resumo { margin: 3px 0 0; color: #a6a6ae; }
+.balao-tarefa .bt-lista, .balao-tarefa .bt-vazio {
+  margin: 10px 0 0;
+  border-radius: 9px;
+  background: #0c0c0d;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+}
+.balao-tarefa .bt-lista { padding: 3px 0; list-style: none; }
+.balao-tarefa .bt-lista li { display: grid; gap: 1px; padding: 7px 12px 7px 14px; box-shadow: inset 2px 0 0 var(--c, #2ad5e5); }
+.balao-tarefa .bt-lista li + li { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+.balao-tarefa .bt-lista b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: #ececef; }
+.balao-tarefa .bt-lista small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 11px/1.4 var(--fonte-mono, ui-monospace, monospace); color: #8e8e96; }
+.balao-tarefa .bt-vazio { padding: 10px 12px; color: #a6a6ae; }
+.balao-tarefa .bt-mais { margin: 6px 0 0; font-size: 12px; color: #8e8e96; }
+.balao-tarefa .bt-barra { height: 8px; margin: 10px 0 0; border-radius: 99px; background: #0a0a0b; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9); overflow: hidden; }
+.balao-tarefa .bt-barra i {
+  display: block;
+  width: var(--v, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, color-mix(in oklch, var(--t0, #2ad5e5) 70%, white), var(--t0, #2ad5e5));
+  box-shadow: 0 0 10px var(--t0, #2ad5e5);
+}
+.balao-tarefa .bt-pergunta { margin: 8px 0 0; font: italic 500 19px/1.3 var(--fonte-fala, Georgia, serif); color: var(--latte, #fff8e7); }
+.balao-tarefa .bt-bloqueio { margin: 8px 0 0; color: var(--alarme, #ff6b6b); }
+.balao-tarefa .bt-dados.dois { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* ---------- 8. O sistema todo segue o Meu dia (pedido do Dominic, 26/09/2026) ---------- */
+/* Títulos na fonte alta (Big Shoulders), em maiúsculas: o da página e o de cada caixa. Brancos nos temas escuros
+   (no Vibe, que é claro, ficam na tinta do tema para continuarem legíveis). O "Bom dia" do Meu dia segue na assinatura com neon. */
+html[data-vista="estacao"] .rotulo {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+html[data-vista="estacao"] .pagina-titulo {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: clamp(34px, 1.3vw + 20px, 46px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+html[data-vista="estacao"]:not([data-tema-estacao="claro"]) .rotulo { color: #fff; }
+html[data-vista="estacao"]:not([data-tema-estacao="claro"]) .pagina-titulo {
+  color: #fff;
+  text-shadow:
+    0 1px 0 #2c2c30,
+    0 2px 0 #242427,
+    0 3px 0 #1d1d20,
+    0 4px 0 #161618,
+    0 7px 10px rgba(0, 0, 0, 0.9),
+    0 16px 26px rgba(0, 0, 0, 0.7);
+}
+.balao-tarefa .bt-titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* abas das laterais (Demandas | Tarefas, Equipe | Metas | Mapa): sulco afundado, a aba escolhida saltada */
+html[data-vista="estacao"]:not([data-tema-estacao]) .ativ-grupo {
+  gap: 4px;
+  margin: 8px 10px 4px;
+  padding: 4px;
+  border-color: transparent;
+  border-radius: 10px;
+  background: #070707;
+  box-shadow: var(--afundado);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .ativ-grupo [role="tab"] { border-color: transparent; border-radius: 7px; transition: background var(--mov-relevo), box-shadow var(--mov-relevo); }
+html[data-vista="estacao"]:not([data-tema-estacao]) .ativ-grupo [role="tab"]:hover { background: #131314; }
+html[data-vista="estacao"]:not([data-tema-estacao]) .ativ-grupo [role="tab"][aria-selected="true"] {
+  background: var(--face-hover);
+  color: #fff;
+  box-shadow: var(--relevo), inset 0 -2px 0 var(--t0);
+}
+
+/* cartões e painéis das outras telas: sobem como os do Meu dia */
+html[data-vista="estacao"]:not([data-tema-estacao]) :is(.pessoa-cartao, .end-sala, .mem-painel, .oficina-pessoa, .parede-term) {
+  border-color: transparent;
+  background: linear-gradient(180deg, #171718 0%, #121213 100%);
+  box-shadow: var(--painel);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .oficina-pessoa.pode { box-shadow: var(--painel), inset 3px 0 0 color-mix(in oklch, var(--t0) 70%, transparent); }
+html[data-vista="estacao"]:not([data-tema-estacao]) .parede-term.meu { box-shadow: var(--painel), inset 0 2px 0 var(--t0); }
+/* a bandeja de escrever do chat flutua sobre a conversa */
+html[data-vista="estacao"]:not([data-tema-estacao]) .zap-compor { border-top-color: transparent; background: #121213; box-shadow: 0 -10px 18px -10px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+/* código e citações dentro dos documentos ficam afundados */
+html[data-vista="estacao"]:not([data-tema-estacao]) #e-conteudo pre { border-color: transparent; background: #0a0a0b; box-shadow: var(--afundado); }
+/* teclas de atalho viram teclinhas de verdade */
+html[data-vista="estacao"]:not([data-tema-estacao]) kbd {
+  border-color: transparent;
+  border-radius: 5px;
+  background: var(--face);
+  color: var(--texto-90);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 0 #030303, 0 3px 5px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- 8b. Tudo tem um fundo (pedido do Dominic, 26/09/2026): nenhum texto fica solto na página ----------
+   · o cabeçalho de cada página (título, subtítulo e botões) vira um painel com relevo;
+   · textos de ajuda viram notas afundadas, como a nota da lateral;
+   · a apresentação da aba Criar (logo, título e texto) ganha a caixa dela, sem mudar o HTML: o bloco vira grade
+     e um ::before ocupa as três primeiras linhas, atrás deles. */
+html[data-vista="estacao"]:not([data-tema-estacao]) .pagina-cab {
+  margin-bottom: 18px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #171718 0%, #111112 100%);
+  box-shadow: var(--painel);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .form-ajuda {
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: #0a0a0b;
+  box-shadow: var(--afundado);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .wa-parear {
+  padding: 26px 28px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #171718 0%, #111112 100%);
+  box-shadow: var(--painel);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .boas-vindas { display: grid; grid-template-columns: minmax(0, 1fr); }
+html[data-vista="estacao"]:not([data-tema-estacao]) .boas-vindas::before {
+  content: "";
+  grid-row: 1 / 4;
+  grid-column: 1;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #171718 0%, #111112 100%);
+  box-shadow: var(--painel);
+}
+html[data-vista="estacao"]:not([data-tema-estacao]) .boas-vindas > .bv-logo { grid-row: 1; grid-column: 1; justify-self: start; position: relative; margin: 20px 22px 6px; }
+html[data-vista="estacao"]:not([data-tema-estacao]) .boas-vindas > .pagina-titulo { grid-row: 2; grid-column: 1; position: relative; margin: 0 22px; }
+html[data-vista="estacao"]:not([data-tema-estacao]) .boas-vindas > .pagina-sub { grid-row: 3; grid-column: 1; position: relative; margin: 10px 22px 22px; max-width: 68ch; }
+
+/* ---------- 9. A luz do assistente (pedido do Dominic, 26/09/2026) ----------
+   No lugar do arco que girava (.bc-p-laco), um anel inteiro de neon em volta do mostrador de cada agente:
+   a luz circula (o degradê gira), pulsa, e alterna entre azul neon (ciano → azul) e roxo neon (lilás → violeta).
+   Parado, pulsa devagar; rodando ou pensando, circula e pulsa mais rápido. Pausado ou desligado, apaga.
+   As cores animam por @property (registradas como <color>/<angle>); sem suporte, o anel fica parado e continua bonito. */
+@property --anel-ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@property --anel-a { syntax: "<color>"; inherits: false; initial-value: #22d3ee; }
+@property --anel-b { syntax: "<color>"; inherits: false; initial-value: #2563ff; }
+
+html[data-vista="estacao"] .tr-pres .bc-presenca .bc-p-laco { display: none; }
+html[data-vista="estacao"] .tr-pres::before,
+html[data-vista="estacao"] .tr-pres::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(from var(--anel-ang), var(--anel-a), var(--anel-b), var(--anel-a), var(--anel-b), var(--anel-a));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 3px));
+  animation: anel-circula 4.8s linear infinite, anel-cores 7s ease-in-out infinite, anel-pulsa 2.6s ease-in-out infinite;
+}
+/* a cópia borrada é o brilho do neon na parede */
+html[data-vista="estacao"] .tr-pres::after {
+  inset: -9px;
+  filter: blur(7px);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 7px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 7px));
+  animation: anel-circula 4.8s linear infinite, anel-cores 7s ease-in-out infinite, anel-brilha 2.6s ease-in-out infinite;
+}
+html[data-vista="estacao"] .tr-pres:has(.bc-presenca:is([data-estado="rodando"], [data-estado="pensando"]))::before,
+html[data-vista="estacao"] .tr-pres:has(.bc-presenca:is([data-estado="rodando"], [data-estado="pensando"]))::after {
+  animation-duration: 1.6s, 3.2s, 0.95s;
+}
+html[data-vista="estacao"] .tr-pres:has(.bc-presenca:is([data-estado="pausado"], [data-estado="desligado"]))::before,
+html[data-vista="estacao"] .tr-pres:has(.bc-presenca:is([data-estado="pausado"], [data-estado="desligado"]))::after {
+  animation: none;
+  opacity: 0.12;
+  filter: grayscale(1);
+}
+@keyframes anel-circula { to { --anel-ang: 360deg; } }
+@keyframes anel-cores {
+  0%, 38% { --anel-a: #22d3ee; --anel-b: #2563ff; }
+  50%, 88% { --anel-a: #d8b4fe; --anel-b: #7c3aed; }
+  100% { --anel-a: #22d3ee; --anel-b: #2563ff; }
+}
+@keyframes anel-pulsa {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+@keyframes anel-brilha {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-vista="estacao"] .tr-pres::before, html[data-vista="estacao"] .tr-pres::after { animation: none; opacity: 0.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-vista="estacao"]:not([data-tema-estacao]) :is(#e-conteudo .item, .lat-item).bt-foco { transform: translateY(-2px); }
+  .balao-tarefa, .balao-tarefa[data-aberto="sim"] { transform: none; filter: none; transition: opacity 120ms, visibility 0s; }
+}
+@media (prefers-contrast: more) {
+  html[data-vista="estacao"]:not([data-tema-estacao]) :is(.botao, .item, .lat-item, input, select, textarea) { border-color: var(--hairline-forte); }
+}
+
+/* ---------- 10. Estação de testes (selo-testes.js): um selo no topo, para nunca confundir com o Babel de verdade ---------- */
+.selo-testes {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  margin-left: 10px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #f5c76a, #d99a2b);
+  color: #1b1204;
+  font: 700 12px/1 var(--fonte-titulo, "Arial Narrow", sans-serif);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.6), 0 0 14px -4px #f5c76a;
+}
+
+/* ---------- 11. Oficina · as pessoas (26/09/2026, pedido do Dominic) ----------
+   · Redondo: em v3.css, ".oficina-pessoa > span:first-of-type { flex: 1 }" pegava a própria foto (é o primeiro span da linha)
+     e esticava o círculo numa elipse. A foto volta ao tamanho fixo e quem cresce é o nome.
+   · Só três cores, todas do Babel, em degradê, e só no anel (o miolo fica preto fosco, afundado, como o resto do app):
+     azul, azul→roxo e roxo, repetindo na ordem da lista (as duas listas da Oficina têm a mesma ordem, então cada pessoa
+     fica com a mesma cor nas duas). O halo em volta do anel pulsa bem devagar (8 s), só opacidade. */
+.oficina-pessoas > .oficina-pessoa > .avatar {
+  --bab-a: #22d3ee;
+  --bab-b: #3b82f6;
+  --bab-luz: #22d3ee;
+  --bab-texto: #a5f3fc;
+  --av-cor: var(--bab-luz);
+  flex: 0 0 var(--tam);
+  width: var(--tam);
+  height: var(--tam);
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 30%, #1c1c1e, #0b0b0c 72%) padding-box,
+    linear-gradient(145deg, var(--bab-a), var(--bab-b)) border-box;
+  color: var(--bab-texto);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.75), inset 0 -1px 0 rgba(255, 255, 255, 0.06), 0 3px 8px rgba(0, 0, 0, 0.6);
+}
+.oficina-pessoas > .oficina-pessoa:nth-child(3n + 2) > .avatar { --bab-a: #3b82f6; --bab-b: #a855f7; --bab-luz: #6366f1; --bab-texto: #c7d2fe; }
+.oficina-pessoas > .oficina-pessoa:nth-child(3n + 3) > .avatar { --bab-a: #d8b4fe; --bab-b: #7c3aed; --bab-luz: #a855f7; --bab-texto: #e9d5ff; }
+.oficina-pessoas > .oficina-pessoa > .avatar + span { flex: 1; min-width: 0; }
+.oficina-pessoas > .oficina-pessoa > .avatar .av-luz { display: none; }
+/* o halo: sombra só por fora do círculo, acendendo e apagando */
+.oficina-pessoas > .oficina-pessoa > .avatar::after {
+  inset: -2px;
+  border: 0;
+  filter: none;
+  box-shadow: 0 0 calc(var(--tam) * 0.5) calc(var(--tam) * 0.06) var(--bab-luz);
+  animation: of-av-pulsa 8s ease-in-out infinite;
+}
+.oficina-pessoas > .oficina-pessoa:nth-child(3n + 2) > .avatar::after { animation-delay: -2.7s; }
+.oficina-pessoas > .oficina-pessoa:nth-child(3n + 3) > .avatar::after { animation-delay: -5.4s; }
+/* o aviso de evento (a pessoa ficou online, o terminal rodou) continua, com as duas laterais na cor da pessoa */
+.oficina-pessoas > .oficina-pessoa > .avatar::before { border-right-color: var(--av-cor); }
+@keyframes of-av-pulsa {
+  0%, 100% { opacity: 0.12; transform: scale(0.96); }
+  50% { opacity: 0.85; transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oficina-pessoas > .oficina-pessoa > .avatar::after { animation: none; opacity: 0.5; transform: none; }
+}
+html.sem-foco .oficina-pessoas > .oficina-pessoa > .avatar::after { animation-play-state: paused; }

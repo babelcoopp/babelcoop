@@ -15,6 +15,20 @@ window.BC = window.BC || {};
   function ativo(id) { var p = L.pessoa(id); return !!p && id !== L.eu && p.status !== 'offline'; }
   function admin(quem) { var p = L.pessoa(quem); return !!p && p.papel === 'admin'; }
 
+  /* celular, iPad e TV abertos pelo IP da máquina: o servidor só aceita deles o que vem em COOP_REAL.remoto (servidor.js).
+     O resto nem se aplica nesta tela (senão ela mostraria o que o diário nunca guarda); as que a tela dispara sozinha saem caladas.
+     Os eventos que chegam do servidor não passam por aqui (a ponte aplica L.A direto). */
+  var AUTOMATICAS = ['lida', 'agenteEstado', 'corpoPublicar', 'retomarSozinho'];
+  var fazerDaLoja = L.fazer;
+  L.fazer = function (nome) {
+    var real = window.COOP_REAL;
+    if (real && Array.isArray(real.remoto) && real.remoto.indexOf(nome) === -1) {
+      if (AUTOMATICAS.indexOf(nome) === -1 && BC.estacao && BC.estacao.aviso) BC.estacao.aviso('Pela rede só o quadro e a TV. "' + String(nome).slice(0, 40) + '" fica para a Estação.');
+      return false;
+    }
+    return fazerDaLoja.apply(L, arguments);
+  };
+
   function pausarOutras(pessoa, exceto, agora) {
     E().demandas.forEach(function (o) {
       if (o.para === pessoa && o.id !== exceto && o.estado === 'andamento') {
@@ -201,7 +215,7 @@ window.BC = window.BC || {};
   /* o arquivo que a IA de cada terminal lê antes de começar */
   A.gerarAprendizadosMd = function () {
     var lista = E().aprendizados.slice().sort(function (a, b) { return (b.confirmacoes.length - a.confirmacoes.length) || (b.ts - a.ts); });
-    var md = ['# Aprendizados da equipe', '', '> Gerado pelo Babel Coop. A IA de cada terminal lê este arquivo antes de começar.',
+    var md = ['# Aprendizados da equipe', '', '> Gerado pelo babel-coop. A IA de cada terminal lê este arquivo antes de começar.',
       '> O que se repete não entra de novo: soma "+1 confirmado".', ''];
     lista.forEach(function (ap) {
       md.push('- ' + ap.texto + ' _(' + (ap.ia ? 'IA do terminal de ' : '') + L.nome(ap.pessoa) + ', ' + U.quando(ap.ts) +
@@ -318,7 +332,8 @@ window.BC = window.BC || {};
   A.pagina = function (quem, delta) { var p = E().projecao; if (!p) return; p.pagina = Math.min(p.paginas, Math.max(1, p.pagina + delta)); return []; };
   A.rolarProjecao = function (quem, delta) { var p = E().projecao; if (!p) return; p.rolagem = Math.max(0, Math.min(1, (p.rolagem || 0) + delta)); return []; };
   A.rolarProjecaoPara = function (quem, fracao) { var p = E().projecao; if (!p) return; p.rolagem = Math.max(0, Math.min(1, +fracao || 0)); return []; };
-  A.encerrarProjecao = function (quem) { var p = E().projecao; if (!p) return; if (quem && p.por !== quem && !admin(quem)) return; E().projecao = null; return []; };
+  /* a TV é da equipe: quem projetou ou a gestão encerra (antes, sem quem, passava qualquer um) */
+  A.encerrarProjecao = function (quem) { var p = E().projecao; if (!p) return; if (p.por !== quem && !admin(quem)) return; E().projecao = null; return []; };
   A.tvSite = function (quem, url) {
     if (!url) return;
     if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
@@ -330,10 +345,19 @@ window.BC = window.BC || {};
     E().cronometroTv = { rotulo: rotulo, fim: Date.now() + min * MIN, por: quem };
     return [ev('cronometro', quem, L.nome(quem) + ' iniciou o cronômetro "' + rotulo + '" (' + min + ' min) na TV', { tv: true, textoTv: rotulo + ' · ' + min + ' min' })];
   };
-  A.pararCronometroTv = function () { E().cronometroTv = null; return []; };
+  /* o cronômetro da TV: para quem o iniciou ou a gestão, como a projeção */
+  A.pararCronometroTv = function (quem) { var c = E().cronometroTv; if (c && c.por !== quem && !admin(quem)) return; E().cronometroTv = null; return []; };
   A.visita = function (quem, ligado) { if (!admin(quem)) return; E().visita = !!ligado; return []; };
-  A.temaTv = function (quem, tema) { E().temaTv = tema; return []; };
-  A.tvModo = function (quem, modo, quadroId) { E().tvModo = modo; if (quadroId !== undefined) E().tvQuadro = quadroId; return []; };
+  A.temaTv = function (quem, tema) { if (!admin(quem) || ['noite', 'claro', 'ametista', 'roxo', 'azul'].indexOf(tema) === -1) return; E().temaTv = tema; return []; };
+  /* modo da TV: a gestão troca qualquer um (Controle da TV); os outros só o que a interface dá a todos: voltar ao painel,
+     pôr um quadro ao vivo (quadro, iPad) e a reunião aberta na TV */
+  function tvModoDeTodos(modo, quadroId) {
+    if (modo === 'painel') return true;
+    if (modo === 'quadro') { if (quadroId == null) return true; var q = L.arquivo(quadroId); return !!q && q.tipo === 'quadro'; }
+    if (modo === 'reuniao') return !!(E().reuniao && E().reuniao.ativa);
+    return false;
+  }
+  A.tvModo = function (quem, modo, quadroId) { if (!admin(quem) && !tvModoDeTodos(modo, quadroId)) return; E().tvModo = modo; if (quadroId !== undefined) E().tvQuadro = quadroId; return []; };
   A.novaCampanha = function (quem, dados) {
     if (!dados || !dados.titulo) return;
     var c = { id: L._novoId('c'), titulo: dados.titulo, alvo: dados.alvo || 10, atual: 0, pessoa: dados.pessoa || quem, prazo: dados.prazo || null, por: quem, ts: Date.now(), unidade: dados.unidade || '' };
@@ -344,7 +368,7 @@ window.BC = window.BC || {};
   };
   A.desfazerCampanha = function (quem, id) { var cs = E().campanhas || [], i = cs.map(function (c) { return c.id; }).indexOf(id); if (i === -1) return; cs.splice(i, 1); return [ev('campanha-desfeita', quem, L.nome(quem) + ' desfez uma campanha', { discreto: true })]; };
   A.presenca = function (quem, status) { var p = L.pessoa(quem); if (!p) return; p.status = status; p.ultimaVez = Date.now(); return []; };
-  A.regra = function (quem, chave, valor) { E().regras[chave] = valor; return []; };
+  A.regra = function (quem, chave, valor) { if (!admin(quem)) return; E().regras[chave] = valor; return []; };
   A.tocar = function () { return []; };
 
   A.maisUmCliente = function (quem) {
@@ -795,6 +819,9 @@ window.BC = window.BC || {};
   function depois(ms, fn) { setTimeout(function () { if (!L.lider) return; try { fn(); } catch (e) { console.error(e); } }, ms); }
 
   A._reagir = function (nome, a) {
+    /* no app real (ponte.js, window.COOP_REAL) quem responde é a pessoa, pelo diário. Sem esta trava, 3 s depois de uma
+       mensagem direta aparecia "Combinado!" em nome de quem estava online, só nesta tela e sumindo ao recarregar (26/09/2026) */
+    if (window.COOP_REAL) return;
     var d = typeof a === 'string' ? L.demanda(a) : null;
     if (nome === 'pronta' && d && ativo(d.de)) {
       depois(U.entre(8000, 13000), function () {

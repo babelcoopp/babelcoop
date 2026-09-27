@@ -451,7 +451,9 @@ html.bc-org-parado .mq-faisca, html.bc-org-parado .mq-ponto { display: none; }
 
 /* ---------- a Máquina inteira em 3D (zoom "3D"): o corpo do projeto de visual3d.js dentro do palco ---------- */
 .mq2 .mq-palco-3d { flex-direction: column; padding: 0; overflow: hidden; }
-.mq2 .mq-3d-lugar { position: relative; flex: 1; min-height: 280px; }
+/* 160 px: com a ficha ou o teste abertos o palco encolhe, e a legenda de baixo não pode sumir atrás da Casa de máquinas */
+.mq2 .mq-3d-lugar { position: relative; flex: 1; min-height: 160px; }
+.mq2 .mq-3d-legenda { flex: none; }
 .mq2 .mq-3d-corpo { position: absolute; inset: 0; }
 .mq2 .mq-3d-corpo .v3c-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .mq2 .mq-3d-corpo .v3c-rotulos { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
@@ -460,3 +462,111 @@ html.bc-org-parado .mq-faisca, html.bc-org-parado .mq-ponto { display: none; }
 .mq2 .mq-3d-corpo .v3c-rotulo.ganhou { color: var(--t0); }
 .mq2 .mq-3d-corpo .v3c-aviso, .mq2 .mq-3d-aviso { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 8px; font: 500 11px/1.3 var(--fonte-mono); color: var(--fraco); text-align: center; }
 .mq2 .mq-3d-legenda { flex: none; margin: 0; padding: 6px 12px; border-top: 1px solid var(--linha-fraca); font: 500 var(--t-11)/1.3 var(--fonte-mono); color: var(--apagado); }
+
+/* ---------- efeitos de montar (maquina-efeitos.js + VistaCorpo.efeito em visual3d.js): tudo com começo e fim, nada em repouso ---------- */
+/* 2D: a peça que veio do banco cai no lugar e acende (uma vez, 0,9 s; a classe sai sozinha em 1 s) */
+.mq2 .mq-peca.mq-fx-nasce { animation: mq-fx-nasce 900ms cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes mq-fx-nasce {
+  0% { opacity: 0; transform: translateY(-18px) scale(.94); box-shadow: 0 0 0 2px #a376e9, 0 0 28px 4px rgb(163 118 233 / .7); }
+  45% { opacity: 1; transform: translateY(2px) scale(1.02); box-shadow: 0 0 0 2px #2ad5e5, 0 0 32px 6px rgb(42 213 229 / .6); }
+  70% { transform: translateY(-2px); }
+  100% { transform: none; }
+}
+/* 3D: o rótulo da peça que existe no banco local (fixo, com o selo) e o rótulo que acende no "nascer" */
+.mq2 .mq-3d-corpo .v3c-rotulo small { display: block; margin-top: 3px; font: 500 9.5px/1 var(--fonte-mono); color: var(--apagado); }
+.mq2 .mq-3d-corpo .v3c-rotulo.banco { border-color: color-mix(in srgb, #2ad5e5 45%, var(--linha-fraca)); }
+.mq2 .mq-3d-corpo .v3c-rotulo.banco small { color: var(--t0); }
+/* peça do banco de outra Estação: o selo diz de quem é o banco, em tom mais baixo (este computador não tem esse banco) */
+.mq2 .mq-3d-corpo .v3c-rotulo.banco.outra { border-style: dotted; }
+.mq2 .mq-3d-corpo .v3c-rotulo.banco.outra small, .mq2 .mq-estado-txt.banco.outra { color: var(--apagado); }
+.mq2 .mq-3d-corpo .v3c-rotulo.acende { color: #fff; border-color: #2ad5e5; background: color-mix(in srgb, #a376e9 32%, var(--s0)); box-shadow: 0 0 0 1px rgb(42 213 229 / .45), 0 0 18px rgb(163 118 233 / .7); }
+/* 3D: o texto do erro enquanto o efeito dura, e o clarão vermelho na borda do palco */
+.mq2 .mq-3d-corpo .v3c-rotulo.erro { max-width: 300px; white-space: normal; text-align: center; line-height: 1.3; color: #ffdada; border-color: #ff6b6b; background: rgb(48 10 16 / .9); }
+.mq2 .mq-3d-corpo.v3c-fx-erro::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; box-shadow: inset 0 0 0 2px rgb(255 107 107 / .85), inset 0 0 80px rgb(255 107 107 / .3); animation: mq-fx-erro 760ms ease-out both; }
+@keyframes mq-fx-erro { from { opacity: 1; } to { opacity: 0; } }
+/* sem movimento: só a cor, sem deslocamento (a classe e o clarão saem pelo relógio do efeito) */
+@media (prefers-reduced-motion: reduce) {
+  .mq2 .mq-peca.mq-fx-nasce { animation: none !important; outline: 2px solid var(--t0); outline-offset: 2px; }
+  .mq2 .mq-3d-corpo.v3c-fx-erro::after { animation: none; }
+}
+html.bc-org-parado .mq2 .mq-peca.mq-fx-nasce { animation: none !important; outline: 2px solid var(--t0); outline-offset: 2px; }
+html.bc-org-parado .mq2 .mq-3d-corpo.v3c-fx-erro::after { animation: none; }
+
+/* ---------- modo Vibe (claro, papel Latte): os tokens de casca-2030.css §20 já trocam quase tudo; aqui só o que era luz
+   pensada para o escuro (sombras pretas, brilho branco, blend "screen", cores fixas). O Tech não passa por aqui ---------- */
+html[data-vista="estacao"][data-tema-estacao="claro"] {
+  --mq-especular: inset 0 1px 0 rgb(255 255 255 / .75), 0 1px 2px rgb(60 45 20 / .10);
+  --mq-especular-polido: inset 0 1px 0 rgb(255 255 255 / .18), 0 2px 5px rgb(40 30 50 / .22);
+}
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-palco { background-image: radial-gradient(circle, rgb(6 11 22 / .08) 1px, transparent 1.2px); }
+/* a espessura da peça: no papel ela é uma sombra de alumínio, não o chão escuro */
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-peca:not(.construindo):not(.local) { border-bottom-color: color-mix(in oklch, var(--hairline-peca) 45%, var(--s3)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-dominio { border-bottom-color: color-mix(in oklch, var(--hairline-peca) 45%, var(--s3)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-peca.corpo { box-shadow: var(--mq-especular-polido), 0 0 0 1px color-mix(in srgb, var(--t2) 30%, transparent), 0 0 calc(var(--luz, 0) * 26px) calc(var(--luz, 0) * -1px) color-mix(in srgb, var(--luz-c, var(--t0)) 70%, transparent); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-gaveta .mq-cab { box-shadow: inset 0 1px 0 rgb(255 255 255 / .6); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-fresta { box-shadow: inset 0 1px 1px rgb(60 45 20 / .28), 0 0 calc(var(--luz, 0) * 12px) var(--luz-c, var(--ok)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-bandeja { box-shadow: inset 0 2px 6px rgb(60 45 20 / .14); }
+/* o Cofre continua obsidiana (o único polido) e o texto dele continua claro: os tokens de texto voltam aos do escuro só ali dentro */
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-cofre {
+  --s0: #1a1424; --s1: #211a2c; --s2: #2c2439; --s3: #372e47; --linha: #5b506f; --linha-fraca: rgba(255, 248, 231, .14);
+  --texto: #fff8e7; --texto-90: #ece6f4; --apagado: #cdc4dc; --fraco: #b7acc9;
+  --t0: #5fe0ec; --t1: #a9c2f5; --ok: #7fd6a6; --atencao: #f0b35a; --alarme: #ff9090;
+  color: var(--texto);
+}
+/* Tela: a miniatura da página é papel branco com as linhas em tinta */
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-mini-tela { background: var(--s1); border-color: var(--linha); }
+/* as imagens das peças: sombra de papel; o recorte "escuro" não some no claro (screen apaga no papel) */
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-corpo-img { filter: drop-shadow(0 3px 5px rgb(60 45 20 / .28)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-dominio-corpos img { filter: drop-shadow(0 3px 4px rgb(60 45 20 / .26)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-ficha-img { filter: drop-shadow(0 6px 10px rgb(60 45 20 / .25)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-corpo-img.escuro,
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-dominio-corpos img.escuro,
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-ficha-img.escuro { mix-blend-mode: normal; filter: none; }
+/* 3D: os rótulos de evento em tinta sobre papel (o branco sobre roxo claro não se lê) */
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-3d-corpo .v3c-rotulo { box-shadow: 0 1px 2px rgb(60 45 20 / .12); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-3d-corpo .v3c-rotulo.banco { border-color: color-mix(in srgb, var(--t0) 55%, var(--linha-fraca)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-3d-corpo .v3c-rotulo.acende { color: var(--texto); border-color: var(--t0); background: color-mix(in srgb, var(--t2) 14%, var(--s1)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--t0) 45%, transparent), 0 0 16px color-mix(in srgb, var(--t2) 45%, transparent); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-3d-corpo .v3c-rotulo.erro { color: #8f1a22; border-color: var(--alarme); background: #fdeceb; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-3d-corpo.v3c-fx-erro::after { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--alarme) 85%, transparent), inset 0 0 80px color-mix(in srgb, var(--alarme) 22%, transparent); }
+/* 2D: a peça que veio do banco cai e acende em tinta (roxo e ciano do claro) */
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-peca.mq-fx-nasce { animation-name: mq-fx-nasce-vibe; }
+@keyframes mq-fx-nasce-vibe {
+  0% { opacity: 0; transform: translateY(-18px) scale(.94); box-shadow: 0 0 0 2px var(--t2), 0 0 24px 3px color-mix(in srgb, var(--t2) 45%, transparent); }
+  45% { opacity: 1; transform: translateY(2px) scale(1.02); box-shadow: 0 0 0 2px var(--t0), 0 0 26px 4px color-mix(in srgb, var(--t0) 40%, transparent); }
+  70% { transform: translateY(-2px); }
+  100% { transform: none; }
+}
+/* os efeitos da camada fixa: o miolo do ponto em papel, não em branco-luz */
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq-ponto i:nth-child(1) { background: var(--s1); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .mq2 .mq-cofre .avatar { --av-cor: var(--cor, var(--t0)); border-color: var(--av-cor); color: var(--av-cor); }
+
+/* ---------------------------------------------------------------------
+   Correções de 26/09/2026 (Téobaldo, varredura pedida pelo Dominic): a aba 16 peças, o nome dos domínios e o cronômetro
+   --------------------------------------------------------------------- */
+/* o detalhe da peça escolhida na vitrine fica compacto: miniatura ao lado e as ações (Montar uma, Ver nesta máquina)
+   logo abaixo do nome. Antes a imagem de 116 px e os textos empurravam os botões para fora do painel, que é baixo. */
+.mq2 .mq-vitrine-detalhe { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px 16px; align-items: start; margin: 0 0 12px; }
+.mq2 .mq-vitrine-detalhe.com-img { grid-template-columns: 84px minmax(0, 1fr); }
+.mq2 .mq-vitrine-detalhe .mq-vitrine-img { grid-row: 1 / span 3; align-self: start; width: 84px; height: 84px; margin: 2px 0 0; }
+.mq2 .mq-vitrine-detalhe.com-img > :not(.mq-vitrine-img) { grid-column: 2; }
+.mq2 .mq-vitrine-cab h3 { margin: 0 0 2px; }
+.mq2 .mq-vitrine-cab .mq-texto { margin: 0 0 2px; }
+.mq2 .mq-vitrine-cab .dem-acoes { margin: 8px 0 2px; }
+.mq2 .mq-vitrine-extra { margin: 4px 0 0; font-size: 12px; color: var(--apagado); }
+.mq2 .mq-vitrine-aviso {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ok) 12%, transparent);
+  box-shadow: inset 3px 0 0 var(--ok);
+  color: var(--texto);
+  font-size: 12.5px;
+}
+.mq2 .mq-vitrine-aviso .mq-link { margin-left: 4px; }
+
+/* o nome do domínio quebra em duas linhas em vez de ficar por baixo do selo de fios ("Peças nov") */
+.mq2 .mq-dominio-nome { white-space: normal; overflow-wrap: anywhere; }
+
+/* com a Máquina aberta, o cronômetro (quando não foi arrastado) sai do pé da coluna, onde cobria a aba "16 peças"
+   e o painel, e fica no canto direito do cabeçalho, ao lado de Testar e Publicar, onde não cobre nada */
+html[data-vista="estacao"]:has(#e-conteudo .mq2) .cronometro:not([style*="left:"]) { top: 178px; bottom: auto; }

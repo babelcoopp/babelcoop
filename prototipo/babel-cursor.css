@@ -1,0 +1,184 @@
+/* =====================================================================
+   Babel Coop · babel Cursor (26/09/2026) · comportamento em babel-cursor.js, especificação em docs/babel-cursor.md
+   Mesma linguagem da camada profundidade: o botão sobe; ligado, afunda com a luz ciano por dentro.
+   A lente flutua; o título dela vem na fonte alta, em maiúsculas e branco, como os títulos das caixas.
+   ===================================================================== */
+
+/* a cor do babel Cursor: ciano ligado e esperando; roxo enquanto ouve, fala, manda ou o agente dele pensa e trabalha */
+:root { --bcur: var(--t0, #2ad5e5); --bcur-claro: #dffcff; }
+html[data-bcur-estado] { --bcur: var(--t2, #a376e9); --bcur-claro: #f1e4ff; }
+
+/* ---------- o botão do topo ---------- */
+.bcur-botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  margin-right: 8px;
+  padding: 0 11px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--face, linear-gradient(180deg, #1c1c1e, #141415));
+  box-shadow: var(--relevo, 0 2px 6px rgba(0, 0, 0, 0.6));
+  color: var(--texto-90, #d2d2d7);
+  font: 600 12.5px/1 var(--fonte-ui, system-ui, sans-serif);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: box-shadow 140ms, background 140ms, color 140ms, transform 140ms;
+}
+.bcur-botao:hover { transform: translateY(-1px); }
+.bcur-botao .bcur-ponto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3a3a3f;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+.bcur-botao[aria-pressed="true"] {
+  background: #0a0a0b;
+  color: var(--bcur-claro);
+  text-shadow: 0 0 6px var(--bcur), 0 0 14px var(--bcur);
+  box-shadow:
+    var(--afundado, inset 0 2px 5px rgba(0, 0, 0, 0.85)),
+    inset 0 0 14px -4px color-mix(in srgb, var(--bcur) 60%, transparent);
+  transform: none;
+}
+.bcur-botao[aria-pressed="true"] .bcur-ponto {
+  background: var(--bcur);
+  box-shadow: 0 0 6px var(--bcur), 0 0 12px var(--bcur);
+  animation: bcur-pulso 1.6s ease-in-out infinite;
+}
+@keyframes bcur-pulso { 50% { opacity: 0.45; } }
+
+/* ---------- ligado: o ponteiro ganha um anel de neon ---------- */
+html[data-babel-cursor="ligado"] body {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%232ad5e5' stroke-opacity='.35' stroke-width='3'/%3E%3Ccircle cx='12' cy='12' r='7' fill='none' stroke='%237ff3ff' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='1.8' fill='white'/%3E%3C/svg%3E") 12 12, auto;
+}
+html[data-babel-cursor="ligado"] :is(button, a, [role="button"], [role="tab"], [role="treeitem"], label, select, summary) {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='%232ad5e5' fill-opacity='.18' stroke='%232ad5e5' stroke-opacity='.5' stroke-width='3'/%3E%3Ccircle cx='12' cy='12' r='7' fill='none' stroke='white' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='2.2' fill='white'/%3E%3C/svg%3E") 12 12, pointer;
+}
+html[data-babel-cursor="ligado"] :is(input, textarea, [contenteditable="true"]) { cursor: text; }
+html[data-babel-cursor="ligado"][data-bcur-estado] body {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%23a376e9' stroke-opacity='.45' stroke-width='3'/%3E%3Ccircle cx='12' cy='12' r='7' fill='none' stroke='%23e2ccff' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='1.8' fill='white'/%3E%3C/svg%3E") 12 12, auto;
+}
+html[data-babel-cursor="ligado"]:is([data-bcur-estado="ouvindo"], [data-bcur-estado="falando"]) * { user-select: none; }
+
+
+/* o elemento identificado: contorno ciano em volta, sem mexer no relevo dele */
+.bcur-foco {
+  outline: 1.5px solid color-mix(in srgb, var(--bcur) 75%, transparent) !important;
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ---------- a lente ---------- */
+.bcur-lente {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147482500;
+  min-width: 230px;
+  max-width: 330px;
+  padding: 10px 10px 10px 12px;
+  border-radius: 12px;
+  background:
+    radial-gradient(100% 70% at 0% 0%, color-mix(in srgb, var(--bcur) 12%, transparent), transparent 70%),
+    linear-gradient(180deg, #1e1e20 0%, #141415 100%);
+  color: #ececef;
+  font: 400 12.5px/1.4 var(--fonte-ui, system-ui, sans-serif);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.9),
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 20px 44px -12px rgba(0, 0, 0, 0.95),
+    0 0 34px -14px var(--bcur);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(5px) scale(0.96);
+  transform-origin: 100% 100%;
+  transition: opacity 150ms ease-out, transform 220ms cubic-bezier(0.18, 0.95, 0.25, 1.12), visibility 0s linear 220ms;
+}
+.bcur-lente[data-aberta="sim"] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity 150ms ease-out, transform 220ms cubic-bezier(0.18, 0.95, 0.25, 1.12), visibility 0s;
+}
+.bcur-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0; }
+.bcur-marca {
+  font: 600 11px/1 var(--fonte-mono, ui-monospace, monospace);
+  color: var(--bcur-claro);
+  text-shadow: 0 0 6px var(--bcur), 0 0 12px var(--bcur);
+}
+.bcur-tipo {
+  font: 700 14px/1 var(--fonte-titulo, "Arial Narrow", sans-serif);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.bcur-nome { margin: 6px 0 9px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #d2d2d7; }
+.bcur-acoes { display: flex; flex-wrap: wrap; gap: 6px; }
+.bcur-acao {
+  height: 27px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #232326 0%, #18181a 100%);
+  color: #ececef;
+  font: 600 12px/1 var(--fonte-ui, system-ui, sans-serif);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  transition: transform 120ms, box-shadow 120ms;
+}
+.bcur-acao:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 rgba(0, 0, 0, 0.6), 0 6px 12px -2px rgba(0, 0, 0, 0.8); }
+.bcur-acao:active { transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8); }
+.bcur-acao.primeira {
+  color: #041316;
+  background: linear-gradient(180deg, color-mix(in oklch, var(--bcur) 78%, white) 0%, var(--bcur) 50%, color-mix(in oklch, var(--bcur) 82%, black) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.7), 0 6px 16px -6px color-mix(in srgb, var(--bcur) 60%, transparent);
+}
+.bcur-acao:focus-visible { outline: 2px solid var(--bcur); outline-offset: 2px; }
+
+/* ouvindo: o elemento pulsa em roxo, e uma pílula perto do ponteiro mostra o que está sendo ouvido */
+html[data-bcur-estado="ouvindo"] .bcur-foco { animation: bcur-ouvir 1.1s ease-in-out infinite; }
+@keyframes bcur-ouvir { 50% { outline-offset: 6px; outline-color: color-mix(in srgb, var(--bcur) 40%, transparent); } }
+.bcur-ouvindo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147482600;
+  width: min(340px, calc(100vw - 24px));
+  padding: 10px 12px;
+  border-radius: 12px;
+  background:
+    radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--bcur) 22%, transparent), transparent 70%),
+    linear-gradient(180deg, #1f1b26 0%, #141217 100%);
+  color: #ececef;
+  font: 400 12.5px/1.45 var(--fonte-ui, system-ui, sans-serif);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.9), 0 20px 44px -12px rgba(0, 0, 0, 0.95), 0 0 40px -12px var(--bcur);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 140ms, visibility 0s linear 140ms;
+}
+.bcur-ouvindo[data-aberta="sim"] { opacity: 1; visibility: visible; transition: opacity 140ms, visibility 0s; }
+.bcur-ouvindo-cab { display: flex; align-items: center; gap: 8px; margin: 0; }
+.bcur-ouvindo-cab b { font: 700 14px/1 var(--fonte-titulo, "Arial Narrow", sans-serif); letter-spacing: 0.06em; text-transform: uppercase; color: #fff; }
+.bcur-ouvindo-cab span:not(.bcur-mic) { color: #a6a6ae; font-size: 12px; }
+.bcur-ouvindo-cab button { margin-left: auto; height: 24px; padding: 0 9px; border: 0; border-radius: 6px; background: linear-gradient(180deg, #2a2530, #1d1a22); color: #fff; font: 600 11.5px var(--fonte-ui, system-ui); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.7); cursor: pointer; }
+.bcur-mic { width: 9px; height: 9px; border-radius: 50%; background: var(--bcur); box-shadow: 0 0 8px var(--bcur), 0 0 16px var(--bcur); animation: bcur-pulso 0.9s ease-in-out infinite; }
+.bcur-ouvindo-texto { margin: 6px 0 0; color: var(--bcur-claro); font-size: 13.5px; }
+.bcur-ouvindo-texto i { color: #8e8e96; font-style: normal; }
+
+/* o nome em neon da tela inicial acompanha: roxo enquanto o babel Cursor trabalha */
+html[data-bcur-estado] .sn-neon .sn-tubo { stroke: color-mix(in srgb, var(--t2, #a376e9) 60%, transparent); }
+html[data-bcur-estado] .sn-neon .sn-luz { stroke: #f1e4ff; }
+html[data-bcur-estado] .sn-neon .sn-luz-2 { stroke: color-mix(in oklch, var(--t0, #2ad5e5) 70%, white); }
+html[data-bcur-estado] .saudacao .sn-texto { text-shadow: 0 1px 0 #2a2a2d, 0 2px 0 #202023, 0 3px 0 #17171a, 0 6px 10px rgba(0, 0, 0, 0.9), 0 0 34px color-mix(in srgb, var(--t2, #a376e9) 45%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-bcur-estado="ouvindo"] .bcur-foco, .bcur-mic { animation: none; }
+  .bcur-lente, .bcur-lente[data-aberta="sim"] { transform: none; transition: opacity 120ms, visibility 0s; }
+  .bcur-botao[aria-pressed="true"] .bcur-ponto { animation: none; }
+}

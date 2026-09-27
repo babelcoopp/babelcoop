@@ -1,0 +1,427 @@
+/* =====================================================================
+   Babel Coop · a placa-mãe do Meu dia (26/09/2026, pedido do Dominic) · montagem em placa-mae.js
+   O que ficava no rodapé vira peça de placa-mãe: cada informação é a peça que uma placa de verdade usa para aquilo.
+   Materiais: máscara de solda preta fosca, trilhas de cobre sob a máscara, pads dourados (ENIG), serigrafia branca,
+   vias, fiduciais e furos de fixação. A pista (a trilha principal) é um circuito anti-horário, como Interlagos,
+   com o "S do Senna" logo depois da largada; duas luzes, azul e roxa, correm nela.
+   Referências e fontes: docs/placa-mae.md.
+   ===================================================================== */
+
+.pm-secao {
+  --pm-mascara: #0a0b0c;
+  --pm-mascara-2: #0f1113;
+  --pm-cobre: #1d2125;
+  --pm-seda: #ebe7de;
+  --pm-seda-fraca: rgba(235, 231, 222, 0.52);
+  --pm-ouro-1: #ecd08c;
+  --pm-ouro-2: #b08a45;
+  --pm-ouro-3: #6c5226;
+  --pm-epoxi-1: #1c1d20;
+  --pm-epoxi-2: #0e0f11;
+  --pm-metal-1: #d6dae0;
+  --pm-metal-2: #8a9099;
+  --pm-metal-3: #3b3f46;
+  --pm-azul-a: #22d3ee;
+  --pm-azul-b: #3b82f6;
+  --pm-roxo-a: #d8b4fe;
+  --pm-roxo-b: #7c3aed;
+  --pm-verde: #34d399;
+  --pm-ambar: #fbbf24;
+  --pm-verm: #fb7185;
+  --pm-calha: 30px;
+  --pm-trilho: 34px;
+  --pm-fonte-seda: var(--fonte-titulo, "Arial Narrow", sans-serif);
+  --pm-fonte-mono: var(--fonte-mono, ui-monospace, monospace);
+  margin: 4px 0 18px;
+  padding: 0 !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.pm-secao > .secao-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.pm-secao .pm-rev { font: 500 11px/1 var(--pm-fonte-mono); letter-spacing: 0.08em; color: var(--pm-seda-fraca); }
+
+/* ---------- a placa ---------- */
+.pm-placa {
+  position: relative;
+  isolation: isolate;
+  border-radius: 16px;
+  padding: 16px 0 10px;
+  color: var(--pm-seda);
+  background:
+    radial-gradient(120% 90% at 18% 0%, rgba(255, 255, 255, 0.035), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, var(--pm-mascara-2), var(--pm-mascara));
+  /* a borda do FR-4 aparece fina na lateral; a placa flutua sobre espaçadores (profundidade) */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 0 0 1px #050506,
+    0 1px 0 1px #2a2418,
+    0 14px 22px -8px rgba(0, 0, 0, 0.85),
+    0 30px 60px -24px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+.pm-desenho { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: visible; }
+
+/* ---------- a grade das peças: faixa de cima, pista, miolo, pista, faixa de baixo ---------- */
+.pm-pecas {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--pm-calha) minmax(0, 1fr) var(--pm-calha);
+  grid-template-rows: auto var(--pm-trilho) auto var(--pm-trilho) auto;
+}
+.pm-cima { grid-column: 2; grid-row: 1; display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; padding: 0 6px; }
+.pm-trilho-cima { grid-column: 1 / -1; grid-row: 2; }
+.pm-centro {
+  grid-column: 2; grid-row: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px 22px;
+  padding: 12px 22px;
+}
+.pm-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.pm-col-esq { align-items: flex-start; }
+.pm-col-dir { align-items: flex-end; }
+.pm-trilho-baixo { grid-column: 1 / -1; grid-row: 4; }
+.pm-baixo { grid-column: 2; grid-row: 5; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 0 6px; }
+
+/* compacta (placa estreita): tudo dentro da pista, em duas colunas, o processador em cima */
+.pm-placa.pm-compacta .pm-cima, .pm-placa.pm-compacta .pm-baixo { display: none; }
+.pm-placa.pm-compacta .pm-pecas { grid-template-rows: var(--pm-trilho) auto var(--pm-trilho); }
+.pm-placa.pm-compacta .pm-trilho-cima { grid-row: 1; }
+.pm-placa.pm-compacta .pm-centro { grid-row: 2; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.pm-placa.pm-compacta .pm-trilho-baixo { grid-row: 3; }
+.pm-placa.pm-compacta .pm-centro > [data-peca="terminal"] { grid-column: 1 / -1; justify-self: center; }
+.pm-placa.pm-compacta .pm-centro > .pm-coluna { grid-column: 1 / -1; justify-self: start; }
+.pm-placa.pm-compacta .pm-dimm-modulo { width: min(172px, 52vw); }
+.pm-placa.pm-compacta .pm-m2 { width: min(190px, 56vw); }
+
+/* ---------- uma peça: o corpo físico + a serigrafia ao lado ---------- */
+.pm-peca { position: relative; display: flex; align-items: flex-end; gap: 8px; min-width: 0; }
+.pm-toque {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 0;
+  border-radius: 8px;
+  cursor: default;
+  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1.2), filter 220ms;
+}
+button.pm-toque:not(:disabled) { cursor: pointer; }
+button.pm-toque:not(:disabled):hover { transform: translateY(-2px); filter: brightness(1.12); }
+button.pm-toque:not(:disabled):active { transform: translateY(0) scale(0.98); }
+button.pm-toque:focus-visible { outline: 2px solid var(--pm-azul-a); outline-offset: 4px; }
+.pm-cima .pm-peca, .pm-cima .pm-toque { align-items: flex-end; }
+.pm-baixo .pm-peca, .pm-baixo .pm-toque { align-items: flex-start; }
+.pm-col .pm-toque, .pm-col .pm-peca { align-items: center; }
+.pm-col-dir .pm-peca, .pm-col-dir .pm-toque { flex-direction: row-reverse; text-align: right; }
+.pm-placa.pm-compacta .pm-centro > .pm-peca.pm-lado-dir .pm-toque { flex-direction: row-reverse; text-align: right; }
+.pm-placa.pm-compacta .pm-centro > .pm-peca.pm-lado-dir { justify-self: end; }
+.pm-corpo { position: relative; flex: none; display: grid; place-items: center; }
+.pm-corpo > span { position: relative; }
+/* as peças compridas (pente de memória, SSD): serigrafia numa linha só, em cima (faixa de cima) ou embaixo (faixa de baixo) */
+.pm-peca.pm-coluna .pm-toque { flex-direction: column; align-items: flex-start; gap: 5px; }
+.pm-cima .pm-peca.pm-coluna .pm-toque { flex-direction: column-reverse; }
+.pm-peca.pm-coluna .pm-leg { grid-template-columns: auto auto 1fr; justify-content: start; align-items: baseline; column-gap: 6px; }
+.pm-peca.pm-coluna .pm-leg .pm-val { grid-column: 1 / -1; max-width: none; -webkit-line-clamp: 1; }
+.pm-placa.pm-compacta .pm-peca.pm-coluna .pm-leg { grid-auto-flow: row; }
+
+/* a serigrafia: designador (U1, J2…), o nome em letra alta e o valor */
+.pm-leg { display: grid; gap: 2px; min-width: 0; padding-bottom: 1px; }
+.pm-ref { font: 500 9px/1 var(--pm-fonte-mono); letter-spacing: 0.1em; color: var(--pm-seda-fraca); }
+.pm-nome { font: 700 13px/1 var(--pm-fonte-seda); letter-spacing: 0.06em; text-transform: uppercase; color: #fff; white-space: nowrap; }
+.pm-val { font: 500 10.5px/1.25 var(--pm-fonte-mono); color: rgba(235, 231, 222, 0.78); max-width: 124px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow-wrap: break-word; }
+.pm-val b { color: #fff; font-weight: 700; }
+
+/* ---------- LED genérico ---------- */
+.pm-led {
+  --led: #2a2d31;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.7), transparent 45%), var(--led);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 6px var(--led-luz, transparent), 0 0 14px var(--led-luz, transparent);
+  transition: background-color 300ms, box-shadow 300ms;
+}
+.pm-led.acesa { --led-luz: var(--led); }
+.pm-led.pisca { animation: pm-pisca 1s steps(1) infinite; }
+.pm-led.pisca-rapido { animation: pm-pisca 0.22s steps(1) infinite; }
+@keyframes pm-pisca { 50% { --led-luz: transparent; filter: brightness(0.45); } }
+
+/* ---------- o carro passou pela peça / a faísca chegou ---------- */
+.pm-peca .pm-corpo::after {
+  content: ""; position: absolute; inset: -6px; border-radius: 10px; pointer-events: none; opacity: 0;
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.5), 0 0 18px rgba(34, 211, 238, 0.35);
+  transition: opacity 500ms ease-out;
+}
+.pm-peca.pm-passou .pm-corpo::after { opacity: 0.55; transition-duration: 60ms; }
+.pm-peca.pm-passou-roxo .pm-corpo::after { box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.55), 0 0 18px rgba(168, 85, 247, 0.4); }
+.pm-peca.pm-chegou .pm-corpo::after { opacity: 1; transition-duration: 80ms; box-shadow: 0 0 0 1.5px rgba(236, 254, 255, 0.85), 0 0 26px rgba(34, 211, 238, 0.7); }
+.pm-peca.pm-chegou .pm-leg { animation: pm-chegou 900ms ease-out; }
+@keyframes pm-chegou { 0% { filter: brightness(1.9); } 100% { filter: none; } }
+
+/* ---------- pegada vazia (DNP: a peça existe no projeto e ainda não foi soldada) ---------- */
+.pm-pegada { display: none; }
+.pm-peca.pm-dnp .pm-corpo > :not(.pm-pegada) { display: none; }
+.pm-peca.pm-dnp .pm-pegada {
+  display: grid; place-items: center;
+  width: var(--pg-l, 30px); height: var(--pg-a, 22px);
+  border: 1px dashed rgba(235, 231, 222, 0.34);
+  border-radius: 3px;
+  font: 600 8px/1 var(--pm-fonte-mono); letter-spacing: 0.12em; color: rgba(235, 231, 222, 0.42);
+  background:
+    linear-gradient(var(--pm-ouro-2), var(--pm-ouro-3)) 3px 3px / 4px 3px no-repeat,
+    linear-gradient(var(--pm-ouro-2), var(--pm-ouro-3)) calc(100% - 3px) 3px / 4px 3px no-repeat,
+    linear-gradient(var(--pm-ouro-2), var(--pm-ouro-3)) 3px calc(100% - 3px) / 4px 3px no-repeat,
+    linear-gradient(var(--pm-ouro-2), var(--pm-ouro-3)) calc(100% - 3px) calc(100% - 3px) / 4px 3px no-repeat;
+}
+.pm-peca.pm-dnp .pm-nome { color: rgba(255, 255, 255, 0.55); }
+.pm-peca.pm-dnp .pm-val { color: rgba(235, 231, 222, 0.42); }
+/* soldou: desce como na pick-and-place e assenta */
+.pm-peca.pm-soldou .pm-corpo > :not(.pm-pegada) { animation: pm-solda 520ms cubic-bezier(0.2, 0.9, 0.3, 1.15); }
+@keyframes pm-solda {
+  0% { transform: translateY(-10px) scale(1.12); opacity: 0; filter: drop-shadow(0 14px 10px rgba(0, 0, 0, 0.8)); }
+  70% { opacity: 1; }
+  100% { transform: none; filter: none; }
+}
+
+/* ---------- as peças ---------- */
+
+/* SW1 · chave táctil 6×6 (presença): moldura metálica, pernas douradas, botão redondo com o anel de LED */
+.pm-sw { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 4px;
+  background: linear-gradient(145deg, #3a3e45, #1b1d21 60%, #2b2e33);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.6), 0 3px 5px rgba(0, 0, 0, 0.7), 0 9px 14px -6px rgba(0, 0, 0, 0.8); }
+.pm-sw::before { content: ""; position: absolute; inset: -3px -5px;
+  background:
+    linear-gradient(var(--pm-ouro-1), var(--pm-ouro-3)) 0 4px / 5px 4px no-repeat,
+    linear-gradient(var(--pm-ouro-1), var(--pm-ouro-3)) 100% 4px / 5px 4px no-repeat,
+    linear-gradient(var(--pm-ouro-1), var(--pm-ouro-3)) 0 calc(100% - 4px) / 5px 4px no-repeat,
+    linear-gradient(var(--pm-ouro-1), var(--pm-ouro-3)) 100% calc(100% - 4px) / 5px 4px no-repeat;
+  z-index: -1; }
+.pm-sw-tampa { display: block; width: 20px; height: 20px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #4a4e56, #121316 70%);
+  box-shadow: 0 0 0 2px #0b0c0e, 0 0 0 3.5px var(--led, #2a2d31), 0 0 10px var(--led-luz, transparent), inset 0 2px 3px rgba(255, 255, 255, 0.12), inset 0 -3px 4px rgba(0, 0, 0, 0.7);
+  transition: box-shadow 300ms; }
+
+/* DS1 · o visor de depuração de dois dígitos (Q-Code) com a caixa de entrada */
+.pm-qcode { width: 52px; height: 36px; border-radius: 4px; padding: 5px 6px 7px;
+  background: linear-gradient(180deg, var(--pm-epoxi-1), var(--pm-epoxi-2));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 3px 5px rgba(0, 0, 0, 0.7), 0 9px 14px -6px rgba(0, 0, 0, 0.8); }
+.pm-qcode::after { content: ""; position: absolute; left: 6px; right: 6px; bottom: -3px; height: 4px;
+  background: repeating-linear-gradient(90deg, #b9bec6 0 2px, transparent 2px 5px); }
+.pm-qcode svg { width: 100%; height: 100%; background: #07080a; border-radius: 2px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9); overflow: visible; }
+.pm-seg { fill: rgba(34, 211, 238, 0.07); transition: fill 200ms, filter 200ms; }
+.pm-seg.on { fill: var(--pm-azul-a); filter: drop-shadow(0 0 2px rgba(34, 211, 238, 0.9)); }
+.pm-qcode.calmo .pm-seg.on { fill: rgba(34, 211, 238, 0.55); filter: none; }
+
+/* Y1 · o cristal de quartzo (lata HC-49): o relógio da demanda que está rodando */
+.pm-cristal { width: 46px; height: 20px; border-radius: 10px;
+  background: linear-gradient(180deg, var(--pm-metal-1) 0%, #aab0b8 30%, var(--pm-metal-2) 55%, #c3c8cf 80%, #6d737c 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35), 0 3px 5px rgba(0, 0, 0, 0.7), 0 8px 12px -6px rgba(0, 0, 0, 0.8);
+  overflow: hidden; }
+.pm-cristal em { font: 700 7px/1 var(--pm-fonte-mono); font-style: normal; letter-spacing: 0.08em; color: rgba(20, 22, 26, 0.72); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4); }
+.pm-cristal::before { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.85) 45%, transparent 60%); transform: translateX(-120%); }
+.pm-peca.pm-rodando .pm-cristal::before { animation: pm-brilho 2.4s ease-in-out infinite; }
+@keyframes pm-brilho { 0% { transform: translateX(-120%); } 55%, 100% { transform: translateX(120%); } }
+.pm-cristal-pes { position: absolute; bottom: -4px; left: 12px; right: 12px; height: 4px;
+  background: linear-gradient(90deg, var(--pm-ouro-2) 0 3px, transparent 3px calc(100% - 3px), var(--pm-ouro-2) calc(100% - 3px)); }
+
+/* RAM1 · o pente de memória no slot (memória da sala) */
+.pm-dimm { display: flex; align-items: flex-end; gap: 0; }
+.pm-dimm-trava { width: 6px; height: 34px; border-radius: 2px; background: linear-gradient(90deg, #26282c, #121315); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 3px 5px rgba(0, 0, 0, 0.6); }
+.pm-dimm-modulo { position: relative; width: 172px; height: 38px; margin: 0 1px -2px; border-radius: 3px 3px 1px 1px; padding: 4px 6px 9px;
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;
+  background: linear-gradient(180deg, #13161a, #0b0d10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 6px rgba(0, 0, 0, 0.7), 0 12px 16px -8px rgba(0, 0, 0, 0.85); }
+.pm-dimm-modulo i { display: block; border-radius: 1.5px; background: linear-gradient(180deg, #25272b, #111214); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.7); }
+.pm-dimm-modulo::after { content: ""; position: absolute; left: 4px; right: 4px; bottom: 1px; height: 6px;
+  background: repeating-linear-gradient(90deg, var(--pm-ouro-1) 0 2px, var(--pm-ouro-2) 2px 3px, transparent 3px 4.5px);
+  -webkit-mask: linear-gradient(90deg, #000 0 58%, transparent 58% 61%, #000 61%); mask: linear-gradient(90deg, #000 0 58%, transparent 58% 61%, #000 61%); }
+.pm-dimm .pm-led { position: absolute; top: -9px; right: 10px; }
+.pm-peca.pm-gravando .pm-dimm-modulo i { animation: pm-grava 1.6s ease-in-out infinite; }
+.pm-peca.pm-gravando .pm-dimm-modulo i:nth-child(2n) { animation-delay: -0.8s; }
+@keyframes pm-grava { 50% { background: linear-gradient(180deg, #3a1f28, #1b0f14); } }
+
+/* BT1 · a bateria CR2032 no suporte (pontos de hoje), com o anel da meta da semana */
+.pm-bateria { width: 50px; height: 50px; display: grid; place-items: center; }
+.pm-bateria::before { content: ""; position: absolute; left: -5px; right: -5px; top: 18px; height: 16px; border-radius: 3px; background: linear-gradient(180deg, #1d1f23, #0d0e10); box-shadow: 0 3px 5px rgba(0, 0, 0, 0.7); }
+.pm-anel { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); transform: rotate(-90deg); overflow: visible; }
+.pm-anel circle { fill: none; stroke-width: 2.4; }
+.pm-anel .fundo { stroke: rgba(255, 255, 255, 0.07); }
+.pm-anel .val { stroke: url(#pm-grad-babel); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 900ms cubic-bezier(0.2, 0.8, 0.2, 1); filter: drop-shadow(0 0 3px rgba(124, 58, 237, 0.7)); }
+.pm-anel.ouro .val { stroke: var(--pm-ouro-1); filter: drop-shadow(0 0 4px rgba(236, 208, 140, 0.8)); }
+.pm-moeda { position: relative; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; align-content: center; gap: 1px;
+  background: radial-gradient(circle at 34% 28%, #f4f6f8, #b7bcc4 38%, #8a9099 62%, #c9ced5 82%, #6b717a);
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.12), inset 0 0 0 4px rgba(255, 255, 255, 0.25), 0 3px 6px rgba(0, 0, 0, 0.75), 0 10px 16px -6px rgba(0, 0, 0, 0.8); }
+.pm-moeda b { font: 800 16px/1 var(--pm-fonte-seda); color: #16181b; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45); font-variant-numeric: tabular-nums; }
+.pm-moeda em { font: 700 5.5px/1 var(--pm-fonte-mono); font-style: normal; letter-spacing: 0.06em; color: rgba(22, 24, 27, 0.6); }
+.pm-ganho { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); pointer-events: none;
+  font: 800 14px/1 var(--pm-fonte-seda); color: var(--pm-roxo-a); text-shadow: 0 0 8px rgba(168, 85, 247, 0.9); white-space: nowrap;
+  animation: pm-ganho 1400ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+@keyframes pm-ganho { 0% { opacity: 0; transform: translate(-50%, 6px); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -26px); } }
+
+/* J1 · a porta HDMI na borda (a TV) */
+.pm-hdmi { width: 48px; height: 22px; }
+.pm-hdmi-casco { position: absolute; inset: 0;
+  background: linear-gradient(180deg, var(--pm-metal-1), var(--pm-metal-2) 55%, #5d636c);
+  clip-path: polygon(0 0, 100% 0, 100% 62%, 86% 100%, 14% 100%, 0 62%);
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.8)); }
+.pm-hdmi-boca { position: absolute; inset: 4px 5px 5px; background: #07080a;
+  clip-path: polygon(0 0, 100% 0, 100% 60%, 85% 100%, 15% 100%, 0 60%); }
+.pm-hdmi-boca::after { content: ""; position: absolute; left: 7px; right: 7px; top: 3px; height: 3px; background: repeating-linear-gradient(90deg, var(--pm-ouro-1) 0 1.5px, transparent 1.5px 3px); }
+.pm-hdmi .pm-led { position: absolute; top: -8px; right: -2px; }
+.pm-hdmi-cabo { display: none; position: absolute; left: 8px; right: 8px; top: -16px; height: 16px; border-radius: 3px 3px 0 0;
+  background: linear-gradient(90deg, #111214, #26282c 50%, #111214); box-shadow: 0 -2px 6px rgba(34, 211, 238, 0.25); }
+.pm-peca.pm-projetando .pm-hdmi-cabo { display: block; }
+
+/* J2 · o conector RJ45 da rede com os LEDs de link (verde) e atividade (âmbar) */
+.pm-rj45 { width: 42px; height: 34px; border-radius: 3px;
+  background: linear-gradient(180deg, var(--pm-metal-1), var(--pm-metal-2) 45%, #6c727b 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35), 0 4px 6px rgba(0, 0, 0, 0.75), 0 12px 16px -8px rgba(0, 0, 0, 0.85); }
+.pm-rj45-boca { position: absolute; left: 7px; right: 7px; bottom: 4px; height: 17px; background: #07080a;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 66% 100%, 66% 78%, 34% 78%, 34% 100%, 0 100%); }
+.pm-rj45-boca::after { content: ""; position: absolute; left: 3px; right: 3px; top: 2px; height: 4px; background: repeating-linear-gradient(90deg, var(--pm-ouro-1) 0 1.2px, transparent 1.2px 3px); }
+.pm-rj45 .pm-led { position: absolute; top: 4px; width: 7px; height: 4px; border-radius: 1px; }
+.pm-rj45 .pm-link { left: 5px; }
+.pm-rj45 .pm-act { right: 5px; }
+
+/* U1 · o processador no soquete, com o espalhador de calor e a marca da Babel (terminal ao vivo) */
+.pm-cpu { width: 112px; height: 112px; border-radius: 6px;
+  background:
+    radial-gradient(circle, rgba(236, 208, 140, 0.5) 0.8px, transparent 1.1px) 0 0 / 5px 5px,
+    linear-gradient(180deg, #25272c, #15161a);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 0 0 5px #121316, 0 6px 10px rgba(0, 0, 0, 0.75), 0 18px 28px -10px rgba(0, 0, 0, 0.9); }
+.pm-cpu::before, .pm-cpu::after { /* capacitores de desacoplamento (0603: corpo cerâmico e terminais estanhados) enfileirados no soquete */
+  content: ""; position: absolute; pointer-events: none; height: 4px; width: 28px;
+  background: repeating-linear-gradient(90deg, #d4d8de 0 1.6px, #a0825c 1.6px 6.4px, #d4d8de 6.4px 8px, transparent 8px 10px);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8)); }
+.pm-cpu::before { left: 6px; top: -10px; }
+.pm-cpu::after { right: 6px; bottom: -10px; }
+.pm-cpu-ihs { position: absolute; inset: 11px; border-radius: 5px; display: grid; place-items: center; align-content: center; gap: 3px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px),
+    linear-gradient(145deg, #3d4148, #26292e 45%, #1c1e22 70%, #2c2f35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -1px 0 rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 600ms; }
+.pm-cpu-logo { width: 30px; height: 30px; background: url("babel-logo.png") center / contain no-repeat; filter: grayscale(1) brightness(1.8) contrast(0.7); opacity: 0.4; mix-blend-mode: screen; }
+.pm-cpu-ihs b { font: 800 14px/1 var(--pm-fonte-seda); letter-spacing: 0.22em; color: rgba(235, 231, 222, 0.55); text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6); }
+.pm-cpu-ihs em { font: 600 7px/1 var(--pm-fonte-mono); font-style: normal; letter-spacing: 0.14em; color: rgba(235, 231, 222, 0.32); }
+.pm-cpu .pm-led { position: absolute; left: 7px; top: 7px; width: 4px; height: 4px; }
+.pm-peca.pm-vivo .pm-cpu-ihs { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -1px 0 rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(34, 211, 238, 0.22), 0 0 22px -4px rgba(59, 130, 246, 0.45); }
+.pm-secao [data-peca="terminal"] .pm-toque { flex-direction: column; align-items: center; text-align: center; }
+.pm-secao [data-peca="terminal"] .pm-leg { justify-items: center; }
+
+/* M.2 · o SSD do acervo: dedos dourados com a chave, controlador, dois NAND, etiqueta e o parafuso */
+.pm-m2 { width: 190px; height: 30px; border-radius: 2px; display: flex; align-items: center; gap: 6px; padding: 0 16px 0 20px;
+  background: linear-gradient(180deg, #121417, #0a0b0d);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 3px 5px rgba(0, 0, 0, 0.7), 0 10px 14px -6px rgba(0, 0, 0, 0.8); }
+.pm-m2-dedos { position: absolute; left: 0; top: 3px; bottom: 3px; width: 8px;
+  background: repeating-linear-gradient(180deg, var(--pm-ouro-1) 0 1.6px, var(--pm-ouro-3) 1.6px 2.2px, transparent 2.2px 3.4px);
+  -webkit-mask: linear-gradient(180deg, #000 0 70%, transparent 70% 76%, #000 76%); mask: linear-gradient(180deg, #000 0 70%, transparent 70% 76%, #000 76%); }
+.pm-m2-ci { flex: none; width: 20px; height: 20px; border-radius: 2px; background: linear-gradient(180deg, #26282c, #121315); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.7); }
+.pm-m2-ci.nand { width: 26px; }
+.pm-m2-etiqueta { flex: 1; min-width: 0; height: 18px; border-radius: 2px; display: flex; align-items: center; justify-content: center; gap: 4px;
+  background: linear-gradient(180deg, #1c1f24, #15181c); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  font: 600 8px/1 var(--pm-fonte-mono); letter-spacing: 0.08em; color: rgba(235, 231, 222, 0.6); white-space: nowrap; overflow: hidden; }
+.pm-m2-etiqueta b { font: 800 12px/1 var(--pm-fonte-seda); color: #fff; letter-spacing: 0.02em; }
+.pm-m2-parafuso { position: absolute; right: -6px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%;
+  background: radial-gradient(circle, #0a0a0a 0 2.5px, var(--pm-ouro-1) 3px, var(--pm-ouro-2) 4.5px, var(--pm-ouro-3) 6px); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); }
+
+/* J3 · barra de pinos 2×5 (tarefas livres): cada pino aceso é uma tarefa livre */
+.pm-pinos { width: 50px; height: 22px; padding: 3px 4px; border-radius: 2px; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr); gap: 2px;
+  background: linear-gradient(180deg, #1f2125, #0e0f11); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 3px 5px rgba(0, 0, 0, 0.7); }
+.pm-pinos i { display: block; margin: auto; width: 4px; height: 4px; border-radius: 0.5px; background: linear-gradient(135deg, var(--pm-ouro-1), var(--pm-ouro-3)); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.8); transition: background 300ms, box-shadow 300ms; }
+.pm-pinos i.on { background: linear-gradient(135deg, #ecfeff, var(--pm-azul-a)); box-shadow: 0 0 5px var(--pm-azul-a), 0 0 10px rgba(59, 130, 246, 0.6); }
+
+/* U5, U6, U7 · circuitos integrados (reunião: QFN; controle do terminal e atualização: SOIC-8) */
+.pm-ci { display: grid; place-items: center; border-radius: 2px; background: linear-gradient(180deg, var(--pm-epoxi-1), var(--pm-epoxi-2));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 3px 5px rgba(0, 0, 0, 0.7), 0 8px 12px -6px rgba(0, 0, 0, 0.8); }
+.pm-ci::before { content: ""; position: absolute; left: 3px; top: 3px; width: 3px; height: 3px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); }
+.pm-qfn { width: 26px; height: 26px; outline: 2px dotted rgba(185, 190, 198, 0.75); outline-offset: 0; }
+.pm-soic { width: 30px; height: 20px; }
+.pm-soic::after { content: ""; position: absolute; left: 3px; right: 3px; top: -3px; bottom: -3px; z-index: -1;
+  background: repeating-linear-gradient(90deg, #c2c7ce 0 2px, transparent 2px 6.4px); }
+.pm-ci em { font: 700 6.5px/1 var(--pm-fonte-mono); font-style: normal; letter-spacing: 0.1em; color: rgba(235, 231, 222, 0.42); }
+.pm-ci .pm-led { position: absolute; right: -9px; top: 50%; margin-top: -3px; }
+
+/* os extras de uma peça (botões de projeção, encerrar/aceitar o controle): mini botões em profundidade */
+.pm-extra { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 4px; }
+.pm-selo { display: flex; align-items: center; gap: 5px; font: 500 10.5px/1.2 var(--fonte-ui, sans-serif); color: rgba(235, 231, 222, 0.85); max-width: 210px; }
+.pm-selo span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pm-mini {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  min-width: 20px; height: 20px; padding: 0 6px; border-radius: 5px; display: inline-grid; place-items: center;
+  font: 600 10.5px/1 var(--fonte-ui, sans-serif); color: #fff;
+  background: linear-gradient(180deg, #25272c, #17181b);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 3px rgba(0, 0, 0, 0.7);
+}
+.pm-mini:hover { background: linear-gradient(180deg, #2e3137, #1c1e22); }
+.pm-mini:focus-visible { outline: 2px solid var(--pm-azul-a); outline-offset: 2px; }
+.pm-mini.perigo { color: #ffe4e6; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 3px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(251, 113, 133, 0.35); }
+.pm-mini.ok { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 3px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(52, 211, 153, 0.4); }
+
+/* ---------- a serigrafia do rodapé da placa: marca, a pista e as voltas ---------- */
+.pm-seda-linha {
+  position: relative; z-index: 1;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 14px;
+  margin: 10px var(--pm-calha) 0; padding-top: 6px;
+  border-top: 1px solid rgba(235, 231, 222, 0.08);
+  font: 500 9px/1.3 var(--pm-fonte-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--pm-seda-fraca);
+}
+.pm-seda-linha b { color: #fff; font-weight: 700; }
+.pm-voltas .az { color: var(--pm-azul-a); }
+.pm-voltas .rx { color: var(--pm-roxo-a); }
+
+/* ---------- o desenho (SVG): pista, trilhas, vias, furos, fiduciais, carros ---------- */
+.pm-pista-cobre { fill: none; stroke: #050607; stroke-width: 6.5; stroke-linejoin: miter; }
+.pm-pista { fill: none; stroke: var(--pm-cobre); stroke-width: 4; stroke-linejoin: miter; }
+.pm-pista-luz { fill: none; stroke: rgba(255, 255, 255, 0.07); stroke-width: 1; transform: translateY(-1px); }
+.pm-hachura { stroke: rgba(255, 255, 255, 0.022); stroke-width: 1; }
+.pm-toco { fill: none; stroke: var(--pm-cobre); stroke-width: 2; stroke-linecap: round; transition: stroke 200ms; }
+.pm-toco-sombra { fill: none; stroke: #050607; stroke-width: 4; stroke-linecap: round; }
+.pm-toco.aceso { stroke: url(#pm-grad-placa); filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.8)); }
+.pm-barramento { fill: none; stroke: #171a1e; stroke-width: 1.2; }
+.pm-via-tampada { fill: #121417; stroke: rgba(255, 255, 255, 0.06); stroke-width: 0.8; }
+.pm-via-ouro { fill: #07080a; stroke: var(--pm-ouro-2); stroke-width: 1.6; }
+.pm-pad { fill: var(--pm-ouro-2); stroke: var(--pm-ouro-1); stroke-width: 0.6; }
+.pm-pad.brilha { fill: var(--pm-ouro-1); }
+.pm-furo-anel { fill: none; stroke: var(--pm-ouro-2); stroke-width: 3; }
+.pm-furo { fill: #030304; }
+.pm-furo-seda { fill: none; stroke: rgba(235, 231, 222, 0.28); stroke-width: 0.8; stroke-dasharray: 2 2.4; }
+.pm-fiducial { fill: var(--pm-ouro-1); }
+.pm-fiducial-limpa { fill: #16130e; }
+.pm-seda-texto { fill: var(--pm-seda-fraca); font: 600 8px/1 var(--pm-fonte-mono); letter-spacing: 0.14em; text-transform: uppercase; }
+.pm-largada rect { shape-rendering: crispEdges; }
+.pm-largada.flash rect.b { fill: #fff; }
+.pm-rastro { fill: none; stroke-linecap: round; }
+.pm-cabeca-halo { opacity: 0.9; }
+.pm-faisca { fill: none; stroke: #ecfeff; stroke-width: 2.2; stroke-linecap: round; filter: drop-shadow(0 0 3px rgba(34, 211, 238, 0.95)) drop-shadow(0 0 7px rgba(59, 130, 246, 0.8)); }
+.pm-faisca.alerta { stroke: #fff7ed; filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.95)) drop-shadow(0 0 8px rgba(251, 113, 133, 0.7)); }
+
+/* ---------- o rodapé da Estação sai de cena no Meu dia: as informações estão na placa ---------- */
+/* a placa sai e volta a cada redesenho do Meu dia: sem ancoragem de rolagem, quem manda no scroll é a Estação (e a placa-mae.js) */
+html[data-placa="dia"] #e-conteudo { overflow-anchor: none; }
+@media (min-width: 761px) {
+  html[data-placa="dia"] .estacao { grid-template-rows: 44px minmax(0, 1fr) 0; }
+  html[data-placa="dia"] #e-status { visibility: hidden; overflow: hidden; border: 0; padding-block: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-toque, .pm-peca .pm-corpo::after { transition: none !important; }
+  .pm-led.pisca, .pm-led.pisca-rapido, .pm-peca.pm-rodando .pm-cristal::before, .pm-peca.pm-gravando .pm-dimm-modulo i,
+  .pm-peca.pm-soldou .pm-corpo > *, .pm-ganho, .pm-peca.pm-chegou .pm-leg { animation: none !important; }
+}
+html.sem-foco .pm-led.pisca, html.sem-foco .pm-led.pisca-rapido, html.sem-foco .pm-cristal::before, html.sem-foco .pm-dimm-modulo i { animation-play-state: paused !important; }
+
+/* modo Vibe (claro): a placa continua preta (é um objeto); só a marca ao lado do título escurece para ser lida no papel */
+html[data-tema-estacao="claro"] .pm-secao .pm-rev { color: rgba(30, 32, 36, 0.55); }
+
+/* peças compridas não encolhem (o corpo físico é fixo); na faixa de cima os extras (botões da projeção) ficam em cima
+   da peça, numa linha só, para não atravessar o toco que desce até a pista */
+.pm-peca.pm-coluna { flex-shrink: 0; }
+.pm-cima .pm-peca { flex-direction: column-reverse; align-items: flex-start; gap: 4px; }
+.pm-cima .pm-extra { margin-top: 0; flex-wrap: nowrap; }
+.pm-cima .pm-mini { min-width: 18px; height: 18px; padding: 0 4px; font-size: 10px; }
