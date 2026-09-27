@@ -32,6 +32,7 @@
        "entrada": { "prompt": "…", "aspect_ratio": "1:1", "resolution": "1K", "output_format": "png" },
        "subir": { "image_input": ["docs/design/assets/visao/imag-estacao.jpg"] },
        "custo_usd": 0.067, "rodada": "terminal-ao-vivo", "teto_usd": 1.5 }
+   `cancelar_apos` (opcional): vira o header Cancel-After da Replicate ("900", "15m"; mínimo 5 s). Obrigatório em vídeo e 3D.
    `subir`: campo → caminho (texto) ou lista de caminhos; cada arquivo sobe pela files API e o campo
    recebe a URL dele (lista continua lista). Modelo da comunidade: passe `versao` (POST /v1/predictions).
 
@@ -68,7 +69,7 @@ function exigeToken() {
 }
 
 /* uma chamada à API; o cabeçalho de autorização só vai para api.replicate.com */
-async function api(metodo, url, { json, form, prefer } = {}) {
+async function api(metodo, url, { json, form, prefer, cancelarApos } = {}) {
   if (!url.startsWith(API + '/')) throw new Error('recusado: o token só vai para ' + API);
   exigeToken();
   const cab = { Authorization: 'Bearer ' + TOKEN };
@@ -76,6 +77,7 @@ async function api(metodo, url, { json, form, prefer } = {}) {
   if (json !== undefined) { cab['Content-Type'] = 'application/json'; corpo = JSON.stringify(json); }
   if (form) corpo = form;
   if (prefer) cab.Prefer = prefer;
+  if (cancelarApos) cab['Cancel-After'] = String(cancelarApos);
   for (let tentativa = 1; ; tentativa++) {
     let r;
     try { r = await fetch(url, { method: metodo, headers: cab, body: corpo }); }
@@ -232,8 +234,8 @@ async function gerar(tarefa, { seco = false } = {}) {
 
     /* 3. cria a predição (oficial: /models/…/predictions; comunidade: /predictions com version) */
     const r = tarefa.versao
-      ? await api('POST', API + '/predictions', { json: { version: tarefa.versao, input: entrada }, prefer: 'wait=60' })
-      : await api('POST', API + '/models/' + tarefa.modelo + '/predictions', { json: { input: entrada }, prefer: 'wait=60' });
+      ? await api('POST', API + '/predictions', { json: { version: tarefa.versao, input: entrada }, prefer: 'wait=60', cancelarApos: tarefa.cancelar_apos })
+      : await api('POST', API + '/models/' + tarefa.modelo + '/predictions', { json: { input: entrada }, prefer: 'wait=60', cancelarApos: tarefa.cancelar_apos });
     /* 202 = aceita e ainda rodando (o `Prefer: wait` venceu antes do fim): a predição existe e custa; segue para o polling.
        Achado em 23/09/2026 (robo-3d no Trellis): tratar 202 como "não criada" apagava a entrada e zerava o custo anotado. */
     const criada = (r.status === 201 || r.status === 200 || r.status === 202) && r.dados && r.dados.id;
