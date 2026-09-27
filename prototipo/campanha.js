@@ -796,6 +796,7 @@ BC.vistas = BC.vistas || {};
           var escrito = p.tipo === 'tela' ? (landingPartes(p.conteudo)[p.feitos - 1] || '').length : p.tipo === 'whatsapp' ? String(p.conteudo.partes[p.feitos - 1] || '').length : 180;
           if (P.pres && P.pres.bytes) P.pres.bytes(escrito * 6);
           var oo = org(); if (oo) oo.acender(card, 1500);
+          if (BC.poderes && p.feitos < p.passos.length) BC.poderes.faisca(card.querySelector('.cp-progresso') || card, { cor: corDe(p.dono) });
         }
       } else if (p.tipo === 'tela' && p.estado === 'pronta') desenharPrevia(P, c, p, false);
       if (p.estado === 'pronta' && v.estado !== 'pronta') {
@@ -855,10 +856,21 @@ BC.vistas = BC.vistas || {};
       if (!palcos[P.id]) return;
       marcarItem(P.el, p, true);
       card.classList.remove('cp-chegou'); void card.offsetWidth; card.classList.add('cp-chegou');
-      if (o) { o.acender(card, MV_CURTA); o.faiscas(card, p.tipo === 'tela' ? 8 : 6, p.tipo === 'tela'); if (meu) o.som('tique'); }
+      var pd = BC.poderes;
+      if (o) { o.acender(card, MV_CURTA); o.faiscas(card, p.tipo === 'tela' ? 8 : 6, p.tipo === 'tela'); if (meu && !pd) o.som('tique'); }
+      if (pd) poderPronta(P, p, card, meu);
     }
     if (o) o.pulso(origem, card, { cor: 'marca', forte: p.tipo === 'tela', aoChegar: chegou });
     else pulsoCss(P, origem, card, chegou);
+  }
+  /* o poder da peça pronta (BC.poderes): explosão na cor do dono, "+2" subindo e 4 orbes que voam até o placar */
+  function poderPronta(P, p, card, meu) {
+    var pd = BC.poderes, corP = corDe(p.dono), placar = P.el.querySelector('.cp-pts-n'), caixa = P.el.querySelector('.cp-pontos');
+    pd.explodir(card, { cor: corP, forca: p.tipo === 'tela' ? 1.4 : 1 });
+    pd.flutuar(card, '+2', { cor: corP, topo: true });
+    if (!meu) return;
+    pd.som('poder');
+    if (placar && caixa && !caixa.hidden) pd.voar(card, placar, { n: 4, cor: corP });
   }
   /* sem o motor do organismo (protótipo puro): um ponto de luz em CSS corre da presença até a peça */
   function pulsoCss(P, de, para, aoChegar) {
@@ -901,10 +913,16 @@ BC.vistas = BC.vistas || {};
     textoRito(P, c);
     var box = P.el.querySelector('.cp-rito'), pecas = P.el.querySelector('.cp-pecas'), o = org(), meu = c.por === L().eu;
     box.classList.remove('nasce'); void box.offsetWidth; box.classList.add('nasce');
+    var pd = BC.poderes;
+    if (pd) {
+      var tot = contaPontos(c).reduce(function (s, x) { return s + x.n; }, 0);
+      pd.combo(pecas, qual === 'no-ar' ? 'Campanha no ar' : 'Campanha pronta', qual === 'no-ar' ? '6 OKs · a parede já viu' : 'COMBO ×6' + (meu ? ' · ' + tot + ' pontos' : ''), { cor: qual === 'no-ar' ? 'ouro' : 't0' });
+      if (meu) pd.som('combo');
+    }
     if (o) {
       o.respirar(pecas, qual === 'no-ar' ? { cor: 'ouro' } : {});
       o.faiscas(box, 12, true, qual === 'no-ar' ? { cor: 'ouro' } : {});
-      if (meu) o.som(qual === 'no-ar' ? 'tres' : 'duas');
+      if (meu && !pd) o.som(qual === 'no-ar' ? 'tres' : 'duas');
     } else { pecas.classList.remove('cp-respira', 'ouro'); void pecas.offsetWidth; pecas.classList.add('cp-respira'); if (qual === 'no-ar') pecas.classList.add('ouro'); }
     P.el.querySelectorAll('.cp-peca').forEach(function (card) { if (o) o.acender(card, MV_CURTA); });
     if (!box.getBoundingClientRect().height || box.getBoundingClientRect().top > window.innerHeight) box.scrollIntoView({ block: 'nearest', behavior: reduzido() ? 'auto' : 'smooth' });

@@ -112,7 +112,7 @@ window.BC = window.BC || {};
   /* ---------- conteúdo dos arquivos ---------- */
 
   var README = [
-    '# Como usamos o Babel Coop', '',
+    '# Como usamos o babel-coop', '',
     'Bem-vindo à Estação. Aqui fica tudo o que a equipe cria, e todo mundo pode ver.', '',
     '## Onde ficam as coisas', '',
     '| Pasta | O que tem |', '|---|---|',
@@ -200,7 +200,7 @@ window.BC = window.BC || {};
       '## Próximos passos', '- **João**: página de preços em homologação até quinta.', '- **Eva**: roteiro do depoimento até sexta.'].join('\n');
   };
 
-  var MAPA = JSON.stringify({ raiz: { id: 'r', texto: 'Babel Coop', filhos: [
+  var MAPA = JSON.stringify({ raiz: { id: 'r', texto: 'babel-coop', filhos: [
     { id: 'a', texto: 'Estação', filhos: [{ id: 'a1', texto: 'Explorador e editor', filhos: [] }, { id: 'a2', texto: 'Terminal com IA', filhos: [] }, { id: 'a3', texto: 'Demandas com cronômetro', filhos: [] }] },
     { id: 'b', texto: 'TV', filhos: [{ id: 'b1', texto: 'Painel', filhos: [] }, { id: 'b2', texto: 'Reunião', filhos: [] }, { id: 'b3', texto: 'Cuidando da gente', filhos: [] }] },
     { id: 'c', texto: 'Inteligência', filhos: [{ id: 'c1', texto: 'Acervo sem LLM', filhos: [] }, { id: 'c2', texto: 'Aprendizados', filhos: [] }, { id: 'c3', texto: 'Sonho', filhos: [] }] },
@@ -231,7 +231,7 @@ window.BC = window.BC || {};
         ['theus/README.md', 'md', '1 KB', 30, README],
         ['theus/notas/ideias soltas.md', 'md', '1 KB', 12, '# Ideias soltas\n\n- A TV mostrar quem pode ajudar quem\n- Quadro do iPad ao vivo nas reuniões\n- Pergunta da semana na segunda de manhã\n- Prompt bom vira receita no terminal'],
         ['theus/Planejamento Q4.pdf', 'pdf', '2,1 MB', 40, pdf('Planejamento Q4', [
-          ['# Objetivo do trimestre', 'Chegar a 80 clientes ativos com atendimento em menos de 1 minuto.', '# Três frentes', 'Comercial: clínicas e escritórios em Campinas e região.', 'Produto: relatórios de comissão e nova página de preços.', 'Equipe: Babel Coop funcionando no escritório, com a TV e o iPad.'],
+          ['# Objetivo do trimestre', 'Chegar a 80 clientes ativos com atendimento em menos de 1 minuto.', '# Três frentes', 'Comercial: clínicas e escritórios em Campinas e região.', 'Produto: relatórios de comissão e nova página de preços.', 'Equipe: babel-coop funcionando no escritório, com a TV e o iPad.'],
           ['# Riscos', 'Dependência do servidor no Mac do Theus até comprar o mini PC.', 'Tempo de implantação por cliente ainda alto (média de 6 dias).']])],
         ['theus/Organograma.png', 'imagem', '640 KB', 300, organograma()],
         ['theus/scripts/gerar-relatorio.sh', 'sh', '1 KB', 1500, SCRIPT],

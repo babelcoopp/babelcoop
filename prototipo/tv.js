@@ -150,6 +150,15 @@ window.BC = window.BC || {};
   function mostrarArquivo(el, a, pagina) {
     var ed = BC.editor, c = ed.conteudo(a), h = {}, dono = a.dono === 'equipe' ? 'da equipe' : 'de ' + L().nome(a.dono);
     el.innerHTML = '';
+    if (a._real && !a._carregado && BC.arquivosReal) {
+      el.innerHTML = '<div class="tv-vazio">Carregando o arquivo para a TV…</div>';
+      BC.arquivosReal.carregar(a, function (ok) {
+        if (!el.isConnected) return;
+        if (ok) Object.assign(h, mostrarArquivo(el, a, pagina));
+        else el.innerHTML = '<div class="tv-vazio">Não foi possível carregar o arquivo. Confira a conexão com o computador de origem e projete novamente.</div>';
+      });
+      return h;
+    }
     if ((a.local && c == null) || ((a.tipo === 'video' || a.tipo === 'binario') && a.dono !== 'equipe' && !L().online(a.dono))) {
       el.innerHTML = '<div class="tv-vazio">Este arquivo fica no computador ' + esc(dono) + ' e abre pela rede quando ele estiver ligado.</div>';
       return h;
@@ -514,7 +523,9 @@ window.BC = window.BC || {};
      sempre online). No app real a sala trabalha quando tem gente dentro: com a TV aberta e alguém na sala, o chão toca em loop (mudo);
      sala vazia, ele para. A intensidade (--chao) continua medida pelo trabalho que roda. Movimento reduzido: fica o pôster parado. */
   function renderChao(e) {
-    var raiz = $('vista-tv'), v = $('tv-chao'), n = contarTrabalho(e), gente = real() ? presentes(e) : 0, estado = n > 0 || gente > 0 ? 'toca' : 'parado';
+    var raiz = $('vista-tv'), v = $('tv-chao'), n = contarTrabalho(e), gente = real() ? presentes(e) : 0;
+    var conectado = !real() || (BC.real && BC.real.ligado());
+    var estado = conectado && n > 0 ? 'toca' : 'parado';
     T.chao.trabalhando = n; T.chao.presentes = gente;
     if (T.chao.estado !== estado) { T.chao.estado = estado; T.chao.trocas++; T.chao.desde = Date.now(); }
     raiz.dataset.chao = estado;
@@ -582,6 +593,7 @@ window.BC = window.BC || {};
       (p.agentes || []).forEach(function (a) {
         var k = p.id + ':' + a.id, est = ESTADO_AG[a.estado] || 'shell', r = T.agentesReal[k];
         if (r && r.ts > agora - 10 * MIN) est = r.estado;
+        if (p.status === 'offline') est = 'shell';
         vistos[k] = true;
         var x = T.agentes[k];
         if (!x) { x = T.agentes[k] = { chave: k, id: a.id, nome: a.nome, dono: p.id, estado: 'shell', desde: 0, fim: 0 }; }
@@ -593,6 +605,8 @@ window.BC = window.BC || {};
     Object.keys(T.agentesReal).forEach(function (k) {
       if (vistos[k]) return;
       var r = T.agentesReal[k], x = T.agentes[k];
+      var dono = L().pessoa(r.dono);
+      if (!dono || dono.status === 'offline') { delete T.agentes[k]; return; }
       if (!x) x = T.agentes[k] = { chave: k, id: r.id, nome: r.nome || 'agente', dono: r.dono, estado: 'shell', desde: 0, fim: 0 };
       if (r.estado === 'rodando' || r.estado === 'espera') { if (x.estado !== r.estado) { x.desde = r.desde || agora; x.estado = r.estado; } }
       else if (x.estado === 'rodando' || x.estado === 'espera') { x.estado = r.estado === 'falhou' ? 'falhou' : 'terminou'; x.fim = agora; }
@@ -708,14 +722,14 @@ window.BC = window.BC || {};
   function cartoesGira(e) {
     var r = [], m = e.mural.filter(function (x) { return !/^(Máquina|Sistema|Oficina):/.test(x.texto || ''); }), max = function (lista, campo) { return lista.reduce(function (a, x) { return Math.max(a, x[campo] || 0); }, 0); };
     var av = e.avisos.slice(0, 2);
-    r.push({ id: 'avisos', titulo: 'AVISOS E MURAL', ts: Math.max(max(av, 'ts'), m[0] ? m[0].ts : 0), assin: av.map(function (a) { return a.id; }).join(',') + '|' + (m[0] ? m[0].id : ''),
+    if (av.length || m.length) r.push({ id: 'avisos', titulo: 'AVISOS E MURAL', ts: Math.max(max(av, 'ts'), m[0] ? m[0].ts : 0), assin: av.map(function (a) { return a.id + ':' + a.texto; }).join(',') + '|' + (m[0] ? m[0].id + ':' + m[0].texto : ''),
       html: '<ul class="tv-avisos">' + av.map(function (a) { return '<li>' + esc(a.texto) + '</li>'; }).join('') + '</ul>' +
         (m[0] ? citacao(m[0].texto, esc(L().nome(m[0].pessoa)) + ' · <time data-rel="' + m[0].ts + '">' + U.relativo(m[0].ts) + '</time>') : '') });
     var hoje = e.aprendizados.filter(function (a) { return U.mesmoDia(a.ts); }), ult = e.aprendizados.slice().sort(function (a, b) { return b.ts - a.ts; })[0];
     if (ult) r.push({ id: 'aprendendo', titulo: 'A BABEL ESTÁ APRENDENDO · ' + hoje.length + ' HOJE · ' + e.aprendizados.length + ' NO TOTAL', ts: ult.ts, assin: e.aprendizados.length + '|' + ult.id + '|' + ult.confirmacoes.length,
       html: citacao(ult.texto, (ult.ia ? 'IA do terminal de ' : '') + esc(L().nome(ult.pessoa)) + (ult.origem ? ' · ' + esc(ult.origem) : '') + (ult.confirmacoes.length ? ' · +' + ult.confirmacoes.length : '')) });
     var resp = e.pergunta.respostas[e.pergunta.respostas.length - 1];
-    r.push({ id: 'pergunta', titulo: 'PERGUNTA DA SEMANA', ts: resp ? resp.ts : e.pergunta.desde, assin: e.pergunta.texto + '|' + e.pergunta.respostas.length,
+    if (resp || !real()) r.push({ id: 'pergunta', titulo: 'PERGUNTA DA SEMANA', ts: resp ? resp.ts : e.pergunta.desde, assin: e.pergunta.texto + '|' + e.pergunta.respostas.length,
       html: '<blockquote class="tv-fala">' + esc(e.pergunta.texto) + '</blockquote><p class="tv-quem-fala">' + (resp ? esc(L().nome(resp.pessoa)) + ' respondeu · ' + e.pergunta.respostas.length + ' respostas' : 'responda na sua Estação, em Meu dia') + '</p>' });
     var so = e.sonho, top = so ? so.top.map(function (id) { return e.prompts.filter(function (p) { return p.id === id; })[0]; }).filter(Boolean) : [];
     if (top.length) r.push({ id: 'sonho', titulo: 'O SONHO DESTA NOITE · TOP 3 PROMPTS', ts: so.ts || 0, assin: so.top.join(','),
@@ -750,15 +764,19 @@ window.BC = window.BC || {};
   }
   function renderGira(e) {
     var G = T.gira, cs = cartoesGira(e), box = $('tv-gira');
-    if (!cs.length) return;
-    cs.forEach(function (c) { if (G.assin[c.id] !== undefined && G.assin[c.id] !== c.assin) G.pendente = c.id; G.assin[c.id] = c.assin; });
+    if (!cs.length) {
+      box.innerHTML = '<p class="tv-vazio">Nenhuma novidade registrada na equipe.</p>';
+      G.atual = G.chave = G.pendente = null; G.assin = {};
+      return;
+    }
+    cs.forEach(function (c) { if (G.assin[c.id] !== c.assin) G.pendente = c.id; G.assin[c.id] = c.assin; });
     var alvo = null;
     if (G.pendente) alvo = cs.filter(function (c) { return c.id === G.pendente; })[0];
     if (!alvo && G.atual) alvo = cs.filter(function (c) { return c.id === G.atual; })[0];
     if (!alvo) alvo = cs.slice().sort(function (a, b) { return b.ts - a.ts; })[0];
     G.pendente = null;
     var chave = alvo.id + '|' + alvo.assin;
-    if (!box.firstChild) box.innerHTML = '<header class="tv-bloco-cab"><span class="tv-rotulo"></span><span class="tv-pontos"></span></header><div class="tv-gira-palco"></div>';
+    if (!box.querySelector('.tv-gira-palco')) box.innerHTML = '<header class="tv-bloco-cab"><span class="tv-rotulo"></span><span class="tv-pontos"></span></header><div class="tv-gira-palco"></div>';
     box.querySelector('.tv-pontos').innerHTML = cs.map(function (c) { return '<i' + (c.id === alvo.id ? ' class="on"' : '') + '></i>'; }).join('');
     if (G.chave === chave) return;
     var trocouCartao = G.atual !== alvo.id;
@@ -985,15 +1003,9 @@ window.BC = window.BC || {};
     partes.push('<span class="tv-b-item"><b class="num">' + caixa + '</b> na caixa</span>');
     if (s.gravando) partes.push('<span class="tv-b-item gravando">● gravando a sala</span>');
     else if (s.memoria) partes.push('<span class="tv-b-item">◌ memória da sala</span>');
-    try {
-      if (BC.placar && typeof BC.placar.hoje === 'function' && BC.placar.eventos().length) {
-        var pts = BC.placar.hoje();
-        if (typeof pts === 'number' && isFinite(pts)) partes.push('<span class="tv-b-item"><b class="num">' + pts + '</b> ' + (pts === 1 ? 'ponto' : 'pontos') + ' hoje</span>');
-      }
-    } catch (x) { /* placar indisponível: o pedaço some */ }
     partes.push('<span class="tv-b-item">TV' + (L().conectado('estacao') ? ' · conectada à Estação' : ' · esperando a Estação') + '</span>');
-    var aoVivo = window.COOP_REAL && window.COOP_REAL.terminal && e.pessoas.some(function (p) { return (p.status === 'online' || p.status === 'foco') && (e.transmissao || {})[p.id] !== false; });
-    if (aoVivo) partes.push('<span class="tv-b-item vivo">● terminal ao vivo</span>');
+    var ativos = Object.keys(T.agentes).filter(function (k) { return T.agentes[k].estado === 'rodando'; }).length;
+    if (ativos) partes.push('<span class="tv-b-item vivo">● ' + ativos + (ativos === 1 ? ' agente trabalhando' : ' agentes trabalhando') + '</span>');
     return '<span class="tv-b-itens">' + partes.join('<span class="tv-sep"> · </span>') + '</span><span>atualizado às <span class="num">' + U.horaSeg(T.atualizado) + '</span></span>';
   }
   function renderChaoParado() { var raiz = $('vista-tv'); raiz.dataset.chao = 'parado'; T.chao.estado = 'parado'; }
@@ -1004,6 +1016,13 @@ window.BC = window.BC || {};
     $('tv-data').textContent = U.dataCurta();
     $('tv-visita-hora').textContent = U.hora(agora);
     if (!e) return; /* estado ainda não chegou (a ponte está trocando o estado): só o relógio anda */
+    if (real() && (!BC.real || !BC.real.ligado())) {
+      renderChaoParado();
+      var video = $('tv-chao'); if (video) video.pause();
+      $('tv-rodape').textContent = 'Sem conexão · dados preservados da última atualização às ' + U.horaSeg(T.atualizado);
+      var aviso = $('tv-sinal'); if (aviso) aviso.textContent = 'SINAL · SEM CONEXÃO';
+      return;
+    }
     document.querySelectorAll('#vista-tv [data-regressiva]').forEach(function (el) { el.textContent = U.regressiva(+el.getAttribute('data-regressiva')).texto; });
     document.querySelectorAll('#vista-tv [data-desde]').forEach(function (el) { el.textContent = U.relogio(agora - +el.getAttribute('data-desde')); });
     document.querySelectorAll('#vista-tv [data-cron]').forEach(function (el) { var d = L().demanda(el.getAttribute('data-cron')); if (d) el.textContent = cronTexto(L().tempo(d).trabalho); });
@@ -1011,7 +1030,7 @@ window.BC = window.BC || {};
     document.querySelectorAll('#vista-tv [data-ha]').forEach(function (el) { el.textContent = Math.max(0, Math.round((agora - +el.getAttribute('data-ha')) / 1000)) + ' s'; });
     luzesDoDado();
     var sinal = $('tv-sinal');
-    if (sinal) sinal.textContent = T.chao.trabalhando ? 'SINAL · ' + T.chao.trabalhando + (T.chao.trabalhando === 1 ? ' CRONÔMETRO RODANDO' : ' CRONÔMETROS RODANDO') : 'SINAL · EM REPOUSO';
+    if (sinal) sinal.textContent = T.chao.trabalhando ? 'SINAL · ' + T.chao.trabalhando + (T.chao.trabalhando === 1 ? ' ATIVIDADE EM ANDAMENTO' : ' ATIVIDADES EM ANDAMENTO') : 'SINAL · EM REPOUSO';
     var rod = $('tv-rodape');
     if (real()) { rod.classList.add('tv-barra'); rod.innerHTML = barraReal(e); }
     else rod.innerHTML = '<span>protótipo com dados de exemplo · atualizado às <span class="num">' + U.horaSeg(T.atualizado) + '</span></span><span>' +

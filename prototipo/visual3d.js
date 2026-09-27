@@ -257,12 +257,13 @@ window.BC = window.BC || {};
   /* =====================================================================================
      O CORPO DO PROJETO (TV · fase F4 do PLANO): as peças da Máquina em 3D, na parede da sala.
      "A peça nova nasce tracejada e ganha corpo ao publicar." Nada gira nem respira sem dado:
-     o quadro só é desenhado quando algo muda (peça nova, peça que ganha corpo, pulso no cano, tamanho).
+     o quadro só é desenhado quando algo muda (peça nova, peça que ganha corpo, pulso no cano, efeito de montar, tamanho).
 
      Estado compartilhado (vai para todas as janelas pela loja):
-       estado.corpo = { atual: <projeto>, projetos: { <projeto>: { nome, pecas: [{ id, tipo, nome, estado: 'corpo'|'tracejada', ts, por }],
+       estado.corpo = { atual: <projeto>, projetos: { <projeto>: { nome, pecas: [{ id, tipo, nome, estado: 'corpo'|'tracejada', ts, por, banco?, bancoEm? }],
                         fios: [[de, para]], publicacoes: [{ ts, por, ids, versao }] } } }
-     Ações (BC.loja.fazer): 'corpoPeca' {projeto, nome?, pecas:[{id,tipo,nome}]} → peças tracejadas (ainda não publicadas)
+     Ações (BC.loja.fazer): 'corpoPeca' {projeto, nome?, pecas:[{id,tipo,nome,banco?,bancoEm?}], sai?:[ids], fiosSai?:[[de,para]]} → peças tracejadas
+                            (ainda não publicadas); a do banco local já tem corpo; sai/fiosSai tiram da parede só o que é do banco e saiu dele
                             'corpoPublicar' {projeto, nome?, pecas?, fios?, tudo?} → as peças ganham corpo (evento 'corpo', vai para a TV)
      As peças em GLB vêm de midia/pecas/pecas.json (geradas pelo pipeline da Replicate); sem GLB, uma forma simples do mesmo tipo.
      ===================================================================================== */
@@ -320,17 +321,40 @@ window.BC = window.BC || {};
     });
   }
 
-  /* peças novas que ainda não foram publicadas: nascem tracejadas na parede */
+  /* peças novas que ainda não foram publicadas: nascem tracejadas na parede. A do banco local existe de verdade: entra com corpo
+     e com o dono do banco (a TV mostra "no banco local"); peça que já estava tracejada e é do banco ganha corpo; o que saiu do
+     banco (sai, fiosSai) sai da parede. Peça só de desenho nunca sai por aqui. */
   LA.corpoPeca = function (quem, dados) {
     if (!dados || !dados.projeto || !Array.isArray(dados.pecas)) return;
-    var pj = corpoProjeto(String(dados.projeto), dados.nome), novas = 0, agora = Date.now();
+    var pj = corpoProjeto(String(dados.projeto), dados.nome), mudou = 0, agora = Date.now();
     dados.pecas.forEach(function (p) {
-      if (!p || !p.id || pecaDoCorpo(pj, String(p.id))) return;
-      pj.pecas.push({ id: String(p.id), tipo: tipoCorpo(p.tipo), nome: String(p.nome || p.id).slice(0, 40), estado: p.publicada ? 'corpo' : 'tracejada', ts: agora, por: quem });
-      novas++;
+      if (!p || !p.id) return;
+      var x = pecaDoCorpo(pj, String(p.id)), bd = p.banco === true, dono = bd && p.bancoEm ? String(p.bancoEm).slice(0, 64) : null;
+      if (!x) {
+        x = { id: String(p.id), tipo: tipoCorpo(p.tipo), nome: String(p.nome || p.id).slice(0, 40), estado: p.publicada || bd ? 'corpo' : 'tracejada', ts: agora, por: quem };
+        if (bd) { x.banco = true; if (dono) x.bancoEm = dono; }
+        pj.pecas.push(x); mudou++;
+        return;
+      }
+      if (bd && (!x.banco || x.estado !== 'corpo' || (dono && x.bancoEm !== dono))) { x.banco = true; x.estado = 'corpo'; if (dono) x.bancoEm = dono; x.ts = agora; mudou++; }
     });
+    var sai = {};
+    (Array.isArray(dados.sai) ? dados.sai : []).forEach(function (id) { var x = pecaDoCorpo(pj, String(id)); if (x && x.banco) sai[x.id] = true; });
+    if (Object.keys(sai).length) {
+      pj.pecas = pj.pecas.filter(function (x) { return !sai[x.id]; });
+      pj.fios = pj.fios.filter(function (f) { return !sai[f[0]] && !sai[f[1]]; });
+      mudou++;
+    }
+    (Array.isArray(dados.fiosSai) ? dados.fiosSai : []).forEach(function (f) {
+      if (!Array.isArray(f)) return;
+      var a = pecaDoCorpo(pj, String(f[0])), b = pecaDoCorpo(pj, String(f[1])), n = pj.fios.length;
+      if (!a || !b || !a.banco || !b.banco) return;
+      pj.fios = pj.fios.filter(function (x) { return !((x[0] === a.id && x[1] === b.id) || (x[0] === b.id && x[1] === a.id)); });
+      if (pj.fios.length !== n) mudou++;
+    });
+    var nFios = pj.fios.length;
     juntarFios(pj, dados.fios);
-    if (!novas) return;
+    if (!mudou && pj.fios.length === nFios) return;
     return [];
   };
 
@@ -372,7 +396,7 @@ window.BC = window.BC || {};
     try { r = BC.maquina.retrato ? BC.maquina.retrato(pjId) : null; } catch (e) { r = null; }
     var lista = r && Array.isArray(r.pecas) ? r.pecas : (Array.isArray(m.pecas) ? m.pecas : []);
     return lista.filter(function (p) { return p && p.id && p.tipo !== 'empresa'; })
-      .map(function (p) { return { id: String(p.id), tipo: p.tipo, nome: p.nome || p.id, publicada: p.publicada !== false && p.pronta !== false }; });
+      .map(function (p) { return { id: String(p.id), tipo: p.tipo, nome: p.nome || p.id, publicada: p.publicada !== false && p.pronta !== false, banco: p.banco === true, bancoEm: p.banco ? p.bancoEm || p.estacao || p.por || null : null }; });
   }
   function fiosDaMaquina(pjId) {
     var m = maquinasLocais()[pjId];
@@ -391,11 +415,17 @@ window.BC = window.BC || {};
     Object.keys(ms).forEach(function (pjId) {
       var pecas = pecasDaMaquina(pjId);
       if (!pecas.length) return;
-      var pj = c && c.projetos && c.projetos[pjId];
-      var novas = pecas.filter(function (p) { return !pj || !pecaDoCorpo(pj, p.id); });
-      if (!novas.length || ponteAgendada) return;
+      var pj = c && c.projetos && c.projetos[pjId], naMaquina = {}, fiosM = {};
+      pecas.forEach(function (p) { naMaquina[p.id] = true; });
+      /* nova na parede, ou do banco e ainda tracejada (ou com outro dono) na parede */
+      var novas = pecas.filter(function (p) { var x = pj && pecaDoCorpo(pj, p.id); return !x || (p.banco && (!x.banco || x.estado !== 'corpo' || (p.bancoEm && x.bancoEm !== p.bancoEm))); });
+      /* do banco na parede e fora da Máquina desta janela (a Máquina só tira peça do banco quando ela sai do banco) */
+      var sai = pj ? pj.pecas.filter(function (x) { return x.banco && !naMaquina[x.id]; }).map(function (x) { return x.id; }) : [];
+      fiosDaMaquina(pjId).forEach(function (f) { fiosM[f[0] + '>' + f[1]] = fiosM[f[1] + '>' + f[0]] = true; });
+      var fiosSai = pj ? pj.fios.filter(function (f) { var a = pecaDoCorpo(pj, f[0]), b = pecaDoCorpo(pj, f[1]); return a && b && a.banco && b.banco && naMaquina[a.id] && naMaquina[b.id] && !fiosM[f[0] + '>' + f[1]]; }) : [];
+      if ((!novas.length && !sai.length && !fiosSai.length) || ponteAgendada) return;
       ponteAgendada = true;
-      setTimeout(function () { ponteAgendada = false; L().fazer('corpoPeca', { projeto: pjId, nome: nomeDoProjeto(pjId), pecas: novas, fios: fiosDaMaquina(pjId) }); }, 0);
+      setTimeout(function () { ponteAgendada = false; L().fazer('corpoPeca', { projeto: pjId, nome: nomeDoProjeto(pjId), pecas: novas, fios: fiosDaMaquina(pjId), sai: sai, fiosSai: fiosSai }); }, 0);
     });
   }
   L().aoMudar(function (estado, novos) {
@@ -484,10 +514,30 @@ window.BC = window.BC || {};
     return g;
   }
 
+  /* os dois modos da Estação na cena: Tech (escuro, o de sempre: o palco aparece por trás) e Vibe (papel Latte, alumínio claro
+     com sombra suave, fios na cor da marca mais escura). Troca ao vivo pelo atributo data-tema-estacao, sem recriar a cena */
+  var PALETA = {
+    tech: { fundo: null, base: 0x161e2d, borda: 0x506b94, tracejo: 0x7ba4f0, fio: 0x506b94, ceu: 0xa9bbff, terra: 0x0a0f1e, hemi: 1.25, sol: 1.5, contra: 0x7ba4f0, contraI: 0.55, aluminio: 0 },
+    vibe: { fundo: 0xfff8e7, base: 0xece3cc, borda: 0x7d7a85, tracejo: 0x3a63c2, fio: 0x5a44a8, ceu: 0xfffaf0, terra: 0x9c907a, hemi: 1.05, sol: 1.7, contra: 0xffe2b8, contraI: 0.22, aluminio: 0.8, grade: [0xe6dcc2, 0xefe7d2] }
+  };
+  var ALUMINIO = 0xcdd2da, ORIGINAL = new WeakMap(); /* material → cor, metal, rugosidade e textura do Tech */
+  function modoVibe() { var h = document.documentElement; return h.getAttribute('data-tema-estacao') === 'claro' && (h.getAttribute('data-vista') || 'estacao') === 'estacao'; }
+  var texSombra = null;
+  function sombraTex(T) {
+    if (texSombra) return texSombra;
+    var cv = document.createElement('canvas'), ctx = cv.getContext('2d'); cv.width = cv.height = 128;
+    var g = ctx.createRadialGradient(64, 64, 8, 64, 64, 64);
+    g.addColorStop(0, 'rgba(70,55,30,0.30)'); g.addColorStop(0.55, 'rgba(70,55,30,0.14)'); g.addColorStop(1, 'rgba(70,55,30,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
+    texSombra = new T.CanvasTexture(cv); texSombra.colorSpace = T.SRGBColorSpace;
+    return texSombra;
+  }
+
   var CORPO_ESPACO = 1.55;
   function VistaCorpo(el, opcoes) {
     this.el = el; this.op = opcoes || {}; this.itens = {}; this.ordem = []; this.anims = []; this.pulsos = []; this.fiosObj = [];
     this.dados = null; this.pronto = false; this.falhou = false; this.renders = 0; this.motivos = {}; this.ganhou = []; this.raf = 0; this.catalogo = null;
+    this.efeitos = []; this.fxObj = 0; this.fxRotulos = []; this.reservas = {}; /* efeitos de montar (maquina-efeitos.js) */
     el.classList.add('v3c');
     el.innerHTML = '<canvas class="v3c-gl" aria-hidden="true"></canvas><div class="v3c-rotulos" aria-hidden="true"></div><p class="v3c-aviso">carregando o corpo…</p>';
     this.canvas = el.querySelector('canvas'); this.rotulosEl = el.querySelector('.v3c-rotulos'); this.aviso = el.querySelector('.v3c-aviso');
@@ -505,12 +555,18 @@ window.BC = window.BC || {};
     this.cena = new T.Scene();
     this.cam = new T.OrthographicCamera(-5, 5, 3, -3, 0.1, 100);
     this.cam.position.set(9, 8.2, 9); this.cam.lookAt(0, 0.35, 0);
-    this.cena.add(new T.HemisphereLight(0xa9bbff, 0x0a0f1e, 1.25));
+    this.camBase = this.cam.position.clone(); /* o foco do efeito "nascer" desloca a câmera e volta para cá */
+    var hemi = new T.HemisphereLight(0xa9bbff, 0x0a0f1e, 1.25); this.cena.add(hemi);
     var sol = new T.DirectionalLight(0xffffff, 1.5); sol.position.set(5, 11, 7); this.cena.add(sol);
     var contra = new T.DirectionalLight(0x7ba4f0, 0.55); contra.position.set(-7, 4, -6); this.cena.add(contra);
+    this.luzes = { hemi: hemi, sol: sol, contra: contra };
     this.raiz = new T.Group(); this.cena.add(this.raiz);
     this.pronto = true;
     this.aviso.hidden = true;
+    this.pal = null; this.vibe = false; /* pal nulo: o primeiro _tema aplica tudo, inclusive as cores globais dos efeitos */
+    this._tema();
+    this._mo = new MutationObserver(function () { eu._tema(); });
+    this._mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-tema-estacao', 'data-vista'] });
     if (window.ResizeObserver) { this.ro = new ResizeObserver(function () { eu._medir(); eu.pedir('tamanho'); }); this.ro.observe(this.el); }
     this._visivel = function () { if (!document.hidden) eu.pedir('visivel'); };
     document.addEventListener('visibilitychange', this._visivel);
@@ -542,6 +598,7 @@ window.BC = window.BC || {};
     if (!this.cam || !this.w) return;
     var T = T3.T, n = Math.max(1, this.ordem.length), a = this.w / this.h, eu = this;
     this.cam.left = -a; this.cam.right = a; this.cam.top = 1; this.cam.bottom = -1; this.cam.zoom = 1; this.cam.updateProjectionMatrix();
+    if (this.camBase) this.cam.position.copy(this.camBase); /* mede sempre da câmera parada, mesmo no meio de um foco */
     this.cam.updateMatrixWorld();
     var mx = 0.01, my = 0.01, v = new T.Vector3();
     for (var i = 0; i < n; i++) {
@@ -551,11 +608,20 @@ window.BC = window.BC || {};
         mx = Math.max(mx, Math.abs(v.x)); my = Math.max(my, Math.abs(v.y));
       });
     }
-    this.cam.zoom = 0.92 / Math.max(mx, my);
+    /* o rótulo (nome da peça) fica acima do topo da peça e centrado nela: reserva ~26 px em cima e ~70 px de cada lado,
+       senão o de cima corta quando o painel de baixo abre e o palco encolhe */
+    var zy = (0.96 - 52 / this.h) / my, zx = (0.96 - 140 / this.w) / mx;
+    this.cam.zoom = Math.max(0.05, Math.min(0.92 / Math.max(mx, my), zy, zx));
+    this.zoomBase = this.cam.zoom;
     this.cam.updateProjectionMatrix();
   };
   VC.atualizar = function (dados) {
-    this.dados = dados ? { nome: dados.nome, pecas: (dados.pecas || []).map(function (p) { return { id: p.id, tipo: p.tipo, nome: p.nome, estado: p.estado, ts: p.ts, por: p.por }; }), fios: (dados.fios || []).slice() } : null;
+    /* banco:true = a peça existe num banco local: tem corpo (nunca tracejada) e leva o selo "no banco local"; de outra Estação,
+       "no banco local de <nome>" (bancoDe, da Máquina; ou bancoEm, o id do dono, da parede da TV) */
+    this.dados = dados ? { nome: dados.nome, pecas: (dados.pecas || []).map(function (p) {
+      var de = p.bancoDe || (p.banco && p.bancoEm && p.bancoEm !== L().eu ? L().nome(p.bancoEm) : null);
+      return { id: p.id, tipo: p.tipo, nome: p.nome, estado: p.banco ? 'corpo' : p.estado, ts: p.ts, por: p.por,
+        banco: !!p.banco, bancoDe: p.banco && de ? String(de) : null, linhas: typeof p.linhas === 'number' && isFinite(p.linhas) ? p.linhas : null }; }), fios: (dados.fios || []).slice() } : null;
     if (this.pronto) this._sincronizar(true);
     else if (this.falhou) this._semTres();
     return this;
@@ -570,10 +636,12 @@ window.BC = window.BC || {};
       if (!it) { it = eu._criar(p); eu.itens[p.id] = it; eu.ordem.push(p.id); mudouLayout = true; if (p.estado === 'corpo' && animar) eu._ganhar(it, reduz); else eu._estadoDireto(it, p.estado); }
       else if (it.estado !== p.estado) { if (p.estado === 'corpo') eu._ganhar(it, reduz || !animar); else eu._estadoDireto(it, p.estado); }
       it.p = p;
+      it.bordaBase.material.color.setHex(p.banco ? FX.ciano : eu.pal.borda);
     });
     Object.keys(this.itens).forEach(function (id) { if (!vistos[id]) { eu.raiz.remove(eu.itens[id].g); delete eu.itens[id]; eu.ordem.splice(eu.ordem.indexOf(id), 1); mudouLayout = true; } });
     if (mudouLayout) { this.ordem.forEach(function (id, i) { var pos = eu._posicao(i, eu.ordem.length); eu.itens[id].g.position.set(pos.x, 0, pos.z); }); this._enquadrar(); }
     this._fios();
+    if (Object.keys(this.reservas).length) this._aplicarReservas();
     this.pedir('dados');
   };
   VC._criar = function (p) {
@@ -588,10 +656,53 @@ window.BC = window.BC || {};
     tracejo.computeLineDistances(); g.add(tracejo);
     var corpo = new T.Group(); corpo.position.y = 0.05; g.add(corpo);
     var forma = formaSimples(T, tipo); corpo.add(forma);
-    var it = { id: p.id, tipo: tipo, g: g, corpo: corpo, forma: forma, tracejo: tracejo, bordaBase: bordaBase, estado: null, luz: 0, glb: false, p: p };
+    /* a sombra suave no papel (só no Vibe): um borrão sob a base, puxado para longe do sol */
+    var sombra = new T.Mesh(new T.PlaneGeometry(1.75, 1.75), new T.MeshBasicMaterial({ map: sombraTex(T), transparent: true, depthWrite: false }));
+    sombra.rotation.x = -Math.PI / 2; sombra.position.set(-0.1, 0.002, -0.12); sombra.visible = false; g.add(sombra);
+    var it = { id: p.id, tipo: tipo, g: g, corpo: corpo, forma: forma, base: base, tracejo: tracejo, bordaBase: bordaBase, sombra: sombra, estado: null, luz: 0, glb: false, p: p };
     this.raiz.add(g);
+    this._pintar(it);
+    this.itens[p.id] = it; /* antes do GLB: vindo do cache ele chega na hora e confere se a peça está na cena */
     this._trocarPorGlb(it);
     return it;
+  };
+  /* o modo (Tech ou Vibe) na cena já montada: fundo, grade, luzes, as peças, os fios e as cores dos efeitos */
+  VC._tema = function () {
+    if (!this.gl) return;
+    var vibe = modoVibe(), T = T3.T, eu = this;
+    Object.assign(FX, vibe ? FX_VIBE : FX_TECH); /* FX é do módulo: sempre no modo de agora, mesmo sem mudança nesta vista */
+    if (vibe === this.vibe && this.pal) return;
+    var P = this.pal = vibe ? PALETA.vibe : PALETA.tech; this.vibe = vibe;
+    if (P.fundo != null) this.gl.setClearColor(P.fundo, 1); else this.gl.setClearColor(0x000000, 0);
+    var L = this.luzes; L.hemi.color.setHex(P.ceu); L.hemi.groundColor.setHex(P.terra); L.hemi.intensity = P.hemi;
+    L.sol.intensity = P.sol; L.contra.color.setHex(P.contra); L.contra.intensity = P.contraI;
+    if (P.grade && !this.grade) { this.grade = new T.GridHelper(80, 160, P.grade[0], P.grade[1]); this.grade.position.y = -0.001; this.cena.add(this.grade); }
+    if (this.grade) this.grade.visible = !!P.grade;
+    this.ordem.forEach(function (id) { eu._pintar(eu.itens[id]); });
+    this.fiosObj.forEach(function (f) { f.linha.material.color.setHex(P.fio); });
+    if (this.el) this.el.classList.toggle('v3c-vibe', vibe);
+    this.pedir('tema');
+  };
+  /* uma peça no modo atual. O original de cada material fica guardado: o Tech volta exatamente ao que era.
+     No Vibe a textura escura dos GLB sai (alumínio liso, as luzes desenham a forma) e volta no Tech */
+  VC._pintar = function (it) {
+    var P = this.pal || PALETA.tech, T = T3.T, alu = new T.Color(ALUMINIO);
+    it.base.material.color.setHex(P.base);
+    it.bordaBase.material.color.setHex(it.p && it.p.banco ? FX.ciano : P.borda);
+    it.tracejo.material.color.setHex(P.tracejo);
+    it.sombra.visible = !!P.aluminio;
+    it.corpo.traverse(function (o) {
+      var m = o.material;
+      if (!o.isMesh || !m || Array.isArray(m)) return;
+      var u = ORIGINAL.get(m);
+      if (!u) { u = { c: m.color ? m.color.getHex() : null, me: m.metalness, ro: m.roughness, mapa: m.map || null }; ORIGINAL.set(m, u); }
+      var mapa = P.aluminio ? null : u.mapa;
+      if ((m.map || null) !== mapa) { m.map = mapa; m.needsUpdate = true; }
+      if (m.color && u.c != null) { m.color.setHex(u.c); if (P.aluminio) m.color.lerp(alu, P.aluminio); }
+      if (typeof u.me === 'number') m.metalness = P.aluminio ? Math.min(u.me, 0.3) : u.me;
+      if (typeof u.ro === 'number') m.roughness = P.aluminio ? Math.max(u.ro, 0.45) : u.ro;
+      if (m.emissive && !m.userData.fxRepouso) m.emissive.setHex(FX.ciano);
+    });
   };
   VC._trocarPorGlb = function (it) {
     var url = this.catalogo && this.catalogo[it.tipo], eu = this;
@@ -604,6 +715,7 @@ window.BC = window.BC || {};
       c.scale.setScalar(k); c.position.set(-centro.x * k, -box.min.y * k, -centro.z * k);
       c.traverse(function (o) { if (o.isMesh && o.material) { o.material = o.material.clone(); if (o.material.emissive) { o.material.emissive.setHex(0x2ad5e5); o.material.emissiveIntensity = 0; } } });
       it.corpo.remove(it.forma); it.forma = c; it.corpo.add(c); it.glb = true;
+      eu._pintar(it);
       eu.pedir('glb');
     });
   };
@@ -618,7 +730,8 @@ window.BC = window.BC || {};
     this.ganhou.push({ id: it.id, ts: Date.now() });
     if (this.ganhou.length > 20) this.ganhou.shift();
     it.luzAte = Date.now() + 6000;
-    if (direto) { this._estadoDireto(it, 'corpo'); this.pedir('corpo'); return; }
+    /* reservada = vai nascer caindo pelo efeito "nascer": aqui só ganha o corpo, sem subir do chão nem pulso */
+    if (direto || this._reservada(it.id)) { this._estadoDireto(it, 'corpo'); this.pedir('corpo'); return; }
     it.corpo.visible = true; it.corpo.scale.set(0.001, 0.001, 0.001); it.tracejo.visible = true;
     this.anims.push({ it: it, t0: performance.now(), dur: 1200 });
     var eu = this;
@@ -634,7 +747,7 @@ window.BC = window.BC || {};
       if (!a || !b) return;
       var pa = a.g.position.clone().setY(0.06), pb = b.g.position.clone().setY(0.06), meio = new T.Vector3(pa.x, 0.06, pb.z);
       var curva = new T.CatmullRomCurve3([pa, pa.clone().lerp(meio, 0.85), meio, meio.clone().lerp(pb, 0.15), pb], false, 'centripetal');
-      var linha = new T.Line(new T.BufferGeometry().setFromPoints(curva.getPoints(40)), new T.LineBasicMaterial({ color: 0x506b94, transparent: true, opacity: 0.7 }));
+      var linha = new T.Line(new T.BufferGeometry().setFromPoints(curva.getPoints(40)), new T.LineBasicMaterial({ color: eu.pal.fio, transparent: true, opacity: 0.7 }));
       eu.raiz.add(linha);
       eu.fiosObj.push({ de: f[0], para: f[1], curva: curva, linha: linha });
     });
@@ -642,10 +755,10 @@ window.BC = window.BC || {};
   VC._pulsarDe = function (id) {
     if (!this.gl || BC.util.movimentoReduzido() || document.hidden) return;
     var T = T3.T, eu = this;
-    this.fiosObj.filter(function (f) { return f.de === id || f.para === id; }).slice(0, 4).forEach(function (f) {
-      var bola = new T.Mesh(new T.SphereGeometry(0.07, 12, 12), new T.MeshBasicMaterial({ color: 0x2ad5e5 }));
+    this.fiosObj.filter(function (f) { return (f.de === id || f.para === id) && !eu._reservada(f.de) && !eu._reservada(f.para); }).slice(0, 4).forEach(function (f) {
+      var bola = new T.Mesh(new T.SphereGeometry(0.07, 12, 12), new T.MeshBasicMaterial({ color: FX.ciano }));
       eu.raiz.add(bola);
-      f.linha.material.color.setHex(0x2ad5e5);
+      f.linha.material.color.setHex(FX.ciano);
       eu.pulsos.push({ f: f, bola: bola, t0: performance.now(), dur: 900, volta: f.para === id });
     });
     this.pedir('pulso');
@@ -671,41 +784,408 @@ window.BC = window.BC || {};
     this.pulsos = this.pulsos.filter(function (p) {
       var k = Math.max(0, Math.min(1, (t - p.t0) / p.dur));
       p.bola.position.copy(p.f.curva.getPoint(p.volta ? 1 - k : k)).setY(0.12);
-      if (k >= 1) { eu.raiz.remove(p.bola); p.f.linha.material.color.setHex(0x506b94); return false; }
+      if (k >= 1) { eu.raiz.remove(p.bola); p.f.linha.material.color.setHex(eu.pal.fio); return false; }
       vivo = true; return true;
     });
+    /* efeitos de montar: cada um anda pelo seu relógio; o que acabou limpa a cena antes deste quadro (nada fica) */
+    var acabados = [];
+    this.efeitos = this.efeitos.filter(function (fx) {
+      if (fx.parado) return true; /* só cor: quem encerra é o relógio dele, sem quadro por quadro */
+      var k = Math.max(0, Math.min(1, (t - fx.t0) / fx.dur));
+      try { fx.passo(k); } catch (e) { console.warn('[efeito]', e); k = 1; }
+      if (k >= 1) { acabados.push(fx); return false; }
+      vivo = true; return true;
+    });
+    acabados.forEach(function (fx) { fx.fim(); });
     this.gl.render(this.cena, this.cam);
     this.renders++;
     this._rotulos();
     if (vivo) this.pedir('animacao');
   };
-  /* rótulos em HTML (nítidos): só das peças tracejadas e das que ganharam corpo há pouco (esfriam em 6 s) */
+  /* rótulos em HTML (nítidos): das peças tracejadas, das que ganharam corpo há pouco (esfriam em 6 s), das que vieram do banco
+     (fixo, com o selo "no banco local") e o texto de um efeito de erro enquanto ele dura. Só o que esfria arma o relógio. */
   VC._rotulos = function () {
-    var T = T3.T, eu = this, agora = Date.now(), v = new T.Vector3(), h = '';
+    var T = T3.T, eu = this, agora = Date.now(), v = new T.Vector3(), h = '', esfria = false;
+    function lugar() { return 'left:' + ((v.x + 1) / 2 * 100).toFixed(2) + '%;top:' + ((1 - v.y) / 2 * 100).toFixed(2) + '%'; }
     this.ordem.forEach(function (id) {
-      var it = eu.itens[id], recente = it.luzAte && it.luzAte > agora;
-      if (it.estado === 'corpo' && !recente) return;
-      v.set(it.g.position.x, 1.25, it.g.position.z).project(eu.cam);
-      var x = (v.x + 1) / 2 * 100, y = (1 - v.y) / 2 * 100;
-      h += '<span class="v3c-rotulo' + (it.estado === 'corpo' ? ' ganhou' : ' tracejada') + '" style="left:' + x.toFixed(2) + '%;top:' + y.toFixed(2) + '%">' + esc(it.p.nome) + '</span>';
+      var it = eu.itens[id], recente = it.luzAte && it.luzAte > agora, banco = !!(it.p && it.p.banco), acende = it.acendeAte && it.acendeAte > agora;
+      if (!it.g.visible || (it.estado === 'corpo' && !recente && !banco)) return;
+      if (recente) esfria = true;
+      v.set(it.g.position.x, 1.25 + it.g.position.y, it.g.position.z).project(eu.cam);
+      var selo = banco ? '<small>no banco local' + (it.p.bancoDe ? ' de ' + esc(it.p.bancoDe) : '') + (it.p.linhas != null ? ' · ' + it.p.linhas + (it.p.linhas === 1 ? ' linha' : ' linhas') : '') + '</small>' : '';
+      h += '<span class="v3c-rotulo' + (it.estado === 'corpo' ? (recente ? ' ganhou' : '') : ' tracejada') + (banco ? ' banco' + (it.p.bancoDe ? ' outra' : '') : '') + (acende ? ' acende' : '') + '" style="' + lugar() + '">' + esc(it.p.nome) + selo + '</span>';
     });
+    this.fxRotulos.forEach(function (r) { v.copy(r.pos).project(eu.cam); h += '<span class="v3c-rotulo ' + r.classe + '" style="' + lugar() + '">' + esc(r.texto) + '</span>'; });
     if (this.rotulosEl.innerHTML !== h) this.rotulosEl.innerHTML = h;
-    if (h && !this._esfriar) this._esfriar = setTimeout(function () { eu._esfriar = null; eu.pedir('esfriar'); }, 6200);
+    if (esfria && !this._esfriar) this._esfriar = setTimeout(function () { eu._esfriar = null; eu.pedir('esfriar'); }, 6200);
   };
   VC.medidas = function () {
     var d = this.dados || { pecas: [] }, eu = this;
     return { pronto: this.pronto, semTres: this.falhou, total: d.pecas.length, comCorpo: d.pecas.filter(function (p) { return p.estado === 'corpo'; }).length,
       tracejadas: d.pecas.filter(function (p) { return p.estado === 'tracejada'; }).length,
       emCena: this.ordem.length, glb: this.ordem.filter(function (id) { return eu.itens[id].glb; }), renders: this.renders,
-      ganhou: this.ganhou.slice(), animando: this.anims.length + this.pulsos.length, motivos: JSON.parse(JSON.stringify(this.motivos)) };
+      ganhou: this.ganhou.slice(), animando: this.anims.length + this.pulsos.length + this.efeitos.length, motivos: JSON.parse(JSON.stringify(this.motivos)),
+      efeitos: this.efeitos.map(function (fx) { return fx.tipo; }), fxObjetos: this.fxObj, reservadas: Object.keys(this.reservas).length };
   };
   VC.destruir = function () {
+    var fxs = this.efeitos; this.efeitos = [];
+    fxs.forEach(function (fx) { try { fx.fim('a vista fechou no meio'); } catch (e) { /* já */ } });
+    clearTimeout(this._reservaTimer);
     if (this.raf) cancelAnimationFrame(this.raf);
     if (this.ro) this.ro.disconnect();
     if (this._visivel) document.removeEventListener('visibilitychange', this._visivel);
     clearTimeout(this._esfriar);
+    if (this._mo) this._mo.disconnect();
     try { if (this.gl) this.gl.dispose(); } catch (e) { /* já */ }
     this.gl = null; this.el = null; this.itens = {}; this.ordem = [];
+  };
+
+  /* =====================================================================================
+     EFEITOS DE MONTAR (quem chama é prototipo/maquina-efeitos.js, peça por peça, um de cada vez).
+     "Pensa lego, pensa minecraft": a peça do banco cai e encaixa, o fio se desenha e um pulso corre até o pino,
+     o cadeado fecha em volta da gaveta, as linhas entram voando, o erro treme em vermelho.
+     Leis: cada efeito dura ≤ ~1 s e chama pronto() no fim; o laço de quadros é o mesmo pedir/_quadro e só vive
+     enquanto há efeito; no fim tudo o que ele criou sai da cena (geometria e material liberados).
+     Sem movimento (prefers-reduced-motion ou efeitos desligados no organismo): só um clarão de cor, sem deslocamento.
+     ===================================================================================== */
+  /* Tech = a luz somada no escuro; Vibe (papel claro) = tinta: cores um degrau mais escuras e mistura normal (somar luz some no bege) */
+  var FX_TECH = { roxo: 0xa376e9, ciano: 0x2ad5e5, erro: 0xff6b6b, fio: 0x506b94, ambar: 0xf2a65a, branco: 0xffffff, pulso: 0xe8fdff, soma: true };
+  var FX_VIBE = { roxo: 0x6d3fb8, ciano: 0x08707f, erro: 0xc8323a, fio: 0x5a44a8, ambar: 0x9a5a00, branco: 0x1c2331, pulso: 0x0b5563, soma: false };
+  var FX = Object.assign({}, FX_TECH);
+  function mistura(T) { return FX.soma ? T.AdditiveBlending : T.NormalBlending; }
+  function semMovimento() {
+    var o = BC.organismo;
+    if (o && o.versao && typeof o.semMovimento === 'function') { try { return !!o.semMovimento(); } catch (e) { /* segue */ } }
+    return U.movimentoReduzido();
+  }
+  function suave(k) { return k * k * (3 - 2 * k); }
+  function saida(k) { return 1 - Math.pow(1 - k, 3); }
+  function entre(k, a, b) { return Math.max(0, Math.min(1, (k - a) / (b - a))); }
+  /* o que o efeito cria: entra na raiz e sai no fim, com geometria e material liberados */
+  function kitFx(eu) {
+    var objs = [], recursos = [];
+    return {
+      por: function (o) { eu.raiz.add(o); objs.push(o); eu.fxObj++; return o; },
+      rec: function (r) { recursos.push(r); return r; },
+      limpar: function () {
+        objs.forEach(function (o) { if (o.parent) o.parent.remove(o); eu.fxObj--; });
+        recursos.forEach(function (r) { try { r.dispose(); } catch (e) { /* já */ } });
+        objs = []; recursos = [];
+      }
+    };
+  }
+  /* o brilho de uma peça: o repouso fica anotado no próprio material, então dois efeitos na mesma peça voltam ao mesmo lugar */
+  function emissivos(raiz) {
+    var lista = [];
+    raiz.traverse(function (o) {
+      var m = o.material;
+      if (!m || Array.isArray(m) || !m.emissive || lista.some(function (x) { return x.m === m; })) return;
+      var r = m.userData.fxRepouso || (m.userData.fxRepouso = { c: m.emissive.getHex(), i: m.emissiveIntensity });
+      lista.push({ m: m, c: r.c, i: r.i });
+    });
+    return lista;
+  }
+  function brilhar(lista, cor, i) { lista.forEach(function (x) { x.m.emissive.copy(cor); x.m.emissiveIntensity = i; }); }
+  function repousar(lista) { lista.forEach(function (x) { x.m.emissive.setHex(x.c); x.m.emissiveIntensity = x.i; delete x.m.userData.fxRepouso; }); }
+
+  /* anima UMA coisa e chama pronto({tocou, motivo}) no fim. ef: {tipo:'nascer'|'fio'|'cadeado'|'dados'|'erro', peca?, de?, para?, n?, texto?,
+     abre? (cadeado que abre), ritmo? (0,3–1: fração da duração, quando a fila está longa)}. Devolve false (e chama pronto na hora)
+     quando não há o que animar. */
+  VC.efeito = function (ef, pronto) {
+    var eu = this, feito = false;
+    function acabar(tocou, motivo) { if (feito) return; feito = true; if (typeof pronto === 'function') { try { pronto({ tocou: tocou, motivo: motivo || '' }); } catch (e) { console.warn('[efeito]', e); } } }
+    if (!ef || !this.gl || !this.raiz) { acabar(false, 'sem 3D'); return false; }
+    Object.assign(FX, this.vibe ? FX_VIBE : FX_TECH); /* as cores do efeito seguem o modo desta vista */
+    var it = ef.peca != null ? this.itens[ef.peca] : null, parado = semMovimento() || document.hidden, fx = null;
+    if (ef.tipo === 'fio') { if (this.itens[ef.de] && this.itens[ef.para]) fx = this._fxFio(ef, parado); }
+    else if (ef.tipo === 'erro') fx = this._fxErro(ef, it, parado);
+    else if (it && ef.tipo === 'nascer') fx = this._fxNascer(ef, it, parado);
+    else if (it && ef.tipo === 'cadeado') fx = this._fxCadeado(ef, it, parado);
+    else if (it && ef.tipo === 'dados') fx = this._fxDados(ef, it, parado);
+    if (!fx) { acabar(false, /^(nascer|fio|cadeado|dados)$/.test(ef.tipo) ? 'peça fora da cena' : 'tipo desconhecido'); return false; }
+    var ritmo = +ef.ritmo;
+    if (!parado && ritmo > 0 && ritmo < 1) fx.dur = Math.max(180, Math.round(fx.dur * ritmo)); /* o passo anda por k (0..1): só fica mais curto */
+    fx.tipo = ef.tipo; fx.t0 = performance.now(); fx.parado = parado;
+    fx.fim = function (motivo) { clearTimeout(fx.guarda); try { fx.limpar(); } catch (e) { console.warn('[efeito]', e); } acabar(true, motivo || (parado ? 'sem movimento: só cor' : '')); };
+    this.efeitos.push(fx);
+    /* o relógio de guarda: aba escondida ou quadro parado (sem rAF) não prendem a fila nem deixam objeto na cena */
+    fx.guarda = setTimeout(function () {
+      var i = eu.efeitos.indexOf(fx); if (i < 0) return;
+      eu.efeitos.splice(i, 1); fx.fim(parado ? '' : 'terminou pelo relógio'); eu.pedir('efeito');
+    }, fx.dur + (parado ? 0 : 1500));
+    fx.passo(parado ? 1 : 0);
+    this.pedir('efeito');
+    return true;
+  };
+  /* a peça que estava subindo do chão (_ganhar) termina já: o efeito toma conta dela */
+  VC._encerrarGanho = function (it) {
+    var tinha = false;
+    this.anims = this.anims.filter(function (a) { if (a.it !== it) return true; tinha = true; return false; });
+    if (!tinha) return;
+    it.corpo.traverse(function (o) { if (o.material && o.material.emissive) o.material.emissiveIntensity = 0; });
+    this._estadoDireto(it, 'corpo');
+  };
+  /* o foco: a câmera anda um pouco na direção da peça e aproxima (env 0..1); env 0 = de volta ao lugar */
+  VC._focar = function (x, z, env) {
+    if (!this.cam || !this.camBase) return;
+    this.cam.position.set(this.camBase.x + x * 0.35 * env, this.camBase.y, this.camBase.z + z * 0.35 * env);
+    this.cam.zoom = (this.zoomBase || this.cam.zoom) * (1 + 0.14 * env);
+    this.cam.updateProjectionMatrix();
+  };
+
+  /* nascer: cai do alto e ENCAIXA (queda, quique, achatada de lego), anel de luz no chão, faíscas subindo, rótulo aceso, foco da câmera */
+  VC._fxNascer = function (ef, it, parado) {
+    var T = T3.T, eu = this, kit = kitFx(this), cor = new T.Color(), roxo = new T.Color(FX.roxo), ciano = new T.Color(FX.ciano);
+    this._encerrarGanho(it);
+    this.liberar([it.id]);
+    var em = emissivos(it.corpo), agora = Date.now();
+    it.luzAte = agora + 6000; it.acendeAte = agora + (parado ? 420 : 1100);
+    if (parado) return { dur: 420, passo: function () { brilhar(em, ciano, 1.1); }, limpar: function () { repousar(em); it.acendeAte = 0; } };
+    var ALTO = 2.6, IMP = 0.5, dur = 900;
+    var anel = kit.por(new T.Mesh(kit.rec(new T.RingGeometry(0.52, 0.64, 48)), kit.rec(new T.MeshBasicMaterial({ color: FX.roxo, transparent: true, opacity: 0, blending: mistura(T), depthWrite: false, side: T.DoubleSide }))));
+    anel.rotation.x = -Math.PI / 2; anel.visible = false;
+    var N = 28, pos = new Float32Array(N * 3), cores = new Float32Array(N * 3), ini = [];
+    for (var i = 0; i < N; i++) {
+      var a = (i / N) * Math.PI * 2 + (i % 3) * 0.4, r = 0.42 + (i % 4) * 0.05, fora = 0.45 + (i % 5) * 0.12;
+      ini.push({ x: Math.cos(a) * r, z: Math.sin(a) * r, vx: Math.cos(a) * fora, vz: Math.sin(a) * fora, vy: 2.1 + ((i * 37) % 10) * 0.16 });
+      cor.copy(roxo).lerp(ciano, (i % 4) / 3); if (i % 7 === 0) cor.lerp(new T.Color(FX.branco), 0.6);
+      cores[i * 3] = cor.r; cores[i * 3 + 1] = cor.g; cores[i * 3 + 2] = cor.b;
+    }
+    var geo = kit.rec(new T.BufferGeometry()); geo.setAttribute('position', new T.BufferAttribute(pos, 3)); geo.setAttribute('color', new T.BufferAttribute(cores, 3));
+    var pm = kit.rec(new T.PointsMaterial({ size: 5, sizeAttenuation: false, vertexColors: true, transparent: true, blending: mistura(T), depthWrite: false }));
+    var faiscas = kit.por(new T.Points(geo, pm)); faiscas.visible = false; faiscas.frustumCulled = false;
+    return {
+      dur: dur,
+      passo: function (k) {
+        var x = it.g.position.x, z = it.g.position.z, y = 0, sq = 0, r = k < IMP ? 0 : (k - IMP) / (1 - IMP);
+        if (k < IMP) { var q = k / IMP; y = ALTO * (1 - q * q); } /* cai acelerando */
+        else {
+          if (k < 0.74) y = 0.2 * Math.sin(Math.PI * (k - IMP) / 0.24); /* quica */
+          else if (k < 0.86) y = 0.05 * Math.sin(Math.PI * (k - 0.74) / 0.12);
+          sq = Math.exp(-(k - IMP) * 16) * Math.cos((k - IMP) * 30); /* achata no encaixe e volta */
+        }
+        it.g.position.y = y;
+        it.g.scale.set(1 + 0.07 * sq, 1 - 0.13 * sq, 1 + 0.07 * sq);
+        brilhar(em, cor.copy(ciano).lerp(roxo, r), k < IMP ? 0.35 : 1.4 * Math.pow(1 - r, 1.6));
+        anel.visible = faiscas.visible = k >= IMP;
+        if (anel.visible) {
+          anel.position.set(x, 0.04, z); anel.scale.setScalar(1 + 2.3 * saida(r));
+          anel.material.opacity = 0.95 * (1 - r); anel.material.color.copy(roxo).lerp(ciano, r);
+          var s = (k - IMP) * dur / 1000;
+          for (var i = 0; i < N; i++) { var p = ini[i]; pos[i * 3] = x + p.x + p.vx * s; pos[i * 3 + 1] = 0.08 + p.vy * s - 3 * s * s; pos[i * 3 + 2] = z + p.z + p.vz * s; }
+          geo.attributes.position.needsUpdate = true; pm.opacity = 1 - r;
+        }
+        eu._focar(x, z, Math.sin(Math.PI * k));
+      },
+      limpar: function () { it.g.position.y = 0; it.g.scale.set(1, 1, 1); repousar(em); it.acendeAte = 0; eu._focar(0, 0, 0); kit.limpar(); }
+    };
+  };
+
+  /* fio: o fio entre as duas peças se desenha do começo ao fim e um pulso de luz corre por ele até o pino */
+  VC._fxFio = function (ef, parado) {
+    var T = T3.T, eu = this, kit = kitFx(this), a = String(ef.de), b = String(ef.para), temp = null;
+    function achar() {
+      if (temp) return temp;
+      for (var i = 0; i < eu.fiosObj.length; i++) { var f = eu.fiosObj[i]; if (f.de === a && f.para === b) return { f: f, volta: false }; if (f.de === b && f.para === a) return { f: f, volta: true }; }
+      return null;
+    }
+    if (!achar()) {
+      /* a Máquina ainda não tem este fio: um fio de luz provisório com o mesmo desenho de _fios, que sai no fim */
+      var pa = this.itens[a].g.position.clone().setY(0.06), pb = this.itens[b].g.position.clone().setY(0.06), meio = new T.Vector3(pa.x, 0.06, pb.z);
+      var curva = new T.CatmullRomCurve3([pa, pa.clone().lerp(meio, 0.85), meio, meio.clone().lerp(pb, 0.15), pb], false, 'centripetal');
+      temp = { f: { curva: curva, linha: kit.por(new T.Line(kit.rec(new T.BufferGeometry().setFromPoints(curva.getPoints(40))), kit.rec(new T.LineBasicMaterial({ color: FX.fio, transparent: true, opacity: 0.7 })))) }, volta: false };
+    }
+    this.liberar([[a, b], [b, a]]);
+    var roxo = new T.Color(FX.roxo), ciano = new T.Color(FX.ciano), cor = new T.Color(), pt = new T.Vector3();
+    function soltar() { var x = achar(); if (x && x !== temp) { x.f.linha.material.color.setHex(FX.fio); x.f.linha.geometry.setDrawRange(0, Infinity); } kit.limpar(); eu._aplicarReservas(); }
+    if (parado) return { dur: 420, passo: function () { var x = achar(); if (x) x.f.linha.material.color.copy(ciano); }, limpar: soltar };
+    var esfera = kit.rec(new T.SphereGeometry(1, 14, 10));
+    function luz(c, op) { return kit.rec(new T.MeshBasicMaterial({ color: c, transparent: true, opacity: op, blending: mistura(T), depthWrite: false })); }
+    var ponta = kit.por(new T.Mesh(esfera, luz(FX.ciano, 1))); ponta.scale.setScalar(0.055);
+    var pulso = kit.por(new T.Mesh(esfera, kit.rec(new T.MeshBasicMaterial({ color: FX.pulso })))); pulso.scale.setScalar(0.075); pulso.visible = false;
+    var halo = kit.por(new T.Mesh(esfera, luz(FX.ciano, 0.35))); halo.scale.setScalar(0.17); halo.visible = false;
+    var pino = kit.por(new T.Mesh(kit.rec(new T.RingGeometry(0.07, 0.11, 32)), kit.rec(new T.MeshBasicMaterial({ color: FX.ciano, transparent: true, opacity: 0, blending: mistura(T), depthWrite: false, side: T.DoubleSide }))));
+    pino.rotation.x = -Math.PI / 2; pino.visible = false;
+    return {
+      dur: 720,
+      passo: function (k) {
+        var x = achar(); if (!x) return;
+        var f = x.f, n = f.linha.geometry.attributes.position.count, g = saida(Math.min(1, k / 0.5)), m = Math.max(2, Math.ceil(n * g));
+        f.linha.geometry.setDrawRange(x.volta ? n - m : 0, m); /* cresce a partir da peça "de" */
+        f.linha.material.color.copy(cor.copy(roxo).lerp(ciano, g));
+        ponta.visible = k < 0.5;
+        if (ponta.visible) { f.curva.getPoint(x.volta ? 1 - g : g, pt); ponta.position.copy(pt).setY(0.1); }
+        var p = (k - 0.45) / 0.42; pulso.visible = halo.visible = p >= 0 && p <= 1;
+        if (pulso.visible) { f.curva.getPoint(x.volta ? 1 - suave(p) : suave(p), pt); pulso.position.copy(pt).setY(0.12); halo.position.copy(pulso.position); }
+        var q = (k - 0.84) / 0.16; pino.visible = q >= 0;
+        if (pino.visible) { f.curva.getPoint(x.volta ? 0 : 1, pt); pino.position.copy(pt).setY(0.07); pino.scale.setScalar(1 + 2.4 * saida(q)); pino.material.opacity = 0.9 * (1 - q); }
+      },
+      limpar: soltar
+    };
+  };
+
+  /* cadeado: um aro de luz fecha em volta da gaveta, o cadeado da frente trava (a alça desce) e dá um clarão curto.
+     ef.abre (a gaveta ficou mais aberta: RLS desligado, regra "true"): o contrário, em âmbar: o aro se abre e a alça sobe e gira */
+  VC._fxCadeado = function (ef, it, parado) {
+    var T = T3.T, kit = kitFx(this), roxo = new T.Color(FX.roxo), ciano = new T.Color(FX.ciano), branco = new T.Color(FX.branco), cor = new T.Color(), flash = new T.Color();
+    var abre = !!ef.abre, ambar = new T.Color(FX.ambar);
+    this._encerrarGanho(it);
+    var em = emissivos(it.corpo);
+    if (parado) return { dur: 420, passo: function () { brilhar(em, abre ? ambar : roxo, 1.1); }, limpar: function () { repousar(em); } };
+    function luz() { return kit.rec(new T.MeshBasicMaterial({ color: FX.roxo, transparent: true, opacity: 0, blending: mistura(T), depthWrite: false })); }
+    var aroGeo = kit.rec(new T.TorusGeometry(0.66, 0.026, 8, 64));
+    var aro = kit.por(new T.Mesh(aroGeo, luz())), aro2 = kit.por(new T.Mesh(aroGeo, luz()));
+    aro.rotation.x = aro2.rotation.x = Math.PI / 2;
+    var cad = new T.Group(), corpoMat = luz(), alcaMat = luz();
+    cad.add(new T.Mesh(kit.rec(new T.BoxGeometry(0.26, 0.2, 0.07)), corpoMat));
+    var alca = new T.Mesh(kit.rec(new T.TorusGeometry(0.075, 0.022, 8, 20, Math.PI)), alcaMat); cad.add(alca);
+    cad.rotation.y = Math.PI / 4; /* de frente para a câmera */
+    kit.por(cad);
+    var clarao = kit.por(new T.Mesh(kit.rec(new T.RingGeometry(0.6, 0.72, 48)), kit.rec(new T.MeshBasicMaterial({ color: FX.ciano, transparent: true, opacity: 0, blending: mistura(T), depthWrite: false, side: T.DoubleSide }))));
+    clarao.rotation.x = -Math.PI / 2; clarao.visible = false;
+    var FECHA = 0.45;
+    if (abre) return {
+      dur: 860,
+      passo: function (k) {
+        var x = it.g.position.x, z = it.g.position.z, a1 = suave(entre(k, 0, 0.55)), a2 = suave(entre(k, 0.08, 0.6)), some = k > 0.7 ? 1 - (k - 0.7) / 0.3 : 1;
+        cor.copy(ciano).lerp(ambar, a1);
+        aro.position.set(x, 0.3, z); aro.scale.setScalar(1 + 1.4 * a1); aro.material.opacity = (1 - 0.6 * a1) * some; aro.material.color.copy(cor);
+        aro2.position.set(x, 0.85, z); aro2.scale.setScalar(1 + 1.8 * a2); aro2.material.opacity = (0.9 - 0.6 * a2) * some; aro2.material.color.copy(cor);
+        cad.position.set(x + 0.47, 0.5, z + 0.47);
+        cad.scale.setScalar(Math.max(0.001, saida(entre(k, 0, 0.2))));
+        alca.position.y = 0.1 + 0.12 * suave(entre(k, 0.2, 0.55)); /* a alça sobe e solta */
+        alca.rotation.y = 0.9 * suave(entre(k, 0.4, 0.65));
+        corpoMat.opacity = alcaMat.opacity = 0.95 * some; corpoMat.color.copy(cor); alcaMat.color.copy(cor);
+        brilhar(em, ambar, 1.1 * Math.sin(Math.PI * k));
+      },
+      limpar: function () { repousar(em); kit.limpar(); }
+    };
+    return {
+      dur: 860,
+      passo: function (k) {
+        var x = it.g.position.x, z = it.g.position.z, c1 = suave(entre(k, 0, FECHA)), c2 = suave(entre(k, 0.08, FECHA)), some = k > 0.72 ? 1 - (k - 0.72) / 0.28 : 1;
+        cor.copy(roxo).lerp(ciano, c1);
+        aro.position.set(x, 0.3, z); aro.scale.setScalar(2.3 - 1.3 * c1); aro.material.opacity = (0.3 + 0.7 * c1) * some; aro.material.color.copy(cor);
+        aro2.position.set(x, 0.85, z); aro2.scale.setScalar(2.7 - 1.7 * c2); aro2.material.opacity = (0.2 + 0.8 * c2) * some; aro2.material.color.copy(cor);
+        var ap = entre(k, 0, 0.22), trava = k >= FECHA && k < FECHA + 0.08;
+        cad.position.set(x + 0.47, 0.5, z + 0.47);
+        cad.scale.setScalar(Math.max(0.001, saida(ap) * (1 + 0.25 * Math.sin(Math.PI * ap))) * (trava ? 1.12 : 1));
+        alca.position.y = 0.1 + 0.1 * (1 - suave(entre(k, 0.22, FECHA))); /* a alça desce e trava */
+        corpoMat.opacity = alcaMat.opacity = 0.95 * some; corpoMat.color.copy(cor); alcaMat.color.copy(cor);
+        var f = (k - FECHA) / 0.3, fl = f >= 0 && f <= 1 ? 1 - f : 0;
+        if (f >= 0) brilhar(em, flash.copy(ciano).lerp(branco, 0.3 * fl), 1.5 * fl);
+        else brilhar(em, roxo, 0.25 * c1);
+        clarao.visible = f >= 0 && f <= 1;
+        if (clarao.visible) { clarao.position.set(x, 0.05, z); clarao.scale.setScalar(1 + 1.2 * saida(f)); clarao.material.opacity = 0.9 * (1 - f); }
+      },
+      limpar: function () { repousar(em); kit.limpar(); }
+    };
+  };
+
+  /* dados: n cubinhos de luz (até 8) voam de fora da cena e entram na gaveta, um a um; a gaveta pula a cada um.
+     n < 0 (linhas que saíram): os cubinhos saem da gaveta para fora. ef.aoImpacto(i) avisa cada batida (o som). */
+  VC._fxDados = function (ef, it, parado) {
+    var T = T3.T, eu = this, kit = kitFx(this), n = Math.round(Number(ef.n) || 0), qtd = Math.min(8, Math.abs(n)), sai = n < 0;
+    var roxo = new T.Color(FX.roxo), ciano = new T.Color(FX.ciano);
+    this._encerrarGanho(it);
+    var em = emissivos(it.corpo);
+    if (parado) return { dur: 420, passo: function () { brilhar(em, ciano, 0.9); }, limpar: function () { repousar(em); } };
+    if (!qtd) return { dur: 500, passo: function (k) { brilhar(em, ciano, 0.9 * Math.sin(Math.PI * k)); }, limpar: function () { repousar(em); } };
+    var VOO = 400, gap = qtd > 1 ? Math.min(100, 460 / (qtd - 1)) : 0, dur = Math.round((qtd - 1) * gap + VOO + 150); /* 8 cubos: ~1 s */
+    var geo = kit.rec(new T.BoxGeometry(0.12, 0.12, 0.12)), cubos = [], v = new T.Vector3(), alvo = new T.Vector3(), ctrl = new T.Vector3();
+    eu.cam.updateMatrixWorld();
+    var zTela = v.set(it.g.position.x, 0.8, it.g.position.z).project(eu.cam).z; /* nasce fora da tela, na mesma profundidade da gaveta */
+    for (var i = 0; i < qtd; i++) {
+      var c = kit.por(new T.Mesh(geo, kit.rec(new T.MeshBasicMaterial({ color: FX.ciano, transparent: true, blending: mistura(T), depthWrite: false, depthTest: false }))));
+      c.visible = false; c.renderOrder = 10;
+      cubos.push({ m: c, fora: new T.Vector3((i % 2 ? 1 : -1) * 1.2, 0.35 + 0.5 * ((i * 0.37) % 1), zTela).unproject(eu.cam), t: i * gap, giro: (i % 3 + 1) * 3.1, bateu: false });
+    }
+    return {
+      dur: dur,
+      passo: function (k) {
+        var ms = k * dur, hop = 0, luz = 0;
+        alvo.set(it.g.position.x, 0.8, it.g.position.z);
+        cubos.forEach(function (c, i) {
+          var s = (ms - c.t) / VOO, marco = sai ? c.t : c.t + VOO;
+          if (!c.bateu && ms >= marco) { c.bateu = true; if (typeof ef.aoImpacto === 'function') { try { ef.aoImpacto(i); } catch (e) { /* segue */ } } }
+          c.m.visible = s > 0 && s < 1;
+          if (c.m.visible) {
+            var de = sai ? alvo : c.fora, para = sai ? c.fora : alvo, e = sai ? s * s : suave(s), u = 1 - e;
+            ctrl.copy(de).lerp(para, 0.5); ctrl.y += 1.4;
+            c.m.position.set(u * u * de.x + 2 * u * e * ctrl.x + e * e * para.x, u * u * de.y + 2 * u * e * ctrl.y + e * e * para.y, u * u * de.z + 2 * u * e * ctrl.z + e * e * para.z);
+            c.m.rotation.set(s * c.giro, s * c.giro * 0.7, 0);
+            c.m.scale.setScalar(sai ? Math.min(1, s / 0.15) : (s > 0.8 ? Math.max(0.05, (1 - s) / 0.2) : 1));
+            c.m.material.color.copy(roxo).lerp(ciano, sai ? 1 - s : s);
+          }
+          var d = (ms - marco) / 150;
+          if (d >= 0 && d < 1) { hop = Math.max(hop, 0.1 * Math.sin(Math.PI * d)); luz = Math.max(luz, 1 - d); }
+        });
+        it.corpo.position.y = 0.05 + hop; /* o pulo da gaveta a cada linha */
+        brilhar(em, ciano, 1.2 * luz);
+      },
+      limpar: function () { it.corpo.position.y = 0.05; repousar(em); kit.limpar(); }
+    };
+  };
+
+  /* erro: clarão vermelho e tremida curta na peça (ou na cena inteira, sem peça); o texto aparece enquanto dura */
+  VC._fxErro = function (ef, it, parado) {
+    var T = T3.T, eu = this, kit = kitFx(this), alvo = it ? it.corpo : this.raiz, vermelho = new T.Color(FX.erro);
+    if (it) this._encerrarGanho(it);
+    var em = emissivos(it ? it.g : this.raiz), texto = String(ef.texto || '').replace(/\s+/g, ' ').trim();
+    if (texto.length > 90) texto = texto.slice(0, 88) + '…';
+    var rot = texto ? { pos: it ? new T.Vector3(it.g.position.x, 1.25, it.g.position.z) : new T.Vector3(0, 1.4, 0), texto: texto, classe: 'erro' } : null;
+    if (rot) this.fxRotulos.push(rot);
+    if (this.el) this.el.classList.add('v3c-fx-erro');
+    function fim() {
+      alvo.position.x = 0; alvo.position.z = 0; repousar(em);
+      var i = eu.fxRotulos.indexOf(rot); if (i >= 0) eu.fxRotulos.splice(i, 1);
+      if (eu.el) eu.el.classList.remove('v3c-fx-erro');
+      kit.limpar();
+    }
+    if (parado) return { dur: 900, passo: function () { brilhar(em, vermelho, 1.2); }, limpar: fim };
+    var anel = it ? kit.por(new T.Mesh(kit.rec(new T.RingGeometry(0.5, 0.6, 48)), kit.rec(new T.MeshBasicMaterial({ color: FX.erro, transparent: true, opacity: 0, blending: mistura(T), depthWrite: false, side: T.DoubleSide })))) : null;
+    if (anel) anel.rotation.x = -Math.PI / 2;
+    var amp = it ? 0.075 : 0.05, dur = 760;
+    return {
+      dur: dur,
+      passo: function (k) {
+        var dec = Math.pow(1 - k, 2), ms = k * dur;
+        alvo.position.x = amp * dec * Math.sin(ms * 0.075);
+        alvo.position.z = -0.6 * amp * dec * Math.sin(ms * 0.075 + 1.1);
+        brilhar(em, vermelho, 1.6 * Math.pow(1 - k, 1.3));
+        if (anel) { anel.position.set(it.g.position.x, 0.04, it.g.position.z); anel.scale.setScalar(1 + 1.8 * saida(k)); anel.material.opacity = 0.9 * (1 - k); }
+      },
+      limpar: fim
+    };
+  };
+
+  /* reservar: as peças (ids) e os fios ([de, para]) que ainda vão nascer pelos efeitos ficam escondidos até a vez deles,
+     senão a peça aparece parada e depois "pula" para cair. Some sozinho em ms (no máximo 30 s): nada fica escondido para sempre. */
+  function chaveReserva(x) { return Array.isArray(x) ? (x[0] && x[1] ? 'f:' + x[0] + '>' + x[1] : null) : x != null && x !== '' ? 'p:' + x : null; }
+  VC.reservar = function (lista, ms) {
+    var eu = this;
+    (lista || []).forEach(function (x) { var c = chaveReserva(x); if (c) eu.reservas[c] = true; });
+    clearTimeout(this._reservaTimer);
+    this._reservaTimer = setTimeout(function () { eu._reservaTimer = null; eu.liberar(); }, Math.max(800, Math.min(30000, ms || 8000)));
+    this._aplicarReservas(); this.pedir('reserva');
+    return this;
+  };
+  VC.liberar = function (lista) {
+    var eu = this, antes = Object.keys(this.reservas).length;
+    if (!antes) return this;
+    if (!lista) { this.reservas = {}; clearTimeout(this._reservaTimer); this._reservaTimer = null; }
+    else lista.forEach(function (x) { var c = chaveReserva(x); if (c) delete eu.reservas[c]; });
+    if (Object.keys(this.reservas).length !== antes) { this._aplicarReservas(); this.pedir('reserva'); }
+    return this;
+  };
+  VC._reservada = function (id) { return !!this.reservas['p:' + id]; };
+  VC._aplicarReservas = function () {
+    var r = this.reservas, eu = this;
+    this.ordem.forEach(function (id) { eu.itens[id].g.visible = !r['p:' + id]; });
+    this.fiosObj.forEach(function (f) {
+      var fora = r['p:' + f.de] || r['p:' + f.para] || r['f:' + f.de + '>' + f.para] || r['f:' + f.para + '>' + f.de];
+      f.linha.geometry.setDrawRange(0, fora ? 0 : Infinity);
+    });
   };
 
   BC.visual3d.corpo = function (el, opcoes) { return new VistaCorpo(el, opcoes); };

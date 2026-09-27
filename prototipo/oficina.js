@@ -17,6 +17,62 @@ BC.vistas = BC.vistas || {};
   function construtor(quem) { return admin(quem) || app().construtores.indexOf(quem) !== -1; }
   function pendentes() { return app().mudancas.filter(function (m) { return !m.versao; }); }
 
+  /* Esta autorização pertence ao computador e à instalação, nunca ao diário compartilhado. */
+  var local = null, consultando = false, operando = false, erroLocal = '', ultimaConsulta = 0;
+  function electronOficina() { return window.coopElectron && typeof window.coopElectron.oficina === 'function'; }
+  async function consultarLocal() {
+    if (!electronOficina() || consultando) return;
+    consultando = true; ultimaConsulta = Date.now();
+    try { local = await window.coopElectron.oficina('estado', {}); erroLocal = ''; }
+    catch (e) { erroLocal = e.message; }
+    finally { consultando = false; BC.estacao.render(); }
+  }
+  async function executarLocal(acao, args) {
+    if (operando || !electronOficina()) return;
+    operando = true; erroLocal = ''; BC.estacao.render();
+    var intervalo = acao === 'empacotar' ? setInterval(consultarLocal, 1500) : null;
+    try {
+      await window.coopElectron.oficina(acao, args || {});
+      await consultarLocal();
+      if (acao === 'previa') window.location.reload();
+    } catch (e) { erroLocal = e.message; }
+    finally { if (intervalo) clearInterval(intervalo); operando = false; BC.estacao.render(); }
+  }
+  A['oficina-local-liberar'] = function () { executarLocal('liberar', { sim: !(local && local.autorizada), identidade: local && local.identidade }); };
+  A['oficina-local-pasta'] = function () { executarLocal('selecionar'); };
+  A['oficina-local-previa'] = function () { executarLocal('previa', { sim: true }); };
+  A['oficina-local-voltar'] = function () { executarLocal('previa', { sim: false }); };
+  A['oficina-local-reiniciar'] = function () { executarLocal('reiniciarPrevia'); };
+  A['oficina-local-empacotar'] = function () { executarLocal('empacotar'); };
+  A['oficina-local-editar'] = async function () {
+    if (!local || !local.autorizada || !local.pasta || operando) return;
+    try {
+      // O servidor valida novamente a permissão ao iniciar o agente.
+      if (!BC.terminalReal || typeof BC.terminalReal.editarOficina !== 'function') throw new Error('O terminal da Oficina ainda não está disponível nesta versão.');
+      await BC.terminalReal.editarOficina(local.pasta);
+    } catch (e) { erroLocal = e.message; BC.estacao.render(); }
+  };
+  function painelLocal() {
+    if (!electronOficina()) return '<section class="secao cartao"><h2>Editar esta instalação</h2><p>Abra a Oficina no aplicativo deste computador para liberar uma versão e editar seus fontes.</p></section>';
+    if (!consultando && Date.now() - ultimaConsulta > 10000) setTimeout(consultarLocal, 0);
+    var s = local, ocupado = operando || (s && s.executando), des = ocupado ? ' disabled' : '';
+    if (!s) return '<section class="secao cartao"><h2>Editar esta instalação</h2><p>' + esc(erroLocal || 'Consultando a permissão desta Estação…') + '</p></section>';
+    var pronto = s.autorizada && !!s.pasta;
+    return '<section class="secao cartao" id="of-local"><span class="rotulo">Oficina local · v' + esc(s.versao) + '</span><h2>Editar esta instalação</h2>' +
+      '<p class="form-ajuda">Libere esta versão, escolha os fontes completos do Babel Coop e peça as mudanças ao agente. Veja a interface na prévia; finalize pelo botão de reempacotar.</p>' +
+      '<p><span class="chip' + (s.autorizada ? ' ok' : '') + '">' + (s.autorizada ? 'Esta versão pode mudar' : 'Edição bloqueada nesta versão') + '</span> ' +
+      (s.gestao ? '<button class="botao" type="button" data-acao="oficina-local-liberar"' + des + '>' + (s.autorizada ? 'Bloquear edição' : 'Permitir mudanças nesta versão') + '</button>' : '<span class="form-ajuda">A gestão libera a edição neste computador.</span>') + '</p>' +
+      (s.autorizada ? '<p class="quebra">Fontes: <code>' + esc(s.pasta || 'nenhuma pasta selecionada') + '</code></p><button class="botao" type="button" data-acao="oficina-local-pasta"' + des + '>Escolher pasta fonte</button> ' : '') +
+      (pronto ? '<button class="botao primario" type="button" data-acao="oficina-local-editar"' + des + '>Editar pelo terminal</button>' +
+        '<hr><p class="form-ajuda">A prévia usa os arquivos da pasta escolhida. Salve no terminal e atualize a prévia para ver a interface. Mudanças no servidor pedem reinício; mudanças na abertura do aplicativo entram no pacote final.</p>' +
+        '<button class="botao" type="button" data-acao="oficina-local-previa"' + des + '>' + (s.previa ? 'Atualizar prévia' : 'Abrir prévia') + '</button> ' +
+        '<button class="botao" type="button" data-acao="oficina-local-reiniciar"' + des + '>Reiniciar prévia</button> ' +
+        (s.previa ? '<button class="botao discreto" type="button" data-acao="oficina-local-voltar"' + des + '>Voltar à interface instalada</button>' : '') +
+        '<hr><button class="botao primario" type="button" data-acao="oficina-local-empacotar"' + des + '>' + (ocupado ? 'Aguarde…' : 'Reempacotar e reiniciar') + '</button><p class="form-ajuda">Quando as mudanças estiverem prontas, este botão gera o app e o instalador, fecha esta janela e abre a nova versão. A equipe não recebe atualização automaticamente. A nova versão volta com edição bloqueada.</p>' : '') +
+      (erroLocal ? '<p role="alert" class="form-ajuda">' + esc(erroLocal) + '</p>' : '') +
+      (s.log ? '<details' + (ocupado ? ' open' : '') + '><summary>Empacotamento</summary><pre style="white-space:pre-wrap;max-height:220px;overflow:auto">' + esc(s.log) + '</pre></details>' : '') + '</section>';
+  }
+
   /* ---------- ações (entram no diário como todas as outras) ---------- */
 
   LA.oficinaConstrutor = function (quem, pessoa, sim) {
@@ -142,7 +198,7 @@ BC.vistas = BC.vistas || {};
         return '<div class="item" style="--cor:#29ccec"><span class="item-corpo"><span class="item-titulo">v' + h.versao + ' · ' + esc(h.notas) + '</span><span class="item-meta">' + U.quando(h.ts) + ' · ' + esc(L().nome(h.por)) + (ms.length ? ' · ' + ms.length + ' mudança' + (ms.length > 1 ? 's' : '') + ': ' + esc(ms.map(function (m) { return m.texto; }).join('; ')) : '') + '</span></span></div>';
       }).join('') + '</div></section>';
 
-      return '<div class="pagina oficina">' + cab + mudancas + quem + instalada + versoes + '</div>';
+      return '<div class="pagina oficina">' + painelLocal() + cab + mudancas + quem + instalada + versoes + '</div>';
     }
   };
 })(window.BC);

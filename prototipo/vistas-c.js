@@ -10,6 +10,8 @@ BC.formularios = BC.formularios || {};
   var U = BC.util, esc = U.esc, A = BC.acoes, F = BC.formularios;
   function L() { return BC.loja; }
   function ui() { return BC.estacao.ui; }
+  /* app real (a ponte existe): sem rótulo de demonstração; o protótipo puro continua mostrando */
+  function real() { return !!BC.real; }
   var NOME_TIPO = { nota: 'nota', 'código': 'código', planilha: 'planilha', pdf: 'PDF', mapa: 'mapa mental', quadro: 'quadro', imagem: 'imagem', 'vídeo': 'vídeo', arquivo: 'arquivo',
     ata: 'ata', aprendizado: 'aprendizado', demanda: 'demanda', prompt: 'prompt', ideia: 'ideia', resposta: 'pergunta da semana', fala: 'fala guardada', terminal: 'terminal', preset: 'preset' };
 
@@ -149,7 +151,7 @@ BC.formularios = BC.formularios || {};
         var novos = (so.novos || []).map(function (id) { return e.aprendizados.filter(function (a) { return a.id === id; })[0]; }).filter(Boolean);
         var top = (so.top || []).map(function (id) { return e.prompts.filter(function (p) { return p.id === id; })[0]; }).filter(Boolean);
         return '<div class="pagina-cab"><div><h1 class="pagina-titulo">O sonho</h1><p class="pagina-sub">Toda madrugada o sistema revisa o dia e refina o conhecimento. Último sonho: ' + (so.ts ? U.quando(so.ts) + ' às ' + U.hora(so.ts) : '—') + '.</p></div>' +
-          '<button class="botao primario" type="button" data-acao="sonhar">Sonhar agora (demonstração)</button></div>' +
+          '<button class="botao primario" type="button" data-acao="sonhar">Sonhar agora' + (real() ? '' : ' (demonstração)') + '</button></div>' +
           '<div class="numeros espaco"><div class="numero"><small>Aprendizados novos</small><b>' + novos.length + '</b></div><div class="numero"><small>Reforçados (+1)</small><b>' + (so.reforcados || 0) + '</b></div>' +
           '<div class="numero"><small>Ideias faladas guardadas</small><b>' + (so.ideiasFaladas || 0) + '</b></div><div class="numero"><small>Total no APRENDIZADOS.md</small><b>' + (so.total || 0) + '</b></div></div>' +
           '<div class="grade-2"><div><section class="secao"><span class="rotulo">O que a Babel aprendeu</span><div class="lista-limpa">' + (novos.map(function (ap) {
@@ -351,7 +353,7 @@ BC.formularios = BC.formularios || {};
         '<div class="perfil-grade"><section class="cartao"><div class="secao-cab"><span class="rotulo">Trabalhos · ' + (ui().perfilTudo ? 'sempre' : U.mes()) + '</span><button class="botao discreto" type="button" data-acao="perfil-periodo">' + (ui().perfilTudo ? 'ver este mês' : 'ver tudo') + '</button></div>' +
         '<div class="numeros dois"><div class="numero"><small>Demandas com OK</small><b>' + s.demandasOk + '</b></div><div class="numero"><small>Ajudas dadas</small><b>' + s.ajudas + '</b></div><div class="numero"><small>Ideias · aprendizados</small><b>' + s.ideias + ' · ' + s.aprendizados + '</b></div><div class="numero"><small>Skills publicadas</small><b>' + s.skills + '</b></div><div class="numero"><small>Tarefas entregues</small><b>' + s.tarefas + '</b></div><div class="numero"><small>Quadros · mapas</small><b>' + s.quadros + ' · ' + s.mapas + '</b></div></div></section>' +
         '<section class="cartao"><span class="rotulo">Tempo · ' + (ui().perfilTudo ? 'sempre' : U.mes()) + '</span><div class="numeros dois"><div class="numero"><small>Em demandas</small><b>' + U.duracao(s.horas) + '</b></div><div class="numero"><small>Média por demanda</small><b>' + U.duracao(s.media) + '</b></div><div class="numero"><small>Pausada</small><b>' + U.duracao(s.pausas) + '</b></div><div class="numero"><small>Melhor foco</small><b>' + (s.melhor != null ? s.melhor + 'h–' + (+s.melhor + 2) + 'h' : '—') + '</b></div></div><p class="form-ajuda">É sobre a pessoa, para ela. Ninguém é comparado.</p></section>' +
-        '<section class="cartao"><span class="rotulo">' + (eu ? 'Você' : esc(p.nome)) + ' no Babel Coop</span><p class="perfil-fatia">' + (eu ? 'você é' : 'é') + ' <b>' + sTotal.pctAcervo + '%</b> do que a Babel sabe</p>' +
+        '<section class="cartao"><span class="rotulo">' + (eu ? 'Você' : esc(p.nome)) + ' no babel-coop</span><p class="perfil-fatia">' + (eu ? 'você é' : 'é') + ' <b>' + sTotal.pctAcervo + '%</b> do que a Babel sabe</p>' +
         [['acervo', sTotal.pctAcervo], ['demandas do mês', s.pctDem], ['ajudas', sTotal.pctAjuda]].map(function (x) { return '<div class="perfil-barra"><span>' + x[0] + '</span><div class="barra" style="--v:' + x[1] + '%"></div><b>' + x[1] + '%</b></div>'; }).join('') +
         '<div class="perfil-barra"><span>projetos</span><div class="barra" style="--v:' + (sTotal.totalProjetos ? Math.round(sTotal.projetos / sTotal.totalProjetos * 100) : 0) + '%"></div><b>' + sTotal.projetos + ' de ' + sTotal.totalProjetos + '</b></div></section></div>' +
         '<div class="perfil-grade"><section class="cartao"><span class="rotulo">Dados e materiais</span><p class="pagina-sub">' + sTotal.arquivos + ' arquivos · ' + sTotal.mapas + ' mapas · ' + sTotal.quadros + ' quadros · ' + sTotal.clones + ' clones</p><div class="lista-limpa">' +

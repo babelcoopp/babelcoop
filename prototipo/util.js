@@ -100,6 +100,16 @@ window.BC = window.BC || {};
     return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   };
 
+  /* janela da Estação sem foco: html.sem-foco pausa o que respira sempre (logo e fotos; casca-2030.css). A TV e o iPad ficam
+     numa tela que ninguém clica, então nunca recebem a classe: lá a luz continua viva */
+  (function () {
+    if (/^#?(tv|ipad)\b/.test(location.hash || '')) return;
+    var marcar = function () { var h = document.documentElement, fora = document.hidden || !document.hasFocus(); if (/^(tv|ipad)$/.test(h.getAttribute('data-vista') || '')) fora = false; h.classList.toggle('sem-foco', fora); };
+    ['focus', 'blur'].forEach(function (e) { window.addEventListener(e, marcar); });
+    document.addEventListener('visibilitychange', marcar);
+    marcar();
+  })();
+
   /* avatar: foto quando houver, senão iniciais, no círculo da cor da pessoa que brilha em volta (casca-2030.css).
      Classe "on" = a pessoa está online (a borda respira devagar); "evento" = a luz pisca nas laterais da foto
      (U.avatarEvento). data-pessoa deixa o evento achar todas as fotos da pessoa na tela. */
@@ -113,7 +123,7 @@ window.BC = window.BC || {};
     if (idade < PISCA_MS) estilo += ';--av-atraso:-' + idade + 'ms';
     return '<span class="avatar' + (p.foto ? ' com-foto' : '') + (on ? ' on' : '') + (idade < PISCA_MS ? ' evento' : '') + '" style="' + estilo + '"' +
       (p.id ? ' data-pessoa="' + U.esc(p.id) + '"' : '') + ' title="' + U.esc(p.nome) + '">' +
-      dentro + (comPonto ? '<span class="ponto ' + p.status + '"></span>' : '') + '</span>';
+      (on ? '<i class="av-luz" aria-hidden="true"></i>' : '') + dentro + (comPonto ? '<span class="ponto ' + p.status + '"></span>' : '') + '</span>';
   };
   /* evento da pessoa (ficou online, o terminal começou a rodar, terminou): a luz pisca nas laterais de todas as fotos
      dela, uma vez (1,4 s, só opacidade). Movimento reduzido: a luz fica parada o mesmo tempo (casca-2030.css).

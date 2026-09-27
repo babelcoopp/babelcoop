@@ -48,7 +48,7 @@ BC.formularios = BC.formularios || {};
     ['explorador', 'Criar · telas, máquina e pesquisas'], ['dia', 'Meu dia'], ['demandas', 'Demandas'], ['chat', 'Chat'], ['reuniao', 'Reunião'],
     ['acervo', 'Acervo · busca sem LLM'], ['inteligencia', 'Inteligência da equipe'], ['terminais', 'Terminais ao vivo'],
     ['tarefas', 'Tarefas com fluxo'], ['metas', 'Metas e campanhas'], ['equipe', 'Equipe'], ['mapa', 'Mapa da equipe'],
-    ['projetos', 'Projetos'], ['whatsapp', 'WhatsApp'], ['loja', 'Loja da equipe'], ['oficina', 'Oficina do app · mudar o Babel Coop pelo terminal']
+    ['projetos', 'Projetos'], ['whatsapp', 'WhatsApp'], ['loja', 'Loja da equipe'], ['oficina', 'Oficina do app · mudar o babel-coop pelo terminal']
   ];
   var CELULAR = [['dia', 'Meu dia'], ['demandas', 'Demandas'], ['chat', 'Chat'], ['explorador', 'Criar'], ['mais', 'Mais']];
   var NOMES = { explorador: 'Criar', maquina: 'Máquina' };
@@ -603,7 +603,8 @@ BC.formularios = BC.formularios || {};
   var paleta = { lista: [], sel: 0, pedindo: null };
 
   /* temas que existem de verdade: da Estação (casca-2030.css §20, sobre os tokens) e da TV (temaTv, tv-2030.css) */
-  var TEMAS_ESTACAO = [['noite', 'noite', 'padrão'], ['ametista', 'ametista', ''], ['claro', 'claro', 'Latte']];
+  /* dois modos (ordem do Theus, 25/09/2026): Tech = escuro (noite), Vibe = claro bege (Latte); ametista fica como variação do Tech na paleta */
+  var TEMAS_ESTACAO = [['noite', 'Tech', 'escuro'], ['claro', 'Vibe', 'claro, bege'], ['ametista', 'Tech ametista', '']];
   var TEMAS_TV = [['roxo', 'roxo', 'grafo v5'], ['azul', 'azul', 'Babel Terminal'], ['ametista', 'ametista', '']];
   var CHAVE_TEMA = 'babel-coop:tema-estacao';
   /* E.tema() → o tema em uso; E.tema('claro') troca e guarda neste computador (localStorage, por pessoa e máquina) */
@@ -613,6 +614,8 @@ BC.formularios = BC.formularios || {};
     if (!TEMAS_ESTACAO.some(function (t) { return t[0] === id; })) return E.tema();
     if (id === 'noite') raiz.removeAttribute('data-tema-estacao'); else raiz.setAttribute('data-tema-estacao', id);
     U.guardarLocal(CHAVE_TEMA, id);
+    var vibe = id === 'claro';
+    document.querySelectorAll('#e-modo [data-modo]').forEach(function (b) { var on = (b.getAttribute('data-modo') === 'claro') === vibe; b.classList.toggle('ativo', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
     return id;
   };
 
@@ -655,7 +658,7 @@ BC.formularios = BC.formularios || {};
     }
     /* temas: o da Estação é de cada um (fica neste computador); o da TV é da equipe (gestão, como no Controle da TV) */
     var temaAgora = E.tema();
-    TEMAS_ESTACAO.forEach(function (t) { c.push({ nome: 'Tema ' + t[1] + ' na Estação' + (t[2] ? ' (' + t[2] + ')' : ''), atalho: temaAgora === t[0] ? 'em uso' : '', fn: function () { E.tema(t[0]); E.aviso('Estação no tema ' + t[1] + '.'); } }); });
+    TEMAS_ESTACAO.forEach(function (t) { c.push({ nome: 'Modo ' + t[1] + ' na Estação' + (t[2] ? ' (' + t[2] + ')' : ''), atalho: temaAgora === t[0] ? 'em uso' : '', fn: function () { E.tema(t[0]); E.aviso('Estação no modo ' + t[1] + '.'); } }); });
     if (L().eAdmin()) TEMAS_TV.forEach(function (t) { c.push({ nome: 'Tema ' + t[1] + ' na TV' + (t[2] ? ' (' + t[2] + ')' : ''), atalho: e.temaTv === t[0] ? 'em uso' : '', fn: function () { L().fazer('temaTv', t[0]); E.aviso('TV no tema ' + t[1] + '.'); } }); });
     c.push({ nome: 'Cronômetro na TV: Foco · 25 min', fn: function () { L().fazer('cronometroTv', 25, 'Foco'); } });
     c.push({ nome: 'Mostrar ou esconder a lateral', atalho: 'Ctrl B', fn: function () { E.alternarLateral(); } });
@@ -759,6 +762,13 @@ BC.formularios = BC.formularios || {};
   A['perfil-cuidado'] = function (el) { L().fazer('perfil', { naoMostrarCuidado: !el.checked }); };
   /* a TV abre numa janela própria, sem botão: é só espelhar na TV */
   A['ir-tv'] = function () {
+    /* no Electron o main.js abre a janela da TV (e nega o window.open, que devolve null): a Estação não muda de vista */
+    if (window.coopElectron && window.coopElectron.abrirTv) {
+      window.coopElectron.abrirTv().then(function (r) {
+        E.aviso(r && r.tela ? 'A TV abriu em tela cheia na outra tela (' + r.tela + '). A Estação continua aqui.' : 'A tela da TV abriu numa janela própria. Com a TV como tela separada, ela vai direto para lá em tela cheia.');
+      }, function () { E.aviso('Não consegui abrir a janela da TV.'); });
+      return;
+    }
     var w = null;
     try { w = window.open(location.pathname + location.search + '#tv', 'babel-tv', 'width=1280,height=720'); } catch (e) { w = null; }
     if (w) { E.aviso('A tela da TV abriu numa janela própria. Arraste para a TV e aperte F para tela cheia.'); try { w.focus(); } catch (e) { /* sem foco */ } }
@@ -896,6 +906,7 @@ BC.formularios = BC.formularios || {};
     $('abrir-paleta').addEventListener('click', E.abrirPaleta);
     $('abrir-coluna').addEventListener('click', A.coluna);
     $('ir-tv').addEventListener('click', A['ir-tv']);
+    $('e-modo').addEventListener('click', function (ev) { var b = ev.target.closest('[data-modo]'); if (!b) return; var id = b.getAttribute('data-modo'); if (id === 'noite' && E.tema() === 'ametista') return; E.tema(id); E.aviso(id === 'claro' ? 'Modo Vibe.' : 'Modo Tech.'); });
     $('ver-como').addEventListener('change', function (ev) { mudarPessoa(ev.target.value); });
 
     $('paleta-entrada').addEventListener('input', function () { paleta.sel = 0; desenharPaleta(); });

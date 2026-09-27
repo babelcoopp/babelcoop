@@ -118,12 +118,16 @@ html[data-vista="estacao"] body {
   opacity: 1;
   /* ordem do Theus: "a logo brilhosa, que brilha, que pulsa" — o "b" em neon respira sempre (roxo → ciano, 3,4 s);
      os eventos abaixo (aviso, agente pensando, espera, terminou) trocam a respiração pelo efeito deles */
+  /* leve: o brilho (filtro) é desenhado uma vez; a respiração anima só escala e opacidade, que a placa de vídeo compõe sem redesenhar
+     (animar o drop-shadow custava ~12% de CPU com o app parado: medido em 24/09/2026) */
+  filter: drop-shadow(0 0 2px rgba(163, 118, 233, .9)) drop-shadow(0 0 7px rgba(145, 96, 236, .5)) drop-shadow(0 0 16px rgba(41, 204, 236, .32));
+  will-change: transform, opacity;
   animation: casca-b-vivo 3.4s ease-in-out infinite alternate;
   transition: filter 2400ms var(--ease-saida), opacity 2400ms var(--ease-saida);
 }
 @keyframes casca-b-vivo {
-  from { filter: drop-shadow(0 0 2px rgba(163, 118, 233, .85)) drop-shadow(0 0 6px rgba(145, 96, 236, .55)) drop-shadow(0 0 14px rgba(145, 96, 236, .25)); transform: scale(1); }
-  to   { filter: drop-shadow(0 0 2px rgba(42, 213, 229, .95)) drop-shadow(0 0 9px rgba(41, 204, 236, .6)) drop-shadow(0 0 22px rgba(41, 204, 236, .35)); transform: scale(1.06); }
+  from { transform: scale(1); opacity: .78; }
+  to   { transform: scale(1.06); opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   .e-logo { animation: none; filter: drop-shadow(0 0 2px rgba(163, 118, 233, .85)) drop-shadow(0 0 8px rgba(41, 204, 236, .45)); }
@@ -182,6 +186,8 @@ html[data-agente="terminou"] .e-logo { animation: casca-b-terminou var(--mov-her
 .e-comando:hover { border-color: var(--linha); color: var(--apagado); }
 .e-comando kbd { padding: 1px 4px; }
 .e-topo-dir { gap: var(--esp-1); }
+/* Tech | Vibe: os dois modos da Estação (estacao.js E.tema) */
+.e-modo button { padding: 3px 10px; font: 500 var(--t-11)/1.2 var(--fonte-ui); }
 .e-vercomo { font: 400 var(--t-11)/1 var(--fonte-mono); letter-spacing: 0; text-transform: none; color: var(--casca-fraco); }
 .e-vercomo select { height: 22px; padding: 0 6px; font: 400 var(--t-125) var(--fonte-ui); border-color: var(--linha-fraca); background: var(--s0); }
 #ir-tv.botao { padding: 3px 8px; border-color: transparent; color: var(--apagado); font-size: var(--t-125); }
@@ -593,13 +599,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--t0); }
   box-shadow: 0 0 calc(var(--tam) * .34) calc(var(--tam) * -.03) var(--av-halo), inset 0 0 calc(var(--tam) * .16) color-mix(in oklch, var(--av-cor) 24%, transparent);
 }
 .avatar.on { --av-halo: color-mix(in oklch, var(--av-cor) 72%, transparent); }
-.ativ-perfil .avatar.on, .perfil-cab .avatar.on, .pessoa-cab .avatar.on, .pr-av .avatar.on, .pr-amp-av .avatar.on, .term-chip-pessoa .avatar.on {
+/* a respiração é a camada .av-luz (util.js) acendendo e apagando: só opacidade, sem redesenhar a sombra a cada quadro (~10% de CPU antes) */
+.avatar { isolation: isolate; }
+.avatar .av-luz { position: absolute; inset: 0; z-index: -1; border-radius: 50%; pointer-events: none; opacity: 0;
+  box-shadow: 0 0 calc(var(--tam) * .6) calc(var(--tam) * .02) var(--av-halo), inset 0 0 calc(var(--tam) * .22) color-mix(in oklch, var(--av-cor) 34%, transparent); }
+.ativ-perfil .avatar.on .av-luz, .perfil-cab .avatar.on .av-luz, .pessoa-cab .avatar.on .av-luz, .pr-av .avatar.on .av-luz, .pr-amp-av .avatar.on .av-luz, .term-chip-pessoa .avatar.on .av-luz {
+  will-change: opacity;
   animation: av-respira 4.8s ease-in-out infinite alternate;
 }
-@keyframes av-respira {
-  from { border-color: var(--av-cor); box-shadow: 0 0 calc(var(--tam) * .22) calc(var(--tam) * -.04) var(--av-halo), inset 0 0 calc(var(--tam) * .12) color-mix(in oklch, var(--av-cor) 18%, transparent); }
-  to { border-color: color-mix(in oklch, var(--av-cor) 62%, #fff); box-shadow: 0 0 calc(var(--tam) * .6) calc(var(--tam) * .02) var(--av-halo), inset 0 0 calc(var(--tam) * .22) color-mix(in oklch, var(--av-cor) 34%, transparent); }
-}
+@keyframes av-respira { from { opacity: 0; } to { opacity: 1; } }
 /* as duas luzes das laterais: um anel só com os lados esquerdo e direito acesos, fora da foto */
 .avatar::before, .avatar::after {
   content: ""; position: absolute; inset: calc(var(--tam) * -.2); border-radius: 50%; pointer-events: none; opacity: 0;
@@ -618,7 +626,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--t0); }
   78% { opacity: .85; transform: scale(1.04); }
   100% { opacity: 0; transform: scale(1.1); }
 }
-html.bc-org-parado .avatar.on { animation: none; }
+html.bc-org-parado .avatar.on .av-luz { animation: none; opacity: .5; }
+/* janela da Estação sem foco (a pessoa está em outro app): o que respira sempre para; evento continua acendendo. A TV nunca recebe a classe */
+html.sem-foco .e-logo, html.sem-foco .avatar .av-luz { animation-play-state: paused !important; }
 html.bc-org-parado .avatar.evento::before, html.bc-org-parado .avatar.evento::after { animation: none; opacity: .8; }
 
 .rotulo { color: var(--casca-fraco); }
@@ -992,7 +1002,7 @@ button.item:hover { border-color: var(--linha); border-left-color: var(--cor); b
   .e-logo { transition: none; }
   .st-gravando, .e-atividades .marca-num.vivo { animation: none; }
   /* a foto brilha parada; no evento as luzes das laterais ficam acesas o tempo do evento, sem piscar */
-  .avatar.on, .ativ-perfil .avatar.on, .perfil-cab .avatar.on, .pessoa-cab .avatar.on, .pr-av .avatar.on, .pr-amp-av .avatar.on, .term-chip-pessoa .avatar.on { animation: none; }
+  .avatar.on .av-luz, .ativ-perfil .avatar.on .av-luz, .perfil-cab .avatar.on .av-luz, .pessoa-cab .avatar.on .av-luz, .pr-av .avatar.on .av-luz, .pr-amp-av .avatar.on .av-luz, .term-chip-pessoa .avatar.on .av-luz { animation: none; opacity: .5; }
   .avatar.evento::before, .avatar.evento::after { animation: none; opacity: .85; }
 }
 
@@ -1010,9 +1020,44 @@ html[data-vista="estacao"][data-tema-estacao="claro"] {
   --s0: #fff8e7; --s1: #ffffff; --s2: #f3ecd9; --s3: #e9e0c9; --obsidiana: #2a2236;
   --linha: #b9b09a; --linha-fraca: rgba(6, 11, 22, .10); --pontos: rgba(6, 11, 22, .06);
   --hairline-peca: #7d7a85; --hairline-forte: #4a4650;
-  --texto: #060b16; --texto-90: #1c2331; --apagado: #4a5568; --fraco: #7b8494;
+  --texto: #060b16; --texto-90: #1c2331; --apagado: #4a5568; --fraco: #5c6475; --sem-dado: #5d6675;
   --latte: #060b16; --latte-88: rgba(6, 11, 22, .88);
-  --t0: #0e8fa0; --t1: #3a63c2; --t2: #6d3fb8;
-  --ok: #1f8a58; --atencao: #b06a00; --alarme: #c8323a; --ouro: #9a6b00;
+  /* Vibe (25/09/2026): t0, ok, atenção e ouro um degrau mais escuros que a cópia dos tokens para o texto passar de 4,5:1 sobre --s0 e --s2 */
+  --t0: #08707f; --t1: #3a63c2; --t2: #6d3fb8;
+  --ok: #17774b; --atencao: #8a5200; --alarme: #c8323a; --ouro: #8a5f00;
   --tela-medida: #b4004e;
 }
+/* Vibe: a cor da pessoa (e as cores fixas dos ícones) nasceu para o escuro (oklch 0.78); no papel ela escurece com preto
+   em oklab (o matiz não gira: amarelo continua amarelo), para as iniciais e os ícones passarem de 4,5:1. O halo fica na cor viva, mesmo matiz. */
+html[data-vista="estacao"][data-tema-estacao="claro"] .avatar {
+  --av-cor: color-mix(in oklab, var(--cor, var(--t0)) 58%, #000);
+  border-color: var(--av-cor); color: var(--av-cor);
+  --av-halo: color-mix(in oklch, var(--cor, var(--t0)) 45%, transparent);
+}
+html[data-vista="estacao"][data-tema-estacao="claro"] .avatar.on { --av-halo: color-mix(in oklch, var(--cor, var(--t0)) 60%, transparent); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .criar-ic,
+html[data-vista="estacao"][data-tema-estacao="claro"] .criar-atalhos i { color: color-mix(in oklab, var(--c) 55%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .criar-ic { background: color-mix(in srgb, var(--c) 22%, var(--s1)); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .trilha-bola { color: color-mix(in oklab, var(--cor) 58%, #000); border-color: color-mix(in oklab, var(--cor) 72%, #000); }
+/* etapa feita: a bola é cheia da cor viva, as iniciais continuam tinta escura (≥ 5:1 nas 12 cores) */
+html[data-vista="estacao"][data-tema-estacao="claro"] .trilha-no.feito .trilha-bola { color: #060b16; }
+/* Quadro no papel: texto e primeira caneta (quase branca) viram tinta; as outras canetas escurecem em oklab até ≥ 3:1 sobre o branco */
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-palco { background-image: radial-gradient(circle, rgb(6 11 22 / .10) 1px, transparent 1.2px); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-nota.q-texto { color: var(--texto); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-texto .q-alca { background: rgb(6 11 22 / .06); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-nota:not(.q-texto) { box-shadow: 0 6px 16px rgb(6 11 22 / .14); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-cor[aria-pressed="true"] { border-color: var(--texto); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-svg [stroke="#f2eaff"] { stroke: var(--texto); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-cor[data-q="cor:#f2eaff"] { background: var(--texto); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-svg [stroke="#c7a2ff"] { stroke: color-mix(in oklab, #c7a2ff 72%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-cor[data-q="cor:#c7a2ff"] { background: color-mix(in oklab, #c7a2ff 72%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-svg [stroke="#29ccec"] { stroke: color-mix(in oklab, #29ccec 72%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-cor[data-q="cor:#29ccec"] { background: color-mix(in oklab, #29ccec 72%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-svg [stroke="#7fd6a6"] { stroke: color-mix(in oklab, #7fd6a6 68%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-cor[data-q="cor:#7fd6a6"] { background: color-mix(in oklab, #7fd6a6 68%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-svg [stroke="#ffcf5c"] { stroke: color-mix(in oklab, #ffcf5c 64%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-cor[data-q="cor:#ffcf5c"] { background: color-mix(in oklab, #ffcf5c 64%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-svg [stroke="#ff7ab8"] { stroke: color-mix(in oklab, #ff7ab8 72%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-cor[data-q="cor:#ff7ab8"] { background: color-mix(in oklab, #ff7ab8 72%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-svg [stroke="#ff6b6b"] { stroke: color-mix(in oklab, #ff6b6b 72%, #000); }
+html[data-vista="estacao"][data-tema-estacao="claro"] .q-cor[data-q="cor:#ff6b6b"] { background: color-mix(in oklab, #ff6b6b 72%, #000); }

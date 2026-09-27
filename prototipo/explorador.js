@@ -43,7 +43,10 @@ BC.locais = BC.locais || {};
       (vendo.length ? '<span class="arv-vendo" title="' + esc(vendo.map(function (p) { return p.nome; }).join(', ')) + ' está vendo">' + vendo.map(function (p) { return U.avatar(p, 14); }).join('') + '</span>' : '') +
       (salvou ? '<span class="arv-salvou" title="salvo por ' + esc(salvou.nome) + '">' + U.avatar(salvou, 14) + '</span>' : '') +
       '<span class="arv-acoes">' + (r && r.ativa ? '<button type="button" data-acao="arq-reuniao" data-id="' + esc(a.id) + '" title="Levar para a reunião" aria-label="Levar para a reunião">☰</button>' : '') +
-      '<button type="button" data-acao="arq-projetar" data-id="' + esc(a.id) + '" title="Projetar na TV" aria-label="Projetar na TV">▣</button></span></div>';
+      '<button type="button" data-acao="arq-projetar" data-id="' + esc(a.id) + '" title="Projetar na TV" aria-label="Projetar na TV">▣</button>' +
+      /* ganchos do app real (arquivos-real.js): Editar e Apagar na linha e a confirmação logo abaixo dela */
+      (BC.explorador.acoesDoArquivo ? BC.explorador.acoesDoArquivo(a) : '') + '</span></div>' +
+      (BC.explorador.abaixoDoArquivo ? BC.explorador.abaixoDoArquivo(a, nivel) : '');
   }
 
   function pasta(no, nivel, rotulo, extra, alvoPessoa) {

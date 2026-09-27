@@ -10,6 +10,8 @@ BC.formularios = BC.formularios || {};
   var U = BC.util, esc = U.esc, A = BC.acoes, F = BC.formularios;
   function L() { return BC.loja; }
   function ui() { return BC.estacao.ui; }
+  /* app real (a ponte existe): botão que só simula some; o protótipo puro continua mostrando */
+  function real() { return !!BC.real; }
   function projeto(id) { return (L().estado.projetos || []).filter(function (p) { return p.id === id; })[0]; }
 
   /* liga algumas demandas de exemplo aos projetos (uma vez por estado) */
@@ -158,6 +160,11 @@ BC.formularios = BC.formularios || {};
     conteudo: function () {
       var w = L().estado.whatsapp, ag = agentePadrao();
       garantirChegadas();
+      /* no app real o pareamento ainda não existe: nada de QR de exemplo pedindo para escanear */
+      if (!w.pareado && real()) {
+        return '<div class="wa-parear"><h1 class="pagina-titulo">WhatsApp</h1><p class="pagina-sub">Ainda não dá para ligar o seu WhatsApp no babel-coop: o pareamento de verdade está por vir. Quando chegar, o ' + esc(ag.nome) + ' poderá sugerir respostas por você.</p>' +
+          '<p class="wa-aviso">Só você verá esta tela. Ela não entra no acervo nem na TV.</p></div>';
+      }
       if (!w.pareado) {
         return '<div class="wa-parear"><h1 class="pagina-titulo">WhatsApp</h1><p class="pagina-sub">Leia o QR code com o seu celular, como no WhatsApp Web. O seu WhatsApp passa a viver aqui, e o ' + esc(ag.nome) + ' pode responder por você.</p>' + qrFalso() +
           '<p class="wa-aviso">Só você vê esta tela. Ela não entra no acervo nem na TV.</p><button class="botao primario" type="button" data-acao="wa-parear">Já escaneei (simulado)</button></div>';

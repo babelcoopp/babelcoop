@@ -8,6 +8,7 @@
 html[data-vista="tv"] body { padding: 0; background: var(--s0); }
 html[data-vista="tv"] .app { height: 100%; }
 
+
 .tv,
 .tv[data-tema="azul"],
 .tv[data-tema="roxo"] {
@@ -389,10 +390,10 @@ html[data-vista="tv"] .app { height: 100%; }
 .tv .quadro { background: var(--s1); }
 .tv-quadro-modo .tv-bloco, .tv-site-modo .tv-bloco { border: 1px solid var(--linha); border-radius: var(--r-painel, 8px); background: var(--s1); }
 
-/* ---------- projeção: hairline --t0 nas quatro bordas + rótulo no canto, estáticos ---------- */
-.tv-projecao { background: var(--s0); box-shadow: inset 0 0 0 calc(var(--u) * .3) var(--t0) !important; animation: none !important; padding: calc(var(--u) * 3) calc(var(--u) * 4.5); }
-.proj-marca { position: absolute; top: calc(var(--u) * .9); left: calc(var(--u) * 1.4); font: 500 calc(var(--u) * 1.7) / 1 var(--fonte-mono); color: var(--t0); letter-spacing: .04em; }
-.proj-cab .tv-rotulo { color: var(--t0) !important; }
+/* ---------- projeção: luz de borda roxa (--t2, identidade da Babel, sem aro âmbar) nas quatro bordas + rótulo no canto, estáticos ---------- */
+.tv-projecao { background: var(--s0); box-shadow: inset 0 0 0 calc(var(--u) * .3) var(--t2) !important; animation: none !important; padding: calc(var(--u) * 3) calc(var(--u) * 4.5); }
+.proj-marca { position: absolute; top: calc(var(--u) * .9); left: calc(var(--u) * 1.4); font: 500 calc(var(--u) * 1.7) / 1 var(--fonte-mono); color: var(--t2); letter-spacing: .04em; }
+.proj-cab .tv-rotulo { color: var(--t2) !important; }
 .proj-nome { font-size: calc(var(--u) * 3); color: var(--texto); }
 .proj-por, .proj-rodape { font-family: var(--fonte-mono); color: var(--apagado); }
 

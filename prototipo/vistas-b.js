@@ -10,6 +10,8 @@ BC.formularios = BC.formularios || {};
   var U = BC.util, esc = U.esc, A = BC.acoes, F = BC.formularios;
   function L() { return BC.loja; }
   function ui() { return BC.estacao.ui; }
+  /* app real (a ponte existe): sem rótulo de demonstração; o protótipo puro continua mostrando */
+  function real() { return !!BC.real; }
   function aberta(t) { return t.atual < L().fluxo(t.fluxo).etapas.length; }
 
   /* ======================= TAREFAS COM FLUXO ======================= */
@@ -150,7 +152,7 @@ BC.formularios = BC.formularios || {};
         '<div class="grade-2"><section class="secao cartao"><span class="rotulo">' + esc(c.nome) + '</span>' +
         '<div class="campanha-linha"><div class="campanha-anel">' + BC.anel(c.atual / c.alvo, '#29ccec') + '<b class="num">' + c.atual + '/' + c.alvo + '</b></div>' +
         '<div><p class="dem-desc">' + c.atual + ' de ' + c.alvo + ' ' + esc(c.descricao) + '</p><p class="pagina-sub">termina em <span data-regressiva="' + c.fim + '">' + U.regressiva(c.fim).texto + '</span></p>' +
-        '<button class="botao" type="button" data-acao="mais-cliente"' + (c.atual >= c.alvo ? ' disabled' : '') + '>+1 cliente (demonstração)</button></div></div></section>' +
+        '<button class="botao" type="button" data-acao="mais-cliente"' + (c.atual >= c.alvo ? ' disabled' : '') + '>+1 cliente' + (real() ? '' : ' (demonstração)') + '</button></div></div></section>' +
         '<section class="secao cartao"><span class="rotulo">Cronômetro na TV</span>' + cron + '</section></div>';
     }
   };
@@ -163,12 +165,46 @@ BC.formularios = BC.formularios || {};
 
   var MODOS_TV = [['painel', 'Painel geral'], ['reuniao', 'Reunião'], ['quadro', 'Quadro ao vivo']];
 
-  /* convidar pessoa = gerar um token de instalação: ela instala o app, cola o token e já vê a equipe (e a equipe vê ela) */
+  /* quem pediu para entrar pelo Wi-Fi (app real, só na gestão): o mesmo código de 4 dígitos aparece na tela da pessoa; confere e aceita ali mesmo */
+  function pedidosEntrada() {
+    var lista = BC.real && BC.real.entrada ? BC.real.entrada.pedidos() : [];
+    if (!lista.length) return '';
+    return '<div class="lat-titulo"><span class="rotulo">Pedindo para entrar</span></div><div class="lat-convite">' + lista.map(function (p) {
+      return '<div class="cartao convite-cartao" data-pedido="' + esc(p.id) + '"><b>' + esc(p.nome) + ' quer entrar na equipe</b><p class="form-ajuda">Código <b class="num">' + esc(p.codigo) + '</b>: confira se é o mesmo que aparece na tela de ' + esc(p.nome) + '.</p>' +
+        '<div class="dem-acoes"><button class="botao primario" type="button" data-acao="eq-entrada-aceitar" data-id="' + esc(p.id) + '">Aceitar</button><button class="botao" type="button" data-acao="eq-entrada-recusar" data-id="' + esc(p.id) + '">Recusar</button></div></div>';
+    }).join('') + '</div>';
+  }
+  A['eq-entrada-aceitar'] = function (el) { if (BC.real && BC.real.entrada) BC.real.entrada.aceitar(el.dataset.id); };
+  A['eq-entrada-recusar'] = function (el) { if (BC.real && BC.real.entrada) BC.real.entrada.recusar(el.dataset.id); };
+
+  /* convidar pessoa = gerar um token de instalação (plano B: no mesmo Wi-Fi a pessoa pede para entrar e o pedido aparece acima) */
+  /* o link do instalador servido por esta Estação no Wi-Fi (app real: GET /api/instalar/info); pedido uma vez e guardado na tela */
+  function linkInstalar() {
+    if (!(BC.real && BC.real.eu)) return '';
+    var ui = BC.estacao.ui, i = ui.instalarInfo;
+    if (!i) {
+      if (!ui.instalarPedido) { ui.instalarPedido = true; fetch('/api/instalar/info').then(function (r) { return r.json(); }).then(function (x) { ui.instalarInfo = x || { rede: false }; BC.estacao.render(); }, function () { ui.instalarInfo = { rede: false }; }); }
+      return '';
+    }
+    if (!i.rede || !i.url) return '<p class="form-ajuda">Sem rede local agora: conecte ao Wi-Fi para gerar o link do instalador.</p>';
+    return '<div class="cartao convite-cartao"><b>Instalar o babel-coop</b><code class="convite-token">' + esc(i.url) + '</code>' +
+      '<div class="dem-acoes"><button class="botao" type="button" data-acao="eq-copiar-link">Copiar link</button></div>' +
+      '<p class="form-ajuda">Quem está no mesmo Wi-Fi abre esse link, baixa o instalador (Mac ou Windows), abre o app e toca em "Pedir para entrar".</p></div>';
+  }
+  A['eq-copiar-link'] = function () {
+    var i = BC.estacao.ui.instalarInfo, url = i && i.url;
+    if (!url) return;
+    var feito = function () { BC.estacao.aviso('Link copiado: ' + url); };
+    if (window.coopElectron && window.coopElectron.copiar) window.coopElectron.copiar(url).then(feito, feito);
+    else if (navigator.clipboard) navigator.clipboard.writeText(url).then(feito, feito);
+  };
+
   function convite() {
     var c = BC.estacao.ui.convite;
-    return '<div class="lat-titulo"><span class="rotulo">Convidar pessoa</span></div><div class="lat-convite">' +
+    return '<div class="lat-titulo"><span class="rotulo">Convidar pessoa</span></div><div class="lat-convite">' + linkInstalar() +
       '<input type="text" id="convite-nome" placeholder="Nome da pessoa" value="' + esc(c && c.nome && !c.token ? c.nome : '') + '" aria-label="Nome da pessoa">' +
       '<button class="botao primario" type="button" data-acao="eq-convidar">Gerar token</button>' +
+      (c && c.token ? '' : '<p class="form-ajuda">No mesmo Wi-Fi não precisa de token: a pessoa instala o app, escreve o nome e toca em "Pedir para entrar"; o pedido aparece aqui e no topo da Estação. O token é o plano B.</p>') +
       (c && c.token ? '<div class="cartao convite-cartao"><b>Token de ' + esc(c.nome) + '</b><code class="convite-token" id="convite-token">' + esc(c.token) + '</code>' +
         '<div class="dem-acoes"><button class="botao" type="button" data-acao="eq-copiar-token">Copiar</button><button class="botao discreto" type="button" data-acao="eq-convite-limpar">Fechar</button></div>' +
         '<p class="form-ajuda">Mande por WhatsApp. ' + esc(c.nome) + ' instala o app, cola o token e entra: vê você, você vê ' + esc(c.nome) + '. O token leva o nome, o papel, o segredo da equipe e o endereço desta Estação na rede.</p></div>' : '') +
@@ -201,7 +237,7 @@ BC.formularios = BC.formularios || {};
       return '<div class="lat-titulo"><span class="rotulo">Equipe</span></div><ul class="lat-lista">' +
         it('eq-cuidado', 'Cuidando da gente', L().cuidados().length) + it('eq-carga', 'Pessoas e carga', e.pessoas.length) +
         it('eq-carga', 'Check-ins de hoje', ck + '/' + e.pessoas.length) + it('eq-tv', 'Controle da TV', e.tvModo) + it('eq-regras', 'Regras', '') + '</ul>' +
-        (L().eAdmin() ? convite() : '') +
+        (L().eAdmin() ? pedidosEntrada() + convite() : '') +
         '<p class="lat-nota">Horas por pessoa aparecem só para a gestão. A TV mostra o total da equipe e os sinais de cuidado, nunca um ranking.</p>';
     },
     conteudo: function () {

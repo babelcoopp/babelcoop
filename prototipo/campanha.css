@@ -369,3 +369,32 @@ html.bc-org-parado .cp-check li { opacity: 1; transform: none; }
 @media (prefers-reduced-transparency: reduce) {
   .cp-peca[data-estado="gerando"] { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--s2); }
 }
+
+/* ================================================================== poderes (poderes.js): o canvas só existe enquanto o efeito vive */
+.pd-tela { position: fixed; inset: 0; pointer-events: none; z-index: 2147483000; }
+.pd-flash { animation: pd-flash 900ms var(--ease-saida, cubic-bezier(.2,0,0,1)); }
+.pd-flash-forte { animation: pd-flash-forte 1300ms var(--ease-saida, cubic-bezier(.2,0,0,1)); }
+@keyframes pd-flash {
+  0% { box-shadow: 0 0 0 2px var(--pd-cor), 0 0 42px 6px color-mix(in srgb, var(--pd-cor) 70%, transparent); filter: brightness(1.45) saturate(1.2); }
+  100% { box-shadow: 0 0 0 0 transparent; filter: none; }
+}
+@keyframes pd-flash-forte {
+  0% { box-shadow: 0 0 0 3px #fff, 0 0 70px 14px var(--pd-cor); filter: brightness(1.9) saturate(1.3); }
+  30% { box-shadow: 0 0 0 2px var(--pd-cor), 0 0 50px 8px color-mix(in srgb, var(--pd-cor) 70%, transparent); filter: brightness(1.3); }
+  100% { box-shadow: 0 0 0 0 transparent; filter: none; }
+}
+.pd-bordas { position: fixed; inset: 0; pointer-events: none; z-index: 2147482999; box-shadow: inset 0 0 140px 24px color-mix(in srgb, var(--pd-cor) 75%, transparent); animation: pd-bordas 1600ms ease-out forwards; }
+@keyframes pd-bordas { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ---------------- modo Vibe (claro, casca-2030.css §20): a prévia do WhatsApp no tema claro dele; a tela carrega no papel ---------------- */
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-tela-quadro iframe { background: #fff8e7; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-wa { background: #efeae2; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-wa-topo { background: #f0f2f5; color: #111b21; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-wa-topo small { color: #54656f; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-wa-av { background: #dfe5e7; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-wa-conversa { background: #efeae2; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-wa-balao { background: #d9fdd3; color: #111b21; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-wa-balao time { color: #54656f; }
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-wa-espera { color: #54656f; }
+/* a régua: o número sobre a cor de quem é dono continua escuro (a cor da pessoa é clara nos dois modos) */
+html[data-vista="estacao"][data-tema-estacao="claro"] .cp-regua li.pronta b, html[data-vista="estacao"][data-tema-estacao="claro"] .cp-regua li.ok b { color: #060b16; }
